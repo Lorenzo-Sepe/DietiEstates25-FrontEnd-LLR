@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import './style/style.css'
+import './style.css'
 import App from './App.vue'
 import { createPinia } from 'pinia'
 import PrimeVue from "primevue/config"
@@ -9,8 +9,9 @@ const app = createApp(App)
 const pinia = createPinia()
 
 app.use(PrimeVue, {
-    unstyled: true,
-    pt: MyPreset
+    theme: {
+        preset: MyPreset
+    },
 })
 
 app.use(pinia)

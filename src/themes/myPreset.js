@@ -312,17 +312,17 @@ export default definePreset(Aura, {
         iconSize: "1rem",
         anchorGutter: "2px",
         primary: {
-            50: "#fffaf7",
-            100: "#ffe7da",
-            200: "#ffd3bd",
-            300: "#ffc0a0",
-            400: "#ffac83",
-            500: "#ff9966",
-            600: "#d98257",
-            700: "#b36b47",
-            800: "#8c5438",
-            900: "#663d29",
-            950: "#40261a"
+            50: "#ecfdf5",
+            100: "#d1fae5",
+            200: "#a7f3d0",
+            300: "#6ee7b7",
+            400: "#34d399",
+            500: "#10b981",
+            600: "#059669",
+            700: "#047857",
+            800: "#065f46",
+            900: "#064e3b",
+            950: "#022c22"
         },
         formField: {
             paddingX: "0.75rem",
@@ -660,8 +660,4 @@ export default definePreset(Aura, {
     }
 });
 
-app.use(PrimeVue, {
-    theme: {
-        preset: MyPreset
-    },
-});
+
