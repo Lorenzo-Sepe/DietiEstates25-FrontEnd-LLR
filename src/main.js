@@ -4,6 +4,7 @@ import App from './App.vue'
 import { createPinia } from 'pinia'
 import PrimeVue from "primevue/config"
 import MyPreset from './themes/myPreset'
+import router from './router'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -15,4 +16,5 @@ app.use(PrimeVue, {
 })
 
 app.use(pinia)
+app.use(router)
 app.mount('#app')
