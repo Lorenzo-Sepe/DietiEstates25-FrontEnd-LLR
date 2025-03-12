@@ -1,9 +1,7 @@
 import axios from 'axios'
 import {useUserStore} from '../stores/UserStore.js'
 
-const userStore = useUserStore()
-
-
+const userStoreInstance = useUserStore()
 
 // Crea un'istanza di Axios con la configurazione base
 const api = axios.create({
@@ -18,7 +16,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     //const token = localStorage.getItem('token') // o dove conservi il tuo token
-    const token = userStore.token
+    const token = userStoreInstance.token
     
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
