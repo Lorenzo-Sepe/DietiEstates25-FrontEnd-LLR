@@ -1,79 +1,113 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@theme{
+  --color-primary-50: oklch( 0.977 0.065 158.6);
+  --color-primary-100: oklch(0.924 0.125 158.6);
+  --color-primary-200: oklch(0.845 0.213 158.6);
+  --color-primary-300: oklch(0.751 0.257 158.6);
+  --color-primary-400: oklch(0.662 0.282 158.6);
+  --color-primary-500: oklch(0.573 0.282 158.6);
+  --color-primary-600: oklch(0.485 0.244 158.6);
+  --color-primary-700: oklch(0.409 0.196 158.6);
+  --color-primary-800: oklch(0.337 0.165 158.6);
+  --color-primary-900: oklch(0.285 0.141 158.6);
+  --color-primary-950: oklch(0.181 0.096 158.6);
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --color-surface-0: oklch(100% 0 0);
+  --color-surface-50: oklch(97.9% 0.004 257);
+  --color-surface-100: oklch(95.3% 0.008 257);
+  --color-surface-200: oklch(90.6% 0.016 257);
+  --color-surface-300: oklch(82.4% 0.027 257);
+  --color-surface-400: oklch(67.7% 0.051 257);
+  --color-surface-500: oklch(55.4% 0.06 257);
+  --color-surface-600: oklch(44.8% 0.057 257);
+  --color-surface-700: oklch(35.9% 0.052 257);
+  --color-surface-800: oklch(25.1% 0.044 257);
+  --color-surface-900: oklch(15.6% 0.035 257);
+  --color-surface-950: oklch(6.6% 0.021 257);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+h1 {
+  display: block;
+  font-size: 2em;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
 }
-a:hover {
-  color: #535bf2;
+
+h2 {
+  display: block;
+  font-size: 1.5em;
+  margin-top: 0.83em;
+  margin-bottom: 0.83em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
+
+h3 {
+  display: block;
+  font-size: 1.17em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
+
+h4 {
+  display: block;
+  font-size: 1em;
+  margin-top: 1.33em;
+  margin-bottom: 1.33em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
+
+h5 {
+  display: block;
+  font-size: .83em;
+  margin-top: 1.67em;
+  margin-bottom: 1.67em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
+
+h6 {
+  display: block;
+  font-size: .67em;
+  margin-top: 2.33em;
+  margin-bottom: 2.33em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
+
+p {
+  display: block;
+  font-size: 1em;
+  margin-top: 0;
+  margin-bottom: 1em;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+
+
+#app {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  padding: 0;
+  height: 100%;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-.card {
-  padding: 2em;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}

@@ -1,19 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HelloWorld from '../components/HelloWorld.vue'
 
 // Definisci le tue rotte
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HelloWorld
+    component: () => import('../views/HomeView.vue')
   },
   {
     path: '/about',
     name: 'about',
     // Lazy loading del componente
     component: () => import('../views/AboutView.vue')
+  },
+  // Route di testing dei componenti
+  {
+    path: '/testLorenzo',
+    name: 'testL',
+    component: () => import('../views/TestLorenzoView.vue')
   }
+
 ]
 
 // Crea l'istanza del router

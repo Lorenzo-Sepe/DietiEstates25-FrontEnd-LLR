@@ -1,8 +1,12 @@
 import { definePreset } from "@primevue/themes";
 import Aura from "@primevue/themes/aura";
+import Material from "@primevue/themes/material";
+import Lara from "@primevue/themes/lara";
+import Nora from "@primevue/themes/nora"
+
 
 // Definisci solo le personalizzazioni che vuoi modificare rispetto al tema Aura
-export default definePreset(Aura, {
+export default definePreset(Nora, {
     primitive: {
         borderRadius: {
             none: "0",

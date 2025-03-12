@@ -1,8 +1,13 @@
 import axios from 'axios'
+import {useUserStore} from '../stores/UserStore.js'
+
+const userStore = useUserStore()
+
+
 
 // Crea un'istanza di Axios con la configurazione base
 const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://localhost:8081',
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json'
@@ -12,7 +17,9 @@ const api = axios.create({
 // Aggiungi un interceptor per le richieste
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token') // o dove conservi il tuo token
+    //const token = localStorage.getItem('token') // o dove conservi il tuo token
+    const token = userStore.token
+    
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
