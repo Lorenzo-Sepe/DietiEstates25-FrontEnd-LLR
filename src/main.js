@@ -14,7 +14,10 @@ const pinia = createPinia()
 app.use(PrimeVue, {
     ripple: true,
     theme: {
-        preset: MyPreset
+        preset: MyPreset,
+        options:{
+            darkModeSelector: '.my-app-dark'       
+        }
     },
 })
 

@@ -11,9 +11,7 @@
   }
   </style>
   
-  <script>
-  export default {
-    name: 'Logo',
-  }
+  <script setup>
+ 
   </script>
   

@@ -5,7 +5,7 @@ import Footer from './components/Footer/Footer.vue';
 
 <template>
   <Header/>
-  <body class="h-screen bg-surface-200"> 
+  <body class="h-screen "> 
     <router-view class="m-5"/>
   </body>
   <Footer/>
