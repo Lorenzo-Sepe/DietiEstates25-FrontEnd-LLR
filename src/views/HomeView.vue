@@ -1,6 +1,6 @@
 <template>
-  <div class="homepage bg-surface-300/50 ">
-    <h1>Benvenuto nella Homepage</h1>
+  <div class="homepage bg-white text-black ">
+    <h1 >Benvenuto nella Homepage</h1>
     <Button label="test"/>
   </div>
 </template>
