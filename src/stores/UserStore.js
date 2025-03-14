@@ -10,7 +10,9 @@ export const useUserStore = defineStore('user', {
       urlFotoProfilo: '',
       email: '',
       token: '',
+      tokenAgent:'',
       dipendente: false,
+      authority:'',
       isAuthenticated: false
     }
   }),

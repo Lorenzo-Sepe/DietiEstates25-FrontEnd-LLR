@@ -13,6 +13,12 @@ const routes = [
     // Lazy loading del componente
     component: () => import('../views/AboutView.vue')
   },
+  {
+    path: '/loginAgent',
+    name: 'loginAgent',
+    component: () => import('../views/LoginAgentView.vue')
+
+  },
   // Route di testing dei componenti
   {
     path: '/testLorenzo',
@@ -21,7 +27,7 @@ const routes = [
   },
   {
     path: '/test-roberto',
-    name: 'testL',
+    name: 'testR',
     component: () => import('../views/testRoby.vue')
   }
 

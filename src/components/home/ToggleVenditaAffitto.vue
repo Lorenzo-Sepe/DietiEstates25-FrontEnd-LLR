@@ -10,7 +10,6 @@
 <script setup>
 
 import { ref } from 'vue';
-import Select from 'primevue/select';
 import Button from 'primevue/button';
 
 const severityAffitto = ref('primary');

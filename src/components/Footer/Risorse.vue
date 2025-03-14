@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-surface-0">
+    <div>
      <h4 class="font-bold">Risorse</h4>
      <div class="text-sm">
      

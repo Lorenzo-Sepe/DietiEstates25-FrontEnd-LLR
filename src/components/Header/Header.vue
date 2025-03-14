@@ -3,7 +3,7 @@
     <LogoPortale v-if="dipendente.value" />
     <Logo v-else class="p-3"/>
     
-    <Button label="Accedi" severity="success" />
+    <Button label="Accedi" raised />
   </div>
 </template>
 
