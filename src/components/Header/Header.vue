@@ -1,5 +1,5 @@
 <template>
-  <div class="flex px-3 flex-row justify-between items-center w-full bg-white top-0 h-auto z-50 sticky text-black text-2xl">
+  <div class="flex px-3 flex-row justify-between items-center w-full top-0 h-auto z-50 sticky text-black text-2xl bg-gray-200">
     <LogoPortale v-if="dipendente.value" />
     <Logo v-else class="p-3"/>
     
