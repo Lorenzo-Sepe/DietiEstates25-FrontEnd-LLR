@@ -1,5 +1,5 @@
 <template>
-    <LoginAgent/>
+    <LoginAgent />
 </template>
 
 <script setup>

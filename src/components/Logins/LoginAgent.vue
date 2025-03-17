@@ -1,14 +1,19 @@
 <template>
-    <Form v-slot="$form" :initialValues :resolver @submit="onFormSubmit"  class="rounded flex flex-col gap-4 justify-center items-center p-5 w-full sm:w-56">
-        <div class="flex flex-col gap-1 ">
+    <div class="flex flex-col items-center justify-between w-screen p-2">
+        <Form v-slot="$form" :initialValues :resolver @submit="onFormSubmit" class="rounded flex flex-col gap-4 justify-center items-center p-5 w-full sm:w-1/2">
+            <div class="flex flex-col gap-1 fluid">
                 <InputText v-model="signInRequest.usernameOrEmail" name="emailOrUsername" type="text" placeholder="Email or Username" fluid />
-                <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{ $form.email.error?.message }}</Message>
-                <InputText v-model="signInRequest.password" name="password" type="password" placeholder="Password" fluid />
-                <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple">{{ $form.email.error?.message }}</Message>
+                <Message v-if="$form.emailOrUsername?.invalid " severity="error" size="small" variant="simple">{{ $form.emailOrUsername.error?.message }}</Message>
+                    
+            <Password :feedback="false" v-model="signInRequest.password" name="password" placeholder="Password" fluid :class="{'p-invalid': errorMessage}" toggleMask/>
+                <Message v-if="$form.password?.invalid " severity="error" size="small" variant="simple">{{ $form.password.error?.message  }}</Message>
 
-        </div>
-        <Button :loading="loading" type="submit" raised severity="secondary" variant="outlined" label="Submit" />
-    </Form>
+            </div>
+            <Button :loading="loading" type="submit" raised severity="secondary" variant="outlined" label="Submit" />
+        </Form>
+        
+        <div v-if="errorMessage" class="text-red-500 text-sm">{{ errorMessage }}</div>
+    </div>
 </template>
 
 <script setup>
@@ -18,14 +23,18 @@ import SignInRequest from '../../dto/signInRequest';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { Form } from '@primevue/forms';
-import { useUserStore } from '../../stores/UserStore';
+import { useEmployeeStore } from '../../stores/EmployeeStore';
 import { useRoute, useRouter } from 'vue-router'
+import  Password  from 'primevue/password';
 
 const router = useRouter();
 const route = useRoute();
 
-const userInstance = useUserStore(); 
+const employeeStoreInstance = useEmployeeStore(); 
 const loading = ref(false);
+const test= ref('')
+const errorMessage = ref('');
+const passwordVisible = ref(false);
 
 const initialValues = reactive({
     emailOrUsername: '',
@@ -56,32 +65,30 @@ const resolver = ({ values }) => {
     };
 };
 
-const onFormSubmit = ({ valid }) => {
+const onFormSubmit = async ({ valid }) => {
     loading.value = true;
-    const signInRequest = new SignInRequest()
-    .usernameOrEmail();
-
+    errorMessage.value = '';
+    console.log(signInRequest.value);
     if (valid) {
-        try{
+        try {
             const response = await AuthService.login({
-                usernameOrEmail: signInRequest.usernameOrEmail,
-                password: signInRequest.password
+                usernameOrEmail: signInRequest.value.usernameOrEmail,
+                password: signInRequest.value.password
             });
-            userInstance.setUser({
-                username: response.value.username,
-                email: response.value.email,
-                tokenAgent: response.value.token,
-                dipendente: true,
-                authority : response.value.authority
-            });
+          
+            
             loading.value = false;
-            router.push({path:'/'});
-            }catch (error) { 
-                console.error(error);
-                loading.value = false;
+            router.push({ path: '/' });
+        } catch (error) { 
+            console.error(error);
+            if (error.response) {
+                errorMessage.value = error.response.data;
+            } else {
+                errorMessage.value = 'Errore di rete o di configurazione: ' + error.message;
             }
+            loading.value = false;
         }
     }
-
+}
 
 </script>

@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 @theme{
-  --color-primary-50: oklch( 0.977 0.065 158.6);
-  --color-primary-100: oklch(0.924 0.125 158.6);
-  --color-primary-200: oklch(0.845 0.213 158.6);
-  --color-primary-300: oklch(0.751 0.257 158.6);
-  --color-primary-400: oklch(0.662 0.282 158.6);
-  --color-primary-500: oklch(0.573 0.282 158.6);
-  --color-primary-600: oklch(0.485 0.244 158.6);
-  --color-primary-700: oklch(0.409 0.196 158.6);
-  --color-primary-800: oklch(0.337 0.165 158.6);
-  --color-primary-900: oklch(0.285 0.141 158.6);
-  --color-primary-950: oklch(0.181 0.096 158.6);
+  --color-primary-50: oklch(97.16% 0.019 161.52);
+  --color-primary-100: oklch(92.87% 0.044 161.47);
+  --color-primary-200: oklch(85.02% 0.098 161.48);
+  --color-primary-300: oklch(75.63% 0.152 161.75);
+  --color-primary-400: oklch(65.96% 0.202 161.81);
+  --color-primary-500: oklch(56.76% 0.202 161.91);
+  --color-primary-600: oklch(47.63% 0.175 161.97);
+  --color-primary-700: oklch(39.96% 0.143 162.05);
+  --color-primary-800: oklch(33.64% 0.116 162.18);
+  --color-primary-900: oklch(28.24% 0.097 162.36);
+  --color-primary-950: oklch(17.67% 0.06 162.75);
 
   --color-surface-0: oklch(100% 0 0);
   --color-surface-50: oklch(97.9% 0.004 257);
