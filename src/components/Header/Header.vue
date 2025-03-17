@@ -1,7 +1,10 @@
 <template>
   <div class="flex px-3 flex-row justify-between items-center w-full top-0 h-auto z-50 sticky text-black text-2xl bg-gray-200">
-    <LogoPortale v-if="dipendente.value" />
+    <LogoPortale v-if="isInPortale" />
     <Logo v-else class="p-3"/>
+
+        <!-- Menu di Navigazione con prop -->
+        <MenuNavigazione :isInPortale="isInPortale" />
     
     <Button label="Accedi" raised />
   </div>
@@ -10,9 +13,16 @@
 <script setup>
 import Logo from "./Logo.vue"
 import LogoPortale from "./LogoPortale.vue"
-import { ref } from 'vue'
+import MenuNavigazione from "./MenuNavigazione.vue";
+
+import { ref, defineProps } from 'vue'
 import {useUserStore} from '../../stores/UserStore'
 import Button from 'primevue/button';
+
+const props = defineProps({
+    isInPortale: Boolean
+  });
+  
 
 const userStoreInstance = useUserStore()
 
