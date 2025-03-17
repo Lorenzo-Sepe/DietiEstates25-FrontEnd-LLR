@@ -3,7 +3,7 @@ import Header from './components/Header/Header.vue';
 import Footer from './components/Footer/Footer.vue';
 import{ computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { isPortaleAgenziaAreaPage } from './service/StatoPaginaService';
+import { isPortaleAgenziaAreaPage } from './services/StatoPaginaService';
 
 const route = useRoute();
 

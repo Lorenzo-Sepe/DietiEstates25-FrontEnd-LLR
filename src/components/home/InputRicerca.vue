@@ -8,7 +8,7 @@
 
 import { ref, onMounted } from "vue";
 import AutoComplete from 'primevue/autocomplete';
-import { CountryService } from "/src/service/ComuniItalianiService";
+import { CountryService } from "../../services/ComuniItalianiService";
 
 onMounted(() => {
     CountryService.getCountries().then((data) => (countries.value = data));
