@@ -6,11 +6,11 @@
 
     <div class="home_ricerca">
 
-      <div class="flex flex-row gap-[1rem]">
-        <ToggleVenditaAffitto />
+      <div class="flex flex-row gap-[1rem] w-full">
+        <ToggleVenditaAffitto  />
         <SelectTipoImmobile />
         <InputRicerca />
-        <Button label="Cerca" icon="pi pi-search" />
+        <Button class="w-1/4" label="Cerca" icon="pi pi-search" />
       </div>
 
       <a href="http://www.poivedremo.it" class="text-lg font-semibold text-blue-600 hover:text-blue-800 underline decoration-2 transition duration-200 ease-in-out">
@@ -34,7 +34,7 @@ import Button from "primevue/button"
 .home_image-container {
 
   position: relative;
-  width: 80%;
+  width: 90%;
   margin: 2rem;
 
 }
@@ -47,8 +47,31 @@ import Button from "primevue/button"
 
 }
 
+@media (max-width: 768px) {
+  .home_image-container {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .home_image-container .home_image {
+    position: static; 
+    width: 80%;
+  }
+
+  .home_ricerca {
+    position: static;
+    transform: none;
+    width: 90%;
+    margin-top: 1rem;
+  }
+}
+
 .home_ricerca {
 
+  width: 90%;
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
@@ -64,6 +87,22 @@ import Button from "primevue/button"
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
+}
+
+@media (max-width: 768px) {
+  .home_ricerca {
+    width: 100%;
+    padding: 2rem;
+    height: auto;
+    position: static;
+    transform: none;
+    background-color: #E5E7EB;
+  }
+
+  .home_ricerca .flex {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 </style>
