@@ -6,8 +6,8 @@
 
     <div class="home_ricerca">
 
-      <div class="flex flex-row gap-[1rem] w-full">
-        <ToggleVenditaAffitto  />
+      <div class="flex flex-row gap-[1rem]">
+        <ToggleVenditaAffitto />
         <SelectTipoImmobile />
         <InputRicerca />
         <Button class="w-1/4" label="Cerca" icon="pi pi-search" />
@@ -24,9 +24,9 @@
 </template>
 
 <script setup>
-import InputRicerca from "../components/home/InputRicerca.vue"
-import SelectTipoImmobile from "../components/home/SelectTipoImmobile.vue"
-import ToggleVenditaAffitto from "../components/home/ToggleVenditaAffitto.vue"
+import InputRicerca from "../components/Homepage/InputRicerca.vue"
+import SelectTipoImmobile from "../components/Homepage/SelectTipoImmobile.vue"
+import ToggleVenditaAffitto from "../components/Homepage/ToggleVenditaAffitto.vue"
 import Button from "primevue/button"
 </script>
 

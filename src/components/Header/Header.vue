@@ -1,5 +1,5 @@
 <template>
-  <div class="flex px-3 flex-row justify-between items-center w-full top-0 h-auto z-50 sticky text-black text-2xl bg-gray-200">
+  <div class="flex px-3 flex-row justify-between items-center w-full top-0 h-auto z-50 sticky text-black text-2xl bg-surface-200">
     <LogoPortale v-if="isInPortale" />
     <Logo v-else class="p-3"/>
 
@@ -15,9 +15,11 @@ import Logo from "./Logo.vue"
 import LogoPortale from "./LogoPortale.vue"
 import MenuNavigazione from "./MenuNavigazione.vue";
 
-import { ref, defineProps } from 'vue'
+import {  defineProps } from 'vue'
 import {useUserStore} from '../../stores/UserStore'
+
 import Button from 'primevue/button';
+
 
 const props = defineProps({
     isInPortale: Boolean
@@ -26,7 +28,6 @@ const props = defineProps({
 
 const userStoreInstance = useUserStore()
 
-const dipendente = ref(userStoreInstance.user.dipendente);
 
 </script>
 

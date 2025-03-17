@@ -5,13 +5,9 @@ export const useUserStore = defineStore('user', {
     user: {
       id: null,
       username: '',
-      name: '',
-      surname: '',
       urlFotoProfilo: '',
       email: '',
       token: '',
-      tokenAgent:'',
-      dipendente: false,
       authority:'',
       isAuthenticated: false
     }
