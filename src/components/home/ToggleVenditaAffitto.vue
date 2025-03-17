@@ -1,6 +1,6 @@
 <template>
 
-    <div class="inline-flex">
+    <div class="inline-flex w-1/5">
         <Button label="Affitto" :severity="severityAffitto" :variant="variantAffitto" @click="toggleButtonsAffitto" />
         <Button label="Vendita" :severity="severityVendita" :variant="variantVendita"  @click="toggleButtonsVendita" />
     </div>

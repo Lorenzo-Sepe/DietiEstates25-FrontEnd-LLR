@@ -1,6 +1,6 @@
 <template>
 
-        <AutoComplete v-model="selectedCountry" optionLabel="comune" :suggestions="filteredCountries" placeholder="Scrivi dove cerchi l'immobile"
+        <AutoComplete class="w-1/2" v-model="selectedCountry" optionLabel="comune" :suggestions="filteredCountries" placeholder="Scrivi dove cerchi l'immobile"
             @complete="search" />
 </template>
 
@@ -32,3 +32,12 @@ const search = (event) => {
 }
 
 </script>
+
+<style scoped>
+
+:deep(.p-autocomplete-input) {
+
+  width: 100% !important;
+}
+
+</style>

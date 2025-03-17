@@ -1,6 +1,6 @@
 <template>
 
-    <Select v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Seleziona il tipo di immobile" />
+    <Select class="w-1/3" v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Seleziona il tipo di immobile" />
 
 </template>
 
