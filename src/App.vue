@@ -1,12 +1,15 @@
 <script setup>
 import Header from './components/Header/Header.vue';
 import Footer from './components/Footer/Footer.vue';
-import { useRoute } from 'vue-router';
 import{ computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { isPortaleAgenziaAreaPage } from './service/StatoPaginaService';
+
 const route = useRoute();
 
 // Determina se l'utente è nell'area venditore
-const isInPortale = computed(() => route.path.startsWith('/venditore'));
+const isInPortale = computed(() => isPortaleAgenziaAreaPage(route));
+
 
 </script>
 
