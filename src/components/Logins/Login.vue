@@ -18,7 +18,7 @@
 
 <script setup>
 import { reactive,ref } from 'vue';
-import AuthService from '../../service/AuthService';
+import AuthService from '../../services/AuthService';
 import SignInRequest from '../../dto/signInRequest'; 
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';

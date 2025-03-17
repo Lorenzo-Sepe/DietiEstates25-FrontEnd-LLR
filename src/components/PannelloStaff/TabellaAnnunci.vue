@@ -64,7 +64,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
-import { ProductService } from '../../service/TabellaAnnunciService';
+import { ProductService } from '../../services/TabellaAnnunciService';
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
