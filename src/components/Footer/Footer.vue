@@ -16,4 +16,10 @@ import Realizzatori from './Realizzatori.vue';
 import Risorse from './Risorse.vue';
 import PortaleBusiness from './PortaleBusiness.vue';
 import ToggleTheme from './ToggleTheme.vue';
+import { defineProps } from 'vue';
+
+const props = defineProps({
+    isInPortale: Boolean
+  });
+
 </script>
