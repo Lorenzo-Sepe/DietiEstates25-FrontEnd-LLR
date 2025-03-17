@@ -12,7 +12,6 @@ export default {
         return Api()
             .post('pb/auth/signup', credentials) 
             .then((response) => {
-                //console.log('register service then', response);
                 return response.data;
             });
     },

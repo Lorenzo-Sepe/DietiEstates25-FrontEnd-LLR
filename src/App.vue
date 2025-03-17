@@ -14,7 +14,7 @@ const isInPortale = computed(() => isPortaleAgenziaAreaPage(route));
 </script>
 
 <template>
-  <Header :isInPortale="isInPortale" />
+  <Header :isInPortale="isInPortale"/>
   <body class="h-screen flex justify-center items-center"> 
     <router-view/>
   </body>

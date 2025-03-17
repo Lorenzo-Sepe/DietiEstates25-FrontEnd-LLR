@@ -30,11 +30,9 @@ import  Password  from 'primevue/password';
 const router = useRouter();
 const route = useRoute();
 
-const employeeStoreInstance = useEmployeeStore(); 
 const loading = ref(false);
-const test= ref('')
+
 const errorMessage = ref('');
-const passwordVisible = ref(false);
 
 const initialValues = reactive({
     emailOrUsername: '',
@@ -75,7 +73,6 @@ const onFormSubmit = async ({ valid }) => {
                 usernameOrEmail: signInRequest.value.usernameOrEmail,
                 password: signInRequest.value.password
             });
-          
             
             loading.value = false;
             router.push({ path: '/' });
