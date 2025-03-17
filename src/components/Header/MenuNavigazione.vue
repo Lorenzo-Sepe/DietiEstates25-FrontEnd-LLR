@@ -15,7 +15,7 @@
   import { computed, defineProps } from 'vue';
   
   const props = defineProps({
-    isVenditore: Boolean
+    isInPortale: Boolean
   });
   
   // Definizione dei menu per le diverse aree
@@ -32,6 +32,6 @@
   ];
   
   // Menu dinamico in base alla prop ricevuta dal padre
-  const menuCorrente = computed(() => (props.isVenditore ? menuVenditore : menuGenerale));
+  const menuCorrente = computed(() => (props.isInPortale ? menuVenditore : menuGenerale));
   </script>
   

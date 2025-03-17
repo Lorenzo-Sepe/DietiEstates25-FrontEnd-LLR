@@ -19,6 +19,11 @@ const routes = [
     component: () => import('../views/LoginAgentView.vue')
 
   },
+  { 
+    path:'/PortaleAgenzia',
+    name: 'PortaleAgenzia',
+    component: () => import('../views/PortaleAgenzia.vue')
+  },
   // Route di testing dei componenti
   {
     path: '/testLorenzo',
