@@ -1,5 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+// Simulazione di un sistema di autenticazione
+const isAuthenticated = () => {
+  return false; // Esempio semplice
+}
+
 // Definisci le tue rotte
 const routes = [
   {
@@ -10,19 +15,41 @@ const routes = [
   {
     path: '/about',
     name: 'about',
-    // Lazy loading del componente
     component: () => import('../views/AboutView.vue')
   },
   {
     path: '/loginAgent',
     name: 'loginAgent',
     component: () => import('../views/LoginAgentView.vue')
-
   },
   { 
-    path:'/PortaleAgenzia',
+    path: '/PortaleAgenzia',
     name: 'PortaleAgenzia',
-    component: () => import('../views/PortaleAgenzia.vue')
+    component: () => import('../views/PortaleAgenzia.vue'),
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) {
+        next({name:'MieiAnnunci'}); // L'utente è loggato, vai alla pagina dei miei annunci
+      } else {
+        next({ name: 'PortaleAgenziaInfo' }); // Reindirizza a una pagina informativa
+      }
+    }
+  },
+  {
+    path: '/PortaleAgenziaInfo',
+    name: 'PortaleAgenziaInfo',
+    component: () => import('../views/PortaleAgenziaInfo.vue') // Pagina informativa sul portale
+  },
+  {
+    path: '/PortaleAgenzia/miei-annunci',
+    name: 'MieiAnnunci',
+    component: () => import('../views/MieiAnnunci.vue'), // Pagina dei miei annunci
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) {
+        next(); // L'utente è loggato, consenti l'accesso
+      } else {
+        next({ name: 'loginAgent' }); // Reindirizza alla pagina di login
+      }
+    }
   },
   // Route di testing dei componenti
   {
@@ -35,7 +62,6 @@ const routes = [
     name: 'testR',
     component: () => import('../views/testRoby.vue')
   }
-
 ]
 
 // Crea l'istanza del router
@@ -44,4 +70,4 @@ const router = createRouter({
   routes
 })
 
-export default router 
+export default router;
