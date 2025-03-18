@@ -28,7 +28,7 @@ const ApiAgent = () => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
   return axios.create({
-    baseURL: 'http://localhost:8081',
+    baseURL: 'http://localhost:8081/api/',
     timeout: 5000,
     headers: {
       'Content-Type': 'application/json'
