@@ -10,9 +10,9 @@
   import { defineEmits, ref, defineProps } from 'vue';
   import FileUpload from 'primevue/fileupload';
   import Button from 'primevue/button';
-  import { Immagine } from '../../dto/RequestAnnuncio';
+  import { Immagine,AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
   
-  const props = defineProps({ annuncio: Object });
+  const props = defineProps({ annuncio: AnnuncioImmobiliareRequest });
   const emit = defineEmits(['indietro', 'invia']);
   const immagini = ref([]);
   

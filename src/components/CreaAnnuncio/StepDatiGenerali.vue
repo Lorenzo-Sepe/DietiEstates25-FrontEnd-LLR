@@ -6,7 +6,7 @@
     <label for="descrizione">Descrizione</label>
     <Textarea id="descrizione" v-model="annuncio.descrizione" rows="4" />
   </div>
-  <Button label="Stampa Annuncio" @click="console.log(annuncio)" />
+ 
   <div class="flex pt-6 justify-end">
     <Button label="Avanti" icon="pi pi-arrow-right" iconPos="right" @click="$emit('avanti')" />
   </div>
@@ -17,8 +17,9 @@ import { defineProps, defineEmits } from 'vue';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
+import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
 
-const props = defineProps({ annuncio: Object });
+const props = defineProps({ annuncio: AnnuncioImmobiliareRequest });
 const emit = defineEmits(['avanti']);
 </script>
 

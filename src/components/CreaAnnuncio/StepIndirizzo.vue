@@ -16,8 +16,9 @@
 import { defineProps, defineEmits } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
 
-const props = defineProps({ annuncio: Object });
+const props = defineProps({ annuncio: AnnuncioImmobiliareRequest });
 const emit = defineEmits(['indietro', 'avanti']);
 </script>
 
