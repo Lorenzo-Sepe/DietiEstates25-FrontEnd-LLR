@@ -2,22 +2,22 @@
 <template>
     <div class="card">
         <DataTable :value="products">
-            <Column field="code" header="Code">
+            <Column field="code" header="Titolo">
                 <template #body>
                     <Skeleton></Skeleton>
                 </template>
             </Column>
-            <Column field="name" header="Name">
+            <Column field="name" header="Copertina">
                 <template #body>
                     <Skeleton></Skeleton>
                 </template>
             </Column>
-            <Column field="category" header="Category">
+            <Column field="category" header="Prezzo">
                 <template #body>
                     <Skeleton></Skeleton>
                 </template>
             </Column>
-            <Column field="quantity" header="Quantity">
+            <Column field="quantity" header="Contratto">
                 <template #body>
                     <Skeleton></Skeleton>
                 </template>

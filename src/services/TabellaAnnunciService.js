@@ -7,7 +7,6 @@ export default {
         return ApiAgent()
             .post('annuncioImmobiliare/cercaByStaff',filtro)
             .then((response) => {
-
                 return response.data;
             })
     },
@@ -15,11 +14,11 @@ export default {
     getNumeroAnnunciByStaff(){
 
         return ApiAgent()
-            .get('annuncioImmobiliare/numeroAnnunciByStaff')
+            .get('annuncioImmobiliare/numeroByStaff')
             .then((response) => {
-
                 return response.data;
             })
     },
+
 };
 

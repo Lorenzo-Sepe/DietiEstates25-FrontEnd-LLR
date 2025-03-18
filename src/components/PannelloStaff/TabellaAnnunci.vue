@@ -1,9 +1,9 @@
 <template>
 
-    <ScheletroTabella v-if="loading" />
+    <ScheletroTabella v-if="props.propLoading" />
 
     <div class="card" v-else>
-        <DataTable :value="annunci" dataKey="id" tableStyle="min-width: 60rem">
+        <DataTable v-model:expandedRows="expandedRows" :value="props.propAnnunci" dataKey="id" tableStyle="min-width: 60rem">
             <template #header>
                 <div class="flex flex-wrap justify-end gap-2">
                     <Button label="Aggiungi annuncio immobilare" />
@@ -13,11 +13,20 @@
             <Column field="titolo" header="Titolo"></Column>
             <Column header="Copertina">
                 <template #body="slotProps">
-                    <img :src="`https://primefaces.org/cdn/primevue/images/product/${slotProps.data.image}`"
-                        :alt="slotProps.data.image" class="shadow-lg" width="64" />
+                    <img :src="`${slotProps.data.immobile.immagini[0].url}`" :alt="slotProps.data.image"
+                        class="shadow-lg" width="64" />
                 </template>
             </Column>
-            <Column field="price" header="Prezzo"></Column>
+            <Column header="Prezzo">
+                <template #body="slotProps">
+                    <span v-if="slotProps.data.contratto.tipoDiContratto === 'vendita'">
+                        {{ slotProps.data.contratto.contrattoVenditaResponse.prezzoVendita }} €
+                    </span>
+                    <span v-else>
+                        {{ slotProps.data.contratto.contrattoAffittoResponse.prezzoAffitto }} €
+                    </span>
+                </template>
+            </Column>
             <Column field="contratto.tipoContratto" header="Contratto"></Column>
             <Column headerStyle="width:4rem">
                 <template #body>
@@ -37,16 +46,16 @@
             </Column>
             <template #expansion="slotProps">
                 <div class="p-4">
-                    <h5>Proposte ricevute di {{ slotProps.data.name }}</h5>
+                    <h5>Proposte ricevute di {{ slotProps.data.titolo }}</h5>
                     <Button label="Aggiungi proposta manuale"></Button>
-                    <DataTable :value="slotProps.data.orders">
-                        <Column field="id" header="Nome" sortable></Column>
-                        <Column field="customer" header="Email" sortable></Column>
-                        <Column field="date" header="Proposta" sortable></Column>
-                        <Column field="amount" header="Controproposta" sortable></Column>
-                        <Column field="status" header="Stato" sortable>
+                    <DataTable :value="slotProps.data.proposte">
+                        <Column field="datiProponente.nome" header="Nome" sortable></Column>
+                        <Column field="datiProponente.email" header="Email" sortable></Column>
+                        <Column field="prezzoProposta" header="Proposta" sortable></Column>
+                        <Column field="controproposta" header="Controproposta" sortable></Column>
+                        <Column field="stato" header="Stato" sortable>
                             <template #body="slotProps">
-                                <Tag :value="slotProps.data.status.toLowerCase()"
+                                <Tag :value="slotProps.data.stato.toLowerCase()"
                                     :severity="getOrderSeverity(slotProps.data)" />
                             </template>
                         </Column>
@@ -83,7 +92,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import AnnunciService from '../../services/TabellaAnnunciService';
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -91,72 +99,24 @@ import Button from 'primevue/button';
 import Tag from 'primevue/tag';
 import ScheletroTabella from '../PannelloStaff/ScheletroTabella.vue';
 
-import { useEmployeeStore } from '../../stores/EmployeeStore';
-import { FiltroAnnunciRequest } from '../../dto/FiltroAnnunciRequest'
+const props = defineProps(['propAnnunci', 'propLoading']);
+const expandedRows = ref([])
 
-const annunci = ref([]);
-const employeeStore = useEmployeeStore();
-const loading = ref(true);
 
 onMounted(async () => {
-
-    // Creare una nuova richiesta utilizzando il builder
-    const filtroAnnunci = FiltroAnnunciRequest.builder()
-        .setNumeroPagina(1)             // Impostare il numero della pagina
-        .setNumeroDiElementiPerPagina(5) // Impostare il numero di elementi per pagina
-        .build();                        // Creare l'oggetto finale
-
-    // Ora `filtroAnnunci` è un'istanza di `FiltroAnnunciRequest` con i valori impostati
-    console.log("filtroooo:", filtroAnnunci);
-
-    employeeStore.initializeStore()
-
-    const employStruct = {
-
-        id: 4,
-        username: 'agente1.test@av0.dietiestate.com"',
-        name: 'Roberto',
-        surname: 'Spena',
-        urlFotoProfilo: '',
-        email: 'agente1.test@av0.dietiestate.com',
-        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQyMjk3NTc5LCJleHAiOjE3NDIzODM5Nzl9.bCmk9bOnTro52FIDHJ31KG2UXcFC4WynT9U_a7uSRNU',
-        authority: 'AGENT',
-        isAuthenticated: true
-    }
-
-    employeeStore.setEmployee(employStruct);
-
-    console.log("storee:", employeeStore.getEmployeeData);
-
-    try {
-
-        annunci.value = await AnnunciService.getAnnunciByStaff(filtroAnnunci);
-
-    } catch (error) {
-
-        console.log("errore durante la chiamata axsios: ", error);
-
-    }finally{
-
-        loading.value = false;
-    }
 });
 
 
+const getOrderSeverity = (proposta) => {
 
-const formatCurrency = (value) => {
-    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-};
-
-const getOrderSeverity = (order) => {
-    switch (order.status) {
-        case 'DELIVERED':
+    switch (proposta.stato) {
+        case 'ACCETTATO':
             return 'success';
 
-        case 'CANCELLED':
+        case 'RIFIUTATO':
             return 'danger';
 
-        case 'PENDING':
+        case 'IN_TRATTAZIONE':
             return 'warn';
 
         case 'RETURNED':
