@@ -16,8 +16,8 @@ export const useEmployeeStore = defineStore('employee', {
   }),
 
   getters: {
-    isLoggedIn: (state) => state.user.isAuthenticated,
-    getEmployeeData: (state) => state.user
+    isLoggedIn: (state) => state.employee.isAuthenticated,
+    getEmployeeData: (state) => state.employee
   },
 
   actions: {

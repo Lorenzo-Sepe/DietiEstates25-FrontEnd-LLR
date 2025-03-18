@@ -9,6 +9,7 @@ import 'primeicons/primeicons.css'
 import ConfirmationService from 'primevue/confirmationservice'
 import DialogService from 'primevue/dialogservice'
 import ToastService from 'primevue/toastservice';
+import Tooltip from 'primevue/tooltip';
 
 
 const app = createApp(App)
@@ -27,6 +28,8 @@ app.use(PrimeVue, {
 app.use(ConfirmationService);
 app.use(ToastService);
 app.use(DialogService);
+app.directive('tooltip', Tooltip);
+
 
 app.use(pinia)
 app.use(router)

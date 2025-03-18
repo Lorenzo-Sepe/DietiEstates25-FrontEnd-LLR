@@ -6,6 +6,8 @@ const userInstance= useUserStore();
 const employeeInstance= useEmployeeStore();
 
 
+import { Api } from '../api/axiosConfig';
+
 export default {
     register(credentials) {
         console.log('service register');
@@ -16,21 +18,12 @@ export default {
             });
     },
     login(credentials) {
-        console.log("I'm in the login", credentials);
+        console.log('service login');
         return Api()
             .post('pb/auth/signin', credentials)
             .then((response) => {
-                if (response.data.email) {
-                    const emailDomain = response.data.email.split('@')[1];
-                    if (emailDomain.endsWith('dietiestate.com')) {
-                        // Salva i dati nello store degli impiegati
-                        employeeInstance.setEmployee(response.data);
-                    } else {
-                        // Salva i dati nello store degli utenti
-                        userInstance.setUser(response.data);
-                    }
-                    return response.data;
-                }
+                console.log('login service then', response);
+                return response.data;
             });
     },
     logout() {
