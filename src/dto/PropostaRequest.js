@@ -1,61 +1,14 @@
-class PropostaRequest{
-    annuncioId;
-    nome;
-    cognome;
-    prezzo;
-    TipoContratto;
-    informazioniContratto;
+export class PropostaRequest{
 
-    static TipoContrattoEnum = {
-        TELEFONO: 'TELEFONO',
-        EMAIL: 'EMAIL',
-        MESSAGGIO: 'MESSAGGIO'
-    };
+    constructor(data = {}) {
 
-    static builder() {
-        return new PropostaRequestBuilder();
+        this.annuncioId = data.annuncioId || null;
+        this.nome = data.nome || '';
+        this.cognome = data.cognome || '';
+        this.prezzo = data.prezzo || '';
+        this.tipoContatto = data.tipoContatto || '';
+        this.informazioniContatto = data.informazioniContatto || ''; 
+    
     }
-}
-
-class PropostaRequestBuilder {
-    constructor() {
-        this.propostaRequest = new PropostaRequest();
-    }
-
-    setAnnuncioId(annuncioId) {
-        this.propostaRequest.annuncioId = annuncioId;
-        return this;
-    }
-
-    setNome(nome) {
-        this.propostaRequest.nome = nome;
-        return this;
-    }
-
-    setCognome(cognome) {
-        this.propostaRequest.cognome = cognome;
-        return this;
-    }
-
-    setPrezzo(prezzo) {
-        this.propostaRequest.prezzo = prezzo;
-        return this;
-    }
-
-    setTipoContratto(tipoContratto) {
-        if (!Object.values(PropostaRequest.TipoContrattoEnum).includes(tipoContratto)) {
-            throw new Error('TipoContratto non valido');
-        }
-        this.propostaRequest.TipoContratto = tipoContratto;
-        return this;
-    }
-
-    setInformazioniContratto(informazioniContratto) {
-        this.propostaRequest.informazioniContratto = informazioniContratto;
-        return this;
-    }
-
-    build() {
-        return this.propostaRequest;
-    }
+    
 }

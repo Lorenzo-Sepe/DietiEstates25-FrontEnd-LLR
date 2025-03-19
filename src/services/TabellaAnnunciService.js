@@ -20,5 +20,14 @@ export default {
             })
     },
 
+    postPropostaManuale(proposta){
+
+        return ApiAgent()
+            .post('proposta/manuale',proposta)
+            .then((response) => {
+                return response.data;
+            })
+    }
+
 };
 

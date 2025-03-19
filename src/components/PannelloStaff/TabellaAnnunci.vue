@@ -3,7 +3,8 @@
     <ScheletroTabella v-if="props.propLoading" />
 
     <div class="card" v-else>
-        <DataTable v-model:expandedRows="expandedRows" :value="props.propAnnunci" dataKey="id" tableStyle="min-width: 60rem">
+        <DataTable v-model:expandedRows="expandedRows" :value="props.propAnnunci" dataKey="id"
+            tableStyle="min-width: 60rem">
             <template #header>
                 <div class="flex flex-wrap justify-end gap-2">
                     <Button label="Aggiungi annuncio immobilare" />
@@ -47,7 +48,12 @@
             <template #expansion="slotProps">
                 <div class="p-4">
                     <h5>Proposte ricevute di {{ slotProps.data.titolo }}</h5>
-                    <Button label="Aggiungi proposta manuale"></Button>
+                    <Button label="Aggiungi proposta manuale" @click="clickAggiungiPropostaManuale(slotProps.data.id)"></Button>
+                    <div class="card flex justify-center">
+                        <Dialog v-model:visible="visible" :style="{ width: 'auto' }" header="Form proposta" :modal="true">
+                            <AggiungiPropostaManuale :propostaRequest="props.propostaRequest" :idAnnuncio="selectedAnnuncioId" />
+                        </Dialog>
+                    </div>
                     <DataTable :value="slotProps.data.proposte">
                         <Column field="datiProponente.nome" header="Nome" sortable></Column>
                         <Column field="datiProponente.email" header="Email" sortable></Column>
@@ -91,20 +97,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, defineProps, defineEmits } from 'vue';
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Tag from 'primevue/tag';
 import ScheletroTabella from '../PannelloStaff/ScheletroTabella.vue';
+import AggiungiPropostaManuale from '../PannelloStaff/AggiungiPropostaManuale.vue';
+import Dialog from 'primevue/dialog';
 
-const props = defineProps(['propAnnunci', 'propLoading']);
+
+const props = defineProps(['propAnnunci', 'propLoading', 'propostaRequest']);
+const emit = defineEmits(['nuovaProposta']);
+
 const expandedRows = ref([])
 
-
-onMounted(async () => {
-});
+const visible = ref(false);
+const selectedAnnuncioId = ref(null);
 
 
 const getOrderSeverity = (proposta) => {
@@ -119,12 +129,17 @@ const getOrderSeverity = (proposta) => {
         case 'IN_TRATTAZIONE':
             return 'warn';
 
-        case 'RETURNED':
-            return 'info';
-
         default:
             return null;
     }
 };
+
+const clickAggiungiPropostaManuale = (id) => {
+
+    selectedAnnuncioId.value = id;
+    console.log("id:",selectedAnnuncioId.value);
+    visible.value = true;
+};
+
 
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col gap-4">
         <AreaSuperiore />
-        <TabellaAnnunci :propAnnunci="annunci" :propLoading="loading" />
+        <TabellaAnnunci :propAnnunci="annunci" :propLoading="loading" :propostaRequest="propostaRequest" @nuovaProposta="aggiungiPropostaManuale" />
         <div class="card">
             <Paginator :rows="5" :totalRecords="numeroAnnunci" @page="onPage"></Paginator>
         </div>
@@ -10,14 +10,16 @@
 
 <script setup>
 
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, } from 'vue';
 
 import AreaSuperiore from '../components/PannelloStaff/AreaSuperiore.vue'
 import TabellaAnnunci from '../components/PannelloStaff/tabellaAnnunci.vue'
 import Paginator from 'primevue/paginator';
+import ConfirmDialog from 'primevue/confirmdialog';
 
 import AnnunciService from '../services/TabellaAnnunciService';
 import { FiltroAnnuncioRequest } from '../dto/FiltroAnnunciRequest';
+import { PropostaRequest } from '../dto/PropostaRequest';
 import { useEmployeeStore } from '../stores/EmployeeStore';
 
 const numeroAnnunci = ref(0);
@@ -26,6 +28,7 @@ const loading = ref(true);
 const employeeStore = useEmployeeStore();
 
 const filtroAnnunci = reactive(new FiltroAnnuncioRequest());
+const propostaRequest = reactive(new PropostaRequest());
 
 onMounted(async () => {
 
@@ -44,7 +47,7 @@ onMounted(async () => {
         surname: 'Spena',
         urlFotoProfilo: '',
         email: 'agente1.test@av0.dietiestate.com',
-        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQyMjk3NTc5LCJleHAiOjE3NDIzODM5Nzl9.bCmk9bOnTro52FIDHJ31KG2UXcFC4WynT9U_a7uSRNU',
+        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQyNDA4Mzc2LCJleHAiOjE3NDI0OTQ3NzZ9.SYL0eIvyd-Th3q0cyUA1xHPaj7odwYHFwKxDLywByok',
         authority: 'AGENT',
         isAuthenticated: true
     }
@@ -92,6 +95,21 @@ const getAnnunci = async () => {
 
         loading.value = false;
         console.log("annunci:", annunci.value);
+    }
+}
+
+const aggiungiPropostaManuale = async () => {
+
+    const errore = ref(false);
+
+    try{
+
+        await AnnunciService.aggiungiPropostaManuale(propostaRequest);
+        okAllert();
+
+    }catch(error){
+
+        erroreAllert();
     }
 }
 
