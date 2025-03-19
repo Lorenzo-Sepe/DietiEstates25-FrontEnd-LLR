@@ -12,7 +12,6 @@
         <div class="titolo-pagina">
             <h1>Gestione annunci immobiliari</h1>
         </div>
-        <Button label="Aggiungi annuncio immobilare" />
     </div>
 
 </template>

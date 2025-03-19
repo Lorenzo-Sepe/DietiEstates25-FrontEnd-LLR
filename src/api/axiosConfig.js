@@ -23,15 +23,17 @@ const Api = () => {
 };
 
 const ApiAgent = () => {
-  const token = employeeStoreInstance.token;
-  if (token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  }
+  
+  const token = employeeStoreInstance.employee.token;
+  console.log("tokennnnnnnnnnnnnnn:", token)
+ 
   return axios.create({
     baseURL: 'http://localhost:8081/api/',
     timeout: 5000,
+    withCredentials: true,
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      ...(token && { Authorization: `Bearer ${token}` })
     }
   });
 };
