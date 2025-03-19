@@ -14,7 +14,7 @@
   </div>
   
   <div class="map-container">
-    <MapComponent :lat="latitude" :lng="longitude" />
+    <MapComponent :activeStep="activeStep" />
   </div>
   
   <div class="flex pt-6 justify-between">
@@ -24,19 +24,16 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import MapComponent from './MapComponent.vue'; 
 import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
 
 // Define props and emits
-const props = defineProps({ annuncio: AnnuncioImmobiliareRequest });
+const props = defineProps({
+  annuncio: AnnuncioImmobiliareRequest,
+  activeStep: Number
+});
 const emit = defineEmits(['indietro', 'avanti']);
-
-// State for latitude and longitude
-const latitude = ref(0);
-const longitude = ref(0);
-
-
 </script>

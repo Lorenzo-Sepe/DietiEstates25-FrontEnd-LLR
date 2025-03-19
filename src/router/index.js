@@ -63,6 +63,11 @@ const routes = [
     component: () => import('../views/pannelloStaff.vue')
 
   },
+  {
+    path: '/annuncio/:id',
+    name: 'annuncio',
+    component:()=> import('../views/DettagliAnnuncioView.vue')
+  },
   // Route di testing dei componenti
   {
     path: '/testLorenzo',
