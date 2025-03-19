@@ -25,7 +25,7 @@ import 'leaflet-control-geocoder';
       const marker = ref(null);
   
       const initMap = () => {
-  map.value = L.map('map').setView([41.8719, 12.5674], 5);
+        map.value = L.map('map').setView([41.8719, 12.5674], 5);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
