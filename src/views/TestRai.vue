@@ -1,20 +1,19 @@
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import Stepper from 'primevue/stepper';
 import StepList from 'primevue/steplist';
 import StepPanels from 'primevue/steppanels';
 import Step from 'primevue/step';
 import StepPanel from 'primevue/steppanel';
 import Divider from 'primevue/divider';
-import { AnnuncioImmobiliareRequest, Immagine } from '../dto/RequestAnnuncio';
+import { AnnuncioImmobiliareRequest } from '../dto/RequestAnnuncio';
 import { CreaAnnuncio } from '../services/CreazioneModificaAnnunciService';
 import StepDettagliAnnuncio from '../components/CreaAnnuncio/StepDatiGenerali.vue';
 import StepIndirizzo from '../components/CreaAnnuncio/StepIndirizzo.vue';
 import StepImmagini from '../components/CreaAnnuncio/StepCaricamentoImmagini.vue';
-   
+
 const annuncio = reactive(new AnnuncioImmobiliareRequest());
 const activeStep = ref(1);
-
 
 const vaiAvanti = () => {
   if (activeStep.value < 3) activeStep.value++;
@@ -28,6 +27,8 @@ const inviaAnnuncio = () => {
   console.log('Dati annuncio:', annuncio);
   CreaAnnuncio(annuncio);
 };
+
+
 </script>
 
 <template>
@@ -51,11 +52,12 @@ const inviaAnnuncio = () => {
         </StepPanel>
 
         <StepPanel :value="2">
-          <h3>indirizzo e posizione</h3>
+          <h3>Indirizzo e Posizione</h3>
           <StepIndirizzo 
             v-model:annuncio="annuncio" 
             @indietro="vaiIndietro" 
             @avanti="vaiAvanti" 
+            :activeStep="activeStep" 
           />
         </StepPanel>
 
