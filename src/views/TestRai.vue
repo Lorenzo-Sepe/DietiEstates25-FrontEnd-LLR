@@ -15,6 +15,7 @@ import StepImmagini from '../components/CreaAnnuncio/StepCaricamentoImmagini.vue
 const annuncio = reactive(new AnnuncioImmobiliareRequest());
 const activeStep = ref(1);
 
+
 const vaiAvanti = () => {
   if (activeStep.value < 3) activeStep.value++;
 };
@@ -42,6 +43,7 @@ const inviaAnnuncio = () => {
       
       <StepPanels>
         <StepPanel :value="1">
+          <h3>Informazioni di Base</h3>
           <StepDettagliAnnuncio 
             v-model:annuncio="annuncio" 
             @avanti="vaiAvanti" 
@@ -49,6 +51,7 @@ const inviaAnnuncio = () => {
         </StepPanel>
 
         <StepPanel :value="2">
+          <h3>indirizzo e posizione</h3>
           <StepIndirizzo 
             v-model:annuncio="annuncio" 
             @indietro="vaiIndietro" 
