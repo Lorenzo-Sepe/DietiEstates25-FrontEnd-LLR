@@ -5,9 +5,6 @@ import { useEmployeeStore } from '../stores/EmployeeStore';
 const userInstance= useUserStore();
 const employeeInstance= useEmployeeStore();
 
-
-import { Api } from '../api/axiosConfig';
-
 export default {
     register(credentials) {
         console.log('service register');
