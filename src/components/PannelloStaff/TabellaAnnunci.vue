@@ -48,10 +48,13 @@
             <template #expansion="slotProps">
                 <div class="p-4">
                     <h5>Proposte ricevute di {{ slotProps.data.titolo }}</h5>
-                    <Button label="Aggiungi proposta manuale" @click="clickAggiungiPropostaManuale(slotProps.data.id)"></Button>
+                    <Button label="Aggiungi proposta manuale"
+                        @click="clickAggiungiPropostaManuale(slotProps.data.id)"></Button>
                     <div class="card flex justify-center">
-                        <Dialog v-model:visible="visible" :style="{ width: 'auto' }" header="Form proposta" :modal="true">
-                            <AggiungiPropostaManuale :propostaRequest="props.propostaRequest" :idAnnuncio="selectedAnnuncioId" />
+                        <Dialog v-model:visible="visible" :style="{ width: 'auto' }" header="Form proposta"
+                            :modal="true">
+                            <AggiungiPropostaManuale :propostaRequest="props.propostaRequest"
+                                :idAnnuncio="selectedAnnuncioId" @nuovaProposta="nuovaProposta" />
                         </Dialog>
                     </div>
                     <DataTable :value="slotProps.data.proposte">
@@ -62,25 +65,42 @@
                         <Column field="stato" header="Stato" sortable>
                             <template #body="slotProps">
                                 <Tag :value="slotProps.data.stato.toLowerCase()"
-                                    :severity="getOrderSeverity(slotProps.data)" />
+                                    :severity="getSeverity(slotProps.data).value" />
                             </template>
                         </Column>
                         <Column headerStyle="width:4rem">
-                            <template #body>
+                            <template #body="slotProps">
                                 <div class="flex flex-row gap-2">
-                                    <Button
+                                    <Button v-if="accettaPropostaAbilitato(slotProps.data)"
                                         v-tooltip="{ value: 'Accetta la proposta', showDelay: 1000, hideDelay: 300 }">
                                         <template #icon>
                                             <img src="../../assets/Icon/accettaProposta.png" class="w-5 h-5" />
                                         </template>
                                     </Button>
-                                    <Button
+                                    <Button v-else disabled>
+                                        <template #icon>
+                                            <img src="../../assets/Icon/accettaProposta.png" class="w-5 h-5" />
+                                        </template>
+                                    </Button>
+                                    <Button v-if="controPropostaAbilitato(slotProps.data)"
                                         v-tooltip="{ value: 'Fai una controproposta', showDelay: 1000, hideDelay: 300 }">
                                         <template #icon>
                                             <img src="../../assets/Icon/controproposta.png" class="w-5 h-5" />
                                         </template>
                                     </Button>
-                                    <Button v-tooltip="{ value: 'Rifiuta proposta', showDelay: 1000, hideDelay: 300 }">
+                                    <Button v-else disabled>
+                                        <template #icon>
+                                            <img src="../../assets/Icon/controproposta.png" class="w-5 h-5" />
+                                        </template>
+                                    </Button>
+                                    <Button v-if="riufiutaPropostaAbilitato(slotProps.data)"
+                                        v-tooltip="{ value: 'Rifiuta proposta', showDelay: 1000, hideDelay: 300 }"
+                                        @click="clickRifiutaProposta(slotProps.data.idProposta)">
+                                        <template #icon>
+                                            <img src="../../assets/Icon/rifiutaProposta.png" class="w-5 h-5" />
+                                        </template>
+                                    </Button>
+                                    <Button v-else disabled>
                                         <template #icon>
                                             <img src="../../assets/Icon/rifiutaProposta.png" class="w-5 h-5" />
                                         </template>
@@ -97,7 +117,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref, defineProps, defineEmits, computed } from 'vue';
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -109,12 +129,17 @@ import Dialog from 'primevue/dialog';
 
 
 const props = defineProps(['propAnnunci', 'propLoading', 'propostaRequest']);
-const emit = defineEmits(['nuovaProposta']);
+const emit = defineEmits(['nuovaProposta', 'eliminaProposta']);
 
 const expandedRows = ref([])
 
 const visible = ref(false);
 const selectedAnnuncioId = ref(null);
+
+const getSeverity = (proposta) => {
+
+    return computed(() => getOrderSeverity(proposta));
+};
 
 
 const getOrderSeverity = (proposta) => {
@@ -137,9 +162,58 @@ const getOrderSeverity = (proposta) => {
 const clickAggiungiPropostaManuale = (id) => {
 
     selectedAnnuncioId.value = id;
-    console.log("id:",selectedAnnuncioId.value);
     visible.value = true;
 };
 
+const nuovaProposta = () => {
+
+    visible.value = false;
+
+    emit('nuovaProposta');
+};
+
+const clickRifiutaProposta = (id) => {
+
+    emit('eliminaProposta', id);
+};
+
+const riufiutaPropostaAbilitato = (proposta) => {
+
+    if (proposta.stato === 'IN_TRATTAZIONE') {
+
+        return true;
+
+    } else {
+
+        return false;
+    }
+
+};
+
+const controPropostaAbilitato = (proposta) => {
+
+    if (proposta.stato === 'IN_TRATTAZIONE' && proposta.controproposta === null) {
+
+        return true;
+
+    } else {
+
+        return false;
+    }
+
+};
+
+const accettaPropostaAbilitato = (proposta) => {
+
+if (proposta.stato === 'IN_TRATTAZIONE') {
+
+    return true;
+
+} else {
+
+    return false;
+}
+
+};
 
 </script>
