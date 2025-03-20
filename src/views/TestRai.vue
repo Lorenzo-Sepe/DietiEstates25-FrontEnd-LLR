@@ -32,7 +32,7 @@ const inviaAnnuncio = () => {
 </script>
 
 <template>
-  <div class="card flex justify-center">
+  <div class="card flex justify-center mt-8 ">
     <Stepper v-model:value="activeStep" class="basis-[40rem]">
       <StepList>
         <Step :value="1"><i class="pi pi-home" /></Step>

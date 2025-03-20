@@ -1,5 +1,5 @@
 <template>
-  <div class="p-fluid">
+  <div class="p-fluid ">
     <label for="via">Via</label>
     <InputText id="via" v-model="annuncio.immobile.indirizzo.via" />
     
@@ -14,8 +14,14 @@
   </div>
   
   <div class="map-container">
-    <MapComponent :activeStep="activeStep" />
-  </div>
+    <MapComponent 
+      :activeStep="activeStep" 
+      :via="annuncio.immobile.indirizzo.via" 
+      :numeroCivico="annuncio.immobile.indirizzo.numeroCivico" 
+      :cap="annuncio.immobile.indirizzo.cap" 
+      :citta="annuncio.immobile.indirizzo.citta"
+    />
+    </div>
   
   <div class="flex pt-6 justify-between">
     <Button label="Indietro" severity="secondary" icon="pi pi-arrow-left" @click="$emit('indietro')" />
