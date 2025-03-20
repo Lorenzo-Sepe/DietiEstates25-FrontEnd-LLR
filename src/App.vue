@@ -14,10 +14,10 @@ const isInPortale = computed(() => isPortaleAgenziaAreaPage(route));
 </script>
 
 <template>
-  <Header :isInPortale="isInPortale"/>
-  <body class="h-screen flex justify-center items-center"> 
+  <Header :isInPortale="isInPortale" />
+  <body class="h-screen flex justify-center items-center "> 
     <router-view/>
   </body>
-  <Footer  :isInPortale="isInPortale" />
+  <Footer :isInPortale="isInPortale" class="z-100" />
 </template>
 
