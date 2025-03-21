@@ -65,7 +65,38 @@
                 },
                 contrattoAffittoResponse: null
             },
-            proposte: []
+            "proposte": [
+    {
+      "idProposta": 1,
+      "prezzoProposta": 150000.50,
+      "controproposta": 140000.75,
+      "stato": "in attesa",
+      "datiProponente": {
+        "email": "utente@example.com",
+        "nome": "Mario",
+        "cognome": "Rossi",
+        "contatto": {
+          "tipo": "telefono",
+          "valore": "+393331234567"
+        }
+      }
+    },
+    {
+      "idProposta": 2,
+      "prezzoProposta": 200000.00,
+      "controproposta": 190000.00,
+      "stato": "accettata",
+      "datiProponente": {
+        "email": "cliente@example.com",
+        "nome": "Luca",
+        "cognome": "Bianchi",
+        "contatto": {
+          "tipo": "email",
+          "valore": "luca.bianchi@example.com"
+        }
+      }
+    }
+  ]
         };
   
   
