@@ -1,41 +1,67 @@
 <template>
-    <div id="carouselExample" class="carousel slide" data-ride="carousel">
-      <div class="carousel-inner">
-        <div class="carousel-item" v-for="(item, index) in items" :key="index" :class="{ active: index === 0 }">
-          <img :src="item.image" class="d-block w-100" alt="...">
-          <div class="carousel-caption d-none d-md-block caption-bg">
-            <h5>{{ item.caption }}</h5>
-          </div>
+    <div>
+        <div id="carouselExample" class="carousel slide" data-ride="carousel" data-interval="false">
+            <div class="carousel-inner">
+                <div class="carousel-item" v-for="(item, index) in galleria" :key="index" :class="{ active: index === 0 }">
+                    <img :src="item.url" class="d-block w-100" alt="..." @click="openModal(item.url,item.descrizione)">
+                    <div class="carousel-caption d-none d-md-block caption-bg">
+                        <h5>{{ item.descrizione }}</h5>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
-      </div>
-      <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
+
+        <!-- Modal per l'immagine a schermo intero -->
+        <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imageModalLabel">{{ description }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body p-0">
+                        <img :src="selectedImage" class="img-fluid" alt="Immagine a schermo intero">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 
-const items = [
-    {
-        image: 'https://placehold.co/600x400/EEE/31343C',
-        caption: 'Prima didascalia'
-    },
-    {
-        image: 'https://placehold.co/600x400/EEE/31343C',
-        caption: 'Seconda didascalia'
-    },
-    {
-        image: 'https://placehold.co/600x400/EEE/31343C',
-        caption: 'Terza didascalia'
+const selectedImage = ref('');
+const description = ref('')
+
+defineProps({
+    galleria: {
+        type: Array,
+        required: true,
+        validator: (value) => {
+            return value.every(item => 
+                typeof item.url === 'string' && 
+                typeof item.descrizione === 'string'
+            );
+        }
     }
-];
+});
+
+const openModal = (imageUrl, imageDescription) => {
+    selectedImage.value = imageUrl;
+     description.value= imageDescription;
+    $('#imageModal').modal('show');
+};
 
 // Includi Bootstrap JS
 onMounted(() => {
@@ -58,17 +84,36 @@ onMounted(() => {
 <style>
 @import url('https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
 
+.carousel-item {
+    height: 400px;
+    background-color: black;
+    cursor: pointer;
+}
+
 .carousel-item img {
-    max-height: 400px; /* Imposta l'altezza massima per le immagini */
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
 
 .caption-bg {
-    background-color: rgba(0, 0, 0, 0.7); /* Sfondo nero con trasparenza */
-    padding: 10px; /* Padding per la caption */
-    border-radius: 5px; /* Angoli arrotondati */
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .carousel-caption h5 {
-    color: white; /* Colore del testo */
+    color: white;
+}
+
+.modal-body {
+    max-height: 80vh;
+    overflow: hidden;
+}
+
+.modal-body img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
 }
 </style>

@@ -1,65 +1,39 @@
 <template>
-  <div class="dettagli-annuncio flex items-center flex-col w-full">
-    <Card class="mb-4 w-full lg:w-[50%]">
+  <div class="dettagli-annuncio flex flex-col items-center w-full">
+    <Card class="mb-4 w-full bg-surface-50 lg:w-[50%]">
       <template #title>
-        <div class="flex flex-row items-center justify-between">
+        <div class="flex flex-row items-center justify-between h-20 bg-surface-50 p-2 rounded border border-surface-100">
           <h2>{{ annuncio.titolo }}</h2>
           <Tag :value="annuncio.contratto.tipoContratto" severity="info" />
         </div>
       </template>
       <template #content>
-        <div class="flex justify-between flex-col  items-center">
-          <div class="flex-1 md:flex-2 w-full">
-            <Galleria :value="annuncio.immobile.immagini" 
-                      :numVisible="5" 
-                      :circular="true"  
-                      :showThumbnails="true" 
-                      :responsiveOptions="responsiveOptions" 
-                      :showItemNavigators="true" 
-                      :showItemNavigatorsOnHover="true"
-                      :showIndicators="false"
-                      class="mb-4 w-full">
-              <template #item="slotProps">
-                <img :src="slotProps.item.url" 
-                      :alt="slotProps.item.descrizione" 
-                      style="width: 100%; 
-                      display: block" />  
-              </template>
-              <template #thumbnail="slotProps">
-                <div class="items-center">
-                  <img :src="slotProps.item.url" 
-                      :alt="slotProps.item.descrizione" 
-                      style="display: block;width: 20%"/>
-                </div>
-              </template>
-              <template #caption="slotProps">
-                <p>{{ slotProps.item.descrizione }}</p>
-              </template>
-            </Galleria>
-          </div>
-          <div class="flex-1 md:flex-1">
-            <div class="surface-0 p-4 border-round">
-              <h2 class="text-xl mb-3">Prezzo</h2>
-              <div v-if="annuncio.contratto.tipoContratto === 'VENDITA'" class="text-2xl font-bold text-primary">
-                €{{ annuncio.contratto.contrattoVenditaResponse.prezzoVendita.toLocaleString() }}
-              </div>
-              <div v-if="annuncio.contratto.tipoContratto === 'AFFITTO'"" class="text-2xl font-bold text-primary">
-                €{{ annuncio.contratto.contrattoAffittoResponse.prezzoAffitto.toLocaleString() }}/mese
-              </div>
-            </div>
+        <div class="flex flex-col items-center justify-between">
+          <div class="flex-1 w-full md:flex-2">
+            <Carosello :galleria="annuncio.immobile.immagini" />
           </div>
         </div>
       </template>
     </Card>
 
-    <div class="flex flex-col lg:flex-row lg:justify-center lg:items-start lg:flex-wrap justify-between gap-1 items-center mx-5 my-2">
-      
-        <div class="flex flex-row  gap-3 w-full lg:w-[50%]">
-          <Card class="mb-4 w-full">
-          <template #title>Dettagli Immobile</template>
+    <div class="flex flex-col items-center justify-between gap-1 mx-5 my-2 lg:flex-row lg:justify-center lg:items-start lg:flex-wrap">
+      <div class="flex flex-row w-full gap-3 lg:w-[50%]">
+        <Card class="mb-4 w-full bg-surface-50">
+          <template #title>
+            <div class="flex items-center h-20 bg-surface-50 p-2 rounded border border-surface-100 m-[-0.5em]">Dettagli Annuncio</div>
+          </template>
           <template #content>
-            <div class="flex flex-col flex-wrap gap-5 items-start justify-center ">
+            <div class="flex flex-col items-start justify-center flex-wrap gap-5">
               <div class="flex flex-col gap-3">
+                <div class="flex items-center gap-1">
+                  <span class="font-bold text-2xl">Prezzo:</span>
+                  <div v-if="annuncio.contratto.tipoContratto === 'VENDITA'" class="font-bold text-2xl">
+                    €{{ annuncio.contratto.contrattoVenditaResponse.prezzoVendita.toLocaleString() }}
+                  </div>
+                  <div v-if="annuncio.contratto.tipoContratto === 'AFFITTO'" class="font-bold text-2xl">
+                    €{{ annuncio.contratto.contrattoAffittoResponse.prezzoAffitto.toLocaleString() }}/mese
+                  </div>
+                </div>
                 <div class="flex items-center gap-1">
                   <i class="pi pi-home"></i>
                   <span>Tipologia: {{ annuncio.immobile.tipologiaImmobile }}</span>
@@ -80,18 +54,20 @@
               <div class="flex flex-col gap-3">
                 <div class="flex items-center gap-1">
                   <i class="pi pi-bolt"></i>
-                  <span>Classe Energetica: {{ annuncio.immobile.classeEnergetica.replace('PLUS', '+').replace('PLUS', '+').replace('MINUS', '-').replace('MINUS', '-').replace('_', '').replace('_', '') }}</span>
+                  <span>Classe Energetica: {{ annuncio.immobile.classeEnergetica.replace('PLUS', '+').replace('MINUS', '-').replace('_', '') }}</span>
                 </div>
                 <div class="flex items-center gap-1">
-                  <i class=" bi-badge-wc"></i>
+                  <i class="bi bi-badge-wc"></i>
                   <span>Bagni: {{ annuncio.immobile.numeroServizi }}</span>
                 </div>
               </div>
             </div>
           </template>
         </Card>
-        <Card class="mb-4 w-full">
-          <template #title>Indirizzo</template>
+        <Card class="mb-4 w-full bg-surface-50">
+          <template #title>
+            <div class="flex items-center h-20 bg-surface-50 p-2 rounded border border-surface-100 m-[-0.5em]">Indirizzo</div>
+          </template>
           <template #content>
             <div class="flex flex-wrap gap-3">
               <div class="flex items-center w-full gap-1">
@@ -109,169 +85,189 @@
             </div>
           </template>
         </Card>
-        </div>
+      </div>
+
+      <Panel class="w-full bg-surface-50 lg:w-[50%]">
+        <template #header>
+          <span class="p-2 text-2xl font-bold">Descrizione</span>
+        </template>
+        <p class="line-height-3">{{ annuncio.descrizione }}</p>
+      </Panel>
 
       <Accordion :multiple="true" class="w-full lg:w-[50%]">
-        <AccordionPanel value="0">
+        <AccordionPanel value="1">
           <AccordionHeader>Caratteristiche Aggiuntive</AccordionHeader>
           <AccordionContent>
-            <ul class="items-start ">
-                <li v-if="annuncio.immobile.caratteristicheAggiuntive.balconi">Balconi</li>
-                <li v-if="annuncio.immobile.caratteristicheAggiuntive.garage">Garage</li>
-                <li v-if="annuncio.immobile.caratteristicheAggiuntive.postiAuto">Posti Auto</li>
-                <li v-if="annuncio.immobile.caratteristicheAggiuntive.giardino">Giardino</li>
-                <li v-if="annuncio.immobile.caratteristicheAggiuntive.ascensore">Ascensore</li>
-                <li v-if="annuncio.immobile.caratteristicheAggiuntive.portiere">Portiere</li>
-                <li v-if="annuncio.immobile.caratteristicheAggiuntive.riscaldamentoCentralizzato">Riscaldamento Centralizzato</li>
-                <li v-if="annuncio.immobile.caratteristicheAggiuntive.climatizzatori">Climatizzatori</li>
-                <li v-if="annuncio.immobile.caratteristicheAggiuntive.pannelliSolari">Pannelli Solari</li>
+            <ul class="items-start">
+              <li v-if="annuncio.immobile.caratteristicheAggiuntive.balconi">Balconi</li>
+              <li v-if="annuncio.immobile.caratteristicheAggiuntive.garage">Garage</li>
+              <li v-if="annuncio.immobile.caratteristicheAggiuntive.postiAuto">Posti Auto</li>
+              <li v-if="annuncio.immobile.caratteristicheAggiuntive.giardino">Giardino</li>
+              <li v-if="annuncio.immobile.caratteristicheAggiuntive.ascensore">Ascensore</li>
+              <li v-if="annuncio.immobile.caratteristicheAggiuntive.portiere">Portiere</li>
+              <li v-if="annuncio.immobile.caratteristicheAggiuntive.riscaldamentoCentralizzato">Riscaldamento Centralizzato</li>
+              <li v-if="annuncio.immobile.caratteristicheAggiuntive.climatizzatori">Climatizzatori</li>
+              <li v-if="annuncio.immobile.caratteristicheAggiuntive.pannelliSolari">Pannelli Solari</li>
+            </ul>
+            <ul class="items-start">
+              <li v-for="luogo in annuncio.immobile.indirizzo.vicinoA" :key="luogo">Vicino a {{ luogo.charAt(0).toUpperCase() + luogo.slice(1).toLowerCase().replace('_', ' ') }}</li>
             </ul>
           </AccordionContent>
         </AccordionPanel>
-
-        <AccordionPanel value="1">
-          <AccordionHeader>Descizione</AccordionHeader>
-          <AccordionContent>
-            <p class="line-height-3">{{ annuncio.descrizione }}</p>
-          </AccordionContent>
-        </AccordionPanel>
       </Accordion>
-                
-        <Card class="mb-4 w-full lg:w-[50%]">
-          <template #title>Agente</template>
-          <template #content>
-            <div class="flex items-center gap-3">
-              <Avatar :image="annuncio.agente.urlFotoProfilo" size="large" />
-              <div>
-                <h3 class="m-0">{{ annuncio.agente.username }}</h3>
-                <p class="m-0 text-sm text-500">{{ annuncio.agente.email }}</p>
-              </div>
-            </div>
-          </template>
-        </Card>
 
-        <Card v-if="annuncio.contratto.tipoContratto === 'AFFITTO'" class="w-full lg:w-[50%]">
-          <template #title>Dettagli Affitto</template>
-          <template #content>
-            <div class="flex flex-column gap-1">
-              <div class="flex items-center gap-1">
-                <i class="pi pi-calendar"></i>
-                <span>Durata: {{ annuncio.contratto.contrattoAffittoResponse.tempoMinimo }} - {{ annuncio.contratto.contrattoAffittoResponse.tempoMassimo }} mesi</span>
-              </div>
-              <div class="flex items-center gap-1">
-                <i class="pi pi-wallet"></i>
-                <span>Caparra: €{{ annuncio.contratto.contrattoAffittoResponse.caparra.toLocaleString() }}</span>
-              </div>
-            </div>
-          </template>
-        </Card>
-
-        <Card  class="mb-4 w-full lg:w-[50%]">
-        <template #title>Proposte</template>
+      <Card class="mb-4 w-full bg-surface-50 lg:w-[50%]">
+        <template #title>
+          <div class="flex items-center h-20 bg-surface-50 p-2 rounded border border-surface-100 m-[-0.5em]">Agente</div>
+        </template>
         <template #content>
-          <DataTable stripedRows tableStyle="width: 100%" :value="annuncio.proposte" responsiveLayout="scroll">
-            <Column field="prezzoProposta" header="Prezzo Proposta" >
+          <div class="flex items-center gap-3">
+            <Avatar :image="annuncio.agente.urlFotoProfilo" size="large" />
+            <div>
+              <h3 class="m-0">{{ annuncio.agente.username }}</h3>
+              <p class="m-0 text-sm text-500">{{ annuncio.agente.email }}</p>
+            </div>
+          </div>
+        </template>
+      </Card>
+
+      <Card v-if="annuncio.contratto.tipoContratto === 'AFFITTO'" class="w-full bg-surface-50 lg:w-[50%]">
+        <template #title>
+          <div class="flex items-center h-20 bg-surface-50 p-2 rounded border border-surface-100 m-[-0.5em]">Dettagli Affitto</div>
+        </template>
+        <template #content>
+          <div class="flex flex-column gap-1">
+            <div class="flex items-center gap-1">
+              <i class="pi pi-calendar"></i>
+              <span>Durata: {{ annuncio.contratto.contrattoAffittoResponse.tempoMinimo }} - {{ annuncio.contratto.contrattoAffittoResponse.tempoMassimo }} mesi</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <i class="pi pi-wallet"></i>
+              <span>Caparra: €{{ annuncio.contratto.contrattoAffittoResponse.caparra.toLocaleString() }}</span>
+            </div>
+          </div>
+        </template>
+      </Card>
+
+      <Card class="mb-4 w-full bg-surface-50 lg:w-[50%]">
+        <template #title>
+          <div class="flex items-center h-20 bg-surface-50 p-2 rounded border border-surface-100 m-[-0.5em]">Proposte</div>
+        </template>
+        <template #content>
+          <DataTable stripedRows tableStyle="width: 100%" :value="annuncio.proposte" responsiveLayout="scroll" class="rounded border border-surface-100">
+            <Column field="prezzoProposta" header="Prezzo Proposta">
               <template #body="slotProps">
                 {{ formatCurrency(slotProps.data.prezzoProposta) }}
               </template>
             </Column>
-            <Column field="controproposta" header="Controproposta" >
+            <Column field="controproposta" header="Controproposta">
               <template #body="slotProps">
                 {{ formatCurrency(slotProps.data.controproposta) }}
               </template>
             </Column>
             <Column field="stato" header="Stato">
               <template #body="slotProps">
-                <Tag :value="slotProps.data.stato" :severity="getSeverity(slotProps.data)"/>
+                <Tag :value="slotProps.data.stato.charAt(0).toUpperCase() + slotProps.data.stato.slice(1)" :severity="getSeverity(slotProps.data)" />
               </template>
             </Column>
-            <Column field="datiProponente.nome" header="Nome Proponente"></Column>
-            <Column field="datiProponente.cognome" header="Cognome Proponente"></Column>
-            <Column field="datiProponente.contatto.tipo" header="Tipo Contatto"></Column>
+            <Column field="datiProponente.nome" header="Nome Proponente">
+              <template #body="slotProps">
+                {{ slotProps.data.datiProponente.nome.charAt(0).toUpperCase() + slotProps.data.datiProponente.nome.slice(1) }}
+              </template>
+            </Column>
+            <Column field="datiProponente.cognome" header="Cognome Proponente">
+              <template #body="slotProps">
+                {{ slotProps.data.datiProponente.cognome.charAt(0).toUpperCase() + slotProps.data.datiProponente.cognome.slice(1) }}
+              </template>
+            </Column>
+            <Column field="datiProponente.contatto.tipo" header="Tipo Contatto">
+              <template #body="slotProps">
+                {{ slotProps.data.datiProponente.contatto.tipo.charAt(0).toUpperCase() + slotProps.data.datiProponente.contatto.tipo.slice(1) }}
+              </template>
+            </Column>
             <Column field="datiProponente.contatto.valore" header="Valore Contatto"></Column>
           </DataTable>
         </template>
       </Card>
-      </div>
+    </div>
   </div>
 </template>
-  
-  <script setup>
-  import { defineProps,ref } from 'vue';
-  import { AnnuncioImmobiliareResponse } from '../dto/Response/AnnuncioImmobiliareResponse';
-  import Card from 'primevue/card'
-  import  Avatar from 'primevue/avatar';
-  import Tag from 'primevue/tag';
-  import Galleria from 'primevue/galleria';
-  import DataTable from 'primevue/datatable';
-  import Column from 'primevue/column';
-  import Accordion from 'primevue/accordion';
-  import AccordionPanel from 'primevue/accordionpanel';
-  import AccordionHeader from 'primevue/accordionheader';
-  import AccordionContent from 'primevue/accordioncontent';
 
 
-  const props = defineProps({
-    annuncio: {
-      type: Object,
-      required: true,
-      default: () => new AnnuncioImmobiliareResponse()
-    }
-  });
+<script setup>
+import { defineProps, ref } from 'vue';
+import { AnnuncioImmobiliareResponse } from '../dto/Response/AnnuncioImmobiliareResponse';
+import Card from 'primevue/card';
+import Avatar from 'primevue/avatar';
+import Tag from 'primevue/tag';
+import Carosello from './Carosello.vue';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Panel from 'primevue/panel';
+import Accordion from 'primevue/accordion';
+import AccordionPanel from 'primevue/accordionpanel';
+import AccordionHeader from 'primevue/accordionheader';
+import AccordionContent from 'primevue/accordioncontent';
 
-  const responsiveOptions = ref([
-    {
-        breakpoint: '1300px',
-        numVisible: 4
-    },
-    {
-        breakpoint: '575px',
-        numVisible: 1
-    }
+const props = defineProps({
+  annuncio: {
+    type: Object,
+    required: true,
+    default: () => new AnnuncioImmobiliareResponse(),
+  },
+});
+
+const responsiveOptions = ref([
+  {
+    breakpoint: '1300px',
+    numVisible: 4,
+  },
+  {
+    breakpoint: '575px',
+    numVisible: 1,
+  },
 ]);
 
 const formatCurrency = (value) => {
-    if (!value) return '';
-    return `€${value.toLocaleString()}`;
+  if (!value) return '';
+  return `€${value.toLocaleString()}`;
 };
 
 const getSeverity = (proposta) => {
-    switch (proposta.stato.toLowerCase()) {
-        case 'accettata':
-            return 'success';
-        case 'rifiutata':
-            return 'danger';
-        case 'in attesa':
-            return 'warn';
-        default:
-            return 'info';
-    }
+  switch (proposta.stato.toLowerCase()) {
+    case 'accettata':
+      return 'success';
+    case 'rifiutata':
+      return 'danger';
+    case 'in attesa':
+      return 'warn';
+    default:
+      return 'info';
+  }
 };
-  </script>
-  
-  <style scoped>
-  .dettagli-annuncio {
-    padding: 2rem;
-  }
-  
-  
-  :deep(.p-card-title) {
-    
-    padding: 1rem;
-    margin: -1rem;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-  }
-  :deep(.p-galleria) {
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  :deep(.p-galleria-item) {
-    border-radius: 8px;
-  }
-  
-  :deep(.p-avatar) {
-    border: 2px solid var(--primary-color);
-  }
-  </style>  
+</script>
+
+<style scoped>
+.dettagli-annuncio {
+  padding: 2rem;
+}
+
+:deep(.p-card-title) {
+  padding: 1rem;
+  margin: -1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
+:deep(.p-galleria) {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+:deep(.p-galleria-item) {
+  border-radius: 8px;
+}
+
+:deep(.p-avatar) {
+  border: 2px solid var(--primary-color);
+}
+</style>

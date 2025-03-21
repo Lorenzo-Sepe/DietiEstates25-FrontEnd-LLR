@@ -31,7 +31,7 @@
                     nazione: "Italia",
                     latitudine: 50,
                     longitudine: 10,
-                    vicinoA: []
+                    vicinoA: ["SCUOLE", "PARCHEGGI", "TRASPORTO_PUBBLICO"]
                 },
                 caratteristicheAggiuntive: {
                     balconi: true,
