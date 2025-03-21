@@ -12,7 +12,6 @@ import ToastService from 'primevue/toastservice';
 import Tooltip from 'primevue/tooltip';
 
 
-
 const app = createApp(App)
 const pinia = createPinia()
 
@@ -30,6 +29,7 @@ app.use(ConfirmationService);
 app.use(ToastService);
 app.use(DialogService);
 app.directive('tooltip', Tooltip);
+
 
 
 app.use(pinia)

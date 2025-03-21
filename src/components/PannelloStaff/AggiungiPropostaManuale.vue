@@ -1,6 +1,4 @@
 <template>
-    
-    <ConfirmDialog></ConfirmDialog>
 
     <div class="form-proposta">
         <div class="card flex justify-center gap-2">
@@ -40,19 +38,16 @@
 
 
 <script setup>
-import { ref, reactive, defineProps} from 'vue';
+import { ref, reactive, defineProps, defineEmits } from 'vue';
 
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import Select from 'primevue/select';
 import Message from 'primevue/message';
 import Button from 'primevue/button';
-import { useConfirm } from "primevue/useconfirm";
-
-import AnnunciService from '../../services/tabellaAnnunciService';
 
 const props = defineProps(['propostaRequest','idAnnuncio','visible']);
-console.log("idAnnuncio::", props.idAnnuncio);
+const emit = defineEmits(['nuovaProposta']);
 
 const nome = ref('');
 const nomeNonValido = ref(false);
@@ -62,8 +57,6 @@ const prezzo = ref(0);
 const prezzoNonValido = ref(false);
 const contatto = ref('');
 const contattoNonValido = ref();
-
-const confirm = useConfirm();
 
 const selectedTipoContatto = ref(null);
 const tipiContatto = ref([
@@ -199,39 +192,9 @@ const clickNuovaProposta = async () => {
     props.propostaRequest.annuncioId = props.idAnnuncio;
 
     console.log("propostaRequest: ", props.propostaRequest);
+    
+    emit("nuovaProposta");
 
-
-    try{
-
-        await AnnunciService.postPropostaManuale(props.propostaRequest);
-        okAllert();
-
-    }catch(error){
-
-        console.log("error: ", error);
-        erroreAllert();
-    }
-
-}
-
-const erroreAllert = () => {
-
-confirm.require({
-    message: 'Errore di rete, riprova',
-    header: 'ERRORE',
-    icon: 'pi pi-exclamation-triangle',
-    label: 'OK'
-});
-}
-
-const okAllert = () => {
-
-confirm.require({
-    message: 'Proposta aggiunta con successo',
-    header: 'CONFERMA',
-    icon: 'pi pi-exclamation-triangle',
-    label: 'OK'
-});
 }
 
 </script>
