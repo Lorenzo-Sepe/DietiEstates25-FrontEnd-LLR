@@ -112,24 +112,16 @@
             <ul class="items-start">
               <li v-for="luogo in annuncio.immobile.indirizzo.vicinoA" :key="luogo">Vicino a {{ luogo.charAt(0).toUpperCase() + luogo.slice(1).toLowerCase().replace('_', ' ') }}</li>
             </ul>
+            <div v-if="annuncio.immobile.caratteristicheAggiuntive.campoExtra">
+              {{ annuncio.immobile.caratteristicheAggiuntive.campoExtra }}
+            </div>
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
 
-      <Card class="mb-4 w-full bg-surface-50 lg:w-[50%]">
-        <template #title>
-          <div class="flex items-center h-20 bg-surface-50 p-2 rounded border border-surface-100 m-[-0.5em]">Agente</div>
-        </template>
-        <template #content>
-          <div class="flex items-center gap-3">
-            <Avatar :image="annuncio.agente.urlFotoProfilo" size="large" />
-            <div>
-              <h3 class="m-0">{{ annuncio.agente.username }}</h3>
-              <p class="m-0 text-sm text-500">{{ annuncio.agente.email }}</p>
-            </div>
-          </div>
-        </template>
-      </Card>
+      <BusinessCard :agente="annuncio.agente" class="mb-4 w-full  lg:w-[50%]"/>
+
+      
 
       <Card v-if="annuncio.contratto.tipoContratto === 'AFFITTO'" class="w-full bg-surface-50 lg:w-[50%]">
         <template #title>
@@ -208,6 +200,7 @@ import Accordion from 'primevue/accordion';
 import AccordionPanel from 'primevue/accordionpanel';
 import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
+import BusinessCard from './BusinessCard.vue';
 
 const props = defineProps({
   annuncio: {
@@ -230,7 +223,7 @@ const responsiveOptions = ref([
 
 const formatCurrency = (value) => {
   if (!value) return '';
-  return `€${value.toLocaleString()}`;
+  return `€${value.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
 };
 
 const getSeverity = (proposta) => {
