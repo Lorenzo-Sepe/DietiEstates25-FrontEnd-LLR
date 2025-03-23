@@ -33,13 +33,13 @@
                 <template #body>
                     <div class="flex flex-row gap-2">
                         <Button variant="text" rounded aria-label="Filter"
-                            v-tooltip="{ value: 'Elimina annuncio', showDelay: 1000, hideDelay: 300 }">
+                            v-tooltip="{ value: 'Modifica annuncio', showDelay: 300, hideDelay: 300 }">
                             <template #icon>
                                 <img src="../../assets/Icon/modificaAnnuncio.png" class="w-5 h-5" />
                             </template>
                         </Button>
                         <Button variant="text" rounded aria-label="Filter"
-                            v-tooltip="{ value: 'Elimina annuncio', showDelay: 1000, hideDelay: 300 }">
+                            v-tooltip="{ value: 'Elimina annuncio', showDelay: 300, hideDelay: 300 }">
                             <template #icon>
                                 <img src="../../assets/Icon/eliminaAnnuncio.png" class="w-5 h-5" />
                             </template>
@@ -63,8 +63,9 @@
                 </div>
 
                 <div class="card flex justify-center">
-                    <Dialog v-model:visible="dialogControproposta" :style="{ width: 'auto' }" header="Form controproposta" :modal="true">
-                        <FormControproposta :propostaRequest="props.propostaRequest" />
+                    <Dialog v-model:visible="dialogControproposta" :style="{ width: 'auto' }"
+                        header="Form controproposta" :modal="true">
+                        <FormControproposta :proposta="propostaSelected" @controproposta="controproposta" />
                     </Dialog>
                 </div>
 
@@ -74,27 +75,33 @@
                         <Column field="datiProponente.nome" header="Nome" sortable></Column>
                         <Column field="datiProponente.cognome" header="Cognome" sortable></Column>
                         <Column field="datiProponente.email" header="Email" sortable></Column>
-                        <Column field="prezzoProposta" header="Proposta" sortable></Column>
+                        <Column field="prezzoProposta" header="Proposta" sortable>
+                            <template #body="slotProps">
+                                <span :class="{ 'line-through': slotProps.data.controproposta !== null }">
+                                    {{ slotProps.data.prezzoProposta }}
+                                </span>
+                            </template>
+                        </Column>
                         <Column field="controproposta" header="Controproposta" sortable></Column>
                         <Column headerStyle="width:4rem">
                             <template #body="slotProps">
                                 <div class="flex flex-row gap-2">
                                     <Button variant="text" rounded aria-label="Filter" class="hover:bg-[#008000]/60!"
                                         @click="clickAccettaProposta(slotProps.data.idProposta)"
-                                        v-tooltip="{ value: 'Accetta la proposta', showDelay: 1000, hideDelay: 300 }">
+                                        v-tooltip="{ value: 'Accetta la proposta', showDelay: 300, hideDelay: 300 }">
                                         <template #icon>
                                             <img src="../../assets/Icon/accettaProposta.png" class="w-5 h-5" />
                                         </template>
                                     </Button>
                                     <Button variant="text" rounded aria-label="Filter" class="hover:bg-[#FFA500]/60!"
-                                        v-tooltip="{ value: 'Fai una controproposta', showDelay: 1000, hideDelay: 300 }"
-                                        @click="dialogControproposta = true">
+                                        v-tooltip="{ value: 'Fai una controproposta', showDelay: 300, hideDelay: 300 }"
+                                        @click="clickControproposta(slotProps.data)">
                                         <template #icon>
                                             <img src="../../assets/Icon/controproposta.png" class="w-5 h-5" />
                                         </template>
                                     </Button>
                                     <Button variant="text" rounded aria-label="Filter" class="hover:bg-[#FF0000]/60!"
-                                        v-tooltip="{ value: 'Rifiuta proposta', showDelay: 1000, hideDelay: 300 }"
+                                        v-tooltip="{ value: 'Rifiuta proposta', showDelay: 300, hideDelay: 300 }"
                                         @click="clickRifiutaProposta(slotProps.data.idProposta)">
                                         <template #icon>
                                             <img src="../../assets/Icon/rifiutaProposta.png" class="w-5 h-5" />
@@ -148,13 +155,14 @@ import FormControproposta from '../PannelloStaff/FormControproposta.vue';
 
 
 const props = defineProps(['propAnnunci', 'propLoading', 'propostaRequest']);
-const emit = defineEmits(['nuovaProposta', 'eliminaProposta', 'accettaProposta']);
+const emit = defineEmits(['nuovaProposta', 'eliminaProposta', 'accettaProposta','controproposta']);
 
 
 const expandedRows = ref([])
 
 const visible = ref(false);
 const dialogControproposta = ref(false);
+const propostaSelected = ref();
 const selectedAnnuncioId = ref(null);
 
 const filterProposteAccettate = (proposte) => {
@@ -185,6 +193,12 @@ const nuovaProposta = () => {
     emit('nuovaProposta');
 };
 
+const clickControproposta = (proposta) => {
+
+    dialogControproposta.value = true;
+    propostaSelected.value = proposta;
+};
+
 const clickRifiutaProposta = (id) => {
 
     emit('eliminaProposta', id);
@@ -193,6 +207,12 @@ const clickRifiutaProposta = (id) => {
 const clickAccettaProposta = (idProposta) => {
 
     emit('accettaProposta', idProposta);
+};
+
+const controproposta = (idProposta,controproposta) => {
+
+    dialogControproposta.value = false;
+    emit('controproposta', idProposta,controproposta);
 };
 
 const controPropostaAbilitato = (proposta) => {

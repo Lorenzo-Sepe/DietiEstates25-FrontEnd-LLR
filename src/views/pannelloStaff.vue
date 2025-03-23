@@ -27,8 +27,10 @@
         <AreaSuperiore />
         <div class="">
             <TabellaAnnunci :propAnnunci="annunci" :propLoading="loading" :propostaRequest="propostaRequest"
-                @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta"
-                @accettaProposta="accettaProposta" />
+                @nuovaProposta="aggiungiPropostaManuale" 
+                @eliminaProposta="rifiutaProposta"
+                @accettaProposta="accettaProposta"
+                @controproposta="controproposta" />
         </div>
         <div class="card">
             <Paginator :rows="5" :totalRecords="numeroAnnunci" @page="onPage"></Paginator>
@@ -81,9 +83,9 @@ onMounted(async () => {
         username: 'agente1.test@av0.dietiestate.com"',
         name: 'Roberto',
         surname: 'Spena',
-        urlFotoProfilo: '',
+        urlFotoProfilo: 'https://dieti24.blob.core.windows.net/upload/annuncio8-0-2025-03-05.png',
         email: 'agente1.test@av0.dietiestate.com',
-        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQyNTU4MTk4LCJleHAiOjE3NDI2NDQ1OTh9.bQkdLCxmRhkviP1rxQGLA3T8DoeWSLUzcfCC9aqmDWw',
+        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQyNzMyMzE1LCJleHAiOjE3NDI4MTg3MTV9.-6v-hpFK9ajOMmitjaFGILexu08bD8MdjBCXmHDmqXs',
         authority: 'AGENT',
         isAuthenticated: true
     }
@@ -253,5 +255,38 @@ const accettaProposta = async (idProposta) => {
     }
 }
 
+const controproposta = async (idProposta, prezzoControproposta) => {
+
+    try {
+
+        loadingOperazione.value = true;
+        await PropostaService.controproposta(idProposta, prezzoControproposta);
+        loadingOperazione.value = false;
+        changeControposta(idProposta, prezzoControproposta);
+        okAllert.value = true;
+
+    } catch (error) {
+
+        console.log("errore durante la chiamata axsios per la controproposta proposta: ", error);
+        loadingOperazione.value = false;
+        erroreAllert.value = true;
+    }
+}
+
+const changeControposta = (idProposta, prezzoControproposta) => {
+
+    annunci.value.forEach((annuncio) => {
+
+        annuncio.proposte.forEach((proposta) => {
+
+            if (proposta.idProposta === idProposta) {
+
+                proposta.controproposta = prezzoControproposta;
+
+                return;
+            }
+        });
+    });
+}
 
 </script>

@@ -20,6 +20,16 @@ export default {
             .then((response) => {
                 return response.data;
             })
+    },
+
+    controproposta(idProposta, prezzoControproposta){
+
+        return ApiAgent()
+
+            .post('proposta/' + idProposta + '/controproposta?controproposta=' + prezzoControproposta)
+            .then((response) => {
+                return response.data;
+            })
     }
 
 };
