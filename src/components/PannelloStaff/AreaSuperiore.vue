@@ -2,10 +2,10 @@
 
     <div class="contenitore-area-superiore">
         <div class="contenitore-foto-profilo flex items-center gap-4">
-            <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" size="xlarge"
+            <Avatar :image="employeeStore.employee.urlFotoProfilo" size="xlarge"
                 shape="circle" />
             <div class="info-profilo flex flex-col">
-                <p>Nome Cognome</p>
+                <p>Agente: <b>{{ employeeStore.employee.name }}  {{ employeeStore.employee.surname }} </b> </p>
                 <p>Nome agenzia</p>
             </div>
         </div>
@@ -17,8 +17,12 @@
 </template>
 
 <script setup>
+
 import Avatar from 'primevue/avatar';
-import Button from 'primevue/button';
+import { useEmployeeStore } from '../../stores/EmployeeStore';
+
+const employeeStore = useEmployeeStore();
+
 </script>
 
 <style scoped>

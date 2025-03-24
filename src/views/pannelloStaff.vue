@@ -18,15 +18,20 @@
     <Dialog v-model:visible="erroreAllert" header="ERRORE" :style="{ width: 'auto' }"
         :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
         <p class="m-0">
-           Errore di rete, riprovare più tardi.
+            Errore di rete, riprovare più tardi.
         </p>
         <Button label="OK" @click="erroreAllert = false" />
     </Dialog>
 
     <div class="flex flex-col gap-4">
         <AreaSuperiore />
-        <TabellaAnnunci :propAnnunci="annunci" :propLoading="loading" :propostaRequest="propostaRequest"
-            @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta" />
+        <div class="">
+            <TabellaAnnunci :propAnnunci="annunci" :propLoading="loading" :propostaRequest="propostaRequest"
+                @nuovaProposta="aggiungiPropostaManuale" 
+                @eliminaProposta="rifiutaProposta"
+                @accettaProposta="accettaProposta"
+                @controproposta="controproposta" />
+        </div>
         <div class="card">
             <Paginator :rows="5" :totalRecords="numeroAnnunci" @page="onPage"></Paginator>
         </div>
@@ -78,9 +83,9 @@ onMounted(async () => {
         username: 'agente1.test@av0.dietiestate.com"',
         name: 'Roberto',
         surname: 'Spena',
-        urlFotoProfilo: '',
+        urlFotoProfilo: 'https://dieti24.blob.core.windows.net/upload/annuncio8-0-2025-03-05.png',
         email: 'agente1.test@av0.dietiestate.com',
-        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQyNDk5ODI0LCJleHAiOjE3NDI1ODYyMjR9.Dtnk8MMtwHcBUcwnn2vG1V3zUxc8rZlCvnsxf2V9Cj8',
+        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQyNzMyMzE1LCJleHAiOjE3NDI4MTg3MTV9.-6v-hpFK9ajOMmitjaFGILexu08bD8MdjBCXmHDmqXs',
         authority: 'AGENT',
         isAuthenticated: true
     }
@@ -138,6 +143,7 @@ const aggiungiPropostaManuale = async () => {
         loadingOperazione.value = true;
         await AnnunciService.postPropostaManuale(propostaRequest);
         loadingOperazione.value = false;
+        aggiungiProposta();
         okAllert.value = true;
 
     } catch (error) {
@@ -153,11 +159,11 @@ const rifiutaProposta = async (idProposta) => {
     try {
 
         loadingOperazione.value = true;
-        await PropostaService.deleteProposta(idProposta);
+        await PropostaService.rifiutaProposta(idProposta);
         loadingOperazione.value = false;
-        changeStatoProposta(idProposta,'RIFIUTATO');
+        changeStatoProposta(idProposta, 'RIFIUTATO');
         okAllert.value = true;
-        
+
 
     } catch (error) {
 
@@ -167,17 +173,31 @@ const rifiutaProposta = async (idProposta) => {
     }
 }
 
-const changeStatoProposta = (idProposta,stato) => {
+const changeStatoProposta = (idProposta, stato) => {
 
-    if(stato === 'RIFIUTATO'){
+    if (stato === 'RIFIUTATO') {
 
         annunci.value.forEach((annuncio) => {
 
             annuncio.proposte.forEach((proposta) => {
 
-                if(proposta.idProposta === idProposta){
+                if (proposta.idProposta === idProposta) {
 
                     proposta.stato = 'RIFIUTATO';
+
+                    return;
+                }
+            });
+        });
+    } else if (stato === 'ACCETTATO') {
+
+        annunci.value.forEach((annuncio) => {
+
+            annuncio.proposte.forEach((proposta) => {
+
+                if (proposta.idProposta === idProposta) {
+
+                    proposta.stato = 'ACCETTATO';
 
                     return;
                 }
@@ -186,5 +206,87 @@ const changeStatoProposta = (idProposta,stato) => {
     }
 }
 
+const aggiungiProposta = () => {
+
+    annunci.value.forEach((annuncio) => {
+
+
+        if (annuncio.id === propostaRequest.annuncioId) {
+
+            console.log("arrivoo quiiii annuncio:", propostaRequest.annuncioId);
+
+            annuncio.proposte.push({
+
+                idProposta: -1,
+                prezzoProposta: propostaRequest.prezzo,
+                stato: 'IN_TRATTAZIONE',
+                controproposta: null,
+                datiProponente: {
+
+                    nome: propostaRequest.nome,
+                    cognome: propostaRequest.cognome,
+                    tipoContatto: propostaRequest.tipoContatto,
+                    contatto: propostaRequest.informazioniContatto
+                }
+
+
+            });
+
+            return;
+        }
+    });
+}
+
+const accettaProposta = async (idProposta) => {
+
+    try {
+
+        loadingOperazione.value = true;
+        await PropostaService.accettaProposta(idProposta);
+        loadingOperazione.value = false;
+        changeStatoProposta(idProposta, 'ACCETTATO');
+        okAllert.value = true;
+
+    } catch (error) {
+
+        console.log("errore durante la chiamata axsios per la accettazione proposta: ", error);
+        loadingOperazione.value = false;
+        erroreAllert.value = true;
+    }
+}
+
+const controproposta = async (idProposta, prezzoControproposta) => {
+
+    try {
+
+        loadingOperazione.value = true;
+        await PropostaService.controproposta(idProposta, prezzoControproposta);
+        loadingOperazione.value = false;
+        changeControposta(idProposta, prezzoControproposta);
+        okAllert.value = true;
+
+    } catch (error) {
+
+        console.log("errore durante la chiamata axsios per la controproposta proposta: ", error);
+        loadingOperazione.value = false;
+        erroreAllert.value = true;
+    }
+}
+
+const changeControposta = (idProposta, prezzoControproposta) => {
+
+    annunci.value.forEach((annuncio) => {
+
+        annuncio.proposte.forEach((proposta) => {
+
+            if (proposta.idProposta === idProposta) {
+
+                proposta.controproposta = prezzoControproposta;
+
+                return;
+            }
+        });
+    });
+}
 
 </script>
