@@ -85,7 +85,7 @@ onMounted(async () => {
         surname: 'Spena',
         urlFotoProfilo: 'https://dieti24.blob.core.windows.net/upload/annuncio8-0-2025-03-05.png',
         email: 'agente1.test@av0.dietiestate.com',
-        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQyNzMyMzE1LCJleHAiOjE3NDI4MTg3MTV9.-6v-hpFK9ajOMmitjaFGILexu08bD8MdjBCXmHDmqXs',
+        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQyODIxMjk4LCJleHAiOjE3NDI5MDc2OTh9.NwE6rZ2jOLUU-JP-vJ0duRb5VO6X3I-LOCLA6BVKv-c',
         authority: 'AGENT',
         isAuthenticated: true
     }

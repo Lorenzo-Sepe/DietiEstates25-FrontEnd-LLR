@@ -22,13 +22,13 @@ const routes = [
     name: 'loginAgent',
     component: () => import('../views/LoginAgentView.vue')
   },
-  { 
+  {
     path: '/PortaleAgenzia',
     name: 'PortaleAgenzia',
     component: () => import('../views/PortaleAgenzia.vue'),
     beforeEnter: (to, from, next) => {
       if (isAuthenticated()) {
-        next({name:'MieiAnnunci'}); // L'utente è loggato, vai alla pagina dei miei annunci
+        next({ name: 'MieiAnnunci' }); // L'utente è loggato, vai alla pagina dei miei annunci
       } else {
         next({ name: 'PortaleAgenziaInfo' }); // Reindirizza a una pagina informativa
       }
@@ -58,16 +58,16 @@ const routes = [
 
   },
   {
-    path: '/pannelloStaff',
-    name: 'pannellStaff',
-    component: () => import('../views/pannelloStaff.vue')
-
-  },
-  {
     path: '/annuncio/:id',
     name: 'annuncio',
-    component:()=> import('../views/DettagliAnnuncioView.vue')
+    component: () => import('../views/DettagliAnnuncioView.vue')
   },
+  {
+    path: '/notifiche',
+    name: 'notifiche',
+    component: () => import('../views/Notifiche.vue')
+  },
+
   // Route di testing dei componenti
   {
     path: '/testLorenzo',
