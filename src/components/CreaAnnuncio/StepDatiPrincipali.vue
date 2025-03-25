@@ -1,11 +1,14 @@
 <script setup>
-import { defineProps, defineEmits, defineExpose, reactive, computed } from 'vue';
+import { defineProps, ref, defineExpose, defineEmits, reactive, computed } from 'vue';
 import InputText from 'primevue/inputtext';
-import Checkbox from 'primevue/checkbox';
 import Select from 'primevue/select';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
+import ContrattoForm from './ContrattoComponet.vue';
+
+
+const emit = defineEmits(['indietro', 'avanti']);
 
 const props = defineProps({
   annuncio: AnnuncioImmobiliareRequest,
@@ -23,28 +26,22 @@ const errori = reactive({
 });
 
 const opzioniClasseEnergetica = reactive([
-  { label: 'A+', value: 'A+' },
+  { label: 'A++', value: 'A_PLUS_PLUS' },
+  { label: 'A+', value: 'A_PLUS' },
   { label: 'A', value: 'A' },
   { label: 'B', value: 'B' },
   { label: 'C', value: 'C' },
   { label: 'D', value: 'D' },
   { label: 'E', value: 'E' },
   { label: 'F', value: 'F' },
-  { label: 'G', value: 'G' }
+  { label: 'G', value: 'G' },
+  { label: 'Non specificata', value: 'Non_Specificata' }
 ]);
 
 // Funzione di validazione
 const verificaDati = (campo) => {
-  if (campo === 'prezzo') {
-    const prezzo = props.annuncio.prezzo || 0;
-    if (prezzo <= 0) {
-      errori.prezzo.invalid = true;
-      errori.prezzo.messaggio = 'Il prezzo deve essere maggiore di zero';
-    } else {
-      errori.prezzo.invalid = false;
-      errori.prezzo.messaggio = '';
-    }
-  } else if (campo === 'metriQuadri') {
+
+     if (campo === 'metriQuadri') {
     const metriQuadri = props.annuncio.metriQuadri || 0;
     if (metriQuadri <= 0) {
       errori.metriQuadri.invalid = true;
@@ -83,22 +80,25 @@ const verificaDati = (campo) => {
   } else if (campo === 'classeEnergetica') {
     errori.classeEnergetica.invalid = !props.annuncio.classeEnergetica;
   }
+
 };
 
 const validaCampi = () => {
-  ['prezzo', 'metriQuadri', 'numeroDiPiani', 'numeroStanze', 'numeroServizi', 'classeEnergetica'].forEach(campo => verificaDati(campo));
-  return !Object.values(errori).some(e => e.invalid);
+  [ 'metriQuadri', 'numeroDiPiani', 'numeroStanze', 'numeroServizi', 'classeEnergetica'].forEach(campo => verificaDati(campo));
+  const isvalidoContratto =refContratto.value.validaCampi();
+  console.log("Valido campi stepPrincipale return: ", !Object.values(errori).some(e => e.invalid) && !isvalidoContratto);
+  return !Object.values(errori).some(e => e.invalid) && !isvalidoContratto;
 };
 
 const validaEAvanza = () => {
-  validaCampi();
-  if (!Object.values(errori).some(e => e.invalid)) {
+  
+  if (validaCampi()) {
     emit('avanti');
   }
 };
 
 const hasErrori = computed(() => {
-  return Object.values(errori).some(e => e.invalid);
+  return Object.values(errori).some(e => e.invalid) || refContratto.value.hasErrori;
 });
 
 // Esponiamo la funzione verificaDati al componente genitore
@@ -106,97 +106,148 @@ defineExpose({
   validaCampi,
   hasErrori
 });
+
+const refContratto = ref({});
 </script>
 
 <template>
+
   <div>
-    <Message v-if="hasErrori && tentativoInvio" severity="error" variant="filled" class="mb-4 text-left">
+    <Message v-if="(hasErrori ||  refContratto.hasErrori ) && tentativoInvio" severity="error" variant="filled" class="mb-4 text-left">
       <p>Alcuni campi non sono corretti. Verifica e correggi i seguenti campi evidenziati in rosso:</p>
       <ul class="list-disc pl-5">
-        <li v-if="errori.prezzo.invalid">Prezzo</li>
         <li v-if="errori.metriQuadri.invalid">Metri Quadrati</li>
         <li v-if="errori.numeroDiPiani.invalid">Numero di Piani</li>
         <li v-if="errori.numeroStanze.invalid">Numero di Stanze</li>
         <li v-if="errori.numeroServizi.invalid">Numero di Servizi</li>
         <li v-if="errori.classeEnergetica.invalid">Classe Energetica</li>
+        <li v-if="refContratto.errori.prezzo.invalid">Prezzo</li>
+        <li v-if="refContratto.errori.caparra.invalid">Caparra</li>
+        <li v-if="refContratto.errori.tempoMinimo.invalid">Tempo Minimo</li>
+        <li v-if="refContratto.errori.tempoMassimo.invalid">Tempo Massimo</li>
+        
       </ul>
     </Message>
 
-    <div class="flex flex-col">
-      <label for="prezzo" class="font-semibold">Prezzo</label>
-      <InputText 
-        id="prezzo" 
-        v-model="annuncio.prezzo" 
-        type="number"
-        :invalid="errori.prezzo.invalid" 
-        @input="verificaDati('prezzo')" 
-        @blur="verificaDati('prezzo')" 
-        class="border rounded p-2"
-      />
-      <Message v-if="errori.prezzo.invalid" severity="error" variant="simple" size="small">{{ errori.prezzo.messaggio }}</Message>
+    <ContrattoForm 
+    ref="refContratto"
+    class="w-full"
+    v-model:contratto="annuncio.contratto" :tentativoInvio="tentativoInvio" />
 
-      <label for="metriQuadri" class="font-semibold">Metri Quadri</label>
-      <InputText 
-        id="metriQuadri" 
-        v-model="annuncio.metriQuadri" 
-        type="number"
-        :invalid="errori.metriQuadri.invalid" 
-        @input="verificaDati('metriQuadri')" 
-        @blur="verificaDati('metriQuadri')" 
-        class="border rounded p-2"
-      />
-      <Message v-if="errori.metriQuadri.invalid" severity="error" variant="simple" size="small">{{ errori.metriQuadri.messaggio }}</Message>
+       <!-- Griglia responsive: 2 colonne su dispositivi medi/grandi, 1 colonna su dispositivi piccoli -->
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Campo Metri Quadri -->
+      <div>
+        <label for="metriQuadri" class="block font-semibold mb-2">Metri Quadri</label>
+        <InputText 
+          id="metriQuadri" 
+          v-model="annuncio.metriQuadri" 
+          type="number"
+          :invalid="errori.metriQuadri.invalid" 
+          @input="verificaDati('metriQuadri')" 
+          @blur="verificaDati('metriQuadri')" 
+          class="border rounded p-2 w-full"
+        />
+        <Message 
+          v-if="errori.metriQuadri.invalid" 
+          severity="error" 
+          variant="simple" 
+          size="small"
+        >
+          {{ errori.metriQuadri.messaggio }}
+        </Message>
+      </div>
 
-      <label for="numeroDiPiani" class="font-semibold">Numero di Piani</label>
-      <InputText 
-        id="numeroDiPiani" 
-        v-model="annuncio.numeroDiPiani" 
-        type="number"
-        :invalid="errori.numeroDiPiani.invalid" 
-        @input="verificaDati('numeroDiPiani')" 
-        @blur="verificaDati('numeroDiPiani')" 
-        class="border rounded p-2"
-      />
-      <Message v-if="errori.numeroDiPiani.invalid" severity="error" variant="simple" size="small">{{ errori.numeroDiPiani.messaggio }}</Message>
+      <!-- Campo Numero di Piani -->
+      <div>
+        <label for="numeroDiPiani" class="block font-semibold mb-2">Numero di Piani</label>
+        <InputText 
+          id="numeroDiPiani" 
+          v-model="annuncio.numeroDiPiani" 
+          type="number"
+          :invalid="errori.numeroDiPiani.invalid" 
+          @input="verificaDati('numeroDiPiani')" 
+          @blur="verificaDati('numeroDiPiani')" 
+          class="border rounded p-2 w-full"
+        />
+        <Message 
+          v-if="errori.numeroDiPiani.invalid" 
+          severity="error" 
+          variant="simple" 
+          size="small"
+        >
+          {{ errori.numeroDiPiani.messaggio }}
+        </Message>
+      </div>
 
-      <label for="numeroStanze" class="font-semibold">Numero di Stanze</label>
-      <InputText 
-        id="numeroStanze" 
-        v-model="annuncio.numeroStanze" 
-        type="number"
-        :invalid="errori.numeroStanze.invalid" 
-        @input="verificaDati('numeroStanze')" 
-        @blur="verificaDati('numeroStanze')" 
-        class="border rounded p-2"
-      />
-      <Message v-if="errori.numeroStanze.invalid" severity="error" variant="simple" size="small">{{ errori.numeroStanze.messaggio }}</Message>
+      <!-- Campo Numero di Stanze -->
+      <div>
+        <label for="numeroStanze" class="block font-semibold mb-2">Numero di Stanze</label>
+        <InputText 
+          id="numeroStanze" 
+          v-model="annuncio.numeroStanze" 
+          type="number"
+          :invalid="errori.numeroStanze.invalid" 
+          @input="verificaDati('numeroStanze')" 
+          @blur="verificaDati('numeroStanze')" 
+          class="border rounded p-2 w-full"
+        />
+        <Message 
+          v-if="errori.numeroStanze.invalid" 
+          severity="error" 
+          variant="simple" 
+          size="small"
+        >
+          {{ errori.numeroStanze.messaggio }}
+        </Message>
+      </div>
 
-      <label for="numeroServizi" class="font-semibold">Numero di Servizi</label>
-      <InputText 
-        id="numeroServizi" 
-        v-model="annuncio.numeroServizi" 
-        type="number"
-        :invalid="errori.numeroServizi.invalid" 
-        @input="verificaDati('numeroServizi')" 
-        @blur="verificaDati('numeroServizi')" 
-        class="border rounded p-2"
-      />
-      <Message v-if="errori.numeroServizi.invalid" severity="error" variant="simple" size="small">{{ errori.numeroServizi.messaggio }}</Message>
+      <!-- Campo Numero di Servizi -->
+      <div>
+        <label for="numeroServizi" class="block font-semibold mb-2">Numero di Servizi</label>
+        <InputText 
+          id="numeroServizi" 
+          v-model="annuncio.numeroServizi" 
+          type="number"
+          :invalid="errori.numeroServizi.invalid" 
+          @input="verificaDati('numeroServizi')" 
+          @blur="verificaDati('numeroServizi')" 
+          class="border rounded p-2 w-full"
+        />
+        <Message 
+          v-if="errori.numeroServizi.invalid" 
+          severity="error" 
+          variant="simple" 
+          size="small"
+        >
+          {{ errori.numeroServizi.messaggio }}
+        </Message>
+      </div>
 
-      <label for="classeEnergetica" class="font-semibold">Classe Energetica</label>
-      <Select 
-        id="classeEnergetica" 
-        v-model="annuncio.classeEnergetica" 
-        :options="opzioniClasseEnergetica" 
-        optionLabel="label"
-        optionValue="value"
-        placeholder="Seleziona la classe energetica"
-        :invalid="errori.classeEnergetica.invalid"
-        @blur="verificaDati('classeEnergetica')" 
-        @change="verificaDati('classeEnergetica')" 
-        class="border rounded p-2"
-      />
-      <Message v-if="errori.classeEnergetica.invalid" severity="error" variant="simple" size="small">{{ errori.classeEnergetica.messaggio }}</Message>
+      <!-- Campo Classe Energetica (occupazione di entrambe le colonne) -->
+      <div class="md:col-span-2">
+        <label for="classeEnergetica" class="block font-semibold mb-2">Classe Energetica</label>
+        <Select 
+          id="classeEnergetica" 
+          v-model="annuncio.classeEnergetica" 
+          :options="opzioniClasseEnergetica" 
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleziona la classe energetica"
+          :invalid="errori.classeEnergetica.invalid"
+          @blur="verificaDati('classeEnergetica')" 
+          @change="verificaDati('classeEnergetica')" 
+          class="border rounded p-2 w-full"
+        />
+        <Message 
+          v-if="errori.classeEnergetica.invalid" 
+          severity="error" 
+          variant="simple" 
+          size="small"
+        >
+          {{ errori.classeEnergetica.messaggio }}
+        </Message>
+      </div>
     </div>
 
     <div class="flex justify-end pt-6">

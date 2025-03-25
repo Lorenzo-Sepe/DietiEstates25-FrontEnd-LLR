@@ -7,6 +7,8 @@ import Button from 'primevue/button';
 import Message from 'primevue/message';
 import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
 
+const emit = defineEmits([ 'avanti']);
+
 const props = defineProps({ 
   annuncio: AnnuncioImmobiliareRequest,
   tentativoInvio: Boolean
@@ -93,7 +95,7 @@ defineExpose({
 </script>
 
 <template>
-  <div>
+  <div class="w-full">
     <Message v-if="hasErrori && tentativoInvio" severity="error" variant="filled" class="mb-4 text-left">
       <p>Alcuni campi non sono corretti. Verifica e correggi i seguenti campi evidenziati in rosso:</p>
       <ul class="list-disc pl-5">
