@@ -85,9 +85,8 @@ const verificaDati = (campo) => {
 
 const validaCampi = () => {
   [ 'metriQuadri', 'numeroDiPiani', 'numeroStanze', 'numeroServizi', 'classeEnergetica'].forEach(campo => verificaDati(campo));
-  const isvalidoContratto =refContratto.value.validaCampi();
-  console.log("Valido campi stepPrincipale return: ", !Object.values(errori).some(e => e.invalid) && !isvalidoContratto);
-  return !Object.values(errori).some(e => e.invalid) && !isvalidoContratto;
+  refContratto.value.validaCampi();
+  return !hasErrori.value;
 };
 
 const validaEAvanza = () => {
@@ -98,8 +97,11 @@ const validaEAvanza = () => {
 };
 
 const hasErrori = computed(() => {
-  return Object.values(errori).some(e => e.invalid) || refContratto.value.hasErrori;
+  const hasError = Object.values(errori).some(e => e.invalid);
+  const hasErrorContratto = refContratto.value.hasErrori;
+  return hasError || hasErrorContratto;
 });
+
 
 // Esponiamo la funzione verificaDati al componente genitore
 defineExpose({
@@ -131,7 +133,6 @@ const refContratto = ref({});
 
     <ContrattoForm 
     ref="refContratto"
-    class="w-full"
     v-model:contratto="annuncio.contratto" :tentativoInvio="tentativoInvio" />
 
        <!-- Griglia responsive: 2 colonne su dispositivi medi/grandi, 1 colonna su dispositivi piccoli -->

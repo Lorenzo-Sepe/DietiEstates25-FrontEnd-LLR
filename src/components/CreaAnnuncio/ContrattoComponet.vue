@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, defineExpose,reactive,computed } from 'vue';
+import { defineProps, defineExpose,reactive,computed,watch, ref} from 'vue';
 import InputText from 'primevue/inputtext';
 import Select from 'primevue/select';
 
@@ -12,6 +12,7 @@ import { Contratto } from '../../dto/RequestAnnuncio';
 const props = defineProps({
   contratto: Contratto,
 });
+const isFirstValidation = ref(true);
 
 const errori = reactive({
   prezzo: { invalid: false, messaggio: '' },
@@ -48,9 +49,6 @@ const verificaDati = (campo) => {
       if(tempoMassimo <= 0){
         errori.tempoMassimo.invalid = true;
         errori.tempoMassimo.messaggio = 'Il tempo massimo deve essere maggiore di zero';
-      } else if(tempoMassimo <= props.contratto.datiAffittoRequest.tempoMinimo){
-        errori.tempoMassimo.invalid = true;
-        errori.tempoMassimo.messaggio = 'Il tempo massimo deve essere maggiore del tempo minimo';
       } else {
         errori.tempoMassimo.invalid = false;
         errori.tempoMassimo.messaggio = '';
@@ -66,6 +64,7 @@ const verificaDati = (campo) => {
 };
 
 const validaCampi = () => {
+  isFirstValidation.value = false;
   if (props.contratto.tipoDiContratto === 'AFFITTO') {
     ['prezzo', 'caparra', 'tempoMinimo','tempoMassimo'].forEach(campo => verificaDati(campo));
   } else if (props.contratto.tipoDiContratto === 'VENDITA') {
@@ -89,10 +88,17 @@ defineExpose({
   errori,
   hasErrori
 });
+
+watch(() => props.contratto.tipoDiContratto, () => {
+  if (!isFirstValidation.value) {
+    validaCampi();
+  }
+});
+
 </script>
 
 <template>
-  <div class="p-4 space-y-6 w-full">
+  <div class="p-4 space-y-6">
     <!-- Sezione per il Tipo di Contratto -->
     <div class="mb-6">
       <label for="tipoContratto" class="block font-semibold mb-2">Tipo di Contratto</label>
@@ -124,7 +130,7 @@ defineExpose({
                 :invalid="errori.prezzo.invalid" 
                 @input="verificaDati('prezzo')" 
                 @blur="verificaDati('prezzo')" 
-                class="w-full border rounded p-2"
+                class=" border rounded p-2"
               />
             </div>
             <div class="md:ml-40 mt-1">
@@ -145,7 +151,7 @@ defineExpose({
                 :invalid="errori.caparra.invalid" 
                 @input="verificaDati('caparra')" 
                 @blur="verificaDati('caparra')" 
-                class="w-full border rounded p-2"
+                class=" border rounded p-2"
               />
             </div>
             <div class="md:ml-40 mt-1">
@@ -169,7 +175,7 @@ defineExpose({
                 :invalid="errori.tempoMinimo.invalid" 
                 @input="verificaDati('tempoMinimo')" 
                 @blur="verificaDati('tempoMinimo')"
-                class="w-full border rounded p-2"
+                class=" border rounded p-2"
               />
             </div>
             <div class="md:ml-40 mt-1">
@@ -181,7 +187,7 @@ defineExpose({
           <!-- Tempo Massimo -->
           <div>
             <div class="flex flex-col md:flex-row md:items-center gap-2">
-              <label for="tempoMassimo" class="font-semibold md:w-40">Tempo Massimo</label>
+              <label for="tempoMassimo" class="font-semibold md:w-40">Tempo massimo</label>
               <InputText 
                 id="tempoMassimo"
                 v-model="contratto.datiAffittoRequest.tempoMassimo"
@@ -189,7 +195,7 @@ defineExpose({
                 :invalid="errori.tempoMassimo.invalid"
                 @input="verificaDati('tempoMassimo')"
                 @blur="verificaDati('tempoMassimo')"
-                class="w-full border rounded p-2"
+                class=" border rounded p-2"
               />
             </div>
             <div class="md:ml-40 mt-1">
@@ -215,7 +221,7 @@ defineExpose({
                 :invalid="errori.prezzo.invalid" 
                 @input="verificaDati('prezzo')" 
                 @blur="verificaDati('prezzo')" 
-                class="w-full border rounded p-2"
+                class="border rounded p-2"
               />
             </div>
             <div class="md:ml-40 mt-1">

@@ -95,7 +95,7 @@ defineExpose({
 </script>
 
 <template>
-  <div class="w-full">
+  <div>
     <Message v-if="hasErrori && tentativoInvio" severity="error" variant="filled" class="mb-4 text-left">
       <p>Alcuni campi non sono corretti. Verifica e correggi i seguenti campi evidenziati in rosso:</p>
       <ul class="list-disc pl-5">

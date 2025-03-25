@@ -20,7 +20,7 @@ const activeStep = ref(1);
 const tentativoInvio = reactive({ valore: false });
 
 const vaiAvanti = () => {
-  if (activeStep.value < 3) activeStep.value++;
+  if (activeStep.value < 5) activeStep.value++;
 };
 
 const vaiIndietro = () => {
@@ -62,6 +62,8 @@ watch(activeStep, (newVal) => {
 </script>
 
 <template>
+has errori step2
+{{ step1.hasErrori }}
 <div class="card flex justify-center mt-8 mx-4 md:mx-auto w-full md:max-w-2/3">
   <Stepper v-model:value="activeStep">
       <StepList>
@@ -83,7 +85,7 @@ watch(activeStep, (newVal) => {
       <StepPanels class="">
         <StepPanel :value="1">
           <h3>Informazioni di Base</h3>
-          <StepDatiIniziali
+          <StepDatiIniziali class="w-200"
              ref="step1" 
             v-model:annuncio="annuncio"
             :tentativoInvio="tentativoInvio.valore"
@@ -93,7 +95,7 @@ watch(activeStep, (newVal) => {
 
         <StepPanel :value="2">
           <h3>Dettagli Annuncio</h3>
-          <StepDatiPrincipali 
+          <StepDatiPrincipali  
           ref="step2"
             v-model:annuncio="annuncio" 
             @indietro="vaiIndietro" 
