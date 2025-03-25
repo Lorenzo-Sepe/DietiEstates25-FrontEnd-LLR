@@ -49,10 +49,7 @@ const inviaAnnuncio = () => {
 </script>
 
 <template>
-<div class="flex justify-end space-x-2 pt-4">
-      <Button label="Salva con Pinia" icon="pi pi-save" @click="salvaInPinia" />
-      <Button label="Recupera con Pinia" icon="pi pi-download" @click="recuperaDaPinia" />
-    </div>
+
      <div class="card flex justify-center mt-8">
     <Stepper v-model:value="activeStep">
       <StepList>
