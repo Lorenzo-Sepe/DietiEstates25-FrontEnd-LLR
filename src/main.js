@@ -10,10 +10,12 @@ import ConfirmationService from 'primevue/confirmationservice'
 import DialogService from 'primevue/dialogservice'
 import ToastService from 'primevue/toastservice';
 import Tooltip from 'primevue/tooltip';
-
+import piniaPersistedState from 'pinia-plugin-persistedstate';
 
 const app = createApp(App)
 const pinia = createPinia()
+pinia.use(piniaPersistedState); // Abilita la persistenza
+
 
 app.use(PrimeVue, {
     ripple: true,
