@@ -1,15 +1,14 @@
 <template>
-    <div class="flex flex-col items-center justify-between w-screen p-2">
-        <Form v-slot="$form" :initialValues :resolver @submit="onFormSubmit" class="rounded flex flex-col gap-4 justify-center items-center p-5 w-full sm:w-1/2">
-            <div class="flex flex-col gap-1 fluid">
+    <div class="flex flex-col items-center justify-between p-2 bg-primary-100 rounded">
+        <Form v-slot="$form" :initialValues :resolver @submit="onFormSubmit" class="rounded flex flex-col gap-4 justify-center items-center p-5 fluid w-full sm:w-1/2">
+            <div class="flex flex-col gap-1 fluid w-full">
                 <InputText v-model="signInRequest.usernameOrEmail" name="emailOrUsername" type="text" placeholder="Email or Username" fluid />
                 <Message v-if="$form.emailOrUsername?.invalid " severity="error" size="small" variant="simple">{{ $form.emailOrUsername.error?.message }}</Message>
                     
-            <Password :feedback="false" v-model="signInRequest.password" name="password" placeholder="Password" fluid :class="{'p-invalid': errorMessage}" toggleMask/>
+                <Password :feedback="false" v-model="signInRequest.password" name="password" placeholder="Password" fluid :class="{'p-invalid': errorMessage}" toggleMask/>
                 <Message v-if="$form.password?.invalid " severity="error" size="small" variant="simple">{{ $form.password.error?.message  }}</Message>
-
             </div>
-            <Button :loading="loading" type="submit" raised severity="secondary" variant="outlined" label="Submit" />
+            <Button :loading="loading" type="submit" raised severity="secondary" label="Submit" />
         </Form>
         
         <div v-if="errorMessage" class="text-red-500 text-sm">{{ errorMessage }}</div>
@@ -17,7 +16,7 @@
 </template>
 
 <script setup>
-import { reactive,ref } from 'vue';
+import { reactive,ref,watch } from 'vue';
 import AuthService from '../../services/AuthService';
 import SignInRequest from '../../dto/signInRequest'; 
 import Button from 'primevue/button';
@@ -63,10 +62,19 @@ const resolver = ({ values }) => {
     };
 };
 
+
 const onFormSubmit = async ({ valid }) => {
     loading.value = true;
     errorMessage.value = '';
     console.log(signInRequest.value);
+    
+    const { errors } = resolver({ values: signInRequest.value });
+
+    if (Object.keys(errors).length > 0) {
+        loading.value = false;
+        return;
+    }
+
     if (valid) {
         try {
             const response = await AuthService.login({
