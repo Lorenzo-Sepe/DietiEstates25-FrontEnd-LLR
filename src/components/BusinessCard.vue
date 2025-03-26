@@ -18,7 +18,6 @@
 
 
 <script setup>
-import  Card  from 'primevue/card';
 import Panel from 'primevue/panel'
 import  Avatar  from 'primevue/avatar';
 import { defineProps } from 'vue';

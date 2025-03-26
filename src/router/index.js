@@ -23,6 +23,12 @@ const routes = [
     component: () => import('../views/LoginAgentView.vue')
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/LoginView.vue')
+  },
+  
+  {
     path: '/PortaleAgenzia',
     name: 'PortaleAgenzia',
     component: () => import('../views/PortaleAgenzia.vue'),
@@ -66,6 +72,12 @@ const routes = [
     path: '/notifiche',
     name: 'notifiche',
     component: () => import('../views/Notifiche.vue')
+  },
+
+  {
+    path: '/callback',
+    name: 'callback',
+    component: () => import('../views/CallbackView.vue')
   },
 
   // Route di testing dei componenti
