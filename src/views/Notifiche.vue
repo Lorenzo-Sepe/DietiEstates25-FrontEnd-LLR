@@ -10,7 +10,7 @@
     <Dialog v-model:visible="okAllert" modal header="CONFERMA OPERAZIONE" :style="{ width: 'auto' }"
         :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
         <p class="m-0">
-            Operzione conclusa con successo
+            Operazione conclusa con successo
         </p>
         <Button label="OK" @click="okAllert = false" />
     </Dialog>
@@ -25,7 +25,22 @@
 
     <Dialog v-model:visible="contenutoNotifica" modal :style="{ width: '40rem' }"
         :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+
         <div v-html="contenutoHtml"></div>
+
+        <div>
+            <div class="border-t-2 border-black w-full mx-auto my-2"></div>
+            <div v-if="isAttivoCategoriaNotificaVisualizzata">
+                <p>Questa notifica appartiene alla categoria <Tag severity="secondary"> {{ nomeCategoriaNotificaVisualizzata }} </Tag>, se non vuoi ricevere ultetiori notifiche di questa categoria clicca disattiva</p>
+                <Button severity="secondary" @click="clickAttivaOrDisattivaCategoria">Disattiva {{ nomeCategoriaNotificaVisualizzata }}</Button>
+            </div>
+            <div v-else>
+                <p class="!text-red-500">Attenzione, la notifica che stai visualizzando appartiene alla categoria <Tag severity="secondary"> {{ nomeCategoriaNotificaVisualizzata }} </Tag>. Questa categoria è disattivata pertanto non stai ricevendo ulteriori notifiche di questa categoria</p>
+                <Button severity="success" @click="clickAttivaOrDisattivaCategoria" > Attiva {{ nomeCategoriaNotificaVisualizzata }}</Button>
+            </div>
+
+        </div>
+
     </Dialog>
 
     <div class="flex flex-row p-4 item-start gap-4 w-full">
@@ -54,6 +69,7 @@ import Paginator from 'primevue/paginator';
 import Dialog from 'primevue/dialog';
 import ProgressSpinner from 'primevue/progressspinner';
 import Button from 'primevue/button';
+import Tag from 'primevue/tag';
 
 import { CategoriaNotificaRequest } from '../dto/CategoriaNotificaRequest.js';
 
@@ -72,6 +88,10 @@ const loadingOperazione = ref(false);
 const contenutoNotifica = ref(false);
 
 const contenutoHtml = ref('');
+
+const isAttivoCategoriaNotificaVisualizzata = ref(false);
+const nomeCategoriaNotificaVisualizzata = ref('');  
+const idCategoriaNotificaVisualizzata = ref(0); 
 
 onMounted(async () => {
 
@@ -199,6 +219,7 @@ const modificaSottoscrizioni = async () => {
         loadingOperazione.value = true;
         await NotificheService.modificaSottoscrizioniCategorie(listaCategorieNotificaRequest.value);
         loadingOperazione.value = false;
+        isAttivoCategoriaNotificaVisualizzata.value = !isAttivoCategoriaNotificaVisualizzata.value;
         okAllert.value = true;
 
     } catch (error) {
@@ -210,8 +231,45 @@ const modificaSottoscrizioni = async () => {
 const visualizzaNotifica = (notifica) => {
 
     contenutoHtml.value = notifica.contenuto;
-
+    isAttivoCategoriaNotificaVisualizzata.value = isAttivo(notifica.idCategoria);
+    nomeCategoriaNotificaVisualizzata.value = getNomeCategoria(notifica.idCategoria);
+    idCategoriaNotificaVisualizzata.value = notifica.idCategoria;
     contenutoNotifica.value = true;
+}
+
+const getNomeCategoria = (idCategoria) => {
+
+    for (const categoria of categorieNotifiche.value) {
+
+        if (categoria.idCategoria === idCategoria) {
+
+            return categoria.nomeCategoria;
+        }
+    }
+}
+
+const isAttivo = (idCategoriaNotificaVisualizzata) => {
+
+    for (const categoria of categorieNotifiche.value) {
+
+        if (categoria.idCategoria === idCategoriaNotificaVisualizzata) {
+
+            return categoria.attivo;
+        }
+    }
+}
+
+const clickAttivaOrDisattivaCategoria = () => {
+
+    categorieNotifiche.value.forEach(categoria => {
+
+        if (categoria.idCategoria === idCategoriaNotificaVisualizzata.value) {
+
+            categoria.attivo = !categoria.attivo;
+        }
+    });
+
+    modificaSottoscrizioni();
 }
 
 </script>
