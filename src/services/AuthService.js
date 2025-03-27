@@ -1,9 +1,5 @@
 import {Api} from '../api/axiosConfig'
-import { useUserStore } from '../stores/UserStore';
-import { useEmployeeStore } from '../stores/EmployeeStore';
 
-const userInstance= useUserStore();
-const employeeInstance= useEmployeeStore();
 
 export default {
     register(credentials) {

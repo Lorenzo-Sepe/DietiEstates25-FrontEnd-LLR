@@ -6,7 +6,10 @@
         <!-- Menu di Navigazione con prop -->
         <MenuNavigazione :isInPortale="isInPortale" />
     
-    <Button label="Accedi" raised />
+        <Button label="Accedi" @click="openDialog"></Button>
+        <Dialog v-model:visible="visible" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" modal header="Login">
+          <LoginDialog @close="closeDialog"></LoginDialog>
+        </Dialog>
   </div>
 </template>
 
@@ -14,12 +17,13 @@
 import Logo from "./Logo.vue"
 import LogoPortale from "./LogoPortale.vue"
 import MenuNavigazione from "./MenuNavigazione.vue";
-
-import {  defineProps } from 'vue'
+import {  defineProps,ref } from 'vue'
 import {useUserStore} from '../../stores/UserStore'
-
 import Button from 'primevue/button';
+import Dialog from 'primevue/dialog';
+import LoginDialog from "../Dialogs/LoginDialog.vue";
 
+const visible = ref(false);
 
 const props = defineProps({
     isInPortale: Boolean
@@ -28,7 +32,13 @@ const props = defineProps({
 
 const userStoreInstance = useUserStore()
 
+function openDialog(){
+  visible.value = true;
+} 
+
+function closeDialog(){
+  visible.value = false;
+} 
 
 </script>
-
 

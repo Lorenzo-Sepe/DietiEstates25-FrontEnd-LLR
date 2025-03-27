@@ -1,104 +1,37 @@
 <template>
-    <DettagliAnnuncio :annuncio="annuncio" />
-  </template>
-  
-  <script setup>
-  import DettagliAnnuncio from '../components/DettagliAnnuncio.vue';
+  <div>
+    <h2>User Profile</h2>
+    <button @click="login">
+      login
+    </button>
+    <button @click="getAccessToken">
+      Get Access Token
+    </button>
+    <pre v-if="isAuthenticated">
+      <code>{{ user }}</code>
+    </pre>
+    <pre v-if="accessToken">
+      <code>{{ accessToken }}</code>
+    </pre>
+  </div>
+</template>
 
-  
-  const annuncio =  {
-            id: 23,
-            titolo: "Test upload annuncio",
-            descrizione: "QUesto è stato modificato per la terza volta (controllo cambio contratto)",
-            agente: {
-                email: "roberto.spena@av0.dietiestate.com",
-                username: "roberto.spena@av0.dietiestate.com",
-                urlFotoProfilo: null
-            },
-            immobile: {
-                tipologiaImmobile: "APPARTAMENTO",
-                metriQuadri: 195,
-                classeEnergetica: "A_PLUS_PLUS",
-                numeroServizi: 2,
-                numeroStanze: 2,
-                numeroDiPiani: 0,
-                indirizzo: {
-                    via: "via delle marmotte",
-                    numeroCivico: "402",
-                    citta: "Napoli",
-                    cap: "97100",
-                    provincia: "97100",
-                    nazione: "Italia",
-                    latitudine: 50,
-                    longitudine: 10,
-                    vicinoA: ["SCUOLE", "PARCHEGGI", "TRASPORTO_PUBBLICO"]
-                },
-                caratteristicheAggiuntive: {
-                    balconi: true,
-                    garage: true,
-                    postiAuto: true,
-                    giardino: false,
-                    ascensore: true,
-                    portiere: false,
-                    riscaldamentoCentralizzato: true,
-                    climatizzatori: false,
-                    pannelliSolari: true,
-                    cantina: false,
-                    soffitta: false,
-                    campoExtra: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                },
-                immagini: [
-                    {
-                        url: "https://dieti24.blob.core.windows.net/upload/annuncio21-0-2025-03-08.png",
-                        descrizione: "questa è una vespa"
-                    },
-                    {
-                        url: "https://dieti24.blob.core.windows.net/upload/annuncio23-2-2025-03-08.png",
-                        descrizione: "questo la seconda immagine ora è un appartamento non piu il logo dell'uni"
-                    }
-                ]
-            },
-            contratto: {
-                tipoContratto: "VENDITA",
-                contrattoVenditaResponse: {
-                    prezzoVendita: 300000,
-                    mutuoEstinto: true
-                },
-                contrattoAffittoResponse: null
-            },
-            "proposte": [
-    {
-      "idProposta": 1,
-      "prezzoProposta": 150000.50,
-      "controproposta": 140000.75,
-      "stato": "in attesa",
-      "datiProponente": {
-        "email": "utente@example.com",
-        "nome": "Mario",
-        "cognome": "Rossi",
-        "contatto": {
-          "tipo": "telefono",
-          "valore": "+393331234567"
-        }
-      }
-    },
-    {
-      "idProposta": 2,
-      "prezzoProposta": 200000.00,
-      "controproposta": 190000.00,
-      "stato": "accettata",
-      "datiProponente": {
-        "email": "cliente@example.com",
-        "nome": "Luca",
-        "cognome": "Bianchi",
-        "contatto": {
-          "tipo": "email",
-          "valore": "luca.bianchi@example.com"
-        }
-      }
+<script setup>
+  import { useAuth0 } from '@auth0/auth0-vue';
+  import { ref } from 'vue';
+
+  const { loginWithPopup, user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const accessToken = ref('');
+
+  const login = () => {
+    loginWithPopup();
+  };
+
+  const getAccessToken = async () => {
+    try {
+      accessToken.value = await getAccessTokenSilently();
+    } catch (error) {
+      console.error('Error getting access token:', error);
     }
-  ]
-        };
-  
-  
-  </script>
+  };
+</script>
