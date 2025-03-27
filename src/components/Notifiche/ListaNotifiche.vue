@@ -1,7 +1,7 @@
 <template>
 
     <div class="flex flex-col items-start my-4">
-        <label class="font-bold">{{ route.query.nome }}</label>
+        <Tag severity="secondary" class="font-bold">{{ route.query.nome }}</Tag>
         <div class="border-t-2 border-black w-full mx-auto my-2"></div>
     </div>
     <div v-for="notifica in notifiche"
@@ -15,6 +15,8 @@
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+
+import Tag from 'primevue/tag';
 
 const router = useRouter();
 const route = useRoute();
