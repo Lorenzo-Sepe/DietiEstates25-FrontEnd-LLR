@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  class="flex flex-col">
     <h2>User Profile</h2>
     <button @click="login">
       login
