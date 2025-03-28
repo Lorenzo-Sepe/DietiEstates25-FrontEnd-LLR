@@ -29,7 +29,7 @@ const ApiAgent = () => {
 
   return axios.create({
     baseURL: 'http://localhost:8081/api/',
-    timeout: 5000,
+    timeout: 9000,
     withCredentials: true,
     headers: {
       'Content-Type': 'application/json',
