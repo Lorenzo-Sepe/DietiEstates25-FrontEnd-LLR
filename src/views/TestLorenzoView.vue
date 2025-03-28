@@ -1,16 +1,17 @@
 <template>
   <div  class="flex flex-col">
     <h2>User Profile</h2>
-    <button @click="login">
-      login
-    </button>
-    <button @click="getAccessToken">
+    <Button @click="login">
+      Login
+    </Button>
+    <Button @click="getToken">
       Get Access Token
-    </button>
+    </Button>
     <pre v-if="isAuthenticated">
       <code>{{ user }}</code>
     </pre>
-    <pre v-if="accessToken">
+    <pre v-if="accessToken" class="flex flex-col">
+      
       <code>{{ accessToken }}</code>
     </pre>
   </div>
@@ -19,17 +20,21 @@
 <script setup>
   import { useAuth0 } from '@auth0/auth0-vue';
   import { ref } from 'vue';
+  import Button from 'primevue/button'
 
-  const { loginWithPopup, user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { loginWithPopup, user, isAuthenticated, getAccessTokenSilently,getAccessTokenWithPopup } = useAuth0();
   const accessToken = ref('');
+const tok = ref('')
 
   const login = () => {
     loginWithPopup();
   };
 
-  const getAccessToken = async () => {
+  const getToken = async () => {
     try {
       accessToken.value = await getAccessTokenSilently();
+    
+      console.log('Access token:', accessToken);
     } catch (error) {
       console.error('Error getting access token:', error);
     }

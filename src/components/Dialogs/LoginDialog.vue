@@ -1,7 +1,7 @@
 <template>
-  <Login @close="closeDialog"/>
+  <Login @close="closeDialog" class="rounded"/>
 
-    <div class="mt-2 flex flex-col justify-center bg-gray-100 items-center">
+    <div class="mt-2 flex flex-col justify-center rounded bg-gray-100 items-center">
         <Auth0Login @close="closeDialog"/>
     </div>
 </template>
