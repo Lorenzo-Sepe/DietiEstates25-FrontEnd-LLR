@@ -29,26 +29,35 @@
         <div v-html="contenutoHtml"></div>
 
         <div>
-            <div class="border-t-2 border-black w-full mx-auto my-2"></div>
+            <div class="flex justify-center border-t-2 border-black w-full mx-auto my-2"></div>
             <div v-if="isAttivoCategoriaNotificaVisualizzata">
-                <p>Questa notifica appartiene alla categoria <Tag severity="secondary"> {{ nomeCategoriaNotificaVisualizzata }} </Tag>, se non vuoi ricevere ultetiori notifiche di questa categoria clicca disattiva</p>
-                <Button severity="secondary" @click="clickAttivaOrDisattivaCategoria">Disattiva {{ nomeCategoriaNotificaVisualizzata }}</Button>
+                <p>Questa notifica appartiene alla categoria <Tag severity="secondary"> {{
+                    nomeCategoriaNotificaVisualizzata }} </Tag>, se non vuoi ricevere ultetiori notifiche di questa
+                    categoria clicca disattiva</p>
+                <Button severity="secondary" @click="clickAttivaOrDisattivaCategoria">Disattiva {{
+                    nomeCategoriaNotificaVisualizzata }}</Button>
             </div>
             <div v-else>
-                <p class="!text-red-500">Attenzione, la notifica che stai visualizzando appartiene alla categoria <Tag severity="secondary"> {{ nomeCategoriaNotificaVisualizzata }} </Tag>. Questa categoria è disattivata pertanto non stai ricevendo ulteriori notifiche di questa categoria</p>
-                <Button severity="success" @click="clickAttivaOrDisattivaCategoria" > Attiva {{ nomeCategoriaNotificaVisualizzata }}</Button>
+                <p class="!text-red-500">Attenzione, la notifica che stai visualizzando appartiene alla categoria <Tag
+                        severity="secondary"> {{ nomeCategoriaNotificaVisualizzata }} </Tag>. Questa categoria è
+                    disattivata pertanto non stai ricevendo ulteriori notifiche di questa categoria</p>
+                <Button severity="success" @click="clickAttivaOrDisattivaCategoria"> Attiva {{
+                    nomeCategoriaNotificaVisualizzata }}</Button>
             </div>
 
         </div>
 
     </Dialog>
 
-    <div class="flex flex-row p-4 item-start gap-4 w-full">
-        <div class="contenitore-menuLaterale border-2 border-black rounded-lg hidden md:block">
+    <div class="flex flex-row p-4 items-start gap-4 w-full">
+        <div class="contenitore-menuLaterale border-2 border-black rounded-lg my-10 hidden md:block">
             <MenuLaterale :categorie="categorieNotifiche" :categoriaSelected="categoriaSelected"
                 @modificaSottoscrizioni="modificaSottoscrizioni" />
         </div>
         <div class="contenitore-notifiche p-2 flex flex-col gap-4">
+            <div class="flex md:hidden border-1 border-gray-500 rounded-lg p-4 justify-center gap-4 w-auto">
+                <MenuCategoriaSuperiore :categorie="categorieNotifiche"  @modificaSottoscrizioni="modificaSottoscrizioni" />
+            </div>
             <ListaNotifiche :notifiche="notifiche" @visualizzaNotifica="visualizzaNotifica" />
             <div class="mt-auto">
                 <Paginator :rows="5" :totalRecords="numeroNotifche" @page="onPage"></Paginator>
@@ -64,6 +73,7 @@ import { useUserStore } from '../stores/UserStore.js'
 import { useRouter, useRoute } from 'vue-router';
 
 import MenuLaterale from '../components/Notifiche/MenuLaterale.vue';
+import MenuCategoriaSuperiore from '../components/Notifiche/MenuCategoriaSuperiore.vue';
 import ListaNotifiche from '../components/Notifiche/ListaNotifiche.vue';
 import Paginator from 'primevue/paginator';
 import Dialog from 'primevue/dialog';
@@ -90,8 +100,8 @@ const contenutoNotifica = ref(false);
 const contenutoHtml = ref('');
 
 const isAttivoCategoriaNotificaVisualizzata = ref(false);
-const nomeCategoriaNotificaVisualizzata = ref('');  
-const idCategoriaNotificaVisualizzata = ref(0); 
+const nomeCategoriaNotificaVisualizzata = ref('');
+const idCategoriaNotificaVisualizzata = ref(0);
 
 onMounted(async () => {
 
@@ -109,7 +119,7 @@ onMounted(async () => {
         email: 'roby98@gmail.com',
         username: 'roby98',
         urlFotoProfilo: 'https://dieti24.blob.core.windows.net/upload/annuncio8-0-2025-03-05.png',
-        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6InJvYnk5OCIsImlhdCI6MTc0MzAxNzM5NSwiZXhwIjoxNzQzMTAzNzk1fQ.YJBnK1D8AsjT6LOVrXAHQppWnlC9kXsuUr-B-k-vc5w',
+        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6InJvYnk5OCIsImlhdCI6MTc0MzE3MDA0MSwiZXhwIjoxNzQzMjU2NDQxfQ.hweKwBUH4LQ-rSIvZc2Ul_ajqPgVt01Y6COKWj12Tbs',
         authority: 'MEMBER',
         isAuthenticated: true
     }
@@ -277,12 +287,18 @@ const clickAttivaOrDisattivaCategoria = () => {
 <style scoped>
 .contenitore-menuLaterale {
 
-    width: auto;
+    width: 24rem;
     padding: 1rem;
 }
 
 .contenitore-notifiche {
 
     width: 70%;
+}
+
+@media (max-width: 768px) {
+    .contenitore-notifiche {
+        width: 100%;
+    }
 }
 </style>

@@ -7,8 +7,7 @@
                 <h2 class="text-lg font-bold">DISATTIVA/ATTIVA NOTIFICHE</h2>
                 <ImpostazioniSottoscrizioni :categorie="props.categorie"
                     :dialogSottoscrizioni="impostazioniSottoscrizineVisibe" @chiudiImpostazioni="closeCallback"
-                    @modificaSottoscrizioni="emit('modificaSottoscrizioni');
-                    " />
+                    @modificaSottoscrizioni="emit('modificaSottoscrizioni')" />
             </div>
         </template>
     </Dialog>

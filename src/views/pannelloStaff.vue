@@ -85,7 +85,7 @@ onMounted(async () => {
         surname: 'Spena',
         urlFotoProfilo: 'https://dieti24.blob.core.windows.net/upload/annuncio8-0-2025-03-05.png',
         email: 'agente1.test@av0.dietiestate.com',
-        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQyODIxMjk4LCJleHAiOjE3NDI5MDc2OTh9.NwE6rZ2jOLUU-JP-vJ0duRb5VO6X3I-LOCLA6BVKv-c',
+        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQzMTgxNjk0LCJleHAiOjE3NDMyNjgwOTR9.eW-6SvC7XD6ZCOM0bYjyIkkJcvlNOfew5VrCsFpx63c',
         authority: 'AGENT',
         isAuthenticated: true
     }
@@ -141,9 +141,10 @@ const aggiungiPropostaManuale = async () => {
     try {
 
         loadingOperazione.value = true;
-        await AnnunciService.postPropostaManuale(propostaRequest);
+        const nuovaProposta = await AnnunciService.postPropostaManuale(propostaRequest);
         loadingOperazione.value = false;
-        aggiungiProposta();
+        console.log("nuova proposta: ", nuovaProposta);
+        aggiungiProposta(nuovaProposta.idProposta);
         okAllert.value = true;
 
     } catch (error) {
@@ -206,18 +207,16 @@ const changeStatoProposta = (idProposta, stato) => {
     }
 }
 
-const aggiungiProposta = () => {
+const aggiungiProposta = (idProposta) => {
 
     annunci.value.forEach((annuncio) => {
 
 
         if (annuncio.id === propostaRequest.annuncioId) {
 
-            console.log("arrivoo quiiii annuncio:", propostaRequest.annuncioId);
-
             annuncio.proposte.push({
 
-                idProposta: -1,
+                idProposta: idProposta,
                 prezzoProposta: propostaRequest.prezzo,
                 stato: 'IN_TRATTAZIONE',
                 controproposta: null,
