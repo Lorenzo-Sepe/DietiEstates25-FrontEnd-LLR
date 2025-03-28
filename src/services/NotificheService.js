@@ -47,6 +47,13 @@ export default {
             })
     },
 
+    modificaSottoscrizioniCategorie(sottoscrizioniRequest) {
 
+        return Api()
+            .patch('utente/sottoscrizioni2',sottoscrizioniRequest)
+            .then((response) => {
+                return response.data;
+            })
+    },
 };
 
