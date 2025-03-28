@@ -1,100 +1,77 @@
 <template>
   <div class="contenitore-card">
-    <FileUpload
-      name="demo[]"
-      :multiple="true"
-      accept="image/*"
-      :maxFileSize="100000000"
-      @select="onSelectedFiles"
-    >
-      <template #header="{ chooseCallback, clearCallback, files }">
-        <div class="header-flex">
-          <Button
-            @click="chooseCallback()"
-            icon="pi pi-image"
-            label="Aggiungi immagini"
-            outlined
-            class="p-button-sm"
-          />
-          <Button
-            @click="clearCallback()"
-            icon="pi pi-trash"
-            label="Pulisci tutto"
-            severity="danger"
-            outlined
-            class="p-button-sm"
-            :disabled="!files?.length"
-          />
-        </div>
-      </template>
+    <div class="header-flex">
+      <input type="file" multiple accept="image/*" @change="onSelectedFiles" hidden ref="inputFile" />
+      <Button @click="apriSelettore" icon="pi pi-image" label="Aggiungi immagini" outlined class="p-button-sm" />
+      <Button @click="pulisciTutto" icon="pi pi-trash" label="Pulisci tutto" severity="danger" outlined class="p-button-sm" :disabled="!annuncio.immobile.immagini.length" />
+    </div>
 
-      <template #content="{ files, removeFileCallback }">
-        <div class="contenitore-immagini">
-          <div
-            v-for="(file, index) in files"
-            :key="file.name"
-            class="card-immagine"
-          >
-            <div class="contenitore-immagine">
-              <img
-                :src="file.objectURL"
-                :alt="file.name"
-                class="anteprima-immagine"
-              />
-              <Button
-                icon="pi pi-times"
-                severity="danger"
-                class="bottone-elimina"
-                @click="removeFileCallback(index)"
-                rounded
-                text
-              />
-            </div>
-            <div class="descrizione-file">
-              <InputText
-                v-model="file.description"
-                placeholder="Inserisci una breve descrizione della foto"
-                class="input-descrizione"
-              />
-              <div class="dettagli-file">
-                <span class="nome-file">{{ file.name }}</span>
-                <span class="dimensione-file">{{ formatSize(file.size) }}</span>
-              </div>
-            </div>
-          </div>
+    <div v-if="annuncio.immobile.immagini.length" class="contenitore-immagini">
+      <div v-for="(img, index) in annuncio.immobile.immagini" :key="index" class="card-immagine">
+        <div class="contenitore-immagine">
+          <img :src="img.urlImmagineEsistente" class="anteprima-immagine" />
+          <Button icon="pi pi-times" severity="danger" class="bottone-elimina" @click="rimuoviFile(index)" rounded text />
         </div>
-      </template>
+        <div class="descrizione-file">
+          <InputText v-model="img.descrizione" placeholder="Inserisci una breve descrizione della foto" class="input-descrizione" />
+        </div>
+      </div>
+    </div>
 
-      <template #empty>
-        <div class="contenitore-vuoto">
-          <i class="pi pi-image icona-vuota" />
-          <p class="testo-vuoto">Clicca o trascina immagini qui</p>
-        </div>
-      </template>
-    </FileUpload>
+    <div v-else class="contenitore-vuoto">
+      <i class="pi pi-image icona-vuota" />
+      <p class="testo-vuoto">Clicca o trascina immagini qui</p>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { usePrimeVue } from 'primevue/config';
-import FileUpload from 'primevue/fileupload';
-import { Button,InputText } from 'primevue';
+import { ref , defineProps} from 'vue';
+import { Button, InputText } from 'primevue';
+import { AnnuncioImmobiliareRequest ,Immagine} from '../../dto/RequestAnnuncio';
 
 
-const $primevue = usePrimeVue();
-const files = ref([]);
+const props = defineProps({ 
+  annuncio: AnnuncioImmobiliareRequest,
+  tentativoInvio: Boolean
+});
+
+const inputFile = ref(null);
+
+const apriSelettore = () => {
+  inputFile.value.click();
+};
 
 const onSelectedFiles = (event) => {
-  files.value = event.files.map((file) => ({
-    ...file,
-    description: '',
-  }));
+  const files = Array.from(event.target.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const immagine = new Immagine();
+      immagine.file = file
+      immagine.urlImmagineEsistente=e.target.result;
+      immagine.descrizione = ``;
+
+      props.annuncio.immobile.immagini.push(immagine);
+      console.log('Immagini:', props.annuncio.immobile.immagini);
+      
+    };
+    reader.readAsDataURL(file);
+  });
+  event.target.value = '';
+};
+
+const rimuoviFile = (index) => {
+  props.annuncio.immobile.immagini.splice(index, 1);
+};
+
+const pulisciTutto = () => {
+  props.annuncio.immobile.immagini = [];
 };
 
 const formatSize = (bytes) => {
   const k = 1024;
-  const sizes = $primevue.config.locale.fileSizeTypes;
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
 };
