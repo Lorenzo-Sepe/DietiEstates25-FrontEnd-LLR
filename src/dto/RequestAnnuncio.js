@@ -24,6 +24,7 @@ export class Indirizzo {
       this.pannelliSolari = data.pannelliSolari || false;
       this.cantina = data.cantina || false;
       this.soffitta = data.soffitta || false;
+      this.descrizioneAggiuntiva = data.descrizioneAggiuntiva || ""
     }
   }
   

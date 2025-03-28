@@ -12,10 +12,13 @@ import StepDatiPrincipali from '../components/CreaAnnuncio/StepDatiPrincipali.vu
 import StepIndirizzo from '../components/CreaAnnuncio/StepIndirizzo.vue';
 import StepImmagini from '../components/CreaAnnuncio/StepCaricamentoImmagini.vue';
 import { useStoreAnnuncio } from '../stores/CreazioneAnnuncioStore';
+import { Button } from 'primevue';
+import Anteprima from '../components/CreaAnnuncio/Anteprima.vue';
+import StepCaratteristiche from '../components/CreaAnnuncio/StepCaratteristiche.vue';
 const storeAnnuncio = useStoreAnnuncio();
 
 const annuncio = storeAnnuncio.annuncio;
-const activeStep = ref(1);
+const activeStep = ref(5);
 
 const tentativoInvio = reactive({ valore: false });
 
@@ -38,9 +41,11 @@ const inviaAnnuncio = () => {
   if(!step1.value.validaCampi()){
     activeStep.value = 1;
     step2.value.validaCampi();
+    step3.value.validaCampi();
     return;
   }else if (!step2.value.validaCampi()){
     activeStep.value = 2;
+    step3.value.validaCampi();
     return;
   }
   CreaAnnuncio(annuncio);
@@ -62,8 +67,8 @@ watch(activeStep, (newVal) => {
 </script>
 
 <template>
-has errori step2
-{{ step1.hasErrori }}
+
+
 <div class="card flex justify-center mt-8 mx-4 md:mx-auto w-full md:max-w-2/3">
   <Stepper v-model:value="activeStep">
       <StepList>
@@ -78,8 +83,11 @@ has errori step2
         <Step :value="3"><i class="pi pi-map" /></Step>
             <Divider />
         <Step :value="4"><i class="pi pi-map" /></Step>
-            <Divider />
+        <Divider />
         <Step :value="5"><i class="pi pi-images" /></Step>
+        <Divider />
+        <Step :value="6"><i class="pi pi-images" /></Step>
+        
       </StepList>
       
       <StepPanels class="">
@@ -103,7 +111,7 @@ has errori step2
             :tentativoInvio="tentativoInvio.valore"
           />
         </StepPanel>
-        <StepPanel :value="3">
+        <StepPanel :value="4">
           <h3>Indirizzo e Posizione</h3>
           <StepIndirizzo 
             v-model:annuncio="annuncio" 
@@ -111,18 +119,27 @@ has errori step2
             @avanti="vaiAvanti" 
                       />
         </StepPanel>
-
-        <StepPanel :value="4">
-          <StepImmagini 
+      <StepPanel :value="3">
+        <h3>Caratteristiche</h3>
+        <StepCaratteristiche
+        ref="step3"
             v-model:annuncio="annuncio" 
             @indietro="vaiIndietro" 
-            @invia="inviaAnnuncio" 
+            @avanti="vaiAvanti" 
+            :tentativoInvio="tentativoInvio.valore"
+        />
+      </StepPanel>
+        <StepPanel :value="5">
+          <StepImmagini 
+            v-model:annuncio="annuncio"
+            @indietro="vaiIndietro" 
+            @avanti="vaiAvanti"  
           />
-        </StepPanel><StepPanel :value="5">
-          <StepImmagini 
-            v-model:annuncio="annuncio" 
-            @indietro="vaiIndietro" 
-            @invia="inviaAnnuncio" 
+        </StepPanel><StepPanel :value="6">
+          <Anteprima  class="w-100"
+          v-model:annuncio="annuncio"
+          @indietro="vaiIndietro" 
+          @invia="inviaAnnuncio" 
           />
         </StepPanel>
       </ StepPanels>

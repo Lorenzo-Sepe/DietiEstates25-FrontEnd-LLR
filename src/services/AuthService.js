@@ -19,6 +19,14 @@ export default {
                 return response.data;
             });
     },
+    loginIdProvvider(credentials){
+        return Api()
+        .post('pb/auth/signinIdProv',credentials)
+        .then((response)=>{
+            console.log('Id provvider success,',response);
+            return response.data;
+        })
+    },
     logout() {
         return Api()
             .post('auth/logout')

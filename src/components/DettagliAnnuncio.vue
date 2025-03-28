@@ -116,6 +116,11 @@
               {{ annuncio.immobile.caratteristicheAggiuntive.campoExtra }}
             </div>
           </AccordionContent>
+
+          <AccordionContent>
+            <AccordionHeader>Informazione aggiuntive</AccordionHeader>
+            {{ annuncio.immobile.caratteristicheAggiuntive.descrizioneAggiuntiva }}
+          </AccordionContent>
         </AccordionPanel>
       </Accordion>
 
@@ -204,7 +209,7 @@ import BusinessCard from './BusinessCard.vue';
 
 const props = defineProps({
   annuncio: {
-    type: Object,
+    type: AnnuncioImmobiliareResponse,
     required: true,
     default: () => new AnnuncioImmobiliareResponse(),
   },

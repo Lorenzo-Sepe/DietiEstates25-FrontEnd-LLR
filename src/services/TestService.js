@@ -45,7 +45,8 @@ export default {
                     climatizzatori: false,
                     pannelliSolari: true,
                     cantina: false,
-                    soffitta: false
+                    soffitta: false,
+                    descrizioneAggiuntiva="Sono una descrione aggiuntiva"
                 },
                 immagini: [
                     {

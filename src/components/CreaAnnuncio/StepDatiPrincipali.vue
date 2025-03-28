@@ -42,7 +42,7 @@ const opzioniClasseEnergetica = reactive([
 const verificaDati = (campo) => {
 
      if (campo === 'metriQuadri') {
-    const metriQuadri = props.annuncio.metriQuadri || 0;
+    const metriQuadri = props.annuncio.immobile.metriQuadri || 0;
     if (metriQuadri <= 0) {
       errori.metriQuadri.invalid = true;
       errori.metriQuadri.messaggio = 'I metri quadri devono essere un valore positivo';
@@ -51,7 +51,7 @@ const verificaDati = (campo) => {
       errori.metriQuadri.messaggio = '';
     }
   } else if (campo === 'numeroDiPiani') {
-    const numeroDiPiani = props.annuncio.numeroDiPiani || 0;
+    const numeroDiPiani = props.annuncio.immobile.numeroDiPiani || 0;
     if (numeroDiPiani <= 0) {
       errori.numeroDiPiani.invalid = true;
       errori.numeroDiPiani.messaggio = 'Il numero di piani deve essere almeno 1';
@@ -60,7 +60,7 @@ const verificaDati = (campo) => {
       errori.numeroDiPiani.messaggio = '';
     }
   } else if (campo === 'numeroStanze') {
-    const numeroStanze = props.annuncio.numeroStanze || 0;
+    const numeroStanze = props.annuncio.immobile.numeroStanze || 0;
     if (numeroStanze <= 0) {
       errori.numeroStanze.invalid = true;
       errori.numeroStanze.messaggio = 'Il numero di stanze deve essere almeno 1';
@@ -69,7 +69,7 @@ const verificaDati = (campo) => {
       errori.numeroStanze.messaggio = '';
     }
   } else if (campo === 'numeroServizi') {
-    const numeroServizi = props.annuncio.numeroServizi || 0;
+    const numeroServizi = props.annuncio.immobile.numeroServizi || 0;
     if (numeroServizi <= 0) {
       errori.numeroServizi.invalid = true;
       errori.numeroServizi.messaggio = 'Il numero di servizi deve essere almeno 1';
@@ -78,7 +78,7 @@ const verificaDati = (campo) => {
       errori.numeroServizi.messaggio = '';
     }
   } else if (campo === 'classeEnergetica') {
-    errori.classeEnergetica.invalid = !props.annuncio.classeEnergetica;
+    errori.classeEnergetica.invalid = !props.annuncio.immobile.classeEnergetica;
   }
 
 };
@@ -142,7 +142,7 @@ const refContratto = ref({});
         <label for="metriQuadri" class="block font-semibold mb-2">Metri Quadri</label>
         <InputText 
           id="metriQuadri" 
-          v-model="annuncio.metriQuadri" 
+          v-model="annuncio.immobile.metriQuadri" 
           type="number"
           :invalid="errori.metriQuadri.invalid" 
           @input="verificaDati('metriQuadri')" 
@@ -164,7 +164,7 @@ const refContratto = ref({});
         <label for="numeroDiPiani" class="block font-semibold mb-2">Numero di Piani</label>
         <InputText 
           id="numeroDiPiani" 
-          v-model="annuncio.numeroDiPiani" 
+          v-model="annuncio.immobile.numeroDiPiani" 
           type="number"
           :invalid="errori.numeroDiPiani.invalid" 
           @input="verificaDati('numeroDiPiani')" 
@@ -186,7 +186,7 @@ const refContratto = ref({});
         <label for="numeroStanze" class="block font-semibold mb-2">Numero di Stanze</label>
         <InputText 
           id="numeroStanze" 
-          v-model="annuncio.numeroStanze" 
+          v-model="annuncio.immobile.numeroStanze" 
           type="number"
           :invalid="errori.numeroStanze.invalid" 
           @input="verificaDati('numeroStanze')" 
@@ -208,7 +208,7 @@ const refContratto = ref({});
         <label for="numeroServizi" class="block font-semibold mb-2">Numero di Servizi</label>
         <InputText 
           id="numeroServizi" 
-          v-model="annuncio.numeroServizi" 
+          v-model="annuncio.immobile.numeroServizi" 
           type="number"
           :invalid="errori.numeroServizi.invalid" 
           @input="verificaDati('numeroServizi')" 
@@ -230,7 +230,7 @@ const refContratto = ref({});
         <label for="classeEnergetica" class="block font-semibold mb-2">Classe Energetica</label>
         <Select 
           id="classeEnergetica" 
-          v-model="annuncio.classeEnergetica" 
+          v-model="annuncio.immobile.classeEnergetica" 
           :options="opzioniClasseEnergetica" 
           optionLabel="label"
           optionValue="value"
