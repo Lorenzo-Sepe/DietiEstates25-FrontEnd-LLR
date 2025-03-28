@@ -40,6 +40,7 @@ formData.append('immobile.caratteristicheAggiuntive.climatizzatori', annuncio.im
 formData.append('immobile.caratteristicheAggiuntive.pannelliSolari', annuncio.immobile.caratteristicheAggiuntive.pannelliSolari);
 formData.append('immobile.caratteristicheAggiuntive.cantina', annuncio.immobile.caratteristicheAggiuntive.cantina);
 formData.append('immobile.caratteristicheAggiuntive.soffitta', annuncio.immobile.caratteristicheAggiuntive.soffitta);
+formData.append('immobile.caratteristicheAggiuntive.descrizioneAggiuntiva',annuncio.immobile.caratteristicheAggiuntive.descrizioneAggiuntiva);
 
 // Immagini
 annuncio.immobile.immagini.forEach((img, index) => {

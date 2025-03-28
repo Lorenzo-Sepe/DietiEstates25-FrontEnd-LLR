@@ -48,7 +48,7 @@ const onSelectedFiles = (event) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const immagine = new Immagine();
-      immagine.file = file
+      immagine.file = file;
       immagine.urlImmagineEsistente=e.target.result;
       immagine.descrizione = ``;
 
