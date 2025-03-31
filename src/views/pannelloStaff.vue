@@ -26,7 +26,7 @@
 
     <!------------------------------------------------------------------------ ------------------------------------------------>
 
-    <div class="flex flex-col gap-4 w-full">
+    <div class="flex flex-col gap-4 w-full p-2">
         <AreaSuperiore />
         <div class="w-full">
             <TabellaAnnunci :propAnnunci="annunci" :propLoading="loading" :propostaRequest="propostaRequest"
@@ -88,7 +88,7 @@ onMounted(async () => {
         surname: 'Spena',
         urlFotoProfilo: 'https://dieti24.blob.core.windows.net/upload/annuncio8-0-2025-03-05.png',
         email: 'agente1.test@av0.dietiestate.com',
-        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQzNDI4NTI3LCJleHAiOjE3NDM1MTQ5Mjd9.axSy3qjc8vRvBXUuPyeEvEc2AHgUpu3kdAsdwWfCuO8',
+        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEuZGkgcm9ieWltbW9iaWxlQHJvYnlpbW1vYmlsaS5kaWV0aWVzdGF0ZS5jb20iLCJpYXQiOjE3NDM0Mzc0MzgsImV4cCI6MTc0MzUyMzgzOH0.LbJVDt_S8AmHZcLp-BRXM0VgjCL342hyNxFyt7-ef0k',
         authority: 'AGENT',
         isAuthenticated: true
     }
