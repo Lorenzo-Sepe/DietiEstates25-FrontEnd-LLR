@@ -26,9 +26,9 @@
 
     <!------------------------------------------------------------------------ ------------------------------------------------>
 
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 w-full">
         <AreaSuperiore />
-        <div class="">
+        <div class="w-full">
             <TabellaAnnunci :propAnnunci="annunci" :propLoading="loading" :propostaRequest="propostaRequest"
                 @nuovaProposta="aggiungiPropostaManuale" 
                 @eliminaProposta="rifiutaProposta"
