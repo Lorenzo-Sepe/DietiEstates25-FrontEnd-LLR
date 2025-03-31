@@ -69,17 +69,10 @@ const onFormSubmit = async ({ valid }) => {
     errorMessage.value = '';
     console.log(signInRequest.value);
     
-    const { errors } = resolver({ values: signInRequest.value });
-
-    if (Object.keys(errors).length > 0) {
-        loading.value = false;
-        return;
-    }
-
-    if (valid) {
+    
         try {
-            const response = await AuthService.login({
-                usernameOrEmail: signInRequest.value.usernameOrEmail,
+            const response = AuthService.login({
+                Email: signInRequest.value.usernameOrEmail,
                 password: signInRequest.value.password
             });
             
@@ -94,7 +87,7 @@ const onFormSubmit = async ({ valid }) => {
             }
             loading.value = false;
         }
-    }
+    
 }
 
 </script>

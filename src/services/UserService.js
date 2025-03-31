@@ -15,8 +15,8 @@ export function setUser (response) {
     store.utente.token(jwtResponse.token);  
     }else{
         const store=  useEmployeeStore();
-        store.employee.email(jwtResponse.email);
-        store.employee.token(jwtResponse.token);  
+        store.employee.email=jwtResponse.email;
+        store.employee.token=jwtResponse.token;  
     }
 
 
