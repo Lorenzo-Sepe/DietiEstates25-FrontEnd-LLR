@@ -11,8 +11,8 @@ export function setUser (response) {
     if(jwtResponse.authority="MEMBER"){ 
     // Imposta i dati dell'utente nello store
     const store = useStoreUtente();
-    store.utente.email(jwtResponse.email);
-    store.utente.token(jwtResponse.token);  
+    store.utente.email=jwtResponse.email;
+    store.utente.token=jwtResponse.token;  
     }else{
         const store=  useEmployeeStore();
         store.employee.email=jwtResponse.email;

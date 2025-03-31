@@ -11,7 +11,7 @@ const Api = () => {
   const store = useStoreUtente();
   const token= store.utente.token;
   if (token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${userStoreInstance.token}`;
+    axios.defaults.headers.common['Authorization'] = `Bearer ${useStoreUtente.token}`;
   }
 
   return axios.create({
