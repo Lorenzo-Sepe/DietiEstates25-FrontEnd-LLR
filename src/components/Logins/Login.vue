@@ -2,10 +2,10 @@
     <div class="flex flex-col items-center justify-between p-2 bg-primary-100 rounded">
         <Form v-slot="$form" :initialValues :resolver @submit="onFormSubmit" class="rounded flex flex-col gap-4 justify-center items-center p-5 fluid w-full sm:w-1/2">
             <div class="flex flex-col gap-1 fluid w-full">
-                <InputText v-model="signInRequest.usernameOrEmail" name="emailOrUsername" type="text" placeholder="Email or Username" fluid />
+                <InputText fluid v-model="signInRequest.usernameOrEmail" name="emailOrUsername" type="text" placeholder="Email or Username"  />
                 <Message v-if="$form.emailOrUsername?.invalid " severity="error" size="small" variant="simple">{{ $form.emailOrUsername.error?.message }}</Message>
                     
-                <Password :feedback="false" v-model="signInRequest.password" name="password" placeholder="Password" fluid :class="{'p-invalid': errorMessage}" toggleMask/>
+                <Password fluid :feedback="false" v-model="signInRequest.password" name="password" placeholder="Password"  :class="{'p-invalid': errorMessage}" toggleMask/>
                 <Message v-if="$form.password?.invalid " severity="error" size="small" variant="simple">{{ $form.password.error?.message  }}</Message>
             </div>
             <Button :loading="loading" type="submit" raised severity="secondary" label="Submit" />
@@ -19,6 +19,7 @@
 import { reactive,ref,watch } from 'vue';
 import AuthService from '../../services/AuthService';
 import SignInRequest from '../../dto/signInRequest'; 
+import  Message  from 'primevue/message';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { Form } from '@primevue/forms';
