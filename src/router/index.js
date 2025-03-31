@@ -27,6 +27,17 @@ const routes = [
     name: 'login',
     component: () => import('../views/LoginView.vue')
   },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('../views/RegistrationView.vue')
+  },
+  {
+    path: '/confirm-registration/:message/:isPasswordVisible',
+    name: 'confirmRegistration',
+    component: () => import('../components/Logins/ConfirmRegistration.vue'),
+    props: true
+  },
   
   {
     path: '/PortaleAgenzia',

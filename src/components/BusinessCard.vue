@@ -1,6 +1,6 @@
 <template>
   
-      <Panel class="mb-4 w-full  lg:w-[50%] ">
+      <Panel class="mb-4 w-full">
         <template #header>
           <div class="w-full flex items-center h-20 bg-primary-400/50 p-2 rounded border border-surface-100 ">Agente</div>
         </template>

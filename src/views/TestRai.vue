@@ -13,6 +13,7 @@ import StepIndirizzo from '../components/CreaAnnuncio/StepIndirizzo.vue';
 import StepImmagini from '../components/CreaAnnuncio/StepCaricamentoImmagini.vue';
 import { useStoreAnnuncio } from '../stores/CreazioneAnnuncioStore';
 import { Button } from 'primevue';
+import Tag from 'primevue/tag';
 import Anteprima from '../components/CreaAnnuncio/Anteprima.vue';
 import StepCaratteristiche from '../components/CreaAnnuncio/StepCaratteristiche.vue';
 const storeAnnuncio = useStoreAnnuncio();
@@ -38,25 +39,25 @@ const step4 = ref({});
 
 const inviaAnnuncio = () => {
   tentativoInvio.valore = true;
-  if(!step1.value.validaCampi()){
+  if (!step1.value.validaCampi()) {
     activeStep.value = 1;
     step2.value.validaCampi();
     step3.value.validaCampi();
     return;
-  }else if (!step2.value.validaCampi()){
+  } else if (!step2.value.validaCampi()) {
     activeStep.value = 2;
     step3.value.validaCampi();
     return;
   }
   CreaAnnuncio(annuncio);
-  
+
 };
 
 watch(activeStep, (newVal) => {
-  if (newVal>1) {
+  if (newVal > 1) {
     step1.value.validaCampi();
   }
-  if (newVal>2) {
+  if (newVal > 2) {
     step2.value.validaCampi();
   }
 
@@ -68,97 +69,87 @@ watch(activeStep, (newVal) => {
 
 <template>
 
+  <div class="flex flex-col gap-4 w-full items-center justify-center">
 
-<div class="card flex justify-center mt-8 mx-4 md:mx-auto w-full md:max-w-2/3">
-  <Stepper v-model:value="activeStep">
-      <StepList>
-        <Step :value="1"   :style="{ '--p-stepper-step-number-background': step1.hasErrori ? '#ad0000' : '', '--p-stepper-step-number-color': step1.hasErrori ? 'white' : '' }"        >
-          <i class="pi pi-home" /></Step>
-             <Divider />
-        <Step :value="2"
-         :style="{ '--p-stepper-step-number-background': step2.hasErrori ? '#ad0000' : '', '--p-stepper-step-number-color': step2.hasErrori ? 'white' : '' }" 
-          >
-          <i class="pi pi-home" /></Step>  
-            <Divider />
-        <Step :value="3"><i class="pi pi-map" /></Step>
-            <Divider />
-        <Step :value="4"><i class="pi pi-map" /></Step>
-        <Divider />
-        <Step :value="5"><i class="pi pi-images" /></Step>
-        <Divider />
-        <Step :value="6"><i class="pi pi-images" /></Step>
-        
-      </StepList>
-      
-      <StepPanels class="">
-        <StepPanel :value="1">
-          <h3>Informazioni di Base</h3>
-          <StepDatiIniziali class="w-200"
-             ref="step1" 
-            v-model:annuncio="annuncio"
-            :tentativoInvio="tentativoInvio.valore"
-            @avanti="vaiAvanti" 
-          />
-        </StepPanel>
+    <h1 class="my-4 mx-4">CREAZIONE NUOVO ANNUNCIO</h1>
 
-        <StepPanel :value="2">
-          <h3>Dettagli Annuncio</h3>
-          <StepDatiPrincipali  
-          ref="step2"
-            v-model:annuncio="annuncio" 
-            @indietro="vaiIndietro" 
-            @avanti="vaiAvanti" 
-            :tentativoInvio="tentativoInvio.valore"
-          />
-        </StepPanel>
-        <StepPanel :value="4">
-          <h3>Indirizzo e Posizione</h3>
-          <StepIndirizzo 
-            v-model:annuncio="annuncio" 
-            @indietro="vaiIndietro" 
-            @avanti="vaiAvanti" 
-                      />
-        </StepPanel>
-      <StepPanel :value="3">
-        <h3>Caratteristiche</h3>
-        <StepCaratteristiche
-        ref="step3"
-            v-model:annuncio="annuncio" 
-            @indietro="vaiIndietro" 
-            @avanti="vaiAvanti" 
-            :tentativoInvio="tentativoInvio.valore"
-        />
-      </StepPanel>
-        <StepPanel :value="5">
-          <StepImmagini 
-            v-model:annuncio="annuncio"
-            @indietro="vaiIndietro" 
-            @avanti="vaiAvanti"  
-          />
-        </StepPanel><StepPanel :value="6">
-          <Anteprima  class="w-100"
-          v-model:annuncio="annuncio"
-          @indietro="vaiIndietro" 
-          @invia="inviaAnnuncio" 
-          />
-        </StepPanel>
-      </ StepPanels>
-    </Stepper>
+    <div
+      class="justify-center border-1 border-green-300 rounded-lg p-2 bg-gray-100 my-2 mx-auto w-full md:w-3/4 lg:w-2/3 xl:w-3/4 2xl:w-4/5 flex">
+
+      <Stepper v-model:value="activeStep" class="w-full max-w-full">
+        <StepList>
+          <Step :value="1"
+            :style="{ '--p-stepper-step-number-background': step1.hasErrori ? '#ad0000' : '', '--p-stepper-step-number-color': step1.hasErrori ? 'white' : '' }">
+            <i class="pi pi-home" />
+          </Step>
+          <Divider />
+          <Step :value="2"
+            :style="{ '--p-stepper-step-number-background': step2.hasErrori ? '#ad0000' : '', '--p-stepper-step-number-color': step2.hasErrori ? 'white' : '' }">
+            <i class="pi pi-home" />
+          </Step>
+          <Divider />
+          <Step :value="3"><i class="pi pi-map" /></Step>
+          <Divider />
+          <Step :value="4"><i class="pi pi-map" /></Step>
+          <Divider />
+          <Step :value="5"><i class="pi pi-images" /></Step>
+          <Divider />
+          <Step :value="6"><i class="pi pi-images" /></Step>
+
+        </StepList>
+
+        <StepPanels>
+          <StepPanel class="!bg-gray-100" :value="1">
+            <Tag class="my-4">
+              <h3>Informazioni di Base</h3>
+            </Tag>
+            <StepDatiIniziali class="" ref="step1" v-model:annuncio="annuncio" :tentativoInvio="tentativoInvio.valore"
+              @avanti="vaiAvanti" />
+          </StepPanel>
+
+          <StepPanel class="!bg-gray-100" :value="2">
+            <Tag class="my-4">
+              <h3>Dettagli Annuncio</h3>
+            </Tag>
+            <StepDatiPrincipali ref="step2" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti"
+              :tentativoInvio="tentativoInvio.valore" />
+          </StepPanel>
+          <StepPanel class="!bg-gray-100" :value="4">
+            <Tag class="my-4">
+              <h3>Indirizzo e Posizione</h3>
+            </Tag>
+            <StepIndirizzo v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti" />
+          </StepPanel>
+          <StepPanel class="!bg-gray-100" :value="3">
+            <Tag class="my-4">
+              <h3>Caratteristiche</h3>
+            </Tag>
+            <StepCaratteristiche ref="step3" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti"
+              :tentativoInvio="tentativoInvio.valore" />
+          </StepPanel>
+          <StepPanel class="!bg-gray-100" :value="5">
+            <StepImmagini v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti" />
+          </StepPanel>
+          <StepPanel class="!bg-gray-100" :value="6">
+            <Anteprima v-model:annuncio="annuncio" @indietro="vaiIndietro" @invia="inviaAnnuncio" />
+          </StepPanel>
+          </ StepPanels>
+      </Stepper>
+    </div>
+
   </div>
+
 </template>
 
-<style >
+<style>
 .p-fluid {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
+
 .error-message {
   color: red;
   font-weight: bold;
 }
-
-
-
-
 </style>

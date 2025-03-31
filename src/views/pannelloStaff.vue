@@ -1,5 +1,6 @@
 <template>
 
+<!----------------------------------------------  SEZIONE DIALOG PER GLI ALLERT ------------------------------------------------>
     <Dialog v-model:visible="loadingOperazione" header="OPERAZIONE IN CORSO" :style="{ width: 'auto' }"
         :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
         <div class="card flex justify-center">
@@ -23,9 +24,11 @@
         <Button label="OK" @click="erroreAllert = false" />
     </Dialog>
 
-    <div class="flex flex-col gap-4">
+    <!------------------------------------------------------------------------ ------------------------------------------------>
+
+    <div class="flex flex-col gap-4 w-full">
         <AreaSuperiore />
-        <div class="">
+        <div class="w-full">
             <TabellaAnnunci :propAnnunci="annunci" :propLoading="loading" :propostaRequest="propostaRequest"
                 @nuovaProposta="aggiungiPropostaManuale" 
                 @eliminaProposta="rifiutaProposta"
@@ -85,7 +88,7 @@ onMounted(async () => {
         surname: 'Spena',
         urlFotoProfilo: 'https://dieti24.blob.core.windows.net/upload/annuncio8-0-2025-03-05.png',
         email: 'agente1.test@av0.dietiestate.com',
-        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQzMTgxNjk0LCJleHAiOjE3NDMyNjgwOTR9.eW-6SvC7XD6ZCOM0bYjyIkkJcvlNOfew5VrCsFpx63c',
+        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQzNDI4NTI3LCJleHAiOjE3NDM1MTQ5Mjd9.axSy3qjc8vRvBXUuPyeEvEc2AHgUpu3kdAsdwWfCuO8',
         authority: 'AGENT',
         isAuthenticated: true
     }
@@ -143,7 +146,6 @@ const aggiungiPropostaManuale = async () => {
         loadingOperazione.value = true;
         const nuovaProposta = await AnnunciService.postPropostaManuale(propostaRequest);
         loadingOperazione.value = false;
-        console.log("nuova proposta: ", nuovaProposta);
         aggiungiProposta(nuovaProposta.idProposta);
         okAllert.value = true;
 
