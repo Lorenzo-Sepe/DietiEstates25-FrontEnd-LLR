@@ -50,7 +50,7 @@ defineExpose({
 </script>
 
 <template>
-  <div>
+  <div class="">
     <Message v-if="hasErrori && tentativoInvio" severity="error" variant="filled" class="mb-4 text-left">
       <p>Alcuni campi non sono corretti. Verifica e correggi i seguenti campi evidenziati in rosso:</p>
       <ul class="list-disc pl-5">
@@ -59,64 +59,71 @@ defineExpose({
     </Message>
 
     <div class="flex flex-col">
+
       <label class="font-semibold">Caratteristiche Aggiuntive</label>
-      <div class="flex flex-wrap">
-        <div class="flex align-items-center mr-4">
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-col sm:flex-row items-center">
+          <span class="block sm:hidden mb-1">Balconi</span>
           <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.balconi" />
-          <span class="ml-2">Balconi</span>
+          <span class="ml-2 hidden sm:block">Balconi</span>
         </div>
-        <div class="flex align-items-center mr-4">
+        <div class="flex flex-col sm:flex-row items-center">
+          <span class="block sm:hidden mb-1">Garage</span>
           <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.garage" />
-          <span class="ml-2">Garage</span>
+          <span class="ml-2 hidden sm:block">Garage</span>
         </div>
-        <div class="flex align-items-center mr-4">
+        <div class="flex flex-col sm:flex-row items-center">
+          <span class="block sm:hidden mb-1">Posti Auto</span>
           <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.postiAuto" />
-          <span class="ml-2">Posti Auto</span>
+          <span class="ml-2 hidden sm:block">Posti Auto</span>
         </div>
-        <div class="flex align-items-center mr-4">
+        <div class="flex flex-col sm:flex-row items-center">
+          <span class="block sm:hidden mb-1">Giardino</span>
           <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.giardino" />
-          <span class="ml-2">Giardino</span>
+          <span class="ml-2 hidden sm:block">Giardino</span>
         </div>
-        <div class="flex align-items-center mr-4">
-          <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.ascensore" />
-          <span class="ml-2">Ascensore</span>
-        </div>
-        <div class="flex align-items-center mr-4">
-          <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.portiere" />
-          <span class="ml-2">Portiere</span>
-        </div>
-        <div class="flex align-items-center mr-4">
-          <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.riscaldamentoCentralizzato" />
-          <span class="ml-2">Riscaldamento Centralizzato</span>
-        </div>
-        <div class="flex align-items-center mr-4">
-          <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.climatizzatori" />
-          <span class="ml-2">Climatizzatori</span>
-        </div>
-        <div class="flex align-items-center mr-4">
+        <div class="flex flex-col sm:flex-row items-center">
+          <span class="block sm:hidden mb-1">Pannelli Solari</span>
           <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.pannelliSolari" />
-          <span class="ml-2">Pannelli Solari</span>
+          <span class="ml-2 hidden sm:block">Pannelli Solari</span>
         </div>
-        <div class="flex align-items-center mr-4">
+        <div class="flex flex-col sm:flex-row items-center">
+          <span class="block sm:hidden mb-1">Cantina</span>
           <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.cantina" />
-          <span class="ml-2">Cantina</span>
+          <span class="ml-2 hidden sm:block">Cantina</span>
         </div>
-        <div class="flex align-items-center mr-4">
+        <div class="flex flex-col sm:flex-row items-center">
+          <span class="block sm:hidden mb-1">Ascensore</span>
+          <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.ascensore" />
+          <span class="ml-2 hidden sm:block">Ascensore</span>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center">
+          <span class="block sm:hidden mb-1">Portiere</span>
+          <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.portiere" />
+          <span class="ml-2 hidden sm:block">Portiere</span>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center">
+          <span class="block sm:hidden mb-1">Riscaldamento Centralizzato</span>
+          <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.riscaldamentoCentralizzato" />
+          <span class="ml-2 hidden sm:block">Riscaldamento Centralizzato</span>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center">
+          <span class="block sm:hidden mb-1">Climatizzatori</span>
+          <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.climatizzatori" />
+          <span class="ml-2 hidden sm:block">Climatizzatori</span>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center">
+          <span class="block sm:hidden mb-1">Soffitta</span>
           <ToggleSwitch v-model="annuncio.immobile.caratteristicheAggiuntive.soffitta" />
-          <span class="ml-2">Soffitta</span>
+          <span class="ml-2 hidden sm:block">Soffitta</span>
         </div>
       </div>
 
-      <label for="descrizioneAggiuntiva" class="font-semibold mt-4">Descrizione Aggiuntiva</label>
-      <Textarea 
-        id="descrizioneAggiuntiva" 
-        v-model="annuncio.immobile.caratteristicheAggiuntive.descrizioneAggiuntiva" 
-        rows="4" 
-        :invalid="errori.descrizioneAggiuntiva.invalid" 
-        @input="validaCampi" 
-        class="border rounded p-2"
-      />
-      <Message v-if="errori.descrizioneAggiuntiva.invalid" severity="error" variant="simple" size="small">{{ errori.descrizioneAggiuntiva.messaggio }}</Message>
+      <label for="descrizioneAggiuntiva" class="font-semibold mt-4">Altre caratteristiche</label>
+      <Textarea id="descrizioneAggiuntiva" v-model="annuncio.immobile.caratteristicheAggiuntive.descrizioneAggiuntiva"
+        rows="4" :invalid="errori.descrizioneAggiuntiva.invalid" @input="validaCampi" class="border rounded p-2" />
+      <Message v-if="errori.descrizioneAggiuntiva.invalid" severity="error" variant="simple" size="small">{{
+        errori.descrizioneAggiuntiva.messaggio }}</Message>
     </div>
 
     <div class="flex justify-end pt-6">

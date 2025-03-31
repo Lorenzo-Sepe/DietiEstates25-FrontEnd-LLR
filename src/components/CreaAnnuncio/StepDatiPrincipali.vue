@@ -41,7 +41,7 @@ const opzioniClasseEnergetica = reactive([
 // Funzione di validazione
 const verificaDati = (campo) => {
 
-     if (campo === 'metriQuadri') {
+  if (campo === 'metriQuadri') {
     const metriQuadri = props.annuncio.immobile.metriQuadri || 0;
     if (metriQuadri <= 0) {
       errori.metriQuadri.invalid = true;
@@ -84,13 +84,13 @@ const verificaDati = (campo) => {
 };
 
 const validaCampi = () => {
-  [ 'metriQuadri', 'numeroDiPiani', 'numeroStanze', 'numeroServizi', 'classeEnergetica'].forEach(campo => verificaDati(campo));
+  ['metriQuadri', 'numeroDiPiani', 'numeroStanze', 'numeroServizi', 'classeEnergetica'].forEach(campo => verificaDati(campo));
   refContratto.value.validaCampi();
   return !hasErrori.value;
 };
 
 const validaEAvanza = () => {
-  
+
   if (validaCampi()) {
     emit('avanti');
   }
@@ -114,8 +114,9 @@ const refContratto = ref({});
 
 <template>
 
-  <div>
-    <Message v-if="(hasErrori ||  refContratto.hasErrori ) && tentativoInvio" severity="error" variant="filled" class="mb-4 text-left">
+  <div class="">
+    <Message v-if="(hasErrori || refContratto.hasErrori) && tentativoInvio" severity="error" variant="filled"
+      class="mb-4 text-left">
       <p>Alcuni campi non sono corretti. Verifica e correggi i seguenti campi evidenziati in rosso:</p>
       <ul class="list-disc pl-5">
         <li v-if="errori.metriQuadri.invalid">Metri Quadrati</li>
@@ -127,34 +128,21 @@ const refContratto = ref({});
         <li v-if="refContratto.errori.caparra.invalid">Caparra</li>
         <li v-if="refContratto.errori.tempoMinimo.invalid">Tempo Minimo</li>
         <li v-if="refContratto.errori.tempoMassimo.invalid">Tempo Massimo</li>
-        
+
       </ul>
     </Message>
 
-    <ContrattoForm 
-    ref="refContratto"
-    v-model:contratto="annuncio.contratto" :tentativoInvio="tentativoInvio" />
+    <ContrattoForm ref="refContratto" v-model:contratto="annuncio.contratto" :tentativoInvio="tentativoInvio" />
 
-       <!-- Griglia responsive: 2 colonne su dispositivi medi/grandi, 1 colonna su dispositivi piccoli -->
-       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Griglia responsive: 2 colonne su dispositivi medi/grandi, 1 colonna su dispositivi piccoli -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border p-2">
       <!-- Campo Metri Quadri -->
       <div>
         <label for="metriQuadri" class="block font-semibold mb-2">Metri Quadri</label>
-        <InputText 
-          id="metriQuadri" 
-          v-model="annuncio.immobile.metriQuadri" 
-          type="number"
-          :invalid="errori.metriQuadri.invalid" 
-          @input="verificaDati('metriQuadri')" 
-          @blur="verificaDati('metriQuadri')" 
-          class="border rounded p-2 w-full"
-        />
-        <Message 
-          v-if="errori.metriQuadri.invalid" 
-          severity="error" 
-          variant="simple" 
-          size="small"
-        >
+        <InputText id="metriQuadri" v-model="annuncio.immobile.metriQuadri" type="number"
+          :invalid="errori.metriQuadri.invalid" @input="verificaDati('metriQuadri')" @blur="verificaDati('metriQuadri')"
+          class="border rounded p-2 w-full" />
+        <Message v-if="errori.metriQuadri.invalid" severity="error" variant="simple" size="small">
           {{ errori.metriQuadri.messaggio }}
         </Message>
       </div>
@@ -162,21 +150,10 @@ const refContratto = ref({});
       <!-- Campo Numero di Piani -->
       <div>
         <label for="numeroDiPiani" class="block font-semibold mb-2">Numero di Piani</label>
-        <InputText 
-          id="numeroDiPiani" 
-          v-model="annuncio.immobile.numeroDiPiani" 
-          type="number"
-          :invalid="errori.numeroDiPiani.invalid" 
-          @input="verificaDati('numeroDiPiani')" 
-          @blur="verificaDati('numeroDiPiani')" 
-          class="border rounded p-2 w-full"
-        />
-        <Message 
-          v-if="errori.numeroDiPiani.invalid" 
-          severity="error" 
-          variant="simple" 
-          size="small"
-        >
+        <InputText id="numeroDiPiani" v-model="annuncio.immobile.numeroDiPiani" type="number"
+          :invalid="errori.numeroDiPiani.invalid" @input="verificaDati('numeroDiPiani')"
+          @blur="verificaDati('numeroDiPiani')" class="border rounded p-2 w-full" />
+        <Message v-if="errori.numeroDiPiani.invalid" severity="error" variant="simple" size="small">
           {{ errori.numeroDiPiani.messaggio }}
         </Message>
       </div>
@@ -184,21 +161,10 @@ const refContratto = ref({});
       <!-- Campo Numero di Stanze -->
       <div>
         <label for="numeroStanze" class="block font-semibold mb-2">Numero di Stanze</label>
-        <InputText 
-          id="numeroStanze" 
-          v-model="annuncio.immobile.numeroStanze" 
-          type="number"
-          :invalid="errori.numeroStanze.invalid" 
-          @input="verificaDati('numeroStanze')" 
-          @blur="verificaDati('numeroStanze')" 
-          class="border rounded p-2 w-full"
-        />
-        <Message 
-          v-if="errori.numeroStanze.invalid" 
-          severity="error" 
-          variant="simple" 
-          size="small"
-        >
+        <InputText id="numeroStanze" v-model="annuncio.immobile.numeroStanze" type="number"
+          :invalid="errori.numeroStanze.invalid" @input="verificaDati('numeroStanze')"
+          @blur="verificaDati('numeroStanze')" class="border rounded p-2 w-full" />
+        <Message v-if="errori.numeroStanze.invalid" severity="error" variant="simple" size="small">
           {{ errori.numeroStanze.messaggio }}
         </Message>
       </div>
@@ -206,21 +172,10 @@ const refContratto = ref({});
       <!-- Campo Numero di Servizi -->
       <div>
         <label for="numeroServizi" class="block font-semibold mb-2">Numero di Servizi</label>
-        <InputText 
-          id="numeroServizi" 
-          v-model="annuncio.immobile.numeroServizi" 
-          type="number"
-          :invalid="errori.numeroServizi.invalid" 
-          @input="verificaDati('numeroServizi')" 
-          @blur="verificaDati('numeroServizi')" 
-          class="border rounded p-2 w-full"
-        />
-        <Message 
-          v-if="errori.numeroServizi.invalid" 
-          severity="error" 
-          variant="simple" 
-          size="small"
-        >
+        <InputText id="numeroServizi" v-model="annuncio.immobile.numeroServizi" type="number"
+          :invalid="errori.numeroServizi.invalid" @input="verificaDati('numeroServizi')"
+          @blur="verificaDati('numeroServizi')" class="border rounded p-2 w-full" />
+        <Message v-if="errori.numeroServizi.invalid" severity="error" variant="simple" size="small">
           {{ errori.numeroServizi.messaggio }}
         </Message>
       </div>
@@ -228,24 +183,11 @@ const refContratto = ref({});
       <!-- Campo Classe Energetica (occupazione di entrambe le colonne) -->
       <div class="md:col-span-2">
         <label for="classeEnergetica" class="block font-semibold mb-2">Classe Energetica</label>
-        <Select 
-          id="classeEnergetica" 
-          v-model="annuncio.immobile.classeEnergetica" 
-          :options="opzioniClasseEnergetica" 
-          optionLabel="label"
-          optionValue="value"
-          placeholder="Seleziona la classe energetica"
-          :invalid="errori.classeEnergetica.invalid"
-          @blur="verificaDati('classeEnergetica')" 
-          @change="verificaDati('classeEnergetica')" 
-          class="border rounded p-2 w-full"
-        />
-        <Message 
-          v-if="errori.classeEnergetica.invalid" 
-          severity="error" 
-          variant="simple" 
-          size="small"
-        >
+        <Select id="classeEnergetica" v-model="annuncio.immobile.classeEnergetica" :options="opzioniClasseEnergetica"
+          optionLabel="label" optionValue="value" placeholder="Seleziona la classe energetica"
+          :invalid="errori.classeEnergetica.invalid" @blur="verificaDati('classeEnergetica')"
+          @change="verificaDati('classeEnergetica')" class="border rounded p-2 w-full" />
+        <Message v-if="errori.classeEnergetica.invalid" severity="error" variant="simple" size="small">
           {{ errori.classeEnergetica.messaggio }}
         </Message>
       </div>
