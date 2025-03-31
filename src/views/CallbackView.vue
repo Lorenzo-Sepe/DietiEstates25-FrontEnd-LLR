@@ -1,6 +1,13 @@
 <!-- Start of Selection -->
 <template>
-  <div class="flex flex-col w-screen h-screen">
+    <Dialog v-model:visible="visible" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" modal header="Login">
+          <AllertMessageDialogDialog  :message="message" :isRegister="true" @close="closeDialog"></AllertMessageDialogDialog>
+        </Dialog>
+    <div v-if="user">
+    <pre>{{ JSON.stringify(user, null, 2) }}</pre>
+    </div>
+    <div v-else>
+        <div class="flex flex-col w-screen h-screen">
       <div class="rounded border border-surface-200 p-6 flex-1">
           <div class="flex mb-4">
               <Skeleton shape="circle" size="4rem" class="mr-2"></Skeleton>
@@ -47,8 +54,9 @@
           </div>
       </div>
   </div>
+    </div>
 </template>
-<!-- End of Selection -->
+
 
 <script setup>
 import { ref ,watch} from 'vue';
@@ -57,25 +65,43 @@ import { useUserStore } from '../stores/UserStore'; // Assicurati di avere il pe
 import Skeleton from 'primevue/skeleton';
 import { useRouter } from 'vue-router';
 import { useAuth0 } from '@auth0/auth0-vue';
+import  Dialog  from 'primevue/dialog';
+import AllertMessageDialogDialog from '../components/Dialogs/AllertMessageDialog.vue';
 
-const { idTokenClaims } = useAuth0();
+const { idTokenClaims,user } = useAuth0();
 
 const userStoreInstance = useUserStore();
 const router = useRouter();
-const userData = ref({});
+const message = ref('')
+const visible = ref(false)
+
 
 // Funzione per recuperare i dati dell'utente
 const fetchUserData = async () => {
     if (idTokenClaims.value) {
         try {
-          console.log(idTokenClaims.value.__raw);  
+         // console.log(idTokenClaims.value.__raw);  
+          
           const response = await AuthService.loginIdProvvider(idTokenClaims.value.__raw);
           console.log(response);
+          userStoreInstance.setUser({
+              id: response.id,
+              username: response.username,
+              email: response.email,
+              token: response.token,
+              authority: response.authority, 
+              isAuthenticated:true,
+              urlFotoProfilo:user.value.picture,  
+                         
+          });
+        //router.push({ path: '/' });
         } catch (error) {
           console.error('Errore durante il recupero dei dati dell\'utente:', error);
           if (error.response) {
               console.log('Codice risposta:', error.response.status);
-              console.log('Messaggio risposta:', error.response.statusText);
+              console.log('Messaggio risposta:', error.response.data);
+              message.value = error.response.data;
+              visible.value = true;
           }
         }
     }

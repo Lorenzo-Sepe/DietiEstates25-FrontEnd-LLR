@@ -1,5 +1,5 @@
 import {Api} from '../api/axiosConfig'
-
+import { useUserStore } from '../stores/UserStore';
 
 export default {
     register(credentials) {
@@ -20,9 +20,19 @@ export default {
             });
     },
     loginIdProvvider(credentials){
+        //console.log('service login config:',Api);
         return Api()
         .post('pb/auth/signinIdProv',credentials)
         .then((response)=>{
+            console.log('Id provvider success,',response);
+            return response.data;
+        })
+    },
+    registerIdProvvider(credentials){
+        //console.log('service register config:',Api);
+        return Api()
+        .post('pb/auth/registerIdProv',credentials)
+        .then((response)=> {
             console.log('Id provvider success,',response);
             return response.data;
         })
@@ -37,5 +47,8 @@ export default {
         return Api()
             .put('auth/change_password', newCredentials)
             .then((response) => response.data);
-    }
+    },
+    
+    
+
 };

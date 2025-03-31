@@ -35,6 +35,9 @@ const tok = ref('')
       accessToken.value = await getAccessTokenSilently();
     
       console.log('Access token:', accessToken);
+      if (isAuthenticated.value) {
+        console.log('Email:', user.value.email);
+      }
     } catch (error) {
       console.error('Error getting access token:', error);
     }
