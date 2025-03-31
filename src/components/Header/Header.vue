@@ -18,7 +18,6 @@ import Logo from "./Logo.vue"
 import LogoPortale from "./LogoPortale.vue"
 import MenuNavigazione from "./MenuNavigazione.vue";
 import {  defineProps,ref } from 'vue'
-import {useUserStore} from '../../stores/UserStore'
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import LoginDialog from "../Dialogs/LoginDialog.vue";
@@ -30,7 +29,6 @@ const props = defineProps({
   });
   
 
-const userStoreInstance = useUserStore()
 
 function openDialog(){
   visible.value = true;

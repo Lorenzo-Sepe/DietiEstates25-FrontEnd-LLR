@@ -78,25 +78,6 @@ onMounted(async () => {
 
     console.log("filtroooo:", filtroAnnunci);
 
-    employeeStore.initializeStore()
-
-    const employStruct = {
-
-        id: 4,
-        username: 'agente1.test@av0.dietiestate.com"',
-        name: 'Roberto',
-        surname: 'Spena',
-        urlFotoProfilo: 'https://dieti24.blob.core.windows.net/upload/annuncio8-0-2025-03-05.png',
-        email: 'agente1.test@av0.dietiestate.com',
-        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6ImFnZW50ZTEudGVzdEBhdjAuZGlldGllc3RhdGUuY29tIiwiaWF0IjoxNzQzNDI4NTI3LCJleHAiOjE3NDM1MTQ5Mjd9.axSy3qjc8vRvBXUuPyeEvEc2AHgUpu3kdAsdwWfCuO8',
-        authority: 'AGENT',
-        isAuthenticated: true
-    }
-
-    employeeStore.setEmployee(employStruct);
-
-    console.log("storee:", employeeStore.getEmployeeData);
-
     getNumeroAnnunci();
     getAnnunci();
 
