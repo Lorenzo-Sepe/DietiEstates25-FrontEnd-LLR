@@ -110,7 +110,6 @@ onMounted(async () => {
     });
 
 
-
     try {
 
         categorieNotifiche.value = await NotificheService.getSottoscrizioni();
@@ -230,6 +229,21 @@ const visualizzaNotifica = (notifica) => {
     nomeCategoriaNotificaVisualizzata.value = getNomeCategoria(notifica.idCategoria);
     idCategoriaNotificaVisualizzata.value = notifica.idCategoria;
     contenutoNotifica.value = true;
+    try{
+
+        NotificheService.setVisualizzazioneNotifica(notifica.id).then(() => {
+
+            console.log("notifica visualizzata correttamente");
+
+        }).catch(error => {
+
+            console.log("errore chiamata visualizza notifica:", error);
+        });
+
+    }catch(error){
+
+        console.log("errore chiamata check notifica:", error);
+    }
 }
 
 const getNomeCategoria = (idCategoria) => {
