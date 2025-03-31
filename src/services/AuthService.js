@@ -1,6 +1,6 @@
 import {Api} from '../api/axiosConfig'
 
-
+import { setUser } from './UserService';
 export default {
     register(credentials) {
         console.log('service register');
@@ -16,6 +16,7 @@ export default {
             .post('pb/auth/signin', credentials)
             .then((response) => {
                 console.log('login service then', response);
+                setUser(response.data);
                 return response.data;
             });
     },
@@ -24,6 +25,7 @@ export default {
         .post('pb/auth/signinIdProv',credentials)
         .then((response)=>{
             console.log('Id provvider success,',response);
+            setUser(response.data);
             return response.data;
         })
     },

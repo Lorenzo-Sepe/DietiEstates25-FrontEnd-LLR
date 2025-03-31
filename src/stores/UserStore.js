@@ -1,55 +1,21 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
-export const useUserStore = defineStore('user', {
+// Store per utenti normali
+export const useStoreUtente = defineStore('utente', {
   state: () => ({
-    user: {
-      id: null,
-      username: '',
-      urlFotoProfilo: '',
-      email: '',
-      token: '',
-      authority:'',
-      isAuthenticated: false
+    utente: {
+      email:"",
+      token:"",
+      UrlFotoProfilo:"",
+      nomeVisualizzato:"",
+      authority:""
     }
   }),
-
-  getters: {
-    isLoggedIn: (state) => state.user.isAuthenticated,
-    getUserData: (state) => state.user
-  },
-
-  actions: {
-    initializeStore() {
-      // Recupera i dati dal localStorage all'avvio
-      const savedState = localStorage.getItem('user-store')
-      if (savedState) {
-        this.$patch(JSON.parse(savedState))
-      }
-    },
-
-    setUser(userData) {
-      this.user = {
-        ...this.user,
-        ...userData,
-        isAuthenticated: true
-      }
-      // Salva nel localStorage
-      this.saveToLocalStorage()
-    },
-
-    clearUser() {
-      this.user = {
-        id: null,
-        name: '',
-        email: '',
-        isAuthenticated: false
-      }
-      // Rimuovi dal localStorage
-      this.saveToLocalStorage()
-    },
-
-    saveToLocalStorage() {
-      localStorage.setItem('user-store', JSON.stringify(this.$state))
-    }
+  persist: {
+    enabled: true,
+    strategies: [{
+      key: 'utente',
+      storage: localStorage
+    }]
   }
-})
+});

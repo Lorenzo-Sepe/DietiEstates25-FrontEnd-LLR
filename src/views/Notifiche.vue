@@ -69,7 +69,6 @@
 <script setup>
 import { ref, reactive, onMounted, watch } from 'vue';
 import NotificheService from '../services/NotificheService.js';
-import { useUserStore } from '../stores/UserStore.js'
 import { useRouter, useRoute } from 'vue-router';
 
 import MenuLaterale from '../components/Notifiche/MenuLaterale.vue';
@@ -83,7 +82,6 @@ import Tag from 'primevue/tag';
 
 import { CategoriaNotificaRequest } from '../dto/CategoriaNotificaRequest.js';
 
-const userStore = useUserStore();
 const categorieNotifiche = ref([]);
 
 const router = useRouter();
@@ -111,20 +109,7 @@ onMounted(async () => {
         query: { ...route.query, nome: 'Tutte le notifiche', pagina: 0, id: 0 }
     });
 
-    userStore.initializeStore()
 
-    const userStruct = {
-
-        id: 1,
-        email: 'roby98@gmail.com',
-        username: 'roby98',
-        urlFotoProfilo: 'https://dieti24.blob.core.windows.net/upload/annuncio8-0-2025-03-05.png',
-        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6InJvYnk5OCIsImlhdCI6MTc0MzE3MDA0MSwiZXhwIjoxNzQzMjU2NDQxfQ.hweKwBUH4LQ-rSIvZc2Ul_ajqPgVt01Y6COKWj12Tbs',
-        authority: 'MEMBER',
-        isAuthenticated: true
-    }
-
-    userStore.setUser(userStruct);
 
     try {
 
