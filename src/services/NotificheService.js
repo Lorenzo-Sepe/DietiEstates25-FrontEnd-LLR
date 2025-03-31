@@ -55,5 +55,14 @@ export default {
                 return response.data;
             })
     },
+
+    setVisualizzazioneNotifica(idNotifica){
+
+        return Api()
+            .patch('checkNotifica?idNotifica='+idNotifica)
+            .then((response) => {
+                return response.data;
+            })
+    }
 };
 

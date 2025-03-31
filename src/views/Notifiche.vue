@@ -119,7 +119,7 @@ onMounted(async () => {
         email: 'roby98@gmail.com',
         username: 'roby98',
         urlFotoProfilo: 'https://dieti24.blob.core.windows.net/upload/annuncio8-0-2025-03-05.png',
-        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6InJvYnk5OCIsImlhdCI6MTc0MzE3MDA0MSwiZXhwIjoxNzQzMjU2NDQxfQ.hweKwBUH4LQ-rSIvZc2Ul_ajqPgVt01Y6COKWj12Tbs',
+        token: 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkaWV0aWVzdGF0ZXMyNSIsInN1YiI6Im1lbWJlcjEiLCJpYXQiOjE3NDM0MzkxOTEsImV4cCI6MTc0MzUyNTU5MX0.tBUAkNoplgprdB1XsHPApc3GnH7qSrDTAJ3Rcn1LniU',
         authority: 'MEMBER',
         isAuthenticated: true
     }
@@ -245,6 +245,21 @@ const visualizzaNotifica = (notifica) => {
     nomeCategoriaNotificaVisualizzata.value = getNomeCategoria(notifica.idCategoria);
     idCategoriaNotificaVisualizzata.value = notifica.idCategoria;
     contenutoNotifica.value = true;
+    try{
+
+        NotificheService.setVisualizzazioneNotifica(notifica.id).then(() => {
+
+            console.log("notifica visualizzata correttamente");
+
+        }).catch(error => {
+
+            console.log("errore chiamata visualizza notifica:", error);
+        });
+
+    }catch(error){
+
+        console.log("errore chiamata check notifica:", error);
+    }
 }
 
 const getNomeCategoria = (idCategoria) => {
