@@ -69,7 +69,7 @@ const routes = [
     }
   },
   {
-    path: '/pannelloStaff',
+    path: '/PortaleAgenzia/pannelloStaff',
     name: 'pannellStaff',
     component: () => import('../views/pannelloStaff.vue')
 

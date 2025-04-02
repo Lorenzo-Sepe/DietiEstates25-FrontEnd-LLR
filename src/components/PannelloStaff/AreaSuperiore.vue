@@ -2,11 +2,11 @@
 
     <div class="contenitore-area-superiore">
         <div class="contenitore-foto-profilo flex items-center gap-4">
-            <Avatar :image="employeeStore.employee.urlFotoProfilo" size="xlarge"
+            <Avatar :image="employeeStore.UrlFotoProfilo" size="xlarge"
                 shape="circle" />
             <div class="info-profilo flex flex-col">
-                <p>Agente: <b>{{ employeeStore.employee.name }}  {{ employeeStore.employee.surname }} </b> </p>
-                <p>Nome agenzia</p>
+                <p>Agente: <b>{{ employeeStore.employee.datiImpiegato.nome }}  {{ employeeStore.employee.datiImpiegato.cognome }} </b> </p>
+                <p>{{ employeeStore.employee.DatiAgenziaImmobiliare.nomeAzienda }}</p>
             </div>
         </div>
         <div class="titolo-pagina">
