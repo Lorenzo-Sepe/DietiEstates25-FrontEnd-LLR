@@ -46,7 +46,6 @@ const ApiPublic = () => {
   return axios.create({
     baseURL: BASE_URL,
     timeout: TIMEOUT,
-    withCredentials: true,
     headers: {
       'Content-Type': 'application/json'
     }
