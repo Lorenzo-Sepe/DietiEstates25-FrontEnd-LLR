@@ -1,5 +1,8 @@
 <template>
-    <AutoComplete class="w-auto" v-model="selectedCountry" optionLabel="comune" :suggestions="filteredCountries" placeholder="Scrivi dove cerchi l'immobile" @complete="search" />
+    <AutoComplete 
+    :fluid="true"  
+    v-model="selectedCountry" 
+    optionLabel="comune" :suggestions="filteredCountries" placeholder="Scrivi dove cerchi l'immobile" @complete="search" />
 </template>
 
 <script setup>

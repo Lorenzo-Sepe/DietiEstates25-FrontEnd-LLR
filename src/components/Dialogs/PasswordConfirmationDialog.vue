@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 import { Form ,FormField} from '@primevue/forms';
 
 import Password from 'primevue/password';
@@ -29,6 +29,8 @@ import Message from 'primevue/message';
 import AuthService from '../../services/AuthService';
 import { useAuth0 } from '@auth0/auth0-vue';
 import { useRouter } from 'vue-router';
+
+const emit = defineEmits(['close']);
 
 const { loginWithPopup, user } = useAuth0();
 const router = useRouter();
@@ -87,9 +89,10 @@ const handleLogin = async (provider) => {
             nomeVisualizzato: user.value.name,
             password: localPassword.value
         });
-        router.push({ name: 'confirmRegistration', params: { message: response.data, isPasswordVisible: false } });
+        router.push({ name: 'confirmRegistration', params: { message: encodeURIComponent(response)} });
     } catch (error) {
         console.error('Login fallito:', error);
+        emit('close', error); // Passa l'errore al genitore
     }
 };
 </script>

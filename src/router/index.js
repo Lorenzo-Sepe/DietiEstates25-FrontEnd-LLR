@@ -33,7 +33,13 @@ const routes = [
     component: () => import('../views/RegistrationView.vue')
   },
   {
-    path: '/confirm-registration/:message/:isPasswordVisible',
+    path: '/register-agency',
+    name: 'registerAgency',
+    component: () => import('../views/AgencyRegistrationView.vue')
+    
+  },
+  {
+    path: '/confirm-registration/:message/',
     name: 'confirmRegistration',
     component: () => import('../components/Logins/ConfirmRegistration.vue'),
     props: true

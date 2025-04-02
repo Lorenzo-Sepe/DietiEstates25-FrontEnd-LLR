@@ -1,6 +1,11 @@
 <template>
 
-    <Select v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Seleziona il tipo di immobile" />
+    <Select v-model="selectedCity" 
+    :fluid="false"
+    :options="cities" 
+    optionLabel="name" 
+    placeholder="Seleziona il tipo di immobile" 
+    />
 
 </template>
 

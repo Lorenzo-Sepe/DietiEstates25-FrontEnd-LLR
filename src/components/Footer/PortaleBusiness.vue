@@ -11,7 +11,9 @@
                 
                 </li>
                 <li> 
-                    <Button class="mb-2" label="Registra la tua agenzia" severity="contrast" raised />    
+                    <RouterLink to="/register-agency">
+                        <Button class="mb-2" label="Registra la tua agenzia" severity="contrast" raised />
+                    </RouterLink>
                 </li>
                 
             </ul>
@@ -23,6 +25,7 @@
 <script setup>
 import Button from 'primevue/button';
 import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
 
 const visibility=ref(false);
 
