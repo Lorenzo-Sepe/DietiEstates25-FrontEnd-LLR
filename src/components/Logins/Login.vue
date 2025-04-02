@@ -2,8 +2,8 @@
     <div class="flex flex-col items-center justify-between p-2 bg-primary-100 rounded">
         <Form v-slot="$form" :initialValues :resolver @submit="onFormSubmit" class="rounded flex flex-col gap-4 justify-center items-center p-5 fluid w-full sm:w-1/2">
             <div class="flex flex-col gap-1 fluid w-full">
-                <InputText fluid v-model="signInRequest.usernameOrEmail" name="emailOrUsername" type="text" placeholder="Email or Username"  />
-                <Message v-if="$form.emailOrUsername?.invalid " severity="error" size="small" variant="simple">{{ $form.emailOrUsername.error?.message }}</Message>
+                <InputText fluid v-model="signInRequest.usernameOrEmail" name="email" type="text" placeholder="Email or Username"  />
+                <Message v-if="$form.email?.invalid " severity="error" size="small" variant="simple">{{ $form.email.error?.message }}</Message>
                     
                 <Password fluid :feedback="false" v-model="signInRequest.password" name="password" placeholder="Password"  :class="{'p-invalid': errorMessage}" toggleMask/>
                 <Message v-if="$form.password?.invalid " severity="error" size="small" variant="simple">{{ $form.password.error?.message  }}</Message>
@@ -16,41 +16,44 @@
 </template>
 
 <script setup>
-import { reactive,ref,watch } from 'vue';
+import { reactive, ref, defineEmits } from 'vue';
 import AuthService from '../../services/AuthService';
-import SignInRequest from '../../dto/signInRequest'; 
 import  Message  from 'primevue/message';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { Form } from '@primevue/forms';
-import { useEmployeeStore } from '../../stores/EmployeeStore';
-import { useRoute, useRouter } from 'vue-router'
+import {  useRouter } from 'vue-router'
+
 import  Password  from 'primevue/password';
 
+const emit = defineEmits(["close"]);
 const router = useRouter();
-const route = useRoute();
 
 const loading = ref(false);
-
 const errorMessage = ref('');
 
 const initialValues = reactive({
-    emailOrUsername: '',
+    email: '',
     password: ''
 });
 
-const signInRequest = ref(
-    {
-        usernameOrEmail: '',
-        password: ''
-    }
-)
+const signInRequest = ref({
+    usernameOrEmail: '',
+    password: ''
+});
+
+const validaEmail = (email) => {
+    const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return regexEmail.test(email);
+};
 
 const resolver = ({ values }) => {
     const errors = {};
 
-    if (!values.emailOrUsername) {
-        errors.emailOrUsername = [{ message: 'Inserire Email o Username.' }];
+    if (!values.email) {
+        errors.email = [{ message: 'Inserire Email' }];
+    } else if (!validaEmail(values.email)) { // Corretto il controllo dell'email
+        errors.email = [{ message: 'Inserire un email valida' }];
     }
 
     if (!values.password) {
@@ -63,31 +66,36 @@ const resolver = ({ values }) => {
     };
 };
 
-
 const onFormSubmit = async ({ valid }) => {
     loading.value = true;
+    if (!valid) {
+        loading.value = false; // Assicurati di fermare il caricamento se non è valido
+        return;
+    }
+    
     errorMessage.value = '';
     console.log(signInRequest.value);
     
-    
-        try {
-            const response = AuthService.login({
-                Email: signInRequest.value.usernameOrEmail,
-                password: signInRequest.value.password
-            });
-            
-            loading.value = false;
-            router.push({ path: '/' });
-        } catch (error) { 
-            console.error(error);
-            if (error.response) {
-                errorMessage.value = error.response.data;
-            } else {
-                errorMessage.value = 'Errore di rete o di configurazione: ' + error.message;
-            }
-            loading.value = false;
+    try {
+        const response = await AuthService.login({
+            Email: signInRequest.value.usernameOrEmail,
+            password: signInRequest.value.password
+        });
+        
+        loading.value = false;
+        if (response.ruolo !== 'MEMBER') {
+            router.push({ path: '/testRAi' });
         }
-    
+        emit("close");
+        
+    } catch (error) { 
+        console.error(error);
+        loading.value = false; // Assicurati di fermare il caricamento in caso di errore
+        if (error.response) {
+            errorMessage.value = error.response.data;
+        } else {
+            errorMessage.value = 'Errore di rete o di configurazione: ' + error.message;
+        }
+    }
 }
-
 </script>

@@ -4,29 +4,36 @@ import { DatiImpiegatoResponse } from "../dto/Response/DatiImpiegato";
 import { useStoreUtente} from "../stores/UserStore";
 import { useEmployeeStore } from "../stores/EmployeeStore";
 import { JwtAuthenticationResponse } from "../dto/Response/JwtAuthenticationResponse";
-export function setUser (response) {
 
+/**
+ * Imposta i dati dell'utente o dell'impiegato nello store in base all'autorità ricevuta nella risposta.
+ * 
+ * @param {Object} response - La risposta contenente i dati di autenticazione JWT.
+ * @returns {Object} - Oggetto contenente un messaggio e l'authority
+ */
+export function setUser(response) {
     // Crea un'istanza di JwtAuthenticationResponse utilizzando la risposta
     const jwtResponse = new JwtAuthenticationResponse(response);
-    if(jwtResponse.authority==="MEMBER"){ 
-    // Imposta i dati dell'utente nello store
-    const store = useStoreUtente();
-    const email=jwtResponse.email;
-    const token=jwtResponse.token;
-    store.impostaUtente(email, token);
     
+    if (jwtResponse.authority === "MEMBER") { 
+        // Imposta i dati dell'utente nello store utente
+        const store = useStoreUtente();
+        const email = jwtResponse.email;
+        const token = jwtResponse.token;
+        store.impostaUtente(email, token);
         
-}else{
-        const store=  useEmployeeStore();
-        const email=jwtResponse.email;
-        const token=jwtResponse.token;  
-        store.impostaImpiegato(email,token);
+        return { messaggio: "Utente normale impostato nello store.", ruolo: jwtResponse.authority };
+    } else {
+        // Imposta i dati dell'impiegato nello store impiegato
+        const store = useEmployeeStore();
+        const email = jwtResponse.email;
+        const token = jwtResponse.token;  
+        store.impostaImpiegato(email, token);
         
+        return { messaggio: "Utente agente impostato nello store.", ruolo: jwtResponse.authority };
     }
-
-
-
 }
+
 
 export function getDatiImpiegato(email) {
     return ApiPublic()

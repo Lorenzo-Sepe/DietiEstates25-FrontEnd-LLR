@@ -84,16 +84,7 @@ const fetchUserData = async () => {
           
           const response = await AuthService.loginIdProvvider(idTokenClaims.value.__raw);
           console.log(response);
-          userStoreInstance.setUser({
-              id: response.id,
-              username: response.username,
-              email: response.email,
-              token: response.token,
-              authority: response.authority, 
-              isAuthenticated:true,
-              urlFotoProfilo:user.value.picture,  
-                         
-          });
+          
         //router.push({ path: '/' });
         } catch (error) {
           console.error('Errore durante il recupero dei dati dell\'utente:', error);

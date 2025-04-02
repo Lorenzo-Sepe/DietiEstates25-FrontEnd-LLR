@@ -16,8 +16,8 @@ export default {
             .post('pb/auth/signin', credentials)
             .then((response) => {
                 console.log('login service then', response);
-                setUser(response.data);
-                return response.data;
+                return setUser(response.data);
+
             });
     },
     loginIdProvvider(credentials){
@@ -26,8 +26,8 @@ export default {
         .post('pb/auth/signinIdProv',credentials)
         .then((response)=>{
             console.log('Id provvider success,',response);
-            setUser(response.data);
-            return response.data;
+            return setUser(response.data);
+
         })
     },
     registerIdProvvider(credentials){
