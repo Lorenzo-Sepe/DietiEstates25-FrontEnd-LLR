@@ -2,7 +2,7 @@ export class FiltroAnnuncioRequest{
 
     constructor(data = {}) {
 
-        this.numeroPagina = data.numeroPagina || 0;
+        this.numeroPagina = data.numeroPagina || 1;
         this.numeroDiElementiPerPagina = data.numeroDiElementiPerPagina || 5;
         this.titolo = data.titolo || null;
         this.tipologiaImmobile = data.tipologiaImmobile || null;
@@ -18,6 +18,7 @@ export class FiltroAnnuncioRequest{
         this.balconi = data.balconi || null;
         this.garage = data.garage || null;
         this.pannelliSolari = data.pannelliSolari || null; 
+        this.agenteCreatoreAnnuncio = data.agenteCreatoreAnnuncio || '';
     
     }
     
