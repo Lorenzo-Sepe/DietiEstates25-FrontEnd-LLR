@@ -43,10 +43,19 @@ const inviaAnnuncio = () => {
     activeStep.value = 1;
     step2.value.validaCampi();
     step3.value.validaCampi();
+    step4.value.validaCampi();
     return;
   } else if (!step2.value.validaCampi()) {
     activeStep.value = 2;
     step3.value.validaCampi();
+    step4.value.validaCampi();
+    return;
+  }else if (!step3.value.validaCampi()) {
+    activeStep.value = 3;
+    step4.value.validaCampi();
+    return;
+  } else if (!step4.value.validaCampi()) {
+    activeStep.value = 4;
     return;
   }
   CreaAnnuncio(annuncio);
@@ -88,9 +97,13 @@ watch(activeStep, (newVal) => {
             <i class="pi pi-home" />
           </Step>
           <Divider />
-          <Step :value="3"><i class="pi pi-map" /></Step>
+          <Step :value="3"
+            :style="{ '--p-stepper-step-number-background': step3.hasErrori ? '#ad0000' : '', '--p-stepper-step-number-color': step3.hasErrori ? 'white' : '' }">
+          <i class="pi pi-map" /></Step>
           <Divider />
-          <Step :value="4"><i class="pi pi-map" /></Step>
+          <Step :value="4"
+            :style="{ '--p-stepper-step-number-background': step4.hasErrori ? '#ad0000' : '', '--p-stepper-step-number-color': step4.hasErrori ? 'white' : '' }"
+          ><i class="pi pi-map" /></Step>
           <Divider />
           <Step :value="5"><i class="pi pi-images" /></Step>
           <Divider />
@@ -118,7 +131,7 @@ watch(activeStep, (newVal) => {
             <Tag class="my-4">
               <h3>Indirizzo e Posizione</h3>
             </Tag>
-            <StepIndirizzo :activeStep="activeStep" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti" />
+            <StepIndirizzo ref="step4" :tentativoInvio="tentativoInvio.valore" :activeStep="activeStep" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="3">
             <Tag class="my-4">

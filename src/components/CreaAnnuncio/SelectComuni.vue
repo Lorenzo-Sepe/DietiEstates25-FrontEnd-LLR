@@ -6,9 +6,9 @@
       :optionLabel="etichettaOpzione"
       filter
       filterBy="cap"              
-      filterPlaceholder="Cerca un CAP"
+      filterPlaceholder="Digita per cercare"
       :virtualScrollerOptions="opzioniScrollerVirtuale"
-      placeholder="Seleziona un CAP"
+      placeholder="Seleziona una Comune"
       @update:modelValue="aggiornaIndirizzo"
     />
 </template>
@@ -30,7 +30,7 @@ const indirizzo = defineModel('comune');
 const listaComuni = ref(datiComuni);
 
 // Per visualizzare il CAP e, eventualmente, altre info (non serve che il filtro sia su queste info)
-const etichettaOpzione = (comune) => `CAP: ${comune.cap} - ${comune.denominazione_ita} (${comune.sigla_provincia})`;
+const etichettaOpzione = (comune) => `${comune.denominazione_ita} (${comune.sigla_provincia}) CAP:${comune.cap}`;
 
 // Configurazione dello scrolling virtuale
 const opzioniScrollerVirtuale = {

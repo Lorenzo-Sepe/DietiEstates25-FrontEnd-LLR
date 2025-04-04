@@ -6,7 +6,7 @@ import Button from 'primevue/button';
 import Message from 'primevue/message';
 import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
 import ContrattoForm from './ContrattoComponet.vue';
-
+import { scrollToFirstError } from '../../utils/scrollToError';
 
 const emit = defineEmits(['indietro', 'avanti']);
 
@@ -93,6 +93,12 @@ const validaEAvanza = () => {
 
   if (validaCampi()) {
     emit('avanti');
+  }else {
+    if (refContratto.value && refContratto.value.hasErrori) {
+      refContratto.value.$el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      scrollToFirstError(errori);
+    }
   }
 };
 
