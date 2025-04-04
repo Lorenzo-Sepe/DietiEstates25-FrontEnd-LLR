@@ -97,6 +97,12 @@ const routes = [
     component: () => import('../views/CallbackView.vue')
   },
 
+  {
+    path: '/annunci',
+    name: 'annunci',
+    component: () => import('../views/Annunci.vue')
+  },
+
   // Route di testing dei componenti
   {
     path: '/testLorenzo',

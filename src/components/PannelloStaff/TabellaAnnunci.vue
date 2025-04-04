@@ -154,7 +154,7 @@ import Dialog from 'primevue/dialog';
 import FormControproposta from '../PannelloStaff/FormControproposta.vue';
 
 
-const props = defineProps(['propAnnunci', 'propLoading', 'propostaRequest']);
+const props = defineProps(['propAnnunci', 'propLoading', 'propostaRequest', 'agente']);
 const emit = defineEmits(['nuovaProposta', 'eliminaProposta', 'accettaProposta','controproposta']);
 
 
