@@ -2,7 +2,8 @@
     <Fluid class="card p-4 ">
         <h2 class="text-center">Creazione Agenzia</h2>
         <Form v-slot="$form" :initialValues="initialValues" :resolver="resolver" @submit="handleRegister" class="flex flex-col gap-4">
-            <Fieldset legend="Informazioni Agenzia" class="gap-3">
+            <Fieldset legend="Informazioni Agenzia" >
+                <div class="gap-3">
                 <InputText 
                 fluid 
                 v-model="initialValues.nomeAgenzia" 
@@ -16,13 +17,13 @@
                 fluid 
                 v-model="initialValues.ragioneSociale" 
                 name="ragioneSociale" 
-                placeholder="Nome Visualizzato" 
+                placeholder="Ragione Sociale" 
                 :class="{'p-invalid': $form.ragioneSociale?.invalid}" 
             />
             <Message v-if="$form.ragioneSociale?.invalid" severity="error" size="small">{{ $form.ragioneSociale.error?.message }}</Message>
 
-            <InputNumber 
-                :useGrouping="false" 
+            <inputMask 
+                mask="9999999 999 9"
                 fluid 
                 v-model="initialValues.partitaIva" 
                 name="partitaIva" 
@@ -40,6 +41,7 @@
             />
             <Message v-if="$form.dominio?.invalid" severity="error" size="small">{{ $form.dominio.error?.message }}</Message>
             
+        </div>
             </Fieldset>
 
             <Fieldset legend="Informazioni Fondatore" class="gap-3">
@@ -89,12 +91,12 @@
 import { reactive, ref } from 'vue';
 import { Form } from '@primevue/forms';
 import InputText from 'primevue/inputtext';
-import InputNumber from 'primevue/inputnumber';
+import inputMask from 'primevue/inputmask';
 import Fluid from 'primevue/fluid';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 import { useRouter } from 'vue-router';
-import AuthService from '../../services/AuthService';
+import AgenziaImmobiliareService from '../../services/AgenziaImmobiliareService';
 import Fieldset from 'primevue/fieldset';
 
 const router = useRouter();
@@ -156,10 +158,12 @@ const resolver = ({ values }) => {
 
 const handleRegister = async () => {
     try {
-        const response = await AuthService.register(AgenziaImmobiliareRequest.value);
+        console.log(AgenziaImmobiliareRequest.value)
+        const response = await AgenziaImmobiliareService.registerAgency(AgenziaImmobiliareRequest.value);
         console.log('Registrazione avvenuta con successo:', response);
-        router.push({ name: 'confirmRegistration', params: { message: encodeURIComponent(response) } });
+        router.push({ name: 'confirmRegistration' });
     } catch (error) {
+        registrationError.value = error;
         console.error('Registrazione fallita:', error);
     }
 };

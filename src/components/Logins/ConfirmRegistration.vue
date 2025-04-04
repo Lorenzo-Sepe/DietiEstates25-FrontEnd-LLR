@@ -2,7 +2,8 @@
 <template>
     <div class="flex flex-col align-items-center justify-content-center my-5">
         <img src="../../assets/Icon/icona.svg" alt="Logo" class="logo h-50 " />
-        <p>{{ message }}</p>
+        <p>La registrazione è avvenuta con successo.</p>
+        <p>Proseguire con il login</p>
         <Button label="Torna alla Homepage" @click="goHome" />
     </div>
 </template>

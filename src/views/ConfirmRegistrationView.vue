@@ -1,5 +1,5 @@
 <template>
-    <ConfirmRegistration :message="routeParams.message" :isPasswordVisible="routeParams.isPasswordVisible" />
+    <ConfirmRegistration />
 </template>
 
 <script setup>

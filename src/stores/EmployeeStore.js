@@ -3,7 +3,7 @@ import { UserInfoResponse } from '../dto/Response/UserInfoResponse';
 import { DatiImpiegatoResponse } from '../dto/Response/DatiImpiegato';
 import { DatiAgenziaImmobiliareResponse } from '../dto/Response/DatiAgenziaImmobiliareResponse';
 import { getDefaultAvatar, getDatiUser, getDatiImpiegato } from '../services/UserService';
-import { getDatiAgenziaByEmailDipendente } from '../services/AgenziaImmobiliareService';
+import AgenziaImmobiliareService from '../services/AgenziaImmobiliareService';
 
 export const useEmployeeStore = defineStore('employee', {
   state: () => ({
@@ -61,7 +61,7 @@ export const useEmployeeStore = defineStore('employee', {
         .catch((error) => {
           console.warn("Attenzione: si è verificato un errore durante l'aggiornamento dei dati impiegato", error);
         });
-      getDatiAgenziaByEmailDipendente(email)
+      AgenziaImmobiliareService.getDatiAgenziaByEmailDipendente(email)
         .then((dati) => {
           this.employee.DatiAgenziaImmobiliare = dati;
         })
