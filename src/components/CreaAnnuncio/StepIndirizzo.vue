@@ -32,16 +32,6 @@
       </div>
     </div>
 
-    <div class="flex flex-col gap-1 border my-4 p-2">
-      <p><strong>Via:</strong> {{ annuncio.immobile.indirizzo.via }} {{ annuncio.immobile.indirizzo.numeroCivico }}</p>
-      <p><strong>CAP:</strong> {{ annuncio.immobile.indirizzo.cap }}</p>
-      <p><strong>Provincia:</strong> {{ annuncio.immobile.indirizzo.provincia }}</p>
-      <p><strong>Città:</strong> {{ annuncio.immobile.indirizzo.citta }}</p>
-      <p><strong>Nazione:</strong> {{ annuncio.immobile.indirizzo.nazione }}</p>
-      <p><strong>Latitudine:</strong> {{ annuncio.immobile.indirizzo.latitudine }}</p>
-      <p><strong>Longitudine:</strong> {{ annuncio.immobile.indirizzo.longitudine }}</p>
-    </div>
-
     <div class="map-container">
       <MapComponent :activeStep="activeStep" :via="annuncio.immobile.indirizzo.via"
         :numeroCivico="annuncio.immobile.indirizzo.numeroCivico" :cap="annuncio.immobile.indirizzo.cap"
