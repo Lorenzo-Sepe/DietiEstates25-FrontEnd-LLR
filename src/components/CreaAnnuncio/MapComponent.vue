@@ -114,13 +114,14 @@ const aggiornaMappa = async () => {
       const nuovaPosizione = marcatore.value.getLatLng();
       console.log('Nuova posizione:', nuovaPosizione);
       emit('posizione-aggiornata', { latitudine: nuovaPosizione.lat, longitudine: nuovaPosizione.lng });
-      // Centra la mappa sulla nuova posizione del marker
+      props.Indirizzo.latitudine = nuovaPosizione.lat;
+      props.Indirizzo.longitudine = nuovaPosizione.lng;
       istanzaMappa.value.setView([nuovaPosizione.lat, nuovaPosizione.lng], 17);
 
-       // Usa un piccolo ritardo per garantire che la mappa abbia il tempo di aggiornarsi
-  setTimeout(() => {
-    istanzaMappa.value.panTo(nuovaPosizione, { animate: true });
-  }, 100);  
+// Usa un piccolo ritardo per garantire che la mappa abbia il tempo di aggiornarsi
+setTimeout(() => {
+istanzaMappa.value.panTo(nuovaPosizione, { animate: true });
+}, 100);  
       // Dopo il trascinamento, mostra un popup di conferma
       marcatore.value
         .bindPopup("✅ Posizione aggiornata! Se necessario, trascina ancora.")
@@ -133,6 +134,7 @@ const aggiornaMappa = async () => {
 };
 watch(() => props.activeStep, (nuovoStep) => {
   if (nuovoStep === 4) {
+    console.log('Attivato il passo 4, ridisegno la mappa');
     forzaRidisegnoMappa();
   }
 });
