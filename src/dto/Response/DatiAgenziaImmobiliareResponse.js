@@ -4,6 +4,7 @@ export class DatiAgenziaImmobiliareResponse {
         this.ragioneSociale = data.ragioneSociale || "";
         this.partitaIva = data.partitaIva || "";
         this.fondatore = data.fondatore || "";
-        this.dipendenti = new Set(data.dipendenti || []); // Utilizza un Set per i dipendenti
+        this.emailDipendenti = new Set(data.emailDipendenti || []); // Solo email
+        this.dipendentiDettagli = new Map(); // Cache dettagli dipendenti
     }
 }

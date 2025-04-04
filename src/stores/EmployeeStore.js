@@ -6,71 +6,75 @@ import { getDefaultAvatar, getDatiUser, getDatiImpiegato } from '../services/Use
 import { getDatiAgenziaByEmailDipendente } from '../services/AgenziaImmobiliareService';
 
 export const useEmployeeStore = defineStore('employee', {
-  state: () => ({
-    employee: {
-      email: "",
-      token: "",
+state: () => ({
+  employee: {
+    email: "",
+    token: "",
+    Info: new UserInfoResponse(),
+    datiImpiegato: new DatiImpiegatoResponse(),
+    DatiAgenziaImmobiliare: new DatiAgenziaImmobiliareResponse()
+  }
+}),
+getters: {
+  isAutenticato: (state) => !!state.employee.token,
+  datiUtente: (state) => state.employee.Info,
+  UrlFotoProfilo: (state) => {
+    return state.employee.Info.UrlFotoProfilo || getDefaultAvatar(state.employee.email);
+  },
+  dipendenti: (state) => {
+    return state.employee.DatiAgenziaImmobiliare.dipendentiDettagli || new Map();
+  }
+},
+actions: {
+  impostaImpiegato(email, token) {
+    this.employee.email = email;
+    this.employee.token = token;
+    this.aggiorna();
+  },
+  clear() {
+    this.employee = {
+      email: '',
+      token: '',
       Info: new UserInfoResponse(),
       datiImpiegato: new DatiImpiegatoResponse(),
       DatiAgenziaImmobiliare: new DatiAgenziaImmobiliareResponse()
-
-    }
-  }),
-  getters: {
-    isAutenticato: (state) => !!state.employee.token,
-    datiUtente: (state) => state.employee.Info,
-    UrlFotoProfilo: (state) => {
-      // Controlla se l'URL della foto del profilo è disponibile
-      return state.employee.Info.UrlFotoProfilo || getDefaultAvatar(state.employee.email);
-    },
-    dipedenti: (state) => {
-
-      return state.employee.DatiAgenziaImmobiliare.dipendenti || []; 
-    }
+    };
   },
-  actions: {
-    impostaImpiegato(email, token) {
-      this.employee.email = email;
-      this.employee.token = token;
-      this.aggiorna();
-    },
-    clear() {
-      this.employee = {
-        email: '',
-        token: '',
-        Info: new UserInfoResponse(),
-        datiImpiegato: new DatiImpiegatoResponse(),
-        DatiAgenziaImmobiliare: new DatiAgenziaImmobiliareResponse()
-      };
-    },
-    aggiorna() {
-      const email = this.employee.email;
-      getDatiUser(email)
-        .then((userInfo) => {
-          this.employee.Info = userInfo;
-        })
-        .catch((error) => {
-          console.warn("Attenzione: si è verificato un errore durante l'aggiornamento delle info.", error);
-          this.employee.Info.UrlFotoProfilo = getDefaultAvatar(this.employee.email);
-        });
-      getDatiImpiegato(email)
-        .then((dati) => {
-          console.log("get dati impiegato: ", dati);
-          this.employee.datiImpiegato = dati;
-        })
-        .catch((error) => {
-          console.warn("Attenzione: si è verificato un errore durante l'aggiornamento dei dati impiegato", error);
-        });
-      getDatiAgenziaByEmailDipendente(email)
-        .then((dati) => {
-          this.employee.DatiAgenziaImmobiliare = dati;
-        })
-        .catch((error) => {
-          console.warn("Attenzione: si è verificato un errore durante l'aggiornamento dei dati riferti alla agenzia", error);
-        });
-
-
+  async aggiorna() {
+    const email = this.employee.email;
+    try {
+      this.employee.Info = await getDatiUser(email);
+    } catch (error) {
+      console.warn("Errore aggiornamento info.", error);
+      this.employee.Info.UrlFotoProfilo = getDefaultAvatar(this.employee.email);
     }
-  },
-  persist: true // Abilita la persistenza dello stato
+
+    try {
+      this.employee.datiImpiegato = await getDatiImpiegato(email);
+    } catch (error) {
+      console.warn("Errore aggiornamento dati impiegato", error);
+    }
+
+    try {
+      const datiAgenzia = await getDatiAgenziaByEmailDipendente(email);
+      this.employee.DatiAgenziaImmobiliare = new DatiAgenziaImmobiliareResponse(datiAgenzia);
+
+      // Recupera i dettagli completi dei dipendenti se non già in cache
+      console.log("Dipendenti email:", this.employee.DatiAgenziaImmobiliare.emailDipendenti);
+      for (const emailDipendente of this.employee.DatiAgenziaImmobiliare.emailDipendenti) {
+        if (!this.employee.DatiAgenziaImmobiliare.dipendentiDettagli.has(emailDipendente)) {
+          try {
+            const datiDipendente = await getDatiUser(emailDipendente);
+            this.employee.DatiAgenziaImmobiliare.dipendentiDettagli.set(emailDipendente, datiDipendente);
+          } catch (error) {
+            console.warn(`Errore caricamento dati per dipendente ${emailDipendente}`, error);
+          }
+        }
+      }
+    } catch (error) {
+      console.warn("Errore aggiornamento dati agenzia", error);
+    }
+  }
+},
+persist: true
 });
