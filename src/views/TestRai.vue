@@ -118,7 +118,7 @@ watch(activeStep, (newVal) => {
             <Tag class="my-4">
               <h3>Indirizzo e Posizione</h3>
             </Tag>
-            <StepIndirizzo v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti" />
+            <StepIndirizzo :activeStep="activeStep" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="3">
             <Tag class="my-4">

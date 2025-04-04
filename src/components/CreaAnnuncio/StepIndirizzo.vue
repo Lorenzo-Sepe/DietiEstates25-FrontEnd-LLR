@@ -17,7 +17,6 @@
 
       <div class="flex flex-col">
         <label for="cap">CAP</label>
-        <InputText id="cap" v-model="annuncio.immobile.indirizzo.cap" disabled />
         <SelectComuni class="w-full" v-model:comune="annuncio.immobile.indirizzo" />
       </div>
 
@@ -37,6 +36,7 @@
     <div class="map-container">
       <MapComponent :activeStep="activeStep" :via="annuncio.immobile.indirizzo.via"
         :numeroCivico="annuncio.immobile.indirizzo.numeroCivico" :cap="annuncio.immobile.indirizzo.cap"
+        :Indirizzo="annuncio.immobile.indirizzo"
         :citta="annuncio.immobile.indirizzo.citta" />
     </div>
 
@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, computed } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import MapComponent from './MapComponent.vue';

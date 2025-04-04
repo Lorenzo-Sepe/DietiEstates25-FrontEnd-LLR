@@ -17,7 +17,6 @@
 import { ref, defineModel } from 'vue';
 import Select from 'primevue/select';
 import datiComuni from '../../assets/comuniCap.json';
-import { Indirizzo } from '../../dto/RequestAnnuncio';
 
 // Riceviamo l'oggetto indirizzo dal padre tramite v-model
 const indirizzo = defineModel('comune');
