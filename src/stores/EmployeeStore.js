@@ -23,6 +23,12 @@ getters: {
   },
   dipendenti: (state) => {
     return state.employee.DatiAgenziaImmobiliare.dipendentiDettagli || new Map();
+  },
+  ruolo: (state) => {
+    return state.employee.datiImpiegato.ruolo || new DatiImpiegatoResponse();
+  },
+  infoUtente: (state) => {
+    return state.employee.Info || new UserInfoResponse();
   }
 },
 actions: {
