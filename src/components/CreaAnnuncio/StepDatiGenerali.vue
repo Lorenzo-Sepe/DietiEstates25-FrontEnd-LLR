@@ -6,7 +6,7 @@ import Select from 'primevue/select';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
-
+import { scrollToFirstError } from '../../utils/scrollToError';
 const emit = defineEmits(['avanti']);
 
 const props = defineProps({
@@ -79,6 +79,8 @@ const validaEAvanza = () => {
   validaCampi();
   if (!Object.values(errori).some(e => e.invalid)) {
     emit('avanti');
+  }else {
+    scrollToFirstError(errori);
   }
 };
 
