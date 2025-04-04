@@ -39,11 +39,12 @@ const routes = [
     
   },
   {
-    path: '/confirm-registration/:message/',
+    path: '/confirm-registration/',
     name: 'confirmRegistration',
     component: () => import('../components/Logins/ConfirmRegistration.vue'),
     props: true
   },
+
   
   {
     path: '/PortaleAgenzia',
@@ -74,10 +75,16 @@ const routes = [
       }
     }
   },
+
   {
     path: '/PortaleAgenzia/pannelloStaff',
     name: 'pannellStaff',
     component: () => import('../views/pannelloStaff.vue')
+
+  },  {
+    path: '/PortaleAgenzia/CreaAnnuncio',
+    name: 'CreaAnnuncio',
+    component: () => import('../views/CreazioneAnnuncio.vue')
 
   },
   {
@@ -101,6 +108,13 @@ const routes = [
     path: '/annunci',
     name: 'annunci',
     component: () => import('../views/Annunci.vue')
+  },
+
+  //ROUTE 404
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('../views/NotFoundView.vue')
   },
 
   // Route di testing dei componenti

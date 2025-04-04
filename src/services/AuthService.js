@@ -21,7 +21,6 @@ export default {
             });
     },
     loginIdProvvider(credentials){
-        //console.log('service login config:',Api);
         return Api()
         .post('pb/auth/signinIdProv',credentials)
         .then((response)=>{
@@ -31,7 +30,6 @@ export default {
         })
     },
     registerIdProvvider(credentials){
-        //console.log('service register config:',Api);
         return Api()
         .post('pb/auth/registerIdProv',credentials)
         .then((response)=> {
