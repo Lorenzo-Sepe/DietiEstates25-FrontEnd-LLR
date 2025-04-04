@@ -63,24 +63,23 @@ actions: {
       
       for (const emailDipendente of this.employee.DatiAgenziaImmobiliare.emailDipendenti) {
         if (!this.employee.DatiAgenziaImmobiliare.dipendentiDettagli.has(emailDipendente)) {
-          try {
-            // Recupero dei dati utente e dati impiegato in parallelo
-            const [datiDipendente, datiImpiegato] = await Promise.all([
-              getDatiUser(emailDipendente),
-              getDatiImpiegato(emailDipendente)
-            ]);
-  
-            // Unione dei dati in un unico oggetto
-            this.employee.DatiAgenziaImmobiliare.dipendentiDettagli.set(emailDipendente, {
-              ...datiDipendente,
-              datiImpiegato
-            });
-  
-          } catch (error) {
-            console.warn(`Errore caricamento dati per dipendente ${emailDipendente}`, error);
-          }
+            try {
+                const [datiDipendente, datiImpiegato] = await Promise.all([
+                    getDatiUser(emailDipendente),
+                    getDatiImpiegato(emailDipendente)
+                ]);
+    
+                this.employee.DatiAgenziaImmobiliare.dipendentiDettagli.set(emailDipendente, {
+                    infoUtente: datiDipendente,
+                    datiImpiegato: datiImpiegato
+                });
+    
+            } catch (error) {
+                console.warn(`Errore caricamento dati per dipendente ${emailDipendente}`, error);
+            }
         }
-      }
+    }
+     
     } catch (error) {
       console.warn("Errore aggiornamento dati agenzia", error);
     }
