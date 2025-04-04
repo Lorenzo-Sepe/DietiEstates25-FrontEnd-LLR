@@ -75,10 +75,16 @@ const routes = [
       }
     }
   },
+
   {
     path: '/PortaleAgenzia/pannelloStaff',
     name: 'pannellStaff',
     component: () => import('../views/pannelloStaff.vue')
+
+  },  {
+    path: '/PortaleAgenzia/CreaAnnuncio',
+    name: 'CreaAnnuncio',
+    component: () => import('../views/CreazioneAnnuncio.vue')
 
   },
   {

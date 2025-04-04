@@ -9,34 +9,36 @@
       </ul>
     </Message>
 
-    <div class="flex flex-col gap-4">
-      <div class="flex flex-col">
-        <label for="via">Via</label>
-        <InputText id="via" v-model="annuncio.immobile.indirizzo.via" :invalid="errori.via.invalid"
-          @input="verificaDati('via')" @blur="verificaDati('via')" />
-        <Message v-if="errori.via.invalid" severity="error" variant="simple" size="small">{{ errori.via.messaggio }}</Message>
+    <div class="flex flex-col md:flex-row gap-4">
+      <div class="flex flex-col w-full md:w-1/2">
+        <div class="flex flex-col">
+          <label for="via">Via</label>
+          <InputText id="via" v-model="annuncio.immobile.indirizzo.via" :invalid="errori.via.invalid"
+            @input="verificaDati('via')" @blur="verificaDati('via')" />
+          <Message v-if="errori.via.invalid" severity="error" variant="simple" size="small">{{ errori.via.messaggio }}</Message>
+        </div>
+
+        <div class="flex flex-col">
+          <label for="numeroCivico">Numero Civico</label>
+          <InputText id="numeroCivico" v-model="annuncio.immobile.indirizzo.numeroCivico" :invalid="errori.numeroCivico.invalid"
+            @input="verificaDati('numeroCivico')" @blur="verificaDati('numeroCivico')" />
+          <Message v-if="errori.numeroCivico.invalid" severity="error" variant="simple" size="small">{{ errori.numeroCivico.messaggio }}</Message>
+        </div>
+
+        <div class="flex flex-col">
+          <label for="cap">Città</label>
+          <SelectComuni class="w-full" v-model:comune="annuncio.immobile.indirizzo" :invalid="errori.comune.invalid"
+            @blur="verificaDati('comune')" @change="verificaDati('comune')" />
+          <Message v-if="errori.comune.invalid" severity="error" variant="simple" size="small">{{ errori.comune.messaggio }}</Message>
+        </div>
       </div>
 
-      <div class="flex flex-col">
-        <label for="numeroCivico">Numero Civico</label>
-        <InputText id="numeroCivico" v-model="annuncio.immobile.indirizzo.numeroCivico" :invalid="errori.numeroCivico.invalid"
-          @input="verificaDati('numeroCivico')" @blur="verificaDati('numeroCivico')" />
-        <Message v-if="errori.numeroCivico.invalid" severity="error" variant="simple" size="small">{{ errori.numeroCivico.messaggio }}</Message>
+      <div class="map-container w-full md:w-1/2">
+        <MapComponent :activeStep="activeStep" :via="annuncio.immobile.indirizzo.via"
+          :numeroCivico="annuncio.immobile.indirizzo.numeroCivico" :cap="annuncio.immobile.indirizzo.cap"
+          :Indirizzo="annuncio.immobile.indirizzo"
+          :citta="annuncio.immobile.indirizzo.citta" />
       </div>
-
-      <div class="flex flex-col">
-        <label for="cap">Città</label>
-        <SelectComuni class="w-full" v-model:comune="annuncio.immobile.indirizzo" :invalid="errori.comune.invalid"
-          @blur="verificaDati('comune')" @change="verificaDati('comune')" />
-        <Message v-if="errori.comune.invalid" severity="error" variant="simple" size="small">{{ errori.comune.messaggio }}</Message>
-      </div>
-    </div>
-
-    <div class="map-container">
-      <MapComponent :activeStep="activeStep" :via="annuncio.immobile.indirizzo.via"
-        :numeroCivico="annuncio.immobile.indirizzo.numeroCivico" :cap="annuncio.immobile.indirizzo.cap"
-        :Indirizzo="annuncio.immobile.indirizzo"
-        :citta="annuncio.immobile.indirizzo.citta" />
     </div>
 
     <div class="flex pt-6 justify-between">
