@@ -5,6 +5,7 @@ import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
+import { scrollToFirstError } from '../../utils/scrollToError';
 const emit = defineEmits(['avanti']);
 
 const props = defineProps({
@@ -29,12 +30,16 @@ const validaCampi = () => {
     errori.descrizioneAggiuntiva.invalid = false;
     errori.descrizioneAggiuntiva.messaggio = '';
   }
+  return !Object.values(errori).some(e => e.invalid);
+
 };
 
 const validaEAvanza = () => {
   validaCampi();
   if (!errori.descrizioneAggiuntiva.invalid) {
     emit('avanti');
+  }else {
+    scrollToFirstError(errori);
   }
 };
 

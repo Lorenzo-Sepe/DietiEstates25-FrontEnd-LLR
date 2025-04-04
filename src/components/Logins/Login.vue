@@ -84,7 +84,7 @@ const onFormSubmit = async ({ valid }) => {
         
         loading.value = false;
         if (response.ruolo !== 'MEMBER') {
-            router.push({ path: '/testRAi' });
+            router.push({ path: '/PortaleAgenzia/pannelloStaff' });
         }
         emit("close");
         

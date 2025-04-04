@@ -2,15 +2,18 @@
 import { ref, onMounted, onBeforeUnmount, defineProps, defineEmits, watch } from 'vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Button } from 'primevue';
-
+import datiComuni from '../../assets/comuniCap.json';
+import { Indirizzo } from '../../dto/RequestAnnuncio';
+// Lista dei comuni dal JSON
+const listaComuni = ref(datiComuni);
 
 const props = defineProps({
   activeStep: Number,
   via: String,
   numeroCivico: String,
   cap: String,
-  citta: String
+  citta: String,
+  Indirizzo: Indirizzo,
 });
 
 const emit = defineEmits(['posizione-aggiornata']);
@@ -61,6 +64,24 @@ const faiRichiestaGeocodifica = async (query) => {
         latitudine: parseFloat(dati[0].lat),
         longitudine: parseFloat(dati[0].lon),
       };
+    }else
+    {
+      console.warn('Nessun risultato trovato per l’indirizzo:', query);
+      console.log('Inserisco come cordinate quelle associta alla città:', props.via);
+      const comune = listaComuni.value.find(comune => comune.denominazione_ita.toLowerCase() === props.citta.toLowerCase());
+      if (comune) {
+        return {
+          latitudine: parseFloat(comune.latitudine),
+          longitudine: parseFloat(comune.longitudine),
+        };
+      } else {
+        console.warn('Comune non trovato nella lista dei comuni:', props.citta);
+        console.log('inserisco cordinate di default');
+        return {
+          latitudine: 41.8719, // Latitudine di default (Italia centrale)
+          longitudine: 12.5674, // Longitudine di default (Italia centrale)
+        };
+      }
     }
   } catch (errore) {
     console.error('Errore durante la richiesta al servizio di geocodifica:', errore);
@@ -93,7 +114,14 @@ const aggiornaMappa = async () => {
       const nuovaPosizione = marcatore.value.getLatLng();
       console.log('Nuova posizione:', nuovaPosizione);
       emit('posizione-aggiornata', { latitudine: nuovaPosizione.lat, longitudine: nuovaPosizione.lng });
+      props.Indirizzo.latitudine = nuovaPosizione.lat;
+      props.Indirizzo.longitudine = nuovaPosizione.lng;
+      istanzaMappa.value.setView([nuovaPosizione.lat, nuovaPosizione.lng], 17);
 
+// Usa un piccolo ritardo per garantire che la mappa abbia il tempo di aggiornarsi
+setTimeout(() => {
+istanzaMappa.value.panTo(nuovaPosizione, { animate: true });
+}, 100);  
       // Dopo il trascinamento, mostra un popup di conferma
       marcatore.value
         .bindPopup("✅ Posizione aggiornata! Se necessario, trascina ancora.")
@@ -105,7 +133,8 @@ const aggiornaMappa = async () => {
 
 };
 watch(() => props.activeStep, (nuovoStep) => {
-  if (nuovoStep === 2) {
+  if (nuovoStep === 4) {
+    console.log('Attivato il passo 4, ridisegno la mappa');
     forzaRidisegnoMappa();
   }
 });
@@ -116,6 +145,11 @@ watch([() => props.via, () => props.numeroCivico, () => props.cap, () => props.c
 
 onMounted(() => {
   inizializzaMappa();
+  if(props.citta) {
+    aggiornaMappa();
+  } else {
+    console.warn('Indirizzo non valido, non posso inizializzare la mappa.');
+  }
 });
 
 onBeforeUnmount(() => {

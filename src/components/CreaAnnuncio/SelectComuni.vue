@@ -6,18 +6,22 @@
       :optionLabel="etichettaOpzione"
       filter
       filterBy="cap"              
-      filterPlaceholder="Cerca un CAP"
+      filterPlaceholder="Digita per cercare"
       :virtualScrollerOptions="opzioniScrollerVirtuale"
-      placeholder="Seleziona un CAP"
+      placeholder="Seleziona una Comune"
       @update:modelValue="aggiornaIndirizzo"
     />
 </template>
 
 <script setup>
-import { ref, defineModel } from 'vue';
+import { ref, defineModel ,defineProps} from 'vue';
 import Select from 'primevue/select';
 import datiComuni from '../../assets/comuniCap.json';
+
 import { Indirizzo } from '../../dto/RequestAnnuncio';
+const props = defineProps({
+  comune: Indirizzo,
+});
 
 // Riceviamo l'oggetto indirizzo dal padre tramite v-model
 const indirizzo = defineModel('comune');
@@ -26,7 +30,7 @@ const indirizzo = defineModel('comune');
 const listaComuni = ref(datiComuni);
 
 // Per visualizzare il CAP e, eventualmente, altre info (non serve che il filtro sia su queste info)
-const etichettaOpzione = (comune) => `CAP: ${comune.cap} - ${comune.denominazione_ita} (${comune.sigla_provincia})`;
+const etichettaOpzione = (comune) => `${comune.denominazione_ita} (${comune.sigla_provincia}) CAP:${comune.cap}`;
 
 // Configurazione dello scrolling virtuale
 const opzioniScrollerVirtuale = {
@@ -37,6 +41,14 @@ const opzioniScrollerVirtuale = {
 // Per tenere traccia del CAP selezionato (il v-model è legato al campo CAP anziché all'intero indirizzo)
 const capSelezionato = ref(null);
 
+
+// Imposta il valore iniziale di capSelezionato in base al prop comune
+if (props.comune.cap) {
+  const record = listaComuni.value.find(comune => comune.cap === props.comune.cap);
+  if (record) {
+    capSelezionato.value = record; // Imposta l'oggetto completo
+  }
+}
 // Quando l'utente seleziona un CAP, cerchiamo il record completo
 const aggiornaIndirizzo = (capSelezionatoVal) => {
   // Trova nel JSON il record corrispondente al CAP

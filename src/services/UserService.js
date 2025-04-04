@@ -68,7 +68,11 @@ export function getDatiUser(email) {
         .get('/pb/user', { params: { email } })
         .then((response) => {
             console.log('pb/user response: ', response.data);
-            return new UserInfoResponse(response.data); // Restituisci l'oggetto creato
+            const ret =new UserInfoResponse(response.data); // Restituisci l'oggetto creato
+            if( ret.UrlFotoProfilo === null || ret.UrlFotoProfilo === undefined || ret.UrlFotoProfilo === "") {
+                ret.UrlFotoProfilo = getDefaultAvatar(email);
+            }
+            return ret;
         })
         .catch((error) => {
             if (error.response) {

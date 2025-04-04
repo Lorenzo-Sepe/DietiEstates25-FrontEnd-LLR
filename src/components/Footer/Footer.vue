@@ -8,6 +8,9 @@
     <div class="flex justify-center  text-2xl">
       <ToggleTheme/>
     </div>
+    <div class="flex justify-center text-2xl">
+      <button @click="scrollToTop" class="text-black hover:text-gray-700">Torna su</button>
+    </div>
     </div>
   </template>
 
@@ -18,6 +21,9 @@ import PortaleBusiness from './PortaleBusiness.vue';
 import ToggleTheme from './ToggleTheme.vue';
 import { defineProps } from 'vue';
 
+function scrollToTop() {
+  window.scrollTo(0, 0); // Scrolla in cima alla pagina
+}
 const props = defineProps({
     isInPortale: Boolean
   });

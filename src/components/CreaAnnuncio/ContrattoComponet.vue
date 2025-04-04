@@ -6,7 +6,7 @@ import Select from 'primevue/select';
 import ToggleSwitch from 'primevue/toggleswitch';
 import Message from 'primevue/message';
 import { Contratto } from '../../dto/RequestAnnuncio';
-
+import { scrollToFirstError } from '../../utils/scrollToError';
 
 
 const props = defineProps({
@@ -83,10 +83,14 @@ const hasErrori = computed(() => {
     return Object.values(errori).some(e => e.invalid);
   }
 });
+const scroll = () => {
+  scrollToFirstError(errori);
+};
 defineExpose({
   validaCampi,
   errori,
-  hasErrori
+  hasErrori,
+  scroll
 });
 
 watch(() => props.contratto.tipoDiContratto, () => {

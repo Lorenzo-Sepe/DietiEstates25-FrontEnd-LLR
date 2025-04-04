@@ -132,7 +132,10 @@ const routes = [
 // Crea l'istanza del router
 const router = createRouter({
   history: createWebHistory(),
-  routes
-})
-
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    // Scrolla sempre in cima alla pagina
+    return { top: 0 };
+  }
+});
 export default router;
