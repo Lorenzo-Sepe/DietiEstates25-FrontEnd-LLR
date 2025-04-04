@@ -48,24 +48,34 @@ actions: {
       console.warn("Errore aggiornamento info.", error);
       this.employee.Info.UrlFotoProfilo = getDefaultAvatar(this.employee.email);
     }
-
+  
     try {
       this.employee.datiImpiegato = await getDatiImpiegato(email);
     } catch (error) {
       console.warn("Errore aggiornamento dati impiegato", error);
     }
-
+  
     try {
       const datiAgenzia = await getDatiAgenziaByEmailDipendente(email);
       this.employee.DatiAgenziaImmobiliare = new DatiAgenziaImmobiliareResponse(datiAgenzia);
-
-      // Recupera i dettagli completi dei dipendenti se non già in cache
+  
       console.log("Dipendenti email:", this.employee.DatiAgenziaImmobiliare.emailDipendenti);
+      
       for (const emailDipendente of this.employee.DatiAgenziaImmobiliare.emailDipendenti) {
         if (!this.employee.DatiAgenziaImmobiliare.dipendentiDettagli.has(emailDipendente)) {
           try {
-            const datiDipendente = await getDatiUser(emailDipendente);
-            this.employee.DatiAgenziaImmobiliare.dipendentiDettagli.set(emailDipendente, datiDipendente);
+            // Recupero dei dati utente e dati impiegato in parallelo
+            const [datiDipendente, datiImpiegato] = await Promise.all([
+              getDatiUser(emailDipendente),
+              getDatiImpiegato(emailDipendente)
+            ]);
+  
+            // Unione dei dati in un unico oggetto
+            this.employee.DatiAgenziaImmobiliare.dipendentiDettagli.set(emailDipendente, {
+              ...datiDipendente,
+              datiImpiegato
+            });
+  
           } catch (error) {
             console.warn(`Errore caricamento dati per dipendente ${emailDipendente}`, error);
           }
@@ -75,6 +85,7 @@ actions: {
       console.warn("Errore aggiornamento dati agenzia", error);
     }
   }
+  
 },
 persist: true
 });
