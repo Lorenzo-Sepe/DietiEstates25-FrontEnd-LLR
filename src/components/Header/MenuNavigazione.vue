@@ -1,10 +1,10 @@
 <template>
-    <nav class="flex space-x-5">
+    <nav class="p-2 lg:mr-5 flex gap-2 lg:gap-4 flex-col lg:flex-row items-center ">
       <router-link 
         v-for="voce in menuCorrente" 
         :key="voce.nome"
         :to="voce.percorso"
-        class="text-black hover:text-gray-600 transition-all duration-200"
+        class="text-black hover:text-gray-600 transition-all duration-200 text-lg flex"
       >
         {{ voce.nome }}
       </router-link>

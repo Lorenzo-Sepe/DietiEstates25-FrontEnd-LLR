@@ -5,7 +5,7 @@
             
             <InputText 
                 fluid 
-                v-model="registrationRequest.email" 
+                v-model="initialValues.email" 
                 name="email" 
                 placeholder="Email" 
                 :class="{'p-invalid': $form.email?.invalid}" 
@@ -14,16 +14,16 @@
 
             <InputText 
                 fluid 
-                v-model="registrationRequest.name" 
-                name="name" 
+                v-model="initialValues.nomeVisualizzato" 
+                name="nomeVisualizzato" 
                 placeholder="Nome Visualizzato" 
-                :class="{'p-invalid': $form.name?.invalid}" 
+                :class="{'p-invalid': $form.nomeVisualizzato?.invalid}" 
             />
-            <Message v-if="$form.name?.invalid" severity="error" size="small">{{ $form.name.error?.message }}</Message>
+            <Message v-if="$form.nomeVisualizzato?.invalid" severity="error" size="small">{{ $form.nomeVisualizzato.error?.message }}</Message>
 
             <Password 
                 fluid 
-                v-model="registrationRequest.password" 
+                v-model="initialValues.password" 
                 name="password" 
                 placeholder="Password" 
                 :class="{'p-invalid': $form.password?.invalid}" 
@@ -32,12 +32,14 @@
 
             <Password 
                 fluid 
-                v-model="registrationRequest.confirmPassword" 
+                v-model="initialValues.confirmPassword" 
                 name="passwordConfirm" 
                 placeholder="Ripeti Password" 
                 :class="{'p-invalid': $form.confirmPassword?.invalid}" 
             />
             <Message v-if="$form.confirmPassword?.invalid" severity="error" size="small">{{ $form.confirmPassword.error?.message }}</Message>
+            
+            <Message v-if="registrationError" severity="error" size="small">{{ registrationError.response.data.toString().replace("{", "").replace("}", "") }}</Message>
             
             <Button type="submit" label="Registrati" :disabled="$form.$invalid" />
 
@@ -59,11 +61,10 @@
             </div>
         </Form>
     </div>
-
     
     <Dialog v-model:visible="showDialog" :style="{ width: '50vw' }" modal header="Inserire la password per questo account">
         <PasswordConfirmationDialog 
-            @close="closeDialog"
+            @close="handleDialogClose" 
             :showDialog="showDialog" 
             :currentProvider="currentProvider" 
         />
@@ -84,26 +85,19 @@ import  Dialog  from 'primevue/dialog';
 import PasswordConfirmationDialog from '../Dialogs/PasswordConfirmationDialog.vue';
 
 
-
-function closeDialog(){
-  visible.value = false;
-} 
-
-
 const router = useRouter();
 
 const initialValues = reactive({
-    username: '',
     email: '',
-    name: '',
+    nomeVisualizzato: '',
     password: '',
     confirmPassword: '',
 });
 
-const registrationRequest = ref(initialValues);
+const SignUpRequest = ref(initialValues);
 const showDialog = ref(false);
-const password = ref('');
 const currentProvider = ref('');
+const registrationError = ref('');
 
 const resolver = ({ values }) => {
     const errors = {};
@@ -114,8 +108,8 @@ const resolver = ({ values }) => {
         errors.email = [{ message: 'Email non valida.' }];
     }
 
-    if (!values.name || values.name.length < 3 || values.name.length > 20) {
-        errors.name = [{ message: 'Nome deve avere tra 3 e 20 caratteri.' }];
+    if (!values.nomeVisualizzato || values.nomeVisualizzato.length < 3 || values.nomeVisualizzato.length > 20) {
+        errors.nomeVisualizzato = [{ message: 'Nome deve avere tra 3 e 20 caratteri.' }];
     }
 
     const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$£%^&+=!]).{8,16}$/;
@@ -135,8 +129,9 @@ const resolver = ({ values }) => {
 
 const handleRegister = async () => {
     try {
-        const response = await AuthService.register(registrationRequest.value);
-        router.push({ name: 'confirmRegistration', params: { message: response.data, isPasswordVisible: false } });
+        const response = await AuthService.register(SignUpRequest.value);
+        console.log('Registrazione avvenuta con successo:', response);
+        router.push({ name: 'confirmRegistration', params: { message: encodeURIComponent(response) } });
     } catch (error) {
         console.error('Registrazione fallita:', error);
     }
@@ -147,30 +142,12 @@ const handleLoginWithDialog = (provider) => {
     currentProvider.value = provider;
 };
 
-const confirmPasswordAction = () => {
-    handleLogin(currentProvider.value);
+
+const handleDialogClose = (error) => {
     showDialog.value = false;
-};
-
-const handleLogin = async (provider) => {
-    try {
-        await loginWithPopup({
-            authorizationParams: {
-                screen_hint: 'signup',
-                connection: provider,
-                scope: 'openid profile email'
-            }
-        });
-
-        const response = await AuthService.registerIdProvvider({
-            username: user.value.email,
-            email: user.value.email,
-            nomeVisualizzato: user.value.name,
-            password: password.value
-        });
-        router.push({ name: 'confirmRegistration', params: { message: response.data, isPasswordVisible: true } });
-    } catch (error) {
-        console.error('Login fallito:', error);
+    if (error) {
+        registrationError.value = error;
+        console.error('Errore dal dialogo:', error);
     }
 };
 </script>

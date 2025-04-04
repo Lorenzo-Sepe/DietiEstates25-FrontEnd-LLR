@@ -5,18 +5,10 @@
     <img src="/src/assets/copertina_home.png" alt="home" class="home_image" />
 
     <div class="home_ricerca">
-
-      <div class="flex flex-row gap-[1rem]">
-        <ToggleVenditaAffitto />
-        <SelectTipoImmobile />
-        <InputRicerca />
-        <Button class="w-1/4" label="Cerca" icon="pi pi-search" />
-      </div>
-
-      <a href="http://www.poivedremo.it" class="text-lg font-semibold text-blue-600 hover:text-blue-800 underline decoration-2 transition duration-200 ease-in-out">
-        Oppure clicca qui per disegnare la tua zona di interesse
-      </a>
-
+        <AreaRicerca/>
+        <a href="http://www.poivedremo.it" class="text-lg font-semibold text-primary-600 hover:primary-blue-800 underline decoration-2 transition duration-200 ease-in-out">
+          Oppure clicca qui per disegnare la tua zona di interesse
+        </a>
     </div>
 
   </div>
@@ -24,10 +16,8 @@
 </template>
 
 <script setup>
-import InputRicerca from "../components/Homepage/InputRicerca.vue"
-import SelectTipoImmobile from "../components/Homepage/SelectTipoImmobile.vue"
-import ToggleVenditaAffitto from "../components/Homepage/ToggleVenditaAffitto.vue"
-import Button from "primevue/button"
+import AreaRicerca from "../components/Homepage/AreaRicerca.vue"
+
 </script>
 
 <style scoped>
@@ -40,11 +30,9 @@ import Button from "primevue/button"
 }
 
 .home_image-container .home_image {
-
   display: block;
   width: 100%;
   height: auto;
-
 }
 
 @media (max-width: 768px) {
@@ -70,12 +58,11 @@ import Button from "primevue/button"
 }
 
 .home_ricerca {
-
   width: 90%;
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-center;
   gap: 1rem;
   position: absolute;
   top: 50%;
@@ -86,7 +73,6 @@ import Button from "primevue/button"
   padding: 3rem;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
 }
 
 @media (max-width: 768px) {

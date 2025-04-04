@@ -33,7 +33,13 @@ const routes = [
     component: () => import('../views/RegistrationView.vue')
   },
   {
-    path: '/confirm-registration/:message/:isPasswordVisible',
+    path: '/register-agency',
+    name: 'registerAgency',
+    component: () => import('../views/AgencyRegistrationView.vue')
+    
+  },
+  {
+    path: '/confirm-registration/:message/',
     name: 'confirmRegistration',
     component: () => import('../components/Logins/ConfirmRegistration.vue'),
     props: true
@@ -89,6 +95,12 @@ const routes = [
     path: '/callback',
     name: 'callback',
     component: () => import('../views/CallbackView.vue')
+  },
+
+  {
+    path: '/annunci',
+    name: 'annunci',
+    component: () => import('../views/Annunci.vue')
   },
 
   // Route di testing dei componenti
