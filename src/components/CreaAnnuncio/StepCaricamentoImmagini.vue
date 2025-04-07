@@ -50,10 +50,12 @@
     </div>
 
     <!-- Pulsanti navigazione -->
-    <div class="barra-navigazione">
-      <Button label="Indietro" severity="secondary" icon="pi pi-arrow-left" @click="$emit('indietro')" />
-      <Button label="Avanti" icon="pi pi-arrow-right" iconPos="right" @click="validaEAvanza" />
-    </div>
+    <StickyButtons>
+      <div class="flex pt-6 justify-between">
+        <Button label="Indietro" severity="secondary" icon="pi pi-arrow-left" @click="$emit('indietro')" />
+        <Button label="Avanti" icon="pi pi-arrow-right" iconPos="right" @click="validaEAvanza" />
+      </div>
+    </StickyButtons>
   </div>
 </template>
 
@@ -61,7 +63,7 @@
 import { ref , defineProps,computed,defineEmits,onMounted} from 'vue';
 import { Button, InputText,Message,Skeleton } from 'primevue';
 import { AnnuncioImmobiliareRequest ,Immagine} from '../../dto/RequestAnnuncio';
-
+import StickyButtons from './StickyButtons.vue';
 
 const dimensioneTotaleMB = computed(() => {
   const totale = props.annuncio.immobile.immagini.reduce((acc, img) => acc + (img.file?.size || 0), 0);
