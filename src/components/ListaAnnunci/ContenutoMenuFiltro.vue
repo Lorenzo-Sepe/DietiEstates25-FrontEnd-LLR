@@ -31,7 +31,7 @@
         </div>
 
         <div class="distanza-massima flex flex-col items-start justify-start">
-            <label class="block text-lg font-semibold mb-1">Distanza massima</label>
+            <label class="block text-lg font-semibold mb-1">Distanza massima (km)</label>
             <InputText v-model.number="valoreDistanzaMassima" class="w-full mb-4" />
             <Slider v-model="valoreDistanzaMassima" class="w-full" />
         </div>
@@ -61,21 +61,25 @@ import InputText from 'primevue/inputtext';
 import Slider from 'primevue/slider';
 import ToggleSwitch from 'primevue/toggleswitch';
 
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRouter, useRoute } from 'vue-router';
 
-const selectedTipologiaImmobile = ref();
+const router = useRouter();
+const route = useRoute()
+
+const selectedTipologiaImmobile = ref(ref({ name: route.query.immobile }));
 const opzioniTipologiaImmobile = ref([
-    { name: 'New York', code: 'NY' },
-    { name: 'Rome', code: 'RM' },
-    { name: 'London', code: 'LDN' },
-    { name: 'Istanbul', code: 'IST' },
-    { name: 'Paris', code: 'PRS' }
+    { name: 'APPARTAMENTO'},
+    { name: 'TERRENO' },
+    { name: 'UFFICIO' },
+    { name: 'POSTOAUTO' },
+    { name: 'ALTRO' }
 ]);
 
-const valorePrezzoMinimo = ref(0);
-const valorePrezzoMassimo = ref(0);
-const valoreMetriQuadriMinimo = ref(0);
-const valoreMetriQuadriMassimo = ref(0);
-const valoreDistanzaMassima = ref(0);
+const valorePrezzoMinimo = ref();
+const valorePrezzoMassimo = ref();
+const valoreMetriQuadriMinimo = ref();
+const valoreMetriQuadriMassimo = ref();
+const valoreDistanzaMassima = ref(5);
 
 </script>
