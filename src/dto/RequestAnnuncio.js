@@ -33,6 +33,7 @@ export class Indirizzo {
       this.file = data.file || "";
       this.descrizione = data.descrizione || "";
       this.urlImmagineEsistente = data.urlImmagineEsistente || "";
+      this.loading=data.loading || false;
     }
   }
   
