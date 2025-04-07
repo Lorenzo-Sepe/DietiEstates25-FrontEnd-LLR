@@ -6,7 +6,8 @@ import Button from 'primevue/button';
 import Message from 'primevue/message';
 import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
 import { scrollToFirstError } from '../../utils/scrollToError';
-const emit = defineEmits(['avanti']);
+import StickyButtons from './StickyButtons.vue';
+const emit = defineEmits(['indietro', 'avanti']);
 
 const props = defineProps({
   annuncio: {
@@ -130,9 +131,11 @@ defineExpose({
       <Message v-if="errori.descrizioneAggiuntiva.invalid" severity="error" variant="simple" size="small">{{
         errori.descrizioneAggiuntiva.messaggio }}</Message>
     </div>
-
-    <div class="flex justify-end pt-6">
-      <Button label="Avanti" icon="pi pi-arrow-right" iconPos="right" @click="validaEAvanza" />
-    </div>
+    <StickyButtons>
+      <div class="flex pt-6 justify-between">
+        <Button label="Indietro" severity="secondary" icon="pi pi-arrow-left" @click="$emit('indietro')" />
+        <Button label="Avanti" icon="pi pi-arrow-right" iconPos="right" @click="validaEAvanza" />
+      </div>
+    </StickyButtons>
   </div>
 </template>

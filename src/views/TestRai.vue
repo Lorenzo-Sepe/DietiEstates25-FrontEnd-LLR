@@ -24,11 +24,17 @@ const activeStep = ref(5);
 const tentativoInvio = reactive({ valore: false });
 
 const vaiAvanti = () => {
-  if (activeStep.value < 5) activeStep.value++;
+  if (activeStep.value < 6){
+    activeStep.value++;
+    window.scrollTo(0, 0);
+  }
 };
 
 const vaiIndietro = () => {
-  if (activeStep.value > 1) activeStep.value--;
+  if (activeStep.value > 1){
+    activeStep.value--;
+    window.scrollTo(0, 0);
+  } 
 };
 
 // Oggetto per contenere i riferimenti ai form
@@ -80,8 +86,6 @@ watch(activeStep, (newVal) => {
 
   <div class="flex flex-col gap-4 w-full items-center justify-center">
 
-    <h1 class="my-4 mx-4">CREAZIONE NUOVO ANNUNCIO</h1>
-
     <div
       class="justify-center border-1 border-green-300 rounded-lg p-2 bg-gray-100 my-2 mx-auto w-full md:w-3/4 lg:w-2/3 xl:w-3/4 2xl:w-4/5 flex">
 
@@ -113,37 +117,43 @@ watch(activeStep, (newVal) => {
 
         <StepPanels>
           <StepPanel class="!bg-gray-100" :value="1">
-            <Tag class="my-4">
-              <h3>Informazioni di Base</h3>
+            <Tag severity="secondary" class="my-4">
+              <h3>Annuncio: Informazioni di Base</h3>
             </Tag>
             <StepDatiIniziali class="" ref="step1" v-model:annuncio="annuncio" :tentativoInvio="tentativoInvio.valore"
               @avanti="vaiAvanti" />
           </StepPanel>
 
           <StepPanel class="!bg-gray-100" :value="2">
-            <Tag class="my-4">
-              <h3>Dettagli Annuncio</h3>
+            <Tag severity="secondary" class="my-4">
+              <h3>Annuncio: Dettagli Annuncio</h3>
             </Tag>
             <StepDatiPrincipali ref="step2" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti"
               :tentativoInvio="tentativoInvio.valore" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="4">
-            <Tag class="my-4">
-              <h3>Indirizzo e Posizione</h3>
+            <Tag severity="secondary" class="my-4">
+              <h3>Annuncio: Indirizzo e Posizione</h3>
             </Tag>
             <StepIndirizzo ref="step4" :tentativoInvio="tentativoInvio.valore" :activeStep="activeStep" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="3">
-            <Tag class="my-4">
-              <h3>Caratteristiche</h3>
+            <Tag severity="secondary" class="my-4">
+              <h3>Annuncio: Caratteristiche</h3>
             </Tag>
             <StepCaratteristiche ref="step3" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti"
               :tentativoInvio="tentativoInvio.valore" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="5">
+            <Tag severity="secondary" class="my-4">
+              <h3>Annuncio: Caricamento Immagini</h3>
+            </Tag>
             <StepImmagini v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="6">
+            <Tag severity="secondary" class="my-4">
+              <h3>Annuncio: Anteprima</h3>
+            </Tag>
             <Anteprima v-model:annuncio="annuncio" @indietro="vaiIndietro" @invia="inviaAnnuncio" />
           </StepPanel>
           </ StepPanels>
@@ -165,4 +175,5 @@ watch(activeStep, (newVal) => {
   color: red;
   font-weight: bold;
 }
+
 </style>

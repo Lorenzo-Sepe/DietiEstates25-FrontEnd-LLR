@@ -1,7 +1,5 @@
 <template>
-
-
-    <!----------------------------------------------  SEZIONE DIALOG PER GLI ALLERT ------------------------------------------------>
+    <!-------------  SEZIONE DIALOG PER GLI ALLERT ------------------------------------------------>
     <Dialog v-model:visible="loadingOperazione" header="OPERAZIONE IN CORSO" :style="{ width: 'auto' }"
         :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
         <div class="card flex justify-center">
@@ -12,7 +10,7 @@
     <Dialog v-model:visible="okAllert" header="CONFERMA OPERAZIONE" :style="{ width: 'auto' }"
         :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
         <p class="m-0">
-            Operzione conclusa con successo
+            Operazione conclusa con successo
         </p>
         <Button label="OK" @click="okAllert = false" />
     </Dialog>
@@ -25,7 +23,12 @@
         <Button label="OK" @click="erroreAllert = false" />
     </Dialog>
 
-    <!------------------------------------------------------------------------ ------------------------------------------------>
+    <Dialog v-model:visible="registrationVisible" header="REGISTRA NUOVO DIPENDENTE" :style="{ width: 'auto' }"
+        :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+        <RegisterAgentDialog @close="registrationVisible = false" />   
+    </Dialog>
+
+    <!-------------------------------------------- ------------------------------------------------>
 
     <div class="w-full flex flex-col gap-2">
 
@@ -38,7 +41,7 @@
             <Accordion v-model:activeIndex="activeIndex" :multiple="false" @update:activeIndex="onAccordionToggle"
                 expandIcon="pi pi-plus" collapseIcon="pi pi-minus">
                 <AccordionPanel class="my-2" v-for="(agente, index) in agenti" :value="index">
-                    <AccordionHeader class="!bg-gray-100 hover:bg-green-400!">
+                    <AccordionHeader class="!bg-gray-100 hover:bg-primary-400!">
                         <span class="flex items-center gap-2 w-full">
                             <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
                                 shape="circle" />
@@ -47,12 +50,15 @@
                     </AccordionHeader>
                     <AccordionContent>
                         <TabellaAnnunci :propAnnunci="annunci" :propLoading="loading" :propostaRequest="propostaRequest" :isAgente="isAgente"
-                            :agente="employeeStore.dipedenti" @nuovaProposta="aggiungiPropostaManuale"
+                            :agente="employeeStore.dipendenti" @nuovaProposta="aggiungiPropostaManuale"
                             @eliminaProposta="rifiutaProposta" @accettaProposta="accettaProposta"
                             @controproposta="controproposta" />
                     </AccordionContent>
                 </AccordionPanel>
             </Accordion>
+            
+                <Button class="mb-2" label="Aggiungi Agente" @click="registrationVisible = true" raised />
+            
         </div>
 
     </div>
@@ -68,18 +74,19 @@ import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
 import Avatar from 'primevue/avatar';
 import Dialog from 'primevue/dialog';
+import Button  from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
 
 import AreaSuperiore from '../components/PannelloStaff/AreaSuperiore.vue'
 import ScheletroListaAgenti from '../components/PannelloStaff/ScheletroListaAgenti.vue'
 import TabellaAnnunci from '../components/PannelloStaff/tabellaAnnunci.vue'
-
+import RegisterAgentDialog from '../components/Dialogs/RegisterAgentDialog.vue';
 import AnnunciService from '../services/TabellaAnnunciService';
 import PropostaService from '../services/PropostaService';
 import { FiltroAnnuncioRequest } from '../dto/FiltroAnnunciRequest';
 import { PropostaRequest } from '../dto/PropostaRequest';
 import { useEmployeeStore } from '../stores/EmployeeStore';
-import { Button } from 'primevue';
+
 
 const activeIndex = ref(null);
 const numeroAnnunci = ref(0);
@@ -89,6 +96,7 @@ const loadingListaAgenti = ref(true);
 const employeeStore = useEmployeeStore();
 const okAllert = ref(false);
 const erroreAllert = ref(false);
+const registrationVisible =ref(false);
 const loadingOperazione = ref(false);
 const agenti = ref([]);
 const isAgente = ref(false);
@@ -139,9 +147,9 @@ onMounted(async () => {
 
 });
 
-const filterAgenti = (dipedenti) => {
+const filterAgenti = (dipendenti) => {
 
-    return dipedenti ? dipedenti.filter(dipedente => dipedente.infoUtente.tipoAccount === 'AGENT') : [];
+    return dipendenti ? dipendenti.filter(dipendente => dipendente.infoUtente.tipoAccount === 'AGENT') : [];
 };
 
 const onAccordionToggle = (newIndex) => {

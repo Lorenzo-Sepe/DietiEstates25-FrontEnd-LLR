@@ -7,6 +7,7 @@ import Message from 'primevue/message';
 import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
 import ContrattoForm from './ContrattoComponet.vue';
 import { scrollToFirstError } from '../../utils/scrollToError';
+import StickyButtons from './StickyButtons.vue';
 
 const emit = defineEmits(['indietro', 'avanti']);
 
@@ -199,8 +200,10 @@ const refContratto = ref({});
       </div>
     </div>
 
-    <div class="flex justify-end pt-6">
-      <Button label="Avanti" icon="pi pi-arrow-right" iconPos="right" @click="validaEAvanza" />
-    </div>
+    <StickyButtons >
+      <div class="flex justify-end pt-6">
+        <Button label="Avanti" icon="pi pi-arrow-right" iconPos="right" @click="validaEAvanza" />
+      </div>
+    </StickyButtons>
   </div>
 </template>

@@ -39,7 +39,11 @@
             />
             <Message v-if="$form.confirmPassword?.invalid" severity="error" size="small">{{ $form.confirmPassword.error?.message }}</Message>
             
-            <Message v-if="registrationError" severity="error" size="small">{{ registrationError.response.data.toString().replace("{", "").replace("}", "") }}</Message>
+            <Message v-if="registrationError" 
+                    severity="error" 
+                    size="small">
+                    {{ registrationError?.response?.data?.message || 'Errore durante la registrazione.' }}
+                </Message>
             
             <Button type="submit" label="Registrati" :disabled="$form.$invalid" />
 
@@ -133,6 +137,7 @@ const handleRegister = async () => {
         console.log('Registrazione avvenuta con successo:', response);
         router.push({ name: 'confirmRegistration', params: { message: encodeURIComponent(response) } });
     } catch (error) {
+        registrationError.value = error;
         console.error('Registrazione fallita:', error);
     }
 };

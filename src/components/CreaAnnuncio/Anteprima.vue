@@ -4,6 +4,7 @@ import Button from 'primevue/button';
 import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
 import DettagliAnnuncio from '../DettagliAnnuncio.vue';
 import { AnnuncioImmobiliareResponse,Agente,CaratteristicheAggiuntive,Contatto,Contratto,ContrattoAffittoResponse,ContrattoVenditaResponse,DatiProponente,Immagine,Immobile,Indirizzo,Proposta } from '../../dto/Response/AnnuncioImmobiliareResponse';
+import StickyButtons from './StickyButtons.vue';
 const emit = defineEmits(['indietro', 'invia']);
 
 const props = defineProps({ 
@@ -32,7 +33,7 @@ function mappaAnnuncio(input) {
             }),
             caratteristicheAggiuntive: new CaratteristicheAggiuntive(request.immobile.caratteristicheAggiuntive),
             immagini: request.immobile.immagini.map(img => new Immagine({
-                url: img.file,
+                url: img.urlImmagineEsistente,
                 descrizione: img.descrizione
             }))
         }),
@@ -61,17 +62,15 @@ const response = computed(() => mappaAnnuncio(props.annuncio));
 
 <template>
   <div>
-    <div class="flex pt-6 justify-between">
-      <Button label="Indietro" severity="secondary" icon="pi pi-arrow-left" @click="$emit('indietro')" />
-      <Button label="stampa response on console.log" @click="console.log(response)" />
-      <Button label="Invia Annuncio" icon="pi pi-check" @click="$emit('invia')" class="p-mt-2" />
-    </div>
-    
     <DettagliAnnuncio 
-    v-model:annuncio="response"
+      v-model:annuncio="response"
     />
-  
-   
-
+    <StickyButtons>
+        <div class="flex pt-6 justify-between">
+          <Button label="Indietro" severity="secondary" icon="pi pi-arrow-left" @click="$emit('indietro')" />
+          <Button label="Invia Annuncio" icon="pi pi-check" @click="$emit('invia')" class="p-mt-2" />
+        </div>
+    </StickyButtons>
   </div>
 </template>
+

@@ -2,9 +2,9 @@
     <div class="flex flex-col items-center justify-between p-2 bg-primary-100 rounded">
         <Form v-slot="$form" :initialValues :resolver @submit="onFormSubmit" class="rounded flex flex-col gap-4 justify-center items-center p-5 fluid w-full sm:w-1/2">
             <div class="flex flex-col gap-1 fluid w-full">
-                <InputText fluid v-model="signInRequest.usernameOrEmail" name="email" type="text" placeholder="Email or Username"  />
+                <InputText fluid v-model="signInRequest.usernameOrEmail" name="email" type="text" placeholder="Email"  />
                 <Message v-if="$form.email?.invalid " severity="error" size="small" variant="simple">{{ $form.email.error?.message }}</Message>
-                    
+                
                 <Password fluid :feedback="false" v-model="signInRequest.password" name="password" placeholder="Password"  :class="{'p-invalid': errorMessage}" toggleMask/>
                 <Message v-if="$form.password?.invalid " severity="error" size="small" variant="simple">{{ $form.password.error?.message  }}</Message>
             </div>
@@ -17,14 +17,15 @@
 
 <script setup>
 import { reactive, ref, defineEmits } from 'vue';
-import AuthService from '../../services/AuthService';
+import {  useRouter } from 'vue-router'
+
 import  Message  from 'primevue/message';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
-import { Form } from '@primevue/forms';
-import {  useRouter } from 'vue-router'
-
 import  Password  from 'primevue/password';
+import { Form } from '@primevue/forms';
+
+import AuthService from '../../services/AuthService';
 
 const emit = defineEmits(["close"]);
 const router = useRouter();

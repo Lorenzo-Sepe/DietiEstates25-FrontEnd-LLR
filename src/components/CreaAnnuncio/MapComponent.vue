@@ -174,5 +174,5 @@ const forzaRidisegnoMappa = () => {
 </script>
 
 <template>
-  <div id="mappa" ref="contenitoreMappa" style="height: 400px; width: 100%;"></div>
+  <div id="mappa" ref="contenitoreMappa" class="z-1" style="height: 400px; width: 100%;"></div>
 </template>

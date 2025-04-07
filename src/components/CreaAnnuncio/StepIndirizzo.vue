@@ -40,11 +40,12 @@
           :citta="annuncio.immobile.indirizzo.citta" />
       </div>
     </div>
-
-    <div class="flex pt-6 justify-between">
-      <Button label="Indietro" severity="secondary" icon="pi pi-arrow-left" @click="$emit('indietro')" />
-      <Button label="Avanti" icon="pi pi-arrow-right" iconPos="right" @click="validaEAvanza" />
-    </div>
+    <StickyButtons>
+      <div class="flex pt-6 justify-between">
+        <Button label="Indietro" severity="secondary" icon="pi pi-arrow-left" @click="$emit('indietro')" />
+        <Button label="Avanti" icon="pi pi-arrow-right" iconPos="right" @click="validaEAvanza" />
+      </div>
+    </StickyButtons>
   </div>
 </template>
 
@@ -56,6 +57,8 @@ import Message from 'primevue/message';
 import MapComponent from './MapComponent.vue';
 import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
 import SelectComuni from './SelectComuni.vue';
+import StickyButtons from './StickyButtons.vue';
+
 import { scrollToFirstError } from '../../utils/scrollToError';
 const props = defineProps({
   annuncio: AnnuncioImmobiliareRequest,
