@@ -18,10 +18,18 @@
       </div>
     </div>
 
-    <div v-else class="contenitore-vuoto">
-      <i class="pi pi-image icona-vuota" />
-      <p class="testo-vuoto">Clicca o trascina immagini qui</p>
-    </div>
+    <div
+  v-else
+  class="contenitore-vuoto"
+  @dragover.prevent="trascinaInCorso = true"
+  @dragleave.prevent="trascinaInCorso = false"
+  @drop.prevent="gestisciTrascinamento"
+  :class="{ evidenzia: trascinaInCorso }"
+>
+  <i class="pi pi-image icona-vuota" />
+  <p class="testo-vuoto">Clicca o trascina immagini qui</p>
+</div>
+
   </div>
 </template>
 
@@ -41,7 +49,26 @@ const inputFile = ref(null);
 const apriSelettore = () => {
   inputFile.value.click();
 };
+const trascinaInCorso = ref(false);
 
+const gestisciTrascinamento = (evento) => {
+  trascinaInCorso.value = false;
+  const fileTrascinati = Array.from(evento.dataTransfer.files);
+
+  fileTrascinati.forEach(file => {
+    if (!file.type.startsWith('image/')) return; // controllo formato immagine
+
+    const lettore = new FileReader();
+    lettore.onload = (e) => {
+      const nuovaImmagine = new Immagine();
+      nuovaImmagine.file = file;
+      nuovaImmagine.urlImmagineEsistente = e.target.result;
+      nuovaImmagine.descrizione = '';
+      props.annuncio.immobile.immagini.push(nuovaImmagine);
+    };
+    lettore.readAsDataURL(file);
+  });
+};
 const onSelectedFiles = (event) => {
   const files = Array.from(event.target.files);
   files.forEach(file => {
@@ -148,6 +175,11 @@ const formatSize = (bytes) => {
 .dimensione-file {
   display: block;
 }
+.evidenzia {
+  border: 2px dashed #3f51b5;
+  background-color: #e8eaf6;
+}
+
 
 .contenitore-vuoto {
   text-align: center;
