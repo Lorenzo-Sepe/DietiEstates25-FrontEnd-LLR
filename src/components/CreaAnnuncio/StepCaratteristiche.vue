@@ -6,7 +6,7 @@ import Button from 'primevue/button';
 import Message from 'primevue/message';
 import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
 import { scrollToFirstError } from '../../utils/scrollToError';
-const emit = defineEmits(['avanti']);
+const emit = defineEmits(['indietro', 'avanti']);
 
 const props = defineProps({
   annuncio: {
