@@ -1,8 +1,8 @@
 <template>
 
-    <Select v-model="selectedCity" 
+    <Select v-model="props.tipoImmobileSelezionato" 
     :fluid="false"
-    :options="cities" 
+    :options="opzioniTipoImmobili" 
     optionLabel="name" 
     placeholder="Seleziona il tipo di immobile" 
     />
@@ -11,15 +11,17 @@
 
 <script setup>
 
-import { ref } from 'vue';
+import { ref, defineProps } from 'vue';
 import Select from 'primevue/select';
 
+const props = defineProps(['tipoImmobileSelezionato']);
 
-const selectedCity = ref();
-const cities = ref([
-   { name: 'Appartamenti' },
-   { name: 'Uffici'},
-   { name: 'Garage'}
+const opzioniTipoImmobili = ref([
+   { name: 'APPARTAMENTO' },
+   { name: 'TERRENO'},
+   { name: 'POSTOAUTO'},
+   { name: 'UFFICIO'},
+   { name: 'ALTRO'}
 ]);
 
 </script>
