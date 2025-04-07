@@ -1,5 +1,5 @@
 <template>
-    <Fluid class="card p-4 ">
+    <Fluid class="card p-4 min-w-[70vw] ">
         <h2 class="text-center">Creazione Agenzia</h2>
         <Form v-slot="$form" :initialValues="initialValues" :resolver="resolver" @submit="handleRegister" class="flex flex-col gap-4">
             <Fieldset legend="Informazioni Agenzia" >

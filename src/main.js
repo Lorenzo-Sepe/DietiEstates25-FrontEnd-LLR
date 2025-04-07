@@ -12,11 +12,17 @@ import ToastService from 'primevue/toastservice';
 import Tooltip from 'primevue/tooltip';
 import piniaPersistedState from 'pinia-plugin-persistedstate';
 import { createAuth0 } from '@auth0/auth0-vue';
-import { useConfirm } from "primevue/useconfirm";
-
 
 const app = createApp(App)
-const pinia = createPinia()
+//const pinia = createPinia()
+const pinia = createPinia();
+pinia.use(({ store }) => {
+  store.$onAction(({ name }) => {
+    console.log(`Action triggered: ${name}`);
+  });
+});
+
+app.use(pinia);
 
 
 pinia.use(piniaPersistedState); // Abilita la persistenza

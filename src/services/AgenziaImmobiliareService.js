@@ -1,7 +1,14 @@
 import { DatiAgenziaImmobiliareResponse } from "../dto/Response/DatiAgenziaImmobiliareResponse";
-import { ApiPublic } from "../api/axiosConfig";
+import { ApiPublic,ApiAgent } from "../api/axiosConfig";
 
 export default{
+    async addEmployee(credentials){
+        return ApiAgent()
+        .post('agenzia/dipendente',credentials)
+        .then((response)=> {
+            return response.data
+        })
+    },
     async registerAgency(credentials){
         console.log('register agency promise', credentials)
         return ApiPublic()
