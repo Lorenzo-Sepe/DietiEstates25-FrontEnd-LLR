@@ -1,4 +1,12 @@
 <template>
+  <Message  severity="error" variant="filled" class="mb-4 text-left">
+      <p>Verifica e correggi i seguenti errori:</p>
+      <ul class="list-disc pl-5">
+        <li v-if="errori.immagineiVuote.invalid">{{ errori.immagineiVuote.messaggio }}</li>
+        <li v-if="errori.dimensioneTotale.invalid">{{errori.dimensioneTotale.messaggio }}</li>
+        <li v-if="true ||errori.descrizioneLunga.invalid">{{ errori.descrizioneLunga.messaggio }}</li>
+      </ul>
+    </Message>
   <div class="contenitore-card">
     <!-- Barra superiore: pulsanti e messaggio info -->
     <div class="barra-superiore">
@@ -7,13 +15,13 @@
       <Button @click="pulisciTutto" icon="pi pi-trash" label="Pulisci tutto" severity="danger" outlined class="pulsante" :disabled="!annuncio.immobile.immagini.length" />
       <Message    v-if="dimensioneTotaleMB > 1" 
         severity="error" class="spazio-messaggio">
-        Utilizzo spazio immagini: {{ dimensioneTotaleMB }} MB / 1 MB
+        Utilizzo spazio immagini: {{ dimensioneTotaleMB }} MB / 10 MB
         <br>  Hai superato il limite massimo di 1 MB. Elimina alcune immagini per continuare.
 
       </Message>
       <Message v-else
       severity="info" class="spazio-messaggio">
-        Utilizzo spazio immagini: {{ dimensioneTotaleMB }} MB / 1 MB
+        Utilizzo spazio immagini: {{ dimensioneTotaleMB }} MB / 10 MB
         </Message>
 
       <Message v-if="tentativoInvio" severity="error" class="spazio-messaggio">Controlla le immagini caricate</Message>
@@ -28,7 +36,12 @@
           <Button icon="pi pi-times" severity="danger" class="bottone-rimuovi" @click="rimuoviFile(indice)" rounded text />
         </div>
         <div class="area-descrizione">
-          <InputText v-model="img.descrizione" placeholder="Inserisci una descrizione" class="campo-descrizione" />
+          <InputText v-model="img.descrizione" placeholder="Inserisci una descrizione" class="campo-descrizione" 
+          :invalid="errori.descrizione[indice]?.invalid" @input="verificaDati(indice)"
+          @blur="verificaDati(indice)" />
+          <Message v-if="errori.descrizione[indice]?.invalid" severity="error" variant="simple" size="small">
+            {{ errori.descrizione[indice].messaggio }}
+          </Message>
         </div>
         <div class="info-file">
           <span>Dimensione: {{ formattaDimensione(img.file?.size || 0) }}</span>
@@ -60,11 +73,24 @@
 </template>
 
 <script setup>
-import { ref , defineProps,computed,defineEmits,onMounted} from 'vue';
+import { ref , defineProps,computed,defineEmits,onMounted,reactive} from 'vue';
 import { Button, InputText,Message,Skeleton } from 'primevue';
 import { AnnuncioImmobiliareRequest ,Immagine} from '../../dto/RequestAnnuncio';
 import StickyButtons from './StickyButtons.vue';
 
+const errori = reactive({
+  immagineiVuote: { invalid: false, messaggio: 'Devi caricare almeno un\'immagine' },
+  dimensioneTotale: { invalid: false, messaggio: 'Le immagini caricate superano i 50 MB totali' },
+  descrizioneLunga: { invalid: false, messaggio: 'Ogni descrizione deve essere di massimo 20 caratteri' },
+  descrizione: [] // Inizializza come array vuoto
+
+});
+const verificaDati = (indice) => {
+  errori.descrizione[indice] = { invalid: false, messaggio: '' };
+  if (props.annuncio.immobile.immagini[indice].descrizione.length > 20) {
+    errori.descrizione[indice] = { invalid: true, messaggio: 'La descrizione deve essere di massimo 20 caratteri' };
+  }
+};
 const dimensioneTotaleMB = computed(() => {
   const totale = props.annuncio.immobile.immagini.reduce((acc, img) => acc + (img.file?.size || 0), 0);
   return (totale / (1024 * 1024)).toFixed(2);
@@ -113,6 +139,7 @@ const onSelectedFiles = (event) => {
       immagine.descrizione = ``;
       immagine.loading = false;
       props.annuncio.immobile.immagini.push(immagine);
+      errori.descrizione.push({ invalid: false, messaggio: '' });
       console.log('Immagini:', props.annuncio.immobile.immagini);
       
     };
@@ -213,6 +240,10 @@ const convertiImmaginiEsistenti = async () => {
 
 // Chiamata alla funzione di conversione quando il componente è montato
 onMounted(() => {
+  //per ogni elmento in immagini aggiungi il relativo campo errore
+  props.annuncio.immobile.immagini.forEach(() => {
+    errori.descrizione.push({ invalid: false, messaggio: '' });
+  });
   convertiImmaginiEsistenti();
 });
 
@@ -281,6 +312,7 @@ onMounted(() => {
 
 .area-descrizione {
   display: flex;
+  flex-direction: column;
 }
 
 .campo-descrizione {
