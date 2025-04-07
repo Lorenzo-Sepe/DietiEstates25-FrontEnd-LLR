@@ -28,7 +28,7 @@ const Api = () => {
 const ApiAgent = () => {
   const employeeStoreInstance = useEmployeeStore();
   const token = employeeStoreInstance.employee.token;
-  console.log("token:", token);
+  console.log('token',token);
 
   return axios.create({
     baseURL: BASE_URL,

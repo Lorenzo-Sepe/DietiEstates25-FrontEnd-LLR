@@ -10,6 +10,7 @@ export default {
                 return response.data;
             });
     },
+    
     login(credentials) {
         console.log('service login');
         return Api()

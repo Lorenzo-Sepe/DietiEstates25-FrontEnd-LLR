@@ -45,7 +45,6 @@ const routes = [
     props: true
   },
 
-  
   {
     path: '/PortaleAgenzia',
     name: 'PortaleAgenzia',
@@ -54,7 +53,7 @@ const routes = [
       if (isAuthenticated()) {
         next({ name: 'MieiAnnunci' }); // L'utente è loggato, vai alla pagina dei miei annunci
       } else {
-        next({ name: 'PortaleAgenziaInfo' }); // Reindirizza a una pagina informativa
+        next({ name: 'registerAgency' }); // Reindirizza a una pagina informativa
       }
     }
   },

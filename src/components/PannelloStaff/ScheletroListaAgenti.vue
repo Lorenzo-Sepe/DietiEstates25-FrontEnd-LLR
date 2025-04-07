@@ -1,6 +1,6 @@
 
 <template>
-    <div class="rounded border border-surface-200 dark:border-surface-700 p-6 bg-surface-0 dark:bg-surface-900">
+    <div class="rounded border  p-6 ">
         <ul class="m-0 p-0 list-none">
             <li class="mb-4">
                 <div class="flex">

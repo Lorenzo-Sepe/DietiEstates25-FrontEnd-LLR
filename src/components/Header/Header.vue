@@ -29,7 +29,7 @@
           <Button icon="pi pi-bars" @click="drawer = true" />
         </div>
         <Dialog v-model:visible="visible" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" modal header="Login">
-          <LoginDialog @close="closeDialog"></LoginDialog>
+          <LoginDialog :dipendente="false" @close="closeDialog"></LoginDialog>
         </Dialog>
   </div>
 </template>
