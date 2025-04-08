@@ -103,8 +103,11 @@ export class ContrattoAffittoResponse {
 export class Contratto {
     constructor(data = {}) {
         this.tipoContratto = data.tipoContratto || "";
-        this.contrattoVenditaResponse = new ContrattoVenditaResponse(data.contrattoVenditaResponse);
-        this.contrattoAffittoResponse = new ContrattoAffittoResponse(data.contrattoAffittoResponse);
+        if (data.tipoContratto === "VENDITA") {
+            this.contrattoVenditaResponse = new ContrattoVenditaResponse(data.contrattoVenditaResponse);
+        } else {
+            this.contrattoAffittoResponse = new ContrattoAffittoResponse(data.contrattoAffittoResponse);
+        }
     }
 }
 

@@ -1,37 +1,65 @@
 <template>
 
-    <div
-        class="w-[95%] h-130 lg:w-[90%] lg:h-80 flex flex-col lg:flex-row bg-white gap-2 m-auto my-2 border border-gray-200 rounded-md">
+    <div v-for="annuncio in annunci" :key="annuncio.id"
+        class="w-[95%] h-150 lg:h-80 flex flex-col lg:flex-row bg-white gap-4 m-auto border border-gray-200 rounded-md">
 
-        <div class="immagine w-full h-45 lg:w-128 lg:h-full border border-gray-200 rounded-md">
-            <img src="https://primefaces.org/cdn/primevue/images/galleria/galleria10.jpg" alt="Image"
+        <div class="immagine w-full h-45 lg:w-115 lg:h-full border border-gray-200 rounded-md">
+            <img :src="annuncio.immobile.immagini[0].url" alt="Image"
                 class="w-full h-full border border-gray-200 rounded-md" />
         </div>
 
         <div class="informazioni flex flex-col items-start w-full">
 
             <div class="tipo-immobile mt-2">
-                <Tag value="Primary">Vendita</Tag>
+                <Tag value="Primary">{{ annuncio.contratto.tipoContratto }}</Tag>
             </div>
 
             <div class="titolo h-20 mt-1">
-                <h3 class="text-xl text-green-600 hover:underline cursor-pointer">Appartamento in affitto in via Francesco Petrarca</h3>
+                <h3 class="text-xl text-green-600 hover:underline cursor-pointer">{{ annuncio.titolo }}</h3>
+                <span class="text-xs text-blue-600 underline cursor-pointer">Mostra sulla mappa</span>
             </div>
 
             <div class="prezzo mb-2">
-                <span class="font-bold text-3xl">750.000 €</span>
+                <span v-if="annuncio.contratto.tipoContratto === 'AFFITTO'" class="font-bold text-3xl">{{ annuncio.contratto.contrattoAffittoResponse.prezzoAffitto }} €/mese</span>
+                <span v-else class="font-bold text-3xl">{{ annuncio.contratto.contrattoVenditaResponse.prezzoVendita }} €</span>
+
             </div>
 
             <div class="descrizione w-full h-20">
-                <p class="text-left clamp-2-lines text-base text-gray-700 leading-relaxed">"Lorem ipsum dolor sit
-                    amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-                    in
-                    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                    non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+                <p class="text-left clamp-2-lines text-base text-gray-700 leading-relaxed">{{ annuncio.descrizione }}</p>
+            </div>
+
+            <div v-if="annuncio.immobile.indirizzo.vicinoA.length > 0" class="luoghi-di-interesse flex flex-col gap-2 items-start mt-1 w-full">
+
+                <span class="font-bold">Immobile vicino a: </span>
+
+                <div class="flex flex-col md:flex-row gap-2 w-full items-start">
+                    <Tag
+                        style="border: 2px solid var(--border-color); background: transparent; color: var(--text-color)">
+                        <div class="flex items-center gap-2 px-1">
+                            <img alt="Country" src="../../assets/Icon/autobus.png" class="flag flag-it"
+                                style="width: 18px" />
+                            <span class="text-base">Trasporti pubblici</span>
+                        </div>
+                    </Tag>
+                    <Tag
+                        style="border: 2px solid var(--border-color); background: transparent; color: var(--text-color)">
+                        <div class="flex items-center gap-2 px-1">
+                            <img alt="Country" src="../../assets/Icon/scuola.png" class="flag flag-it"
+                                style="width: 18px" />
+                            <span class="text-base">Scuole</span>
+                        </div>
+                    </Tag>
+                    <Tag
+                        style="border: 2px solid var(--border-color); background: transparent; color: var(--text-color)">
+                        <div class="flex items-center gap-2 px-1">
+                            <img alt="Country" src="../../assets/Icon/parcheggio.png" class="flag flag-it"
+                                style="width: 18px" />
+                            <span class="text-base">Parcheggi</span>
+                        </div>
+                    </Tag>
+                </div>
+
             </div>
 
         </div>
@@ -41,9 +69,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineProps } from "vue";
+
+import { AnnuncioImmobiliareResponse } from "../../dto/Response/AnnuncioImmobiliareResponse";
+
+import Galleria from '../ListaAnnunci/Galleria.vue';
 
 import Tag from 'primevue/tag';
+
+const props = defineProps({
+
+    annunci: {
+
+        type: [AnnuncioImmobiliareResponse],
+        required: true
+    }
+});
 
 </script>
 
