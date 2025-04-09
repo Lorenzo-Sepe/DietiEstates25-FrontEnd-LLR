@@ -51,12 +51,10 @@ import { Form } from '@primevue/forms';
 import InputText from 'primevue/inputtext';
 import Select from 'primevue/select';
 import Button from 'primevue/button';
-import {getDefaultAvatar} from '../../services/UserService'
 import Message from 'primevue/message';
-import AgenziaImmobiliareService from '../../services/AgenziaImmobiliareService'; '../../services/AgenziaImmobiliareService';
+import AgenziaImmobiliareService from '../../services/AgenziaImmobiliareService'; 
 
 const initialValues  = reactive({
-    fotoProfilo: '',
     nome: '',
     cognome: '',
     role: '',
@@ -94,8 +92,6 @@ const resolver = ({ values }) => {
 
 const handleRegister = async () => {
     try {
-        NewAgentRequest.value.fotoProfilo = getDefaultAvatar(NewAgentRequest.value.nome);
-        console.log(NewAgentRequest.value.fotoProfilo.value);
         const response = await AgenziaImmobiliareService.addEmployee(NewAgentRequest.value);
         console.log('Registrazione avvenuta con successo:', response);
     } catch (error) {

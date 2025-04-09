@@ -1,6 +1,6 @@
 <template>
     <RegisterAgent @close="$emit('close')" class="rounded"/>
-  </template>
+</template>
   
   <script setup>
   import RegisterAgent from '../Logins/RegisterAgent.vue'; 
