@@ -1,13 +1,13 @@
 <template>
     <AutoComplete 
     :fluid="true"  
-    v-model="selectedCountry" 
+    v-model="props.luogoCercato" 
     optionLabel="comune" :suggestions="filteredCountries" placeholder="Scrivi dove cerchi l'immobile" @complete="search" />
 </template>
 
 <script setup>
 
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineProps } from "vue";
 import AutoComplete from 'primevue/autocomplete';
 import { CountryService } from "../../services/ComuniItalianiService";
 
@@ -15,8 +15,8 @@ onMounted(() => {
     CountryService.getCountries().then((data) => (countries.value = data));
 });
 
+const props = defineProps(['luogoCercato']);
 const countries = ref();
-const selectedCountry = ref();
 const filteredCountries = ref();
 
 

@@ -9,13 +9,15 @@
 
 <script setup>
 
-import { ref } from 'vue';
+import { ref, defineProps } from 'vue';
 import Button from 'primevue/button';
 
 const severityAffitto = ref('primary');
 const severityVendita = ref('secondary');
 const variantAffitto = ref('raised');
 const variantVendita = ref('text');
+
+const props = defineProps(['contrattoSelezionato'])
 
 const toggleButtonsAffitto = () => {
 
@@ -24,6 +26,8 @@ const toggleButtonsAffitto = () => {
 
   variantAffitto.value = 'raised';
   variantVendita.value = 'text';
+
+  props.contrattoSelezionato.value = 'AFFITTO';
 };
 
 const toggleButtonsVendita = () => {
@@ -33,6 +37,8 @@ const toggleButtonsVendita = () => {
 
     variantAffitto.value = 'text';
     variantVendita.value = 'raised';
+
+    props.contrattoSelezionato.value = 'VENDITA';
 };
 
 
