@@ -75,7 +75,7 @@ const onFormSubmit = async ({ valid }) => {
     }
     
     errorMessage.value = '';
-    console.log(signInRequest.value);
+    //console.log(signInRequest.value);
     
     try {
         const response = await AuthService.login({
@@ -86,6 +86,7 @@ const onFormSubmit = async ({ valid }) => {
         loading.value = false;
         if (response.ruolo !== 'MEMBER') {
             router.push({ path: '/PortaleAgenzia/pannelloStaff' });
+            emit("close");
         }
         emit("close");
         

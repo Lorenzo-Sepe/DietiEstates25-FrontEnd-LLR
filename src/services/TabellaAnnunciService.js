@@ -1,4 +1,4 @@
-import {Api, ApiAgent} from '../api/axiosConfig'
+import {ApiAgent} from '../api/axiosConfig'
 
 export default {
 

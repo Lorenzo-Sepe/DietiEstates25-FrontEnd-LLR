@@ -1,7 +1,7 @@
 <template>
 
-    <div class="contenitore-area-superiore">
-        <div class="contenitore-foto-profilo flex items-center gap-4">
+    <div class="contenitore-area-superiore items-center flex flex-row">
+        <div class="contenitore-foto-profilo flex items-start gap-4">
             <Avatar :image="employeeStore.UrlFotoProfilo" size="xlarge"
                 shape="circle" />
             <div class="info-profilo flex flex-col">

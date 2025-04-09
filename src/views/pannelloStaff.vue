@@ -12,7 +12,7 @@
         <p class="m-0">
             Operazione conclusa con successo
         </p>
-        <Button label="OK" @click="okAllert = false" />
+        <Button  severity="contrast" label="OK" @click="okAllert = false" />
     </Dialog>
 
     <Dialog v-model:visible="erroreAllert" header="ERRORE" :style="{ width: 'auto' }"
@@ -20,7 +20,7 @@
         <p class="m-0">
             Errore di rete, riprovare più tardi.
         </p>
-        <Button label="OK" @click="erroreAllert = false" />
+        <Button label="OK" @click="erroreAllert = false" severity="contrast" />
     </Dialog>
 
     <Dialog v-model:visible="registrationVisible" header="REGISTRA NUOVO DIPENDENTE" :style="{ width: 'auto' }"
@@ -41,10 +41,15 @@
             <Accordion v-model:activeIndex="activeIndex" :multiple="false" @update:activeIndex="onAccordionToggle"
                 expandIcon="pi pi-plus" collapseIcon="pi pi-minus">
                 <AccordionPanel class="my-2" v-for="(agente, index) in agenti" :value="index">
-                    <AccordionHeader class="!bg-gray-100 hover:bg-primary-400!">
+                    <AccordionHeader class="!bg-surface-100 hover:bg-surface-300!">
                         <span class="flex items-center gap-2 w-full">
-                            <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
-                                shape="circle" />
+                            <div class="w-10 h-10 rounded-full overflow-hidden">
+                            <img
+                                :src="agente.infoUtente.urlFotoProfilo"
+                                :alt="agente.infoUtente.nomeVisualizzato"
+                                class="w-full h-full object-cover"
+                            />
+                            </div>
                             <span class="font-bold whitespace-nowrap">{{ agente.infoUtente.nomeVisualizzato }}</span>
                         </span>
                     </AccordionHeader>
@@ -57,7 +62,7 @@
                 </AccordionPanel>
             </Accordion>
             
-                <Button class="mb-2" label="Aggiungi Agente" @click="registrationVisible = true" raised />
+                <Button severity="contrast" class="mb-2" label="Aggiungi Agente" @click="registrationVisible = true" raised />
             
         </div>
 
@@ -87,7 +92,10 @@ import { FiltroAnnuncioRequest } from '../dto/FiltroAnnunciRequest';
 import { PropostaRequest } from '../dto/PropostaRequest';
 import { useEmployeeStore } from '../stores/EmployeeStore';
 
-
+const getImg = (agente) => {
+  console.log("avatar url:", agente.infoUtente.urlFotoProfilo);
+  return agente.infoUtente.urlFotoProfilo;
+};
 const activeIndex = ref(null);
 const numeroAnnunci = ref(0);
 const annunci = ref([]);
@@ -105,38 +113,30 @@ const filtroAnnunci = reactive(new FiltroAnnuncioRequest());
 const propostaRequest = reactive(new PropostaRequest());
 
 onMounted(async () => {
-
     try {
-
         await employeeStore.aggiorna();
 
     } catch (error) {
-
         console.log("errore durante l'aggiormamento dati pinia: ", error);
         return;
 
     } finally {
-
         if (employeeStore.ruolo === 'MANAGER') {
-
             agenti.value = filterAgenti(Array.from(employeeStore.employee.DatiAgenziaImmobiliare.dipendentiDettagli.values()));
             loadingListaAgenti.value = false;
 
         } else {
-
             const dettagliAgente = ref(
-
                 {
                     infoUtente: {
-
                         nomeVisualizzato: employeeStore.infoUtente.nomeVisualizzato,
                         email: employeeStore.infoUtente.email,
                         telefono: employeeStore.infoUtente.telefono,
-                        tipoAccount: employeeStore.infoUtente.tipoAccount
+                        tipoAccount: employeeStore.infoUtente.tipoAccount,
+                        urlFotoProfilo: employeeStore.infoUtente.urlFotoProfilo
                     }
                 }
             );
-
             agenti.value.push(dettagliAgente.value);
             isAgente.value = true;
             loadingListaAgenti.value = false;
@@ -154,7 +154,7 @@ const filterAgenti = (dipendenti) => {
 
 const onAccordionToggle = (newIndex) => {
     if (newIndex !== null) {
-        console.log("Dati utente:", agenti.value[newIndex].infoUtente.email);
+        //console.log("Dati utente:", agenti.value[newIndex].infoUtente.email);
         filtroAnnunci.agenteCreatoreAnnuncio = agenti.value[newIndex].infoUtente.email;
         getAnnunci();
     }
@@ -176,7 +176,6 @@ const getNumeroAnnunci = async () => {
 const getAnnunci = async () => {
 
     try {
-
         annunci.value = [{}];
         loading.value = true;
         annunci.value = await AnnunciService.getAnnunciByStaff(filtroAnnunci);
@@ -195,7 +194,6 @@ const getAnnunci = async () => {
 const aggiungiPropostaManuale = async () => {
 
     try {
-
         loadingOperazione.value = true;
         const nuovaProposta = await AnnunciService.postPropostaManuale(propostaRequest);
         loadingOperazione.value = false;
