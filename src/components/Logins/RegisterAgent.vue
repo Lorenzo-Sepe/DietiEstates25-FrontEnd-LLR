@@ -27,7 +27,7 @@
                 optionValue="code"
                 placeholder="Seleziona un Ruolo"
                 :class="{ 'p-invalid': $form.role?.invalid }"
-                v-model="initialValues.role"
+                v-model="initialValues.ruolo"
                 />
             <Message v-if="$form.role?.invalid" severity="error" size="small">{{ $form.role.error?.message }}</Message>
 
@@ -57,7 +57,7 @@ import AgenziaImmobiliareService from '../../services/AgenziaImmobiliareService'
 const initialValues  = reactive({
     nome: '',
     cognome: '',
-    role: '',
+    ruolo: '',
 });
 
 const NewAgentRequest = ref(initialValues);

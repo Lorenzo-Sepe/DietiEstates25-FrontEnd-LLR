@@ -139,6 +139,7 @@ const resolver = ({ values }) => {
     }
 
     // Controllo specifico per la partita IVA
+    values.partitaIva=values.partitaIva.replace(/\s/g, '');
     const partitaIvaPattern = /^\d{11}$/;
     if (!values.partitaIva || !partitaIvaPattern.test(values.partitaIva)) {
         errors.partitaIva = [{ message: 'La partita IVA deve essere un numero di esattamente 11 cifre.' }];
@@ -158,7 +159,8 @@ const resolver = ({ values }) => {
 
 const handleRegister = async () => {
     try {
-        console.log(AgenziaImmobiliareRequest.value)
+        AgenziaImmobiliareRequest.value.partitaIva = AgenziaImmobiliareRequest.value.partitaIva.replace(/\s/g, '');
+        console.log('Richiesta di registrazione:', AgenziaImmobiliareRequest.value);
         const response = await AgenziaImmobiliareService.registerAgency(AgenziaImmobiliareRequest.value);
         console.log('Registrazione avvenuta con successo:', response);
         router.push({ name: 'confirmRegistration' });
@@ -167,7 +169,6 @@ const handleRegister = async () => {
         console.error('Registrazione fallita:', error);
     }
 };
-
 
 </script>
 
