@@ -1,26 +1,51 @@
 <template>
 
-    <div class="w-full flex flex-row gap-2">
+    <div class="w-full h-full flex flex-col bg-gray-100">
 
-        <div class="menuLaterale w-115 h-screen p-4 overflow-y-auto hidden md:block">
-            <ContenutoMenuFiltro />
+        <div class="intestazione w-full p-4">
+            <h2>{{ numeroAnnunci }} {{ route.query.immobile }} in {{ route.query.contratto }} a {{ route.query.title }}
+            </h2>
         </div>
 
-        <div class="lista-annunci w-full bg-gray-200 flex flex-col gap-4 mt-4">
+        <div class="w-full h-full flex flex-row gap-2 mt-2">
 
-            <div class="flex border-b border-b-2 border-b-gray-400 p-4 justify-start gap-4 w-auto mb-4 block md:hidden">
-                <div class="card flex justify-center">
-                    <Drawer v-model:visible="visible" header="Filtro">
-                        <ContenutoMenuFiltro />
-                    </Drawer>
-                    <Button icon="pi pi-arrow-right" @click="visible = true" />
-                </div>
+            <div class="menuLaterale flex flex-col gap-2 w-120 h-full p-2 hidden md:block">
+
+                <ContenutoMenuFiltro />
+
             </div>
 
-            <ListaAnnunci :annunci="annunciResponse" />
+            <div class="lista-annunci w-full flex flex-col gap-4 p-2 m-auto">
 
-            <div>
-                <Paginator :rows="5" :totalRecords="numeroAnnunci"></Paginator>
+                <div class="flex flex-row border-b border-b-2 border-b-gray-400 p-4 justify-between gap-4 w-auto mb-4">
+
+                    <div class="flex justify-center block md:hidden">
+                        <Drawer v-model:visible="visible" header="Filtro">
+                            <ContenutoMenuFiltro />
+                        </Drawer>
+                        <Button icon="pi pi-arrow-right" @click="visible = true" />
+                    </div>
+
+                    <div class="filtro-ordine w-full">
+                        Ordina per:
+                    </div>
+
+                </div>
+
+                <ScheletroLista v-if="loadingAnnunci" />
+
+                <div v-else>
+                    <ListaAnnunci v-if="annunciResponse.length > 0" :annunci="annunciResponse" />
+                    <div class="w-[95%] h-150" v-else>
+                        <h3>Non sono stati trovati annunci</h3>
+                    </div>
+                </div>
+
+
+                <div>
+                    <Paginator :rows="5" :totalRecords="numeroAnnunci"></Paginator>
+                </div>
+
             </div>
 
         </div>
@@ -35,6 +60,7 @@ import { useRouter, useRoute } from 'vue-router';
 
 import ListaAnnunci from '../components/ListaAnnunci/ListaAnnunci.vue';
 import ContenutoMenuFiltro from '../components/ListaAnnunci/ContenutoMenuFiltro.vue';
+import ScheletroLista from '../components/ListaAnnunci/ScheletroLista.vue';
 import { FiltroAnnuncioRequest } from '../dto/FiltroAnnunciRequest.js';
 import { AnnuncioImmobiliareResponse } from '../dto/Response/AnnuncioImmobiliareResponse.js';
 import AnnunciImmobiliService from '../services/AnnunciImmobiliService.js';
@@ -52,7 +78,7 @@ const loadingAnnunci = ref(true);
 const numeroAnnunci = ref(0);
 const annunciResponse = ref([]);
 
-onMounted( async () => {
+onMounted(async () => {
 
     try {
 
@@ -109,7 +135,7 @@ const setFiltro = async () => {
 const setAnnunciResponse = (annunci) => {
 
     annunci.forEach(annuncio => {
-        
+
         annunciResponse.value.push(reactive(new AnnuncioImmobiliareResponse(annuncio)));
     });
 }
