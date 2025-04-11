@@ -1,7 +1,7 @@
 <template>
 
     <div v-for="annuncio in annunci" :key="annuncio.id"
-        class="w-[95%] h-150 lg:h-80 flex flex-col lg:flex-row bg-white gap-4 m-auto border border-gray-200 rounded-md">
+        class="w-[95%] h-150 lg:h-80 flex flex-col lg:flex-row bg-white gap-4 mb-4 border border-gray-200 rounded-md">
 
         <div class="immagine w-full h-45 lg:w-115 lg:h-full border border-gray-200 rounded-md">
             <img :src="annuncio.immobile.immagini[0].url" alt="Image"
@@ -10,8 +10,10 @@
 
         <div class="informazioni flex flex-col items-start w-full">
 
-            <div class="tipo-immobile mt-2">
+            <div class="tipo-immobile mt-2 p-2 flex flex-row justify-between w-full">
                 <Tag value="Primary">{{ annuncio.contratto.tipoContratto }}</Tag>
+                <span class="text-sm font-medium">Pubblicato il: {{ annuncio.dataCreazione[2] }}/{{ annuncio.dataCreazione[1] }}/{{ annuncio.dataCreazione[0] }}</span>
+
             </div>
 
             <div class="titolo h-20 mt-1">

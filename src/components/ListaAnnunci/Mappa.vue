@@ -6,7 +6,7 @@ import { useRouter, useRoute } from 'vue-router';
 
 
 
-const props = defineProps(['raggio'])
+const props = defineProps(['luogo'])
 
 const router = useRouter();
 const route = useRoute()
@@ -53,11 +53,15 @@ const inizializzaMappa = () => {
 // Aggiorna la mappa con il nuovo comune
 const aggiornaMappa = async () => {
 
-    if (route.query.lat && route.query.lon) {
+    if (props.luogo.latitudine && props.luogo.longitudine) {
 
-        istanzaMappa.value.setView([route.query.lat, route.query.lon], 17);
+        istanzaMappa.value.setView([props.luogo.latitudine, props.luogo.longitudine], 17);
 
-        disegnaConfineCircolare();
+        //disegnaConfineCircolare();
+
+        const datiConfine = await getDatiConfine()
+        const relation = convertiDatiConfineToGeoJSON(datiConfine)
+        disegnaConfine(relation)
 
     } else {
 
@@ -65,6 +69,73 @@ const aggiornaMappa = async () => {
     }
 
 };
+
+const getDatiConfine = async () => {
+
+    const overpassUrl = 'https://overpass-api.de/api/interpreter'
+    const comune = props.luogo.comune
+
+    const query = `
+                    [out:json];
+                    relation["boundary"="administrative"]["admin_level"="8"]["name"="${comune}"];
+                    out geom;
+                `
+    // Richiesta all'Overpass API
+    const response = await fetch(overpassUrl, {
+        method: 'POST',
+        body: query,
+    })
+
+    return await response.json()
+}
+
+const convertiDatiConfineToGeoJSON = (dati) => {
+
+    const relation = dati.elements.find(el => el.type === 'relation')
+    return relation
+}
+
+const disegnaConfine = (relation) => {
+
+    const geojson = {
+        type: 'Feature',
+        geometry: {
+            type: 'MultiPolygon',
+            coordinates: []
+        },
+        properties: {
+            name: props.luogo.comune,
+        }
+    }
+
+    // Estrae le coordinate
+    const coords = relation.members
+        .filter(m => m.type === 'way' && m.geometry)
+        .map(m => m.geometry.map(p => [p.lon, p.lat]))
+
+    geojson.geometry.coordinates = [coords]
+
+    // Rimuove eventuali cerchi precedenti
+    if (marcatore.value) {
+        istanzaMappa.value.removeLayer(marcatore.value);
+    }
+
+    // Disegna sulla mappa
+    marcatore.value = L.geoJSON(geojson, {
+        style: {
+            color: 'blue',
+            weight: 2,
+            fillOpacity: 0.1,
+        }
+    }).addTo(istanzaMappa.value)
+
+    const bounds = marcatore.value.getBounds();
+
+    setTimeout(() => {
+        istanzaMappa.value.invalidateSize(); // forza il ridisegno
+        istanzaMappa.value.fitBounds(bounds, { padding: [30, 30] });
+    }, 500);
+}
 
 const disegnaConfineCircolare = () => {
 
@@ -95,7 +166,7 @@ const disegnaConfineCircolare = () => {
 };
 
 // Quando cambia comune, aggiorniamo la mappa
-watch([() => props.raggio], () => {
+watch([() => props.luogo], () => {
 
     aggiornaMappa();
 });
