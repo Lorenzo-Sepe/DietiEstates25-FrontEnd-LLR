@@ -3,35 +3,40 @@
     <div v-for="annuncio in annunci" :key="annuncio.id"
         class="w-[95%] h-150 lg:h-80 flex flex-col lg:flex-row bg-white gap-4 mb-4 border border-gray-200 rounded-md">
 
-        <div class="immagine w-full h-45 lg:w-115 lg:h-full border border-gray-200 rounded-md">
-            <img :src="annuncio.immobile.immagini[0].url" alt="Image"
-                class="w-full h-full border border-gray-200 rounded-md" />
+        <div
+            class="immagine w-full h-45 lg:w-115 lg:h-full md:w-90 md:mx-auto md:mt-1 border border-gray-200 rounded-md">
+            <Galleria :immagini="annuncio.immobile.immagini" />
         </div>
 
         <div class="informazioni flex flex-col items-start w-full">
 
             <div class="tipo-immobile mt-2 p-2 flex flex-row justify-between w-full">
                 <Tag value="Primary">{{ annuncio.contratto.tipoContratto }}</Tag>
-                <span class="text-sm font-medium">Pubblicato il: {{ annuncio.dataCreazione[2] }}/{{ annuncio.dataCreazione[1] }}/{{ annuncio.dataCreazione[0] }}</span>
+                <span class="text-sm font-medium">Pubblicato il: {{ annuncio.dataCreazione[2] }}/{{
+                    annuncio.dataCreazione[1] }}/{{ annuncio.dataCreazione[0] }}</span>
 
             </div>
 
-            <div class="titolo h-20 mt-1">
-                <h3 class="text-xl text-green-600 hover:underline cursor-pointer">{{ annuncio.titolo }}</h3>
+            <div class="titolo h-20 mt-1 items-start justify-start flex flex-col w-full">
+                <span class="text-xl text-green-600 hover:underline cursor-pointer">{{ annuncio.titolo }}</span>
                 <span class="text-xs text-blue-600 underline cursor-pointer">Mostra sulla mappa</span>
             </div>
 
             <div class="prezzo mb-2">
-                <span v-if="annuncio.contratto.tipoContratto === 'AFFITTO'" class="font-bold text-3xl">{{ annuncio.contratto.contrattoAffittoResponse.prezzoAffitto }} €/mese</span>
-                <span v-else class="font-bold text-3xl">{{ annuncio.contratto.contrattoVenditaResponse.prezzoVendita }} €</span>
+                <span v-if="annuncio.contratto.tipoContratto === 'AFFITTO'" class="font-bold text-3xl">{{
+                    formattaPrezzo(annuncio.contratto.contrattoAffittoResponse.prezzoAffitto) }} €/mese</span>
+                <span v-else class="font-bold text-3xl">{{
+                    formattaPrezzo(annuncio.contratto.contrattoVenditaResponse.prezzoVendita) }} €</span>
 
             </div>
 
             <div class="descrizione w-full h-20">
-                <p class="text-left clamp-2-lines text-base text-gray-700 leading-relaxed">{{ annuncio.descrizione }}</p>
+                <p class="text-left clamp-2-lines text-base text-gray-700 leading-relaxed">{{ annuncio.descrizione }}
+                </p>
             </div>
 
-            <div v-if="annuncio.immobile.indirizzo.vicinoA.length > 0" class="luoghi-di-interesse flex flex-col gap-2 items-start mt-1 w-full">
+            <div v-if="annuncio.immobile.indirizzo.vicinoA.length > 0"
+                class="luoghi-di-interesse flex flex-col gap-2 items-start mt-1 w-full">
 
                 <span class="font-bold">Immobile vicino a: </span>
 
@@ -87,6 +92,12 @@ const props = defineProps({
         required: true
     }
 });
+
+function formattaPrezzo(prezzoStringa) {
+    // Converte in numero e formatta con separatore delle migliaia
+    return Number(prezzoStringa).toLocaleString('it-IT');
+}
+
 
 </script>
 

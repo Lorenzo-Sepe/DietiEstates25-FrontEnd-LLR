@@ -40,7 +40,7 @@ const clickCerca = () => {
     router.push({
 
          path: '/annunci', 
-         query: { ...route.query, comune: comune, immobile: tipoImmobile, contratto: tipoContratto, page: 1, lat: latitutine, lon: longitudine } 
+         query: { ...route.query, comune: comune, immobile: tipoImmobile, contratto: tipoContratto, page: 1, lat: latitutine, lon: longitudine, ordineDataDesc: true } 
         
         });
 }

@@ -2,8 +2,9 @@
 
     <div class="w-full h-full flex flex-col bg-gray-100">
 
-        <div class="intestazione w-full p-4">
-            <h2>{{ numeroAnnunci }} {{ route.query.immobile }} in {{ route.query.contratto }} a {{ route.query.comune }}
+        <div class="intestazione w-full p-4 items-start justify-start flex flex-col">
+            <h2>{{ numeroAnnunci }} {{ formattaInPlurale(route.query.immobile, numeroAnnunci) }} in {{
+                route.query.contratto }} a {{ route.query.comune }}
             </h2>
         </div>
 
@@ -30,7 +31,8 @@
                     <div class="filtro-ordine">
                         <div class="filtro-schermi-grandi hidden md:block flex flex-row justify-end">
                             <label class="text-lg font-semibold mr-2">Ordina per:</label>
-                            <SelectButton v-model="selectedOrdine" :options="opzioniDiOrdinamento" @click="setOrdineToQueryRoute" />
+                            <SelectButton v-model="selectedOrdine" :options="opzioniDiOrdinamento"
+                                @click="setOrdineToQueryRoute" />
                         </div>
                         <div class="filtro-schermi-piccolo block md:hidden flex flex-col">
                             <label class="text-lg font-semibold mb-1">Ordina per</label>
@@ -140,7 +142,7 @@ const setFiltro = async () => {
     filtroAnnunci.numeroPagina = route.query.page ? parseInt(route.query.page) : 1;
     filtroAnnunci.ordinePrezzoAsc = route.query.ordinePrezzoAsc ? route.query.ordinePrezzoAsc : false;
     filtroAnnunci.ordinePrezzoDesc = route.query.ordinePrezzoDesc ? route.query.ordinePrezzoDesc : false;
-    filtroAnnunci.ordineDataAsc = route.query.ordineDataAsc ? route.query.ordineDataAsc : true;
+    filtroAnnunci.ordineDataAsc = route.query.ordineDataAsc ? route.query.ordineDataAsc : false;
     filtroAnnunci.ordineDataDesc = route.query.ordineDataDesc ? route.query.ordineDataDesc : false;
     filtroAnnunci.tipologiaImmobile = route.query.immobile ? route.query.immobile : null;
     filtroAnnunci.tipologiaContratto = route.query.contratto ? route.query.contratto : null;
@@ -175,7 +177,7 @@ const setAnnunciResponse = (annunci) => {
 
 watch(route, (newRoute) => {
 
-    resetPage.value = Number((route.query.page)-1 || 1 - 1) * 5
+    resetPage.value = Number((route.query.page) - 1 || 1 - 1) * 5
 
     setValoreOrdineBottoni();
     mostraAnnunci();
@@ -191,7 +193,7 @@ const setValoreOrdineBottoni = () => {
         selectedOrdine.value = 'Più economici';
     } else if (route.query.ordinePrezzoDesc == 'true') {
         selectedOrdine.value = 'Meno economici';
-    }else{
+    } else {
         selectedOrdine.value = 'Più recenti';
     }
 }
@@ -265,6 +267,26 @@ const setPage = (event) => {
             page: event.page + 1
         }
     });
+}
+
+function formattaInPlurale(tipologiaImmobile, nuemroAnnunci) {
+
+    if (nuemroAnnunci == 0 || nuemroAnnunci > 1) {
+        switch (tipologiaImmobile) {
+            case 'APPARTAMENTO':
+                return 'Appartamenti';
+            case 'TERRENO':
+                return 'Terreni';
+            case 'UFFICIO':
+                return 'Uffici';
+            case 'POSTOAUTO':
+                return 'Posti auto';
+            case 'ALTRO':
+                return 'Immobili';
+            default:
+                return tipologiaImmobile;
+        }
+    }
 }
 
 </script>
