@@ -25,27 +25,14 @@ onMounted(() => {
 
 const inizializzaMappa = () => {
 
-    try {
+    if (contenitoreMappa.value) {
 
-        istanzaMappa.value = L.map('mappa').setView([41.8719, 12.5674], 6);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap',
-        }).addTo(istanzaMappa.value);
-
-    } catch (error) {
-
-        const mappaContainer = document.getElementById('mappa');
-        L.DomUtil.remove(mappaContainer)
-
-        istanzaMappa.value = L.map('mappa').setView([41.8719, 12.5674], 6);
+        istanzaMappa.value = L.map(contenitoreMappa.value).setView([40.8400998, 14.2500966], 17);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap',
         }).addTo(istanzaMappa.value);
-
     }
 
 }
@@ -174,5 +161,5 @@ watch([() => props.luogo], () => {
 </script>
 
 <template>
-    <div id="mappa" ref="contenitoreMappa" class="z-1" style="height: 100%; width: 100%;"></div>
+    <div ref="contenitoreMappa" class="z-1" style="height: 100%; width: 100%;"></div>
 </template>

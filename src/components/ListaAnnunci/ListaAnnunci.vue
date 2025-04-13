@@ -1,5 +1,16 @@
 <template>
 
+
+    <!--------------------------------------------DIALOG MAPPA----------------------------------------------------------------->
+
+    <Dialog v-model:visible="dialogMappa" modal header="MAPPA" :style="{ width: '50rem', height: '50rem' }"
+        :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+        <AnnuncioNellaMappa />
+    </Dialog>
+
+    <!-------------------------------------------------------------------------------------------------------------------------->
+
+
     <div v-for="annuncio in annunci" :key="annuncio.id"
         class="w-[95%] h-150 lg:h-80 flex flex-col lg:flex-row bg-white gap-4 mb-4 border border-gray-200 rounded-md">
 
@@ -10,7 +21,7 @@
 
         <div class="informazioni flex flex-col items-start w-full">
 
-            <div class="tipo-immobile mt-2 p-2 flex flex-row justify-between w-full">
+            <div class="contratto mt-2 p-2 flex flex-row justify-between w-full">
                 <Tag value="Primary">{{ annuncio.contratto.tipoContratto }}</Tag>
                 <span class="text-sm font-medium">Pubblicato il: {{ annuncio.dataCreazione[2] }}/{{
                     annuncio.dataCreazione[1] }}/{{ annuncio.dataCreazione[0] }}</span>
@@ -19,7 +30,8 @@
 
             <div class="titolo h-20 mt-1 items-start justify-start flex flex-col w-full">
                 <span class="text-xl text-green-600 hover:underline cursor-pointer">{{ annuncio.titolo }}</span>
-                <span class="text-xs text-blue-600 underline cursor-pointer">Mostra sulla mappa</span>
+                <span class="text-xs text-blue-600 underline cursor-pointer" @click="dialogMappa = true">Mostra sulla
+                    mappa</span>
             </div>
 
             <div class="prezzo mb-2">
@@ -81,8 +93,14 @@ import { ref, onMounted, defineProps } from "vue";
 import { AnnuncioImmobiliareResponse } from "../../dto/Response/AnnuncioImmobiliareResponse";
 
 import Galleria from '../ListaAnnunci/Galleria.vue';
+import AnnuncioNellaMappa from '../ListaAnnunci/AnnuncioNellaMappa.vue';
 
 import Tag from 'primevue/tag';
+import Dialog from 'primevue/dialog';
+
+
+const dialogMappa = ref(false);
+
 
 const props = defineProps({
 
@@ -97,7 +115,6 @@ function formattaPrezzo(prezzoStringa) {
     // Converte in numero e formatta con separatore delle migliaia
     return Number(prezzoStringa).toLocaleString('it-IT');
 }
-
 
 </script>
 
