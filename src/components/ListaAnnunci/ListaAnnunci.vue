@@ -3,7 +3,7 @@
 
     <!--------------------------------------------DIALOG MAPPA----------------------------------------------------------------->
 
-    <Dialog v-model:visible="dialogMappa" modal header="MAPPA" :style="{ width: '50rem', height: '50rem' }"
+    <Dialog v-model:visible="dialogMappa" modal header="MAPPA" :style="{ width: '50rem', height: '40rem' }"
         :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
         <AnnuncioNellaMappa />
     </Dialog>
