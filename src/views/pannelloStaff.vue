@@ -154,7 +154,7 @@ const filterAgenti = (dipendenti) => {
 
 const onAccordionToggle = (newIndex) => {
     if (newIndex !== null) {
-        //console.log("Dati utente:", agenti.value[newIndex].infoUtente.email);
+        console.log("Dati utente:", agenti.value[newIndex].infoUtente.email);
         filtroAnnunci.agenteCreatoreAnnuncio = agenti.value[newIndex].infoUtente.email;
         getAnnunci();
     }

@@ -31,7 +31,7 @@ const datiInputRicerca = {
 
 const clickCerca = () => {
 
-    const titolo = datiInputRicerca.luogoCercato.value.comune
+    const comune = datiInputRicerca.luogoCercato.value.comune
     const tipoImmobile = datiInputRicerca.tipoImmobile.value.name
     const tipoContratto = datiInputRicerca.tipoContratto.value
     const latitutine = datiInputRicerca.luogoCercato.value.latitudine
@@ -40,7 +40,7 @@ const clickCerca = () => {
     router.push({
 
          path: '/annunci', 
-         query: { ...route.query, title: titolo, immobile: tipoImmobile, contratto: tipoContratto, page: 1, raggio: 5, lat: latitutine, lon: longitudine } 
+         query: { ...route.query, comune: comune, immobile: tipoImmobile, contratto: tipoContratto, page: 1, lat: latitutine, lon: longitudine, ordineDataDesc: true } 
         
         });
 }
