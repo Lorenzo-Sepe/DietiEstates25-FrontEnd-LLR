@@ -4,7 +4,7 @@
         <ScheletroTabella v-if="props.propLoading" />
 
         <div v-else class="flex-grow">
-            <DataTable v-model:expandedRows="expandedRows" :value="props.propAnnunci" dataKey="id"
+            <DataTable v-model:expandedRows="expandedRows" :value="annunci" dataKey="id"
                 tableStyle="min-width: 100%; height: 100%;">
                 <template #header>
                     <div class="flex flex-wrap justify-end gap-2">
@@ -21,7 +21,7 @@
                 </Column>
                 <Column header="Prezzo">
                     <template #body="slotProps">
-                        <span v-if="slotProps.data.contratto.tipoDiContratto === 'vendita'">
+                        <span v-if="slotProps.data.contratto.tipoContratto === 'VENDITA'">
                             {{ slotProps.data.contratto.contrattoVenditaResponse.prezzoVendita }} €
                         </span>
                         <span v-else>
@@ -156,7 +156,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps, defineEmits } from 'vue';
+import { ref, onMounted, defineProps, defineEmits, watch } from 'vue';
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -168,6 +168,7 @@ import ScheletroTabella from '../PannelloStaff/ScheletroTabella.vue';
 const props = defineProps(['propAnnunci', 'propLoading', 'propostaRequest', 'agente', 'isAgente']);
 const emit = defineEmits(['nuovaProposta', 'eliminaProposta', 'accettaProposta', 'controproposta']);
 
+const annunci = ref([]);
 
 const expandedRows = ref([])
 
@@ -242,6 +243,10 @@ const controPropostaAbilitato = (proposta) => {
     }
 
 };
+
+watch(() => props.propAnnunci, (newAnnunci) => {
+  annunci.value = newAnnunci; // Copia "sicura"
+}, { immediate: true });
 
 </script>
 

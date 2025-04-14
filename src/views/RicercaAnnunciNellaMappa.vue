@@ -46,9 +46,20 @@ const filtroAnnunci = reactive(new FiltroAnnuncioRequest());
 const annunciResponse = ref([]);
 const loadingAnnunci = ref(false);
 
-const cercannunci = () => {
+const mostraAnnunciSullaMappa = () => {
 
+    try{
 
+    }catch (error) {
+        console.error("Errore durante la visualizzazione degli annunci sulla mappa:", error);
+    }finally{
+
+    }
+}
+
+const getAnnunci = async () => {
+
+    await AnnunciImmobiliService.getAnnunciByAnonimo(filtroAnnunci)
 }
 
 const setFiltro = async () => {
