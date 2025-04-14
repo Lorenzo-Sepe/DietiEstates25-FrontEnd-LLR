@@ -109,6 +109,12 @@ const routes = [
     component: () => import('../views/Annunci.vue')
   },
 
+  {
+    path: '/mappa-annunci',
+    name: 'mappa-annunci',
+    component: () => import('../views/RicercaAnnunciNellaMappa.vue')
+  },
+
   //ROUTE 404
   {
     path: '/:pathMatch(.*)*',

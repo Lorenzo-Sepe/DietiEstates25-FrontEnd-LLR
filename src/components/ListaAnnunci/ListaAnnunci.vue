@@ -19,7 +19,7 @@
             <Galleria :immagini="annuncio.immobile.immagini" />
         </div>
 
-        <div class="informazioni flex flex-col items-start w-full">
+        <div class="informazioni flex flex-col items-start w-full p-2">
 
             <div class="contratto mt-2 p-2 flex flex-row justify-between w-full">
                 <Tag value="Primary">{{ annuncio.contratto.tipoContratto }}</Tag>

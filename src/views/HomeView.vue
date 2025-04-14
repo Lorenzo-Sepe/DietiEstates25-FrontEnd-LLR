@@ -5,10 +5,12 @@
     <img src="/src/assets/copertina_home.png" alt="home" class="home_image" />
 
     <div class="home_ricerca">
-        <AreaRicerca/>
-        <a href="http://www.poivedremo.it" class="text-lg font-semibold text-primary-600 hover:primary-blue-800 underline decoration-2 transition duration-200 ease-in-out">
-          Oppure clicca qui per disegnare la tua zona di interesse
-        </a>
+      <AreaRicerca />
+      <span
+        class="text-lg font-semibold text-primary-600 hover:primary-blue-800 underline decoration-2 transition duration-200 ease-in-out cursor-pointer"
+        @click="vaiAllaMappa">
+        Oppure clicca qui per disegnare la tua zona di interesse
+      </span>
     </div>
 
   </div>
@@ -16,7 +18,22 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+
 import AreaRicerca from "../components/Homepage/AreaRicerca.vue"
+
+const router = useRouter();
+
+const vaiAllaMappa = () => {
+
+  router.push({
+
+    path: '/mappa-annunci',
+    query: {  immobile: 'APPARTAMENTO', contratto: 'AFFITTO' }
+
+  });
+
+};
 
 </script>
 
@@ -45,7 +62,7 @@ import AreaRicerca from "../components/Homepage/AreaRicerca.vue"
   }
 
   .home_image-container .home_image {
-    position: static; 
+    position: static;
     width: 80%;
   }
 
@@ -90,5 +107,4 @@ import AreaRicerca from "../components/Homepage/AreaRicerca.vue"
     align-items: stretch;
   }
 }
-
 </style>

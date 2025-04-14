@@ -10,13 +10,13 @@
 
         <div class="w-full h-full flex flex-row gap-2 mt-2 items-start justify-start">
 
-            <div class="menuLaterale flex flex-col gap-2 w-120 h-full p-2 hidden md:block">
+            <div class="menuLaterale flex flex-col gap-2 w-120 h-full p-2 hidden md:block mx-2">
 
                 <ContenutoMenuFiltro />
 
             </div>
 
-            <div class="lista-annunci w-full min-h-screen flex flex-col gap-4">
+            <div class="lista-annunci w-full min-h-screen md:w-[85%] lg:w-full flex flex-col gap-4">
 
                 <div
                     class="menuSuperiore flex flex-row border-b border-b-2 border-b-gray-400 p-2 gap-2 mb-4 mx-2 justify-between">
