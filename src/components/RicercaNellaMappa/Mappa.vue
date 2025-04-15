@@ -7,6 +7,11 @@ import 'leaflet-draw'; // Questo estende direttamente L
 import { useRouter, useRoute } from 'vue-router';
 
 import ProgressSpinner from 'primevue/progressspinner';
+import Tag from 'primevue/tag';
+
+import { AnnuncioImmobiliareResponse } from '../../dto/Response/AnnuncioImmobiliareResponse';
+
+import Galleria from '../ListaAnnunci/Galleria.vue'
 
 const props = defineProps(['annunci', 'loading'])
 
@@ -17,9 +22,13 @@ const contenitoreMappa = ref(null);
 const istanzaMappa = ref(null);
 const marcatore = ref(null);
 let drawCircle = null;
+const markersAnnunci = ref([]);
+const mostraPopupAnnuncio = ref(false);
+const annuncioSelezionato = ref(new AnnuncioImmobiliareResponse())
 
+import markerIconUrl from '../../assets/Icon/marker.png';
 const iconaAnnuncio = L.icon({
-    iconUrl: '../assets/Icon/marker.png',
+    iconUrl: markerIconUrl,
     iconSize: [30, 30],
     iconAnchor: [15, 30],
     popupAnchor: [0, -30],
@@ -28,6 +37,8 @@ const iconaAnnuncio = L.icon({
 onMounted(() => {
 
     inizializzaMappa();
+
+    istanzaMappa.value.on('click', onMappaClick);
 
     istanzaMappa.value.on(L.Draw.Event.CREATED, function (event) {
         const layer = event.layer;
@@ -59,6 +70,11 @@ onMounted(() => {
     });
 });
 
+const onMappaClick = () => {
+
+    mostraPopupAnnuncio.value = false;
+}
+
 
 const inizializzaMappa = () => {
 
@@ -84,12 +100,20 @@ const inizializzaMappa = () => {
 }
 
 const attivaDisegnoCerchio = () => {
+
+    // Rimuovi i vecchi marker
+    markersAnnunci.value.forEach(marker => {
+        istanzaMappa.value.removeLayer(marker);
+    });
+    markersAnnunci.value = [];
+
     if (drawCircle) {
         drawCircle.enable();
     }
 };
 
 const rimuoviCerchio = () => {
+
     if (marcatore.value) {
         istanzaMappa.value.removeLayer(marcatore.value);
         marcatore.value = null;
@@ -108,20 +132,40 @@ const rimuoviCerchio = () => {
 
 const aggiornaMarker = () => {
 
-    // Rimuovi i vecchi marker
-    markersAnnunci.value.forEach(marker => {
-        istanzaMappa.value.removeLayer(marker);
-    });
-    markersAnnunci.value = [];
+    console.log("Aggiorna marker", props.annunci);
 
-    // Aggiungi nuovi marker
-    annunci.forEach(annuncio => {
-        const marker = L.marker([annuncio.latitudine, annuncio.longitudine],{ icon: iconaAnnuncio })
-            .addTo(istanzaMappa.value)
-            .bindPopup(`<b>${annuncio.titolo}</b><br>€ ${annuncio.prezzo.toLocaleString()}`);
+    try {
 
-        markersAnnunci.value.push(marker);
-    });
+        // Rimuovi i vecchi marker
+        markersAnnunci.value.forEach(marker => {
+            istanzaMappa.value.removeLayer(marker);
+        });
+        markersAnnunci.value = [];
+
+        // Aggiungi nuovi marker
+        props.annunci.forEach(annuncio => {
+
+            const marker = L.marker([annuncio.immobile.indirizzo.latitudine, annuncio.immobile.indirizzo.longitudine], { icon: iconaAnnuncio })
+                .addTo(istanzaMappa.value)
+                .on('click', () => {
+                    console.log("Marker cliccato:", annuncio);
+                    annuncioSelezionato.value = annuncio;
+                    mostraPopupAnnuncio.value = true;
+                });
+
+            markersAnnunci.value.push(marker);
+        });
+        console.log("Markers aggiunti:", markersAnnunci.value);
+
+    } catch (error) {
+
+        console.error("Errore durante l'aggiornamento dei marker:", error);
+    }
+}
+
+function formattaPrezzo(prezzoStringa) {
+    // Converte in numero e formatta con separatore delle migliaia
+    return Number(prezzoStringa).toLocaleString('it-IT');
 }
 
 watch([() => props.annunci], () => {
@@ -133,10 +177,11 @@ watch([() => props.annunci], () => {
 
 <template>
     <div class="relative h-full w-full">
+
         <div ref="contenitoreMappa" class="z-1 h-full w-full"></div>
 
         <div v-if="props.loading" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 z-10 flex gap-2">
-            <ProgressSpinner style="width: 64px; height: 64px" strokeWidth="8" fill="transparent"
+            <ProgressSpinner style="width: 128px; height: 128x" strokeWidth="8" fill="transparent"
                 animationDuration=".5s" aria-label="Custom ProgressSpinner" />
         </div>
 
@@ -152,5 +197,32 @@ watch([() => props.annunci], () => {
             </button>
 
         </div>
+
+        <div v-if="mostraPopupAnnuncio"
+            class="dettaglio-annuncio-pupup absolute right-4 top-4 z-10 flex flex-col w-70 h-90 md:w-90 md:h-90 rounded-md bg-white items-start justify-start">
+
+            <div class="area-superiore p-2 w-full h-50 bg-gray-200 rounded-md ">
+                <Galleria :immagini="annuncioSelezionato.immobile.immagini" />
+            </div>
+
+            <div class="contratto mt-2 p-2 flex flex-row justify-between w-full">
+                <Tag value="Primary"> {{ annuncioSelezionato.contratto.tipoContratto }} </Tag>
+            </div>
+
+            <div class="titolo h-20 mt-1 p-2 items-start justify-start flex flex-col w-full">
+                <span class="text-sm text-left text-green-600 hover:underline cursor-pointer"> {{
+                    annuncioSelezionato.titolo }} </span>
+            </div>
+
+            <div class="prezzo mb-2 p-2">
+                <span v-if="annuncioSelezionato.contratto.tipoContratto === 'AFFITTO'" class="font-bold text-3xl">{{
+                    formattaPrezzo(annuncioSelezionato.contratto.contrattoAffittoResponse.prezzoAffitto) }}
+                    €/mese</span>
+                <span v-else class="font-bold text-3xl">{{
+                    formattaPrezzo(annuncioSelezionato.contratto.contrattoVenditaResponse.prezzoVendita) }} €</span>
+            </div>
+
+        </div>
+
     </div>
 </template>

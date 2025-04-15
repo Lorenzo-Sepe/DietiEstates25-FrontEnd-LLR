@@ -39,7 +39,6 @@
                     formattaPrezzo(annuncio.contratto.contrattoAffittoResponse.prezzoAffitto) }} €/mese</span>
                 <span v-else class="font-bold text-3xl">{{
                     formattaPrezzo(annuncio.contratto.contrattoVenditaResponse.prezzoVendita) }} €</span>
-
             </div>
 
             <div class="descrizione w-full h-20">
