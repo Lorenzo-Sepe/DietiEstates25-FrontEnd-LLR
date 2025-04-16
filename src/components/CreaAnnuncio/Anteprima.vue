@@ -2,7 +2,7 @@
 import { defineProps, defineEmits ,computed} from 'vue';
 import Button from 'primevue/button';
 import { AnnuncioImmobiliareRequest } from '../../dto/RequestAnnuncio';
-import DettagliAnnuncio from '../DettagliAnnuncio.vue';
+import DettagliAnnuncio from '../DettaglioAnnuncio/DettaglioAnnuncio.vue';
 import { AnnuncioImmobiliareResponse,Agente,CaratteristicheAggiuntive,Contatto,Contratto,ContrattoAffittoResponse,ContrattoVenditaResponse,DatiProponente,Immagine,Immobile,Indirizzo,Proposta } from '../../dto/Response/AnnuncioImmobiliareResponse';
 import StickyButtons from './StickyButtons.vue';
 const emit = defineEmits(['indietro', 'invia']);
@@ -55,16 +55,11 @@ function mappaAnnuncio(input) {
 }
 const response = computed(() => mappaAnnuncio(props.annuncio));
 
-
-
-
 </script>
 
 <template>
-  <div>
-    <DettagliAnnuncio 
-      v-model:annuncio="response"
-    />
+  <div class="w-full h-full">
+    <DettagliAnnuncio :annuncio="response" />
     <StickyButtons>
         <div class="flex pt-6 justify-between">
           <Button label="Indietro" severity="secondary" icon="pi pi-arrow-left" @click="$emit('indietro')" />
