@@ -1,6 +1,6 @@
 <template>
 
-    <div class="flex flex-col gap-8 w-full overflow-y-auto items-start justify-start p-2 bg-white">
+    <div class="flex flex-col gap-8 w-full md:h-100 overflow-y-auto items-start justify-start p-2 bg-white">
 
         <div class="luogo w-full">
 
@@ -146,25 +146,25 @@ const buckupSelectedImmobile = () => {
 const selectedContratto = ref(route.query.contratto);
 const opzioniContratto = ref(['AFFITTO', 'VENDITA']);
 
-const valorePrezzoMinimo = ref();
-const valorePrezzoMassimo = ref();
-const valoreMetriQuadriMinimo = ref();
-const valoreMetriQuadriMassimo = ref();
+const valorePrezzoMinimo = ref(route.query.prezzoMin);
+const valorePrezzoMassimo = ref(route.query.prezzoMax);
+const valoreMetriQuadriMinimo = ref(route.query.mqMin);
+const valoreMetriQuadriMassimo = ref(route.query.mqMax);
 const valoreDistanzaMassima = ref(5);
 
 const caratteristicheAggiuntive = ref({
 
-    balconi: false,
-    garage: false,
-    postiAuto: false,
-    giardino: false,
-    ascensore: false,
-    portiere: false,
-    riscaldamentoCentralizzato: false,
-    climatizzatori: false,
-    pannelliSolari: false,
-    cantina: false,
-    soffitta: false,
+    balconi: route.query.balconi==true || route.query.balconi=='true' ? true : false,
+    garage: route.query.garage==true || route.query.garage=='true' ? true : false,
+    postiAuto: route.query.postiAuto==true || route.query.postiAuto=='true' ? true : false,
+    giardino: route.query.giardino==true || route.query.giardino=='true' ? true : false,
+    ascensore: route.query.ascensore==true || route.query.ascensore=='true' ? true : false,
+    portiere: route.query.portiere==true || route.query.portiere=='true' ? true : false,
+    riscaldamentoCentralizzato: route.query.riscaldamentoCentralizzato==true || route.query.riscaldamentoCentralizzato=='true' ? true : false,
+    climatizzatori: route.query.climatizzatore==true || route.query.climatizzatore=='true' ? true : false,
+    pannelliSolari: route.query.pannelliSolari==true || route.query.pannelliSolari=='true' ? true : false,
+    cantina: route.query.cantina==true || route.query.cantina=='true' ? true : false,
+    soffitta: route.query.soffitta==true || route.query.soffitta=='true' ? true : false,
 })
 
 onMounted(() => {
