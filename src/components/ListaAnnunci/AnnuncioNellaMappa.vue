@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, defineProps } from 'vue';
+import { ref, onMounted, defineProps, watch } from 'vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useRouter, useRoute } from 'vue-router';
@@ -34,7 +34,7 @@ const inizializzaMappa = () => {
 
     if (contenitoreMappa.value) {
         
-        istanzaMappa.value = L.map(contenitoreMappa.value).setView([40.8400998, 14.2500966], 17);
+        istanzaMappa.value = L.map(contenitoreMappa.value).setView([props.latitudine, props.longitudine], 17);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -47,7 +47,7 @@ const inizializzaMappa = () => {
 // Aggiorna la mappa con il nuovo comune
 const aggiornaMappa = async () => {
 
-    istanzaMappa.value.setView([40.8400998, 14.2500966], 17);
+    istanzaMappa.value.setView([props.latitudine, props.longitudine], 17);
 
     localizzaImmobile();
 };
@@ -62,7 +62,7 @@ const localizzaImmobile = () => {
     }
 
     // Crea un nuovo marcatore
-    marcatore.value = L.marker([40.8400998, 14.2500966], { icon: customIcon }).addTo(istanzaMappa.value);
+    marcatore.value = L.marker([props.latitudine, props.longitudine], { icon: customIcon }).addTo(istanzaMappa.value);
 };
 
 </script>

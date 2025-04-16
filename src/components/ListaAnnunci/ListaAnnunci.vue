@@ -5,7 +5,7 @@
 
     <Dialog v-model:visible="dialogMappa" modal header="MAPPA" :style="{ width: '50rem', height: '40rem' }"
         :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-        <AnnuncioNellaMappa />
+        <AnnuncioNellaMappa :latitudine="coordinata.latitudine" :longitudine="coordinata.longitudine" />
     </Dialog>
 
     <!-------------------------------------------------------------------------------------------------------------------------->
@@ -30,7 +30,7 @@
 
             <div class="titolo h-20 mt-1 items-start justify-start flex flex-col w-full">
                 <span class="text-xl text-green-600 hover:underline cursor-pointer">{{ annuncio.titolo }}</span>
-                <span class="text-xs text-blue-600 underline cursor-pointer" @click="dialogMappa = true">Mostra sulla
+                <span class="text-xs text-blue-600 underline cursor-pointer" @click="vissualizzaPosizioneAnnuncioSuMappa(annuncio)">Mostra sulla
                     mappa</span>
             </div>
 
@@ -99,6 +99,10 @@ import Dialog from 'primevue/dialog';
 
 
 const dialogMappa = ref(false);
+const coordinata = ref({
+    latitudine: 40.8400998,
+    longitudine: 14.2500966
+});
 
 
 const props = defineProps({
@@ -113,6 +117,13 @@ const props = defineProps({
 function formattaPrezzo(prezzoStringa) {
     // Converte in numero e formatta con separatore delle migliaia
     return Number(prezzoStringa).toLocaleString('it-IT');
+}
+
+const vissualizzaPosizioneAnnuncioSuMappa = (annuncio) => {
+
+    coordinata.value.latitudine = annuncio.immobile.indirizzo.latitudine;
+    coordinata.value.longitudine = annuncio.immobile.indirizzo.longitudine;
+    dialogMappa.value = true;
 }
 
 </script>
