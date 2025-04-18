@@ -1,8 +1,8 @@
 <template>
 
-    <div class="w-[95%] p-1 lg:p-8">
+    <div class="w-full lg:w-fit p-1 lg:p-8">
         <div
-            class="card-contatti w-full h-60 shadow-[0_0_0_4px_rgba(0,0,0,0.05)] rounded-md bg-gray-100 lg:p-4 flex flex-col gap-2 items-start justify-start">
+            class="card-contatti lg:w-90 h-60 shadow-[0_0_0_4px_rgba(0,0,0,0.05)] rounded-md bg-gray-100 lg:p-4 flex flex-col gap-2 items-start justify-start">
 
             <div class="intestazione w-full border-b hidden lg:block">
                 <span class="text-xl font-bold">Contatti agente immobiliare</span>

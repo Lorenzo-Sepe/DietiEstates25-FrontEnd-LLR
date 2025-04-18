@@ -29,7 +29,7 @@
             </div>
 
             <div class="titolo h-20 mt-1 items-start justify-start flex flex-col w-full">
-                <span class="text-xl text-green-600 hover:underline cursor-pointer">{{ annuncio.titolo }}</span>
+                <span class="text-xl text-green-600 hover:underline cursor-pointer" @click="mostraDettagliAnnuncio(annuncio.id)">{{ annuncio.titolo }}"</span>
                 <span class="text-xs text-blue-600 underline cursor-pointer" @click="vissualizzaPosizioneAnnuncioSuMappa(annuncio)">Mostra sulla
                     mappa</span>
             </div>
@@ -88,6 +88,7 @@
 
 <script setup>
 import { ref, onMounted, defineProps } from "vue";
+import { useRouter } from "vue-router";
 
 import { AnnuncioImmobiliareResponse } from "../../dto/Response/AnnuncioImmobiliareResponse";
 
@@ -103,6 +104,8 @@ const coordinata = ref({
     latitudine: 40.8400998,
     longitudine: 14.2500966
 });
+
+const router = useRouter();
 
 
 const props = defineProps({
@@ -124,6 +127,12 @@ const vissualizzaPosizioneAnnuncioSuMappa = (annuncio) => {
     coordinata.value.latitudine = annuncio.immobile.indirizzo.latitudine;
     coordinata.value.longitudine = annuncio.immobile.indirizzo.longitudine;
     dialogMappa.value = true;
+}
+
+const mostraDettagliAnnuncio = (id) => {
+    router.push({
+        path: 'annuncio/' + id,
+    });
 }
 
 </script>
