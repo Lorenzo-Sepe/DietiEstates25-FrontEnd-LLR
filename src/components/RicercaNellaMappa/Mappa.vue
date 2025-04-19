@@ -168,11 +168,19 @@ function formattaPrezzo(prezzoStringa) {
     return Number(prezzoStringa).toLocaleString('it-IT');
 }
 
+const vaiAlDettaglioAnnuncio = (idAnnunciio) => {
+
+    router.push({
+
+        path: '/annuncio/' + idAnnunciio,
+    })
+}
+
+
 watch([() => props.annunci], () => {
 
     aggiornaMarker();
 });
-
 </script>
 
 <template>
@@ -210,8 +218,10 @@ watch([() => props.annunci], () => {
             </div>
 
             <div class="titolo h-20 mt-1 p-2 items-start justify-start flex flex-col w-full">
-                <span class="text-sm text-left text-green-600 hover:underline cursor-pointer"> {{
-                    annuncioSelezionato.titolo }} </span>
+                <span class="text-sm text-left text-green-600 hover:underline cursor-pointer"
+                    @click="vaiAlDettaglioAnnuncio(annuncioSelezionato.id)">
+                    {{ annuncioSelezionato.titolo }}
+                </span>
             </div>
 
             <div class="prezzo mb-2 p-2">
