@@ -13,7 +13,7 @@ import { AnnuncioImmobiliareResponse } from '../../dto/Response/AnnuncioImmobili
 
 import Galleria from '../ListaAnnunci/Galleria.vue'
 
-const props = defineProps(['annunci', 'loading'])
+const props = defineProps(['annunci', 'loading', 'filtro'])
 
 const router = useRouter();
 const route = useRoute()
@@ -56,16 +56,9 @@ onMounted(() => {
             marcatore.value = layer;
             layer.addTo(istanzaMappa.value);
 
-            router.push({
-
-                path: '/mappa-annunci',
-                query: {
-                    ...route.query,
-                    lat: latLng.lat,
-                    lon: latLng.lng,
-                    raggio: radius / 1000, // Converti il raggio in km
-                }
-            })
+            props.filtro.latCentro = latLng.lat;
+            props.filtro.lonCentro = latLng.lng;
+            props.filtro.raggioKm = radius / 1000; // Converti il raggio in km
         }
     });
 });
@@ -118,17 +111,31 @@ const rimuoviCerchio = () => {
         istanzaMappa.value.removeLayer(marcatore.value);
         marcatore.value = null;
     }
-    router.push({
 
-        path: '/mappa-annunci',
-        query: {
-            ...route.query,
-            lat: null,
-            lon: null,
-            raggio: null
-        }
-    })
+    filtroAnnunci.latCentro = null;
+    filtroAnnunci.lonCentro = null;
+    filtroAnnunci.raggioKm = null;
+
 };
+
+function ridisegnaCerchioDaFiltro() {
+    const lat = props.filtro.latCentro;
+    const lon = props.filtro.lonCentro;
+    const raggioMetri = props.filtro.raggioKm * 1000;
+
+    if (marcatore.value) {
+        istanzaMappa.value.removeLayer(marcatore.value);
+    }
+
+    const cerchio = L.circle([lat, lon], {
+        radius: raggioMetri,
+        color: 'blue',
+        fillOpacity: 0.2,
+    });
+
+    cerchio.addTo(istanzaMappa.value);
+    marcatore.value = cerchio;
+}
 
 const aggiornaMarker = () => {
 
@@ -179,8 +186,15 @@ const vaiAlDettaglioAnnuncio = (idAnnunciio) => {
 
 watch([() => props.annunci], () => {
 
+    mostraPopupAnnuncio.value = false;
+
+    if(props.filtro.latCentro && props.filtro.lonCentro && props.filtro.raggioKm) {
+        ridisegnaCerchioDaFiltro();
+    }
+    
     aggiornaMarker();
 });
+
 </script>
 
 <template>

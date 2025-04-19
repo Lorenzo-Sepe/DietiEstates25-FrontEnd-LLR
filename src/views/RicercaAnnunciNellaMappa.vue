@@ -5,7 +5,7 @@
         <div class="w-full h-full flex flex-row gap-2 my-4">
 
             <div class="filtro-laterale w-120 h-120 hidden lg:block mx-2">
-                <ContenutoMenuFiltro :filtro="filtroAnnunci" />
+                <ContenutoMenuFiltro v-if="valoriCaricati" :filtro="filtroAnnunci" />
             </div>
 
             <div class="area-centrale flex flex-col w-full gap-2">
@@ -14,11 +14,11 @@
                     <Drawer v-model:visible="drawerVisible" header="Filtro">
                         <ContenutoMenuFiltro />
                     </Drawer>
-                    <Button label="Filtro" @click="drawerVisible=true" />
+                    <Button label="Filtro" @click="drawerVisible = true" />
                 </div>
 
                 <div class="mappa w-full lg:h-120 h-100">
-                    <Mappa :annunci="annunciResponse" :loading="loadingAnnunci" />
+                    <Mappa :annunci="annunciResponse" :loading="loadingAnnunci" :filtro="filtroAnnunci" />
                 </div>
 
             </div>
@@ -26,7 +26,7 @@
         </div>
 
         <div class="area-inferiore w-full flex items-center px-8">
-            <Button @click="mostraAnnunciSullaMappa" class="w-full" label="Vedi risultati" />
+            <Button @click="setQueryRoute" class="w-full" label="Vedi risultati" />
         </div>
 
     </div>
@@ -52,18 +52,62 @@ const filtroAnnunci = reactive(new FiltroAnnuncioRequest());
 const annunciResponse = ref([]);
 const loadingAnnunci = ref(false);
 const drawerVisible = ref(false);
+const valoriCaricati = ref(false);
 
 const router = useRouter();
 const route = useRoute()
+
+onMounted(() => {
+
+    setFiltro();
+
+    valoriCaricati.value = true;
+
+});
+
+const setFiltro = () => {
+
+    //Caratteristiche principali
+    filtroAnnunci.tipologiaImmobile = route.query.immobile ? route.query.immobile : null;
+    filtroAnnunci.tipologiaContratto = route.query.contratto ? route.query.contratto : null;
+    filtroAnnunci.prezzoMin = route.query.prezzoMin ? parseInt(route.query.prezzoMin) : null;
+    filtroAnnunci.prezzoMax = route.query.prezzoMax ? parseInt(route.query.prezzoMax) : null;
+    filtroAnnunci.metriQuadriMin = route.query.mqMin ? parseInt(route.query.mqMin) : null;
+    filtroAnnunci.metriQuadriMax = route.query.mqMax ? parseInt(route.query.mqMax) : null;
+
+    //Caratteristiche aggiuntive
+    filtroAnnunci.balconi = route.query.balconi == true || route.query.balconi == 'true' ? true : null
+    filtroAnnunci.garage = route.query.garage == true || route.query.garage == 'true' ? true : null
+    filtroAnnunci.postiAuto = route.query.postiAuto == true || route.query.postiAuto == 'true' ? true : null
+    filtroAnnunci.giardino = route.query.giardino == true || route.query.giardino == 'true' ? true : null
+    filtroAnnunci.ascensore = route.query.ascensore == true || route.query.ascensore == 'true' ? true : null
+    filtroAnnunci.portiere = route.query.portiere == true || route.query.portiere == 'true' ? true : null
+    filtroAnnunci.riscaldamentoCentralizzato = route.query.riscaldamento == true || route.query.riscaldamento == 'true' ? true : null
+    filtroAnnunci.climatizzatori = route.query.climatizzatore == true || route.query.climatizzatore == 'true' ? true : null
+    filtroAnnunci.pannelliSolari = route.query.pannelliSolari == true || route.query.pannelliSolari == 'true' ? true : null
+    filtroAnnunci.cantina = route.query.cantina == true || route.query.cantina == 'true' ? true : null
+    filtroAnnunci.soffitta = route.query.soffitta == true || route.query.soffitta == 'true' ? true : null
+
+    //Localizzazione
+    filtroAnnunci.latCentro = route.query.lat ? parseFloat(route.query.lat) : null;
+    filtroAnnunci.lonCentro = route.query.lon ? parseFloat(route.query.lon) : null;
+    filtroAnnunci.raggioKm = route.query.raggio ? parseFloat(route.query.raggio) : null;
+
+    //Tutti gli annunci
+    filtroAnnunci.numeroPagina = null;
+    filtroAnnunci.numeroDiElementiPerPagina = null;
+}
 
 const mostraAnnunciSullaMappa = async () => {
 
     try {
 
+        console.log("Filtro annunci: ", filtroAnnunci);
         loadingAnnunci.value = true;
-        setFiltro();
         const annunci = await AnnunciImmobiliService.getAnnunciByAnonimo(filtroAnnunci)
         setAnnunciResponse(annunci)
+        console.log("resposne: ", annunci)
+        console.log("annunciResponse: ", annunciResponse)
 
     } catch (error) {
 
@@ -75,42 +119,35 @@ const mostraAnnunciSullaMappa = async () => {
     }
 }
 
-const getAnnunci = async () => {
+const setQueryRoute = () => {
 
-    await AnnunciImmobiliService.getAnnunciByAnonimo(filtroAnnunci)
-}
+    const query = {
 
-const setFiltro = () => {
+        immobile: filtroAnnunci.tipologiaImmobile ? filtroAnnunci.tipologiaImmobile : null,
+        contratto: filtroAnnunci.tipologiaContratto ? filtroAnnunci.tipologiaContratto : null,
+        prezzoMin: filtroAnnunci.prezzoMin ? filtroAnnunci.prezzoMin : null,
+        prezzoMax: filtroAnnunci.prezzoMax ? filtroAnnunci.prezzoMax : null,
+        mqMin: filtroAnnunci.metriQuadriMin ? filtroAnnunci.metriQuadriMin : null,
+        mqMax: filtroAnnunci.metriQuadriMax ? filtroAnnunci.metriQuadriMax : null,
 
-    //Immobile
-    filtroAnnunci.tipologiaImmobile = route.query.immobile ? route.query.immobile : null;
-    filtroAnnunci.tipologiaContratto = route.query.contratto ? route.query.contratto : null;
-    filtroAnnunci.prezzoMin = route.query.prezzoMin ? parseInt(route.query.prezzoMin) : null;
-    filtroAnnunci.prezzoMax = route.query.prezzoMax ? parseInt(route.query.prezzoMax) : null;
-    filtroAnnunci.metriQuadriMin = route.query.mqMin ? parseInt(route.query.mqMin) : null;
-    filtroAnnunci.metriQuadriMax = route.query.mqMax ? parseInt(route.query.mqMax) : null;
+        balconi: filtroAnnunci.balconi ? true : false,
+        garage: filtroAnnunci.garage ? true : false,
+        postiAuto: filtroAnnunci.postiAuto ? true : false,
+        giardino: filtroAnnunci.giardino ? true : false,
+        ascensore: filtroAnnunci.ascensore ? true : false,
+        portiere: filtroAnnunci.portiere ? true : false,
+        riscaldamento: filtroAnnunci.riscaldamentoCentralizzato ? true : false,
+        climatizzatore: filtroAnnunci.climatizzatori ? true : false,
+        pannelliSolari: filtroAnnunci.pannelliSolari ? true : false,
+        cantina: filtroAnnunci.cantina ? true : false,
+        soffitta: filtroAnnunci.soffitta ? true : false,
 
-    //Caratteristiche aggiuntive
-    filtroAnnunci.balconi = route.query.balconi ? route.query.balconi : null;
-    filtroAnnunci.garage = route.query.garage ? route.query.garage : null;
-    filtroAnnunci.postiAuto = route.query.postiAuto ? route.query.postiAuto : null;
-    filtroAnnunci.giardino = route.query.giardino ? route.query.giardino : null;
-    filtroAnnunci.ascensore = route.query.ascensore ? route.query.ascensore : null;
-    filtroAnnunci.portiere = route.query.portiere ? route.query.portiere : null;
-    filtroAnnunci.riscaldamentoCentralizzato = route.query.riscaldamento ? route.query.riscaldamento : null;
-    filtroAnnunci.climatizzatori = route.query.climatizzatore ? route.query.climatizzatore : null;
-    filtroAnnunci.pannelliSolari = route.query.pannelli ? route.query.pannelli : null;
-    filtroAnnunci.cantina = route.query.cantina ? route.query.cantina : null;
-    filtroAnnunci.soffitta = route.query.soffitta ? route.query.soffitta : null;
+        lat: filtroAnnunci.latCentro ? filtroAnnunci.latCentro : null,
+        lon: filtroAnnunci.lonCentro ? filtroAnnunci.lonCentro : null,
+        raggio: filtroAnnunci.raggioKm ? filtroAnnunci.raggioKm : null,
+    }
 
-    //Localizzazione
-    filtroAnnunci.latCentro = route.query.lat ? parseFloat(route.query.lat) : null;
-    filtroAnnunci.lonCentro = route.query.lon ? parseFloat(route.query.lon) : null;
-    filtroAnnunci.raggioKm = route.query.raggio ? parseFloat(route.query.raggio) : null;
-
-    //Tutti gli annunci
-    filtroAnnunci.numeroPagina = null;
-    filtroAnnunci.numeroDiElementiPerPagina = null;
+    router.push({ query });
 }
 
 const setAnnunciResponse = (annunci) => {
@@ -123,5 +160,14 @@ const setAnnunciResponse = (annunci) => {
     });
 }
 
+watch(() => route.query, () => {
+
+    setFiltro();
+
+    if(route.query.lat && route.query.lon && route.query.raggio){
+        mostraAnnunciSullaMappa()
+    }
+
+}, { immediate: true });
 
 </script>
