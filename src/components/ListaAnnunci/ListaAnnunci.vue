@@ -29,7 +29,7 @@
             </div>
 
             <div class="titolo h-20 mt-1 items-start justify-start flex flex-col w-full">
-                <span class="text-xl text-green-600 hover:underline cursor-pointer" @click="mostraDettagliAnnuncio(annuncio.id)">{{ annuncio.titolo }}"</span>
+                <span class="text-xl text-green-600 hover:underline cursor-pointer" @click="mostraDettagliAnnuncio(annuncio.id)">{{ annuncio.titolo }}</span>
                 <span class="text-xs text-blue-600 underline cursor-pointer" @click="vissualizzaPosizioneAnnuncioSuMappa(annuncio)">Mostra sulla
                     mappa</span>
             </div>

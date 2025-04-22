@@ -4,12 +4,17 @@
         class="w-full h-100 overflow-y-auto shadow-[0_0_0_4px_rgba(0,0,0,0.05)] rounded-md bg-gray-100 lg:p-4 flex flex-col gap-2 items-start justify-start">
 
 
-        <div class="w-full p-4">
-            <Button class="w-full" label="Fai la tua proposta" @click="mostraDialogFormProposta=true" />
-            <Dialog v-model:visible="mostraDialogFormProposta" modal header="FORM NUOVA PROPOSTA" :style="{ width: '30rem' }"
-                :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-                <FormNuovaProposta />
+        <div  v-if="mostraButtonNuovaProposta" class="w-full p-4">
+            <Button class="w-full" label="Fai la tua proposta" @click="mostraDialogFormProposta = true" />
+            <Dialog v-model:visible="mostraDialogFormProposta" modal header="FORM NUOVA PROPOSTA"
+                :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+                <FormNuovaProposta :prezzo="prezzoImmobile" @inviaNuovaProposta="inviaNuovaProposta" />
             </Dialog>
+        </div>
+
+        <div v-else class="w-full p-4">
+            <span>Accedi per poter fare la tua proposta</span>
+            <Button label="Accedi" />
         </div>
 
         <Accordion value="0" class="accordiations w-full">
@@ -64,7 +69,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps, defineEmits, watch } from 'vue';
+import { ref, onMounted, defineProps, defineEmits } from 'vue';
+
+import { useStoreUtente } from '../../stores/UserStore.js'
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -78,10 +85,49 @@ import Dialog from 'primevue/dialog';
 
 import FormNuovaProposta from '../../components/DettaglioAnnuncio/FormNuovaProposta.vue';
 
-const props = defineProps(['proposte'])
+const userStore = useStoreUtente()
+
+const props = defineProps(['proposte', 'contratto'])
+const emit = defineEmits(['inviaNuovaProposta']);
 
 const mostraDialogFormProposta = ref(false);
 
+const mostraButtonNuovaProposta = ref(false);
+
+const prezzoImmobile = ref(0);
+
+
+onMounted( async () => {
+
+    setPrezzoImmobile();
+
+    try{
+
+        await userStore.aggiorna();
+        
+    }catch (error) {
+
+        console.error('Errore durante aggiornamento di userStore:', error);
+    }finally {
+
+        if(!userStore.isTokenScaduto()) {
+
+            mostraButtonNuovaProposta.value = true;
+        }
+    }
+});
+
+const setPrezzoImmobile = () => {
+
+    if(props.contratto.tipoContratto==="AFFITTO"){
+
+        prezzoImmobile.value = props.contratto.contrattoAffittoResponse.prezzoAffitto;
+
+    }else{
+
+        prezzoImmobile.value = props.contratto.contrattoVenditaResponse.prezzoVendita;
+    }
+};
 
 const filterProposteAccettate = (proposte) => {
 
@@ -97,5 +143,11 @@ const filterProposteInTrattativa = (proposte) => {
 
     return proposte ? proposte.filter(proposta => proposta.stato === 'IN_TRATTAZIONE') : [];
 };
+
+const inviaNuovaProposta = (prezzo) => {
+
+    console.log("arrivo quiiiii",prezzo);
+    emit('inviaNuovaProposta', prezzo);
+}
 
 </script>

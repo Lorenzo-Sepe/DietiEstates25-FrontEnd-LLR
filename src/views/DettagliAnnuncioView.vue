@@ -1,22 +1,25 @@
 <template>
 
-  <DettagliAnnuncio :annuncio="annuncioResponse" />
+  <DettagliAnnuncio :annuncio="annuncioResponse" :propostaRequest="propostaRequest" @inviaNuovaProposta="inviaNuovaProposta" />
 
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { AnnuncioImmobiliareResponse } from '../dto/Response/AnnuncioImmobiliareResponse.js';
+import {PropostaRequest} from './../dto/PropostaRequest.js';
+
 import AnnunciImmobiliService from '../services/AnnunciImmobiliService.js';
+import PropostaService from '../services/PropostaService.js';
 
 import DettagliAnnuncio from '../components/DettaglioAnnuncio/DettaglioAnnuncio.vue';
 
 const route = useRoute();
 
 const annuncioResponse = ref(null);
-const mostraDialogCardAgente = ref(false);
+const propostaRequest = reactive(new PropostaRequest());
 
 onMounted(async () => {
 
@@ -26,9 +29,11 @@ onMounted(async () => {
 
 });
 
-function formattaPrezzo(prezzoStringa) {
-  // Converte in numero e formatta con separatore delle migliaia
-  return Number(prezzoStringa).toLocaleString('it-IT');
+const inviaNuovaProposta = () => {
+
+  console.log("emit emesso:::::", propostaRequest)
+
 }
+
 
 </script>

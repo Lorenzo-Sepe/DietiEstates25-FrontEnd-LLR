@@ -105,7 +105,7 @@
                         </AccordionContent>
                     </AccordionPanel>
 
-                    <AccordionPanel value="2" class="contratto">
+                    <AccordionPanel value="2" class="contratto mt-2">
                         <AccordionHeader>CONDIZIONI CONTRATTUALI</AccordionHeader>
                         <AccordionContent>
                             <div v-if="props.annuncio.contratto.tipoContratto === 'AFFITTO'"
@@ -174,7 +174,7 @@
             </div>
 
             <div class="area-proposte w-full flex flex-col gap-2  p-2 mx-auto">
-                <TabellaProposte :proposte="props.annuncio.proposte" />
+                <TabellaProposte :proposte="props.annuncio.proposte" :contratto="props.annuncio.contratto" @inviaNuovaProposta="inviaNuovaProposta" />
             </div>
 
         </div>
@@ -188,7 +188,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps, computed } from 'vue';
+import { ref, onMounted, defineProps, defineEmits } from 'vue';
 import { useRoute } from 'vue-router';
 
 import Galleria from '../../components/DettaglioAnnuncio/Galleria.vue';
@@ -203,10 +203,12 @@ import AccordionContent from 'primevue/accordioncontent';
 import Tag from 'primevue/tag';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
+import { PropostaRequest } from '../../dto/PropostaRequest';
 
 const route = useRoute();
 
-const props = defineProps(['annuncio']);
+const props = defineProps(['annuncio','propostaRequest']);
+const emit = defineEmits(['inviaNuovaProposta']);
 
 const mostraDialogCardAgente = ref(false);
 const mostraDialogProposte = ref(false);
@@ -229,6 +231,12 @@ onMounted(() => {
 function formattaPrezzo(prezzoStringa) {
     // Converte in numero e formatta con separatore delle migliaia
     return Number(prezzoStringa).toLocaleString('it-IT');
+}
+
+const inviaNuovaProposta = () => {
+
+    props.propostaRequest.annuncioId = props.annuncio.id;
+    emit('inviaNuovaProposta');
 }
 
 </script>

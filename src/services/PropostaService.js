@@ -30,6 +30,16 @@ export default {
             .then((response) => {
                 return response.data;
             })
+    },
+
+    inviaNuovaProposta(propostaRequest){
+
+        return ApiAgent()
+        .post('proposta/',propostaRequest)
+        .then((response) => {
+            return response.data;
+        })
+
     }
 
 };
