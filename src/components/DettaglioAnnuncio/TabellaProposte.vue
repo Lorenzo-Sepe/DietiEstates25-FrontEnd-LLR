@@ -8,7 +8,7 @@
             <Button class="w-full" label="Fai la tua proposta" @click="mostraDialogFormProposta = true" />
             <Dialog v-model:visible="mostraDialogFormProposta" modal header="FORM NUOVA PROPOSTA"
                 :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-                <FormNuovaProposta :prezzo="prezzoImmobile" @inviaNuovaProposta="inviaNuovaProposta" />
+                <FormNuovaProposta :prezzo="prezzoImmobile" :propostaRequest="props.propostaRequest" @inviaNuovaProposta="inviaNuovaProposta" />
             </Dialog>
         </div>
 
@@ -29,7 +29,7 @@
                             <Column field="datiProponente.cognome" header="Cognome" sortable></Column>
                             <Column field="prezzoProposta" header="Proposta" sortable>
                                 <template #body="slotProps">
-                                    <span :class="{ 'line-through': slotProps.data.controproposta !== null }">
+                                    <span :class="{ 'line-through': slotProps.data.controproposta !== 0 }">
                                         {{ slotProps.data.prezzoProposta }}
                                     </span>
                                 </template>
@@ -87,7 +87,7 @@ import FormNuovaProposta from '../../components/DettaglioAnnuncio/FormNuovaPropo
 
 const userStore = useStoreUtente()
 
-const props = defineProps(['proposte', 'contratto'])
+const props = defineProps(['proposte', 'contratto', 'propostaRequest']);
 const emit = defineEmits(['inviaNuovaProposta']);
 
 const mostraDialogFormProposta = ref(false);
@@ -144,10 +144,9 @@ const filterProposteInTrattativa = (proposte) => {
     return proposte ? proposte.filter(proposta => proposta.stato === 'IN_TRATTAZIONE') : [];
 };
 
-const inviaNuovaProposta = (prezzo) => {
+const inviaNuovaProposta = () => {
 
-    console.log("arrivo quiiiii",prezzo);
-    emit('inviaNuovaProposta', prezzo);
+    emit('inviaNuovaProposta');
 }
 
 </script>

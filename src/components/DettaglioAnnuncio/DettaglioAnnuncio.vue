@@ -174,7 +174,10 @@
             </div>
 
             <div class="area-proposte w-full flex flex-col gap-2  p-2 mx-auto">
-                <TabellaProposte :proposte="props.annuncio.proposte" :contratto="props.annuncio.contratto" @inviaNuovaProposta="inviaNuovaProposta" />
+                <TabellaProposte :proposte="props.annuncio.proposte" 
+                :contratto="props.annuncio.contratto" 
+                :propostaRequest="props.propostaRequest"
+                @inviaNuovaProposta="inviaNuovaProposta" />
             </div>
 
         </div>
@@ -203,7 +206,6 @@ import AccordionContent from 'primevue/accordioncontent';
 import Tag from 'primevue/tag';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
-import { PropostaRequest } from '../../dto/PropostaRequest';
 
 const route = useRoute();
 
@@ -226,6 +228,7 @@ const isAnnuncioCompleto = (annuncio) => {
 onMounted(() => {
 
     console.log('figlio annuncio:', props.annuncio);
+   
 });
 
 function formattaPrezzo(prezzoStringa) {
@@ -235,7 +238,6 @@ function formattaPrezzo(prezzoStringa) {
 
 const inviaNuovaProposta = () => {
 
-    props.propostaRequest.annuncioId = props.annuncio.id;
     emit('inviaNuovaProposta');
 }
 

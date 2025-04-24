@@ -6,11 +6,11 @@
             <div class="flex flex-col gap-2 my-2">
                 <div class="flex flex-col my-2">
                     <label for="Contatto" class="font-bold block mb-2"> Nome </label>
-                    <InputText id="contatto" v-model="contatto" :invalid="errori.contatto.invalido" />
+                    <InputText id="contatto" v-model="nome" :invalid="errori.contatto.invalido" />
                 </div>
                 <div class="flex flex-col my-2">
                     <label for="Contatto" class="font-bold block mb-2"> Cognome </label>
-                    <InputText id="contatto" v-model="contatto" :invalid="errori.contatto.invalido" />
+                    <InputText id="contatto" v-model="cognome" :invalid="errori.contatto.invalido" />
                 </div>
                 <div class="flex flex-col my-2">
                     <label for="TipoContatto" class="font-bold block mb-2"> Tipo contatto </label>
@@ -49,18 +49,18 @@ import Select from 'primevue/select';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 
-const props = defineProps(['prezzo']);
+const props = defineProps(['prezzo','propostaRequest']);
 const emit = defineEmits(['inviaNuovaProposta']);
 
 const selectedTipoContatto = ref(null);
 const tipiContatto = ref([
-    { name: 'Cellulare', code: 'cell' },
-    { name: 'Email', code: 'email' },
-    { name: 'Facebook', code: 'fb' },
-    { name: 'Instagram', code: 'ins' },
-    { name: 'Telegram', code: 'tel' }
+    { name: 'TELEFONO', code: 'cell' },
+    { name: 'EMAIL', code: 'email' },
+    { name: 'MESSAGGIO', code: 'fb' },
 ]);
 const contatto = ref('');
+const nome = ref('');
+const cognome = ref('');
 
 const proposta = ref(0);
 
@@ -92,7 +92,12 @@ const clickEffettuaProposta = () => {
 
         errori.prezzo.invalido = false;
         errori.prezzo.messaggio = '';
-        emit('inviaNuovaProposta', proposta.value);
+        props.propostaRequest.nome = nome.value;
+        props.propostaRequest.cognome = cognome.value;
+        props.propostaRequest.prezzo = proposta.value;
+        props.propostaRequest.tipoContatto = selectedTipoContatto.value.name;
+        props.propostaRequest.informazioniContatto = contatto.value;
+        emit('inviaNuovaProposta');
     }
 }
 

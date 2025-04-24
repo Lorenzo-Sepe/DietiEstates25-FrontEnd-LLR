@@ -1,6 +1,7 @@
 <template>
 
-  <DettagliAnnuncio :annuncio="annuncioResponse" :propostaRequest="propostaRequest" @inviaNuovaProposta="inviaNuovaProposta" />
+  <DettagliAnnuncio :annuncio="annuncioResponse" :propostaRequest="propostaRequest"
+    @inviaNuovaProposta="inviaNuovaProposta" />
 
 </template>
 
@@ -9,7 +10,7 @@ import { ref, reactive, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { AnnuncioImmobiliareResponse } from '../dto/Response/AnnuncioImmobiliareResponse.js';
-import {PropostaRequest} from './../dto/PropostaRequest.js';
+import { PropostaRequest } from './../dto/PropostaRequest.js';
 
 import AnnunciImmobiliService from '../services/AnnunciImmobiliService.js';
 import PropostaService from '../services/PropostaService.js';
@@ -29,11 +30,22 @@ onMounted(async () => {
 
 });
 
-const inviaNuovaProposta = () => {
+const inviaNuovaProposta = async () => {
 
+  propostaRequest.annuncioId = route.params.id;
   console.log("emit emesso:::::", propostaRequest)
 
+  try {
+
+    await PropostaService.inviaNuovaProposta(propostaRequest)
+    console.log('Proposta inviata con successo:');
+
+  } catch (error) {
+    console.error('Errore durante l\'invio della proposta:', error);
+  }
+
 }
+
 
 
 </script>
