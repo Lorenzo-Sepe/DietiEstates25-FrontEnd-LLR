@@ -1,20 +1,25 @@
 <template>
 
+    <Dialog v-model:visible="visibleLoginDialog" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+        modal header="Login">
+        <LoginDialog :dipendente="false" @close="closeDialog"></LoginDialog>
+    </Dialog>
+
     <div
         class="w-full h-100 overflow-y-auto shadow-[0_0_0_4px_rgba(0,0,0,0.05)] rounded-md bg-gray-100 lg:p-4 flex flex-col gap-2 items-start justify-start">
 
-
-        <div  v-if="mostraButtonNuovaProposta" class="w-full p-4">
+        <div v-if="mostraButtonNuovaProposta" class="w-full p-4">
             <Button class="w-full" label="Fai la tua proposta" @click="mostraDialogFormProposta = true" />
             <Dialog v-model:visible="mostraDialogFormProposta" modal header="FORM NUOVA PROPOSTA"
                 :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-                <FormNuovaProposta :prezzo="prezzoImmobile" :propostaRequest="props.propostaRequest" @inviaNuovaProposta="inviaNuovaProposta" />
+                <FormNuovaProposta :prezzo="prezzoImmobile" :propostaRequest="props.propostaRequest"
+                    @inviaNuovaProposta="inviaNuovaProposta" />
             </Dialog>
         </div>
 
-        <div v-else class="w-full p-4">
-            <span>Accedi per poter fare la tua proposta</span>
-            <Button label="Accedi" />
+        <div v-else class="w-full p-4 flex flex-col gap-2 items-center justify-center">
+            <span class="text-xl font-bold">Accedi per poter fare la tua proposta</span>
+            <Button class="w-full" label="Accedi" @click="visibleLoginDialog=true"  @close="visibleLoginDialog=false" />
         </div>
 
         <Accordion value="0" class="accordiations w-full">
@@ -84,6 +89,7 @@ import AccordionContent from 'primevue/accordioncontent';
 import Dialog from 'primevue/dialog';
 
 import FormNuovaProposta from '../../components/DettaglioAnnuncio/FormNuovaProposta.vue';
+import LoginDialog from '../Dialogs/LoginDialog.vue';
 
 const userStore = useStoreUtente()
 
@@ -96,21 +102,23 @@ const mostraButtonNuovaProposta = ref(false);
 
 const prezzoImmobile = ref(0);
 
+const visibleLoginDialog = ref(false);
 
-onMounted( async () => {
+
+onMounted(async () => {
 
     setPrezzoImmobile();
 
-    try{
+    try {
 
         await userStore.aggiorna();
-        
-    }catch (error) {
+
+    } catch (error) {
 
         console.error('Errore durante aggiornamento di userStore:', error);
-    }finally {
+    } finally {
 
-        if(!userStore.isTokenScaduto()) {
+        if (!userStore.isTokenScaduto()) {
 
             mostraButtonNuovaProposta.value = true;
         }
@@ -119,11 +127,11 @@ onMounted( async () => {
 
 const setPrezzoImmobile = () => {
 
-    if(props.contratto.tipoContratto==="AFFITTO"){
+    if (props.contratto.tipoContratto === "AFFITTO") {
 
         prezzoImmobile.value = props.contratto.contrattoAffittoResponse.prezzoAffitto;
 
-    }else{
+    } else {
 
         prezzoImmobile.value = props.contratto.contrattoVenditaResponse.prezzoVendita;
     }
