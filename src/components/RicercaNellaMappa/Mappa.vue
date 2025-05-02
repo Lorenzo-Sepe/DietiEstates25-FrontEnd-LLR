@@ -176,11 +176,8 @@ function formattaPrezzo(prezzoStringa) {
 }
 
 const vaiAlDettaglioAnnuncio = (idAnnunciio) => {
-
-    router.push({
-
-        path: '/annuncio/' + idAnnunciio,
-    })
+    const url = window.location.origin + '/annuncio/' + idAnnunciio;
+    window.open(url, '_blank');
 }
 
 
