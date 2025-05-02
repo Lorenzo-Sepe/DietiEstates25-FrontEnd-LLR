@@ -104,7 +104,7 @@ const mostraAnnunciSullaMappa = async () => {
 
         console.log("Filtro annunci: ", filtroAnnunci);
         loadingAnnunci.value = true;
-        const annunci = await AnnunciImmobiliService.getAnnunciByAnonimo(filtroAnnunci)
+        const annunci = await AnnunciImmobiliService.getAnnunci(filtroAnnunci)
         setAnnunciResponse(annunci)
         console.log("resposne: ", annunci)
         console.log("annunciResponse: ", annunciResponse)

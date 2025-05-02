@@ -9,11 +9,18 @@ export const useStoreUtente = defineStore('utente', {
     utente: {
       email: '',
       token: '',
-      Info: new UserInfoResponse() // Assicurati che sia una classe valida o sostituiscila con un oggetto vuoto {}
+      Info: new UserInfoResponse()
     }
   }),
   getters: {
-    isAutenticato: (state) => !isTokenScaduto(),
+    isAutenticato: (state) => {
+      try {
+        return !state.isTokenScaduto();
+      } catch (error) {
+        console.error("Errore durante la verifica dell'autenticazione:", error);
+        return false; // Restituisce false in caso di errore
+      }
+    },
     datiUtente: (state) => state.utente.Info,
     UrlFotoProfilo: (state) => {
       // Controlla se l'URL della foto del profilo è disponibile

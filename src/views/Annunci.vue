@@ -134,7 +134,7 @@ const getAnnunci = async () => {
 
     setFiltro();
 
-    return AnnunciImmobiliService.getAnnunciByAnonimo(filtroAnnunci);
+    return AnnunciImmobiliService.getAnnunci(filtroAnnunci);
 }
 
 const setFiltro = async () => {
