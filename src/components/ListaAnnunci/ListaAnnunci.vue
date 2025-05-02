@@ -23,8 +23,7 @@
 
             <div class="contratto mt-2 p-2 flex flex-row justify-between w-full">
                 <Tag value="Primary">{{ annuncio.contratto.tipoContratto }}</Tag>
-                <span class="text-sm font-medium">Pubblicato il: {{ annuncio.dataCreazione[2] }}/{{
-                    annuncio.dataCreazione[1] }}/{{ annuncio.dataCreazione[0] }}</span>
+                <span class="text-sm font-medium">Pubblicato: {{ formattaDataUmana(annuncio.dataPubblicazione) }}</span>
 
             </div>
 
@@ -121,6 +120,59 @@ function formattaPrezzo(prezzoStringa) {
     // Converte in numero e formatta con separatore delle migliaia
     return Number(prezzoStringa).toLocaleString('it-IT');
 }
+function formattaDataUmana(dataInput) {
+  const now = new Date();
+  let data;
+  try{
+       data = new Date(dataInput);
+
+  }catch (error) {
+      console.error('Errore nella conversione della data:', error);
+      console.log('Data di input:', dataInput);
+      console.warn('setto come data input la data attuale:', typeof dataInput);
+        data = now;
+    }
+
+
+  const diffMs = now - data;
+  if (diffMs < 0) {
+    // Data futura, puoi adattare se vuoi
+    return data.toLocaleDateString('it-IT', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  }
+
+  const diffSeconds = Math.floor(diffMs / 1000);
+  if (diffSeconds < 1) {
+    return 'adesso';
+  }
+  if (diffSeconds < 60) {
+    return diffSeconds + (diffSeconds === 1 ? ' secondo fa' : ' secondi fa');
+  }
+
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  if (diffMinutes < 60) {
+    return diffMinutes + (diffMinutes === 1 ? ' minuto fa' : ' minuti fa');
+  }
+
+  const diffHours = Math.floor(diffMinutes / 60);
+  if (diffHours < 24) {
+    return diffHours + (diffHours === 1 ? ' ora fa' : ' ore fa');
+  }
+
+  const diffDays = Math.floor(diffHours / 24);
+  if (diffDays < 7) {
+    return diffDays + (diffDays === 1 ? ' giorno fa' : ' giorni fa');
+  }
+
+  const diffWeeks = Math.floor(diffDays / 7);
+  if (diffWeeks < 4) {
+    return diffWeeks + (diffWeeks === 1 ? ' settimana fa' : ' settimane fa');
+  }
+
+  // Se oltre un mese, ritorna la data precisa in italiano
+  return data.toLocaleDateString('it-IT', { year: 'numeric', month: '2-digit', day: '2-digit' });
+}
+
+
 
 const vissualizzaPosizioneAnnuncioSuMappa = (annuncio) => {
 
@@ -130,9 +182,8 @@ const vissualizzaPosizioneAnnuncioSuMappa = (annuncio) => {
 }
 
 const mostraDettagliAnnuncio = (id) => {
-    router.push({
-        path: 'annuncio/' + id,
-    });
+    const url = window.location.origin + '/annuncio/' + id;
+    window.open(url, '_blank');
 }
 
 </script>

@@ -1,3 +1,5 @@
+import { date } from "@primeuix/themes/aura/datepicker";
+
 export class Contatto {
     constructor(data = {}) {
         this.tipo = data.tipo || "";
@@ -114,7 +116,7 @@ export class Contratto {
 export class AnnuncioImmobiliareResponse {
     constructor(data = {}) {
         this.id = data.id || 0;
-        this.dataCreazione = data.dataCreazione || null;
+        this.dataPubblicazione = data.dataPubblicazione || null;
         this.titolo = data.titolo || "";
         this.descrizione = data.descrizione || "";
         this.agente = new Agente(data.agente);
