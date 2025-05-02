@@ -61,7 +61,6 @@
 <script setup>
 import { ref ,watch} from 'vue';
 import AuthService from '../services/AuthService';
-import { useUserStore } from '../stores/UserStore'; // Assicurati di avere il percorso corretto
 import Skeleton from 'primevue/skeleton';
 import { useRouter } from 'vue-router';
 import { useAuth0 } from '@auth0/auth0-vue';
@@ -70,7 +69,6 @@ import AllertMessageDialogDialog from '../components/Dialogs/AllertMessageDialog
 
 const { idTokenClaims,user } = useAuth0();
 
-const userStoreInstance = useUserStore();
 const router = useRouter();
 const message = ref('')
 const visible = ref(false)
