@@ -58,7 +58,8 @@
             <div class="flex md:hidden border-1 border-gray-500 rounded-lg p-4 justify-center gap-4 w-auto">
                 <MenuCategoriaSuperiore :categorie="categorieNotifiche"  @modificaSottoscrizioni="modificaSottoscrizioni" />
             </div>
-            <ListaNotifiche :notifiche="notifiche" @visualizzaNotifica="visualizzaNotifica" />
+            <span v-if="numeroNotifche<1" class="text-2xl">Non hai ricevuto nessuna notifica</span>
+            <ListaNotifiche v-else :notifiche="notifiche" @visualizzaNotifica="visualizzaNotifica" />
             <div class="mt-auto">
                 <Paginator :rows="5" :totalRecords="numeroNotifche" @page="onPage"></Paginator>
             </div>
