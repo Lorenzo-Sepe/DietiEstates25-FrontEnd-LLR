@@ -23,6 +23,8 @@
 
             <Password 
                 fluid 
+                :mediumRegex="mediumRegex"
+                :strongRegex="strongRegex"
                 v-model="initialValues.password" 
                 name="password" 
                 placeholder="Password" 
@@ -32,6 +34,7 @@
 
             <Password 
                 fluid 
+                :feedback="false"
                 v-model="initialValues.confirmPassword" 
                 name="passwordConfirm" 
                 placeholder="Ripeti Password" 
@@ -88,6 +91,8 @@ import AuthService from '../../services/AuthService';
 import  Dialog  from 'primevue/dialog';
 import PasswordConfirmationDialog from '../Dialogs/PasswordConfirmationDialog.vue';
 
+const mediumRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!?\-_]).{8,11}$/;
+const strongRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$£%^&+=!?\-_]).{12,16}$/;
 
 const router = useRouter();
 
@@ -116,7 +121,7 @@ const resolver = ({ values }) => {
         errors.nomeVisualizzato = [{ message: 'Nome deve avere tra 3 e 20 caratteri.' }];
     }
 
-    const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$£%^&+=!]).{8,16}$/;
+    const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$£%^&+=!?\-_]).{8,16}$/;
     if (!passwordPattern.test(values.password)) {
         errors.password = [{ message: 'La password deve avere tra 8 e 16 caratteri e includere almeno un numero, una lettera maiuscola, una lettera minuscola e un simbolo.' }];
     }

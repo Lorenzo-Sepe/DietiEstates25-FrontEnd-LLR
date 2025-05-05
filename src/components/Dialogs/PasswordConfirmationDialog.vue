@@ -6,12 +6,17 @@
               class="flex flex-col gap-4">
 
               <FormField v-slot="$field" name="password" initialValue="" class="flex flex-col gap-1">
-                <Password fluid v-model="localPassword" placeholder="Inserisci la tua password" />
+                <Password 
+                    fluid 
+                    :mediumRegex="mediumRegex"
+                    :strongRegex="strongRegex"
+                    v-model="localPassword" 
+                    placeholder="Inserisci la tua password" />
                 <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{ $field.error?.message }}</Message>
               </FormField>
 
               <FormField v-slot="$field" name="confirmPassword" initialValue="" class="flex flex-col gap-1">
-                <Password fluid v-model="localConfirmPassword" placeholder="Conferma la tua password" />
+                <Password fluid v-model="localConfirmPassword" :feedback="false" placeholder="Conferma la tua password" />
                 <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{ $field.error?.message }}</Message>
               </FormField>
             <Button label="Conferma" type="submit" :disabled="$form.$invalid"/>
@@ -32,6 +37,10 @@ import { useRouter } from 'vue-router';
 
 const emit = defineEmits(['close']);
 
+const mediumRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!?\-_]).{8,11}$/;
+const strongRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$£%^&+=!?\-_]).{12,16}$/;
+
+
 const { loginWithPopup, user } = useAuth0();
 const router = useRouter();
 
@@ -46,7 +55,7 @@ const localConfirmPassword = ref('');
 const resolver = ({ values }) => {
     const errors = {};
 
-    const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$£%^&+=!]).{8,16}$/;
+    const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$£%^&+=!?\-_]).{8,16}$/;
     if (!passwordPattern.test(values.password)) {
         errors.password = [{ message: 'La password deve avere tra 8 e 16 caratteri e includere almeno un numero, una lettera maiuscola, una lettera minuscola e un simbolo.' }];
     }

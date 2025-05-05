@@ -6,6 +6,7 @@ import PrimeVue from "primevue/config"
 import MyPreset from './themes/myPreset'
 import router from './router'
 import 'primeicons/primeicons.css'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 import ConfirmationService from 'primevue/confirmationservice'
 import DialogService from 'primevue/dialogservice'
 import ToastService from 'primevue/toastservice';
