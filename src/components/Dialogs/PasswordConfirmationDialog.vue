@@ -1,111 +1,163 @@
 <template>
-       <Form v-slot="$form" 
-              :resolver 
-              :validate-on-blur
-              @submit="confirmPasswordAction" 
-              class="flex flex-col gap-4">
+    <div v-if="stato === 'caricamento'" class="text-center p-6">
+        <p class="text-lg font-semibold mb-2">
+            {{ props.modalita === 'registrazione' ? 'Preparazione registrazione...' : 'Accesso in corso...' }}
+        </p>
+        <p class="text-gray-500">
+            Attendi mentre completiamo {{ props.modalita === 'registrazione' ? 'la registrazione' : "l'accesso" }} con
+            {{ providerNames[props.currentProvider] }}.
+        </p>
+    </div>
+    <div v-else-if="stato === 'verifica'" class="text-center p-6">
+  <p class="text-lg font-semibold mb-2">
+    Verifica account...
+  </p>
+  <p class="text-gray-500">
+    Controlliamo se esiste un account collegato a <strong>{{ utente?.email || 'la tua email' }}</strong>.
+  </p>
+</div>
 
-              <FormField v-slot="$field" name="password" initialValue="" class="flex flex-col gap-1">
-                <Password 
-                    fluid 
-                    :mediumRegex="mediumRegex"
-                    :strongRegex="strongRegex"
-                    v-model="localPassword" 
-                    placeholder="Inserisci la tua password" />
-                <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{ $field.error?.message }}</Message>
-              </FormField>
+    <div v-else-if="stato === 'pronto'">
+        <div class="text-center mb-4">
+            <p class="text-xl font-semibold">Ciao {{ utente?.name || 'utente' }}</p>
+            <p class="text-gray-600 mt-1">Stai creando un account con l'email: <strong>{{ utente?.email }}</strong></p>
+            <p class="text-gray-500 mt-2">Imposta una password per completare la registrazione.</p>
+        </div>
+          <ModuloPassword @submit="completaRegistrazione" />
+    </div>
+    <div v-else-if="stato === 'esistente'" class="text-center p-6">
+        <p class="text-xl font-semibold">Bentornato {{ utente?.name || 'utente' }} 👋</p>
+        <p class="text-gray-600 mt-2">
+            Hai già un account associato all'email <strong>{{ utente?.email }}</strong>.
+        </p>
+        <p class="text-gray-500 mt-2">Verrai reindirizzato alla home. Vuoi procedere?</p>
+        <Button class="mt-4" label="Vai alla home" @click="vaiAllaHome" />
+    </div>
+    <div v-else-if="stato === 'offriRegistrazione'" class="text-center p-6">
+        <p class="text-xl font-semibold">Account non trovato</p>
+        <p class="text-gray-600 mt-2">
+            Non esiste alcun account associato all'email <strong>{{ utente?.email }}</strong>.
+        </p>
+        <p class="text-gray-500 mt-2">Imposta una password per completare la registrazione.</p>
+        <ModuloPassword @submit="completaRegistrazione" />
 
-              <FormField v-slot="$field" name="confirmPassword" initialValue="" class="flex flex-col gap-1">
-                <Password fluid v-model="localConfirmPassword" :feedback="false" placeholder="Conferma la tua password" />
-                <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{ $field.error?.message }}</Message>
-              </FormField>
-            <Button label="Conferma" type="submit" :disabled="$form.$invalid"/>
-        </Form>
- 
+    </div>
+
+    <div v-else-if="stato === 'errore'" class="text-center p-6 text-red-600">
+        <p class="font-semibold">Si è verificato un errore durante il login.</p>
+        <p>Riprova o contatta il supporto.</p>
+    </div>
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue';
-import { Form ,FormField} from '@primevue/forms';
-
-import Password from 'primevue/password';
+import { ref, onMounted } from 'vue';
+import ModuloPassword from './ModuloPassword.vue';
 import Button from 'primevue/button';
-import Message from 'primevue/message';
 import AuthService from '../../services/AuthService';
 import { useAuth0 } from '@auth0/auth0-vue';
 import { useRouter } from 'vue-router';
 
-const emit = defineEmits(['close']);
 
-const mediumRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!?\-_]).{8,11}$/;
-const strongRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$£%^&+=!?\-_]).{12,16}$/;
-
-
-const { loginWithPopup, user } = useAuth0();
+const { loginWithPopup, user, idTokenClaims } = useAuth0();
 const router = useRouter();
+const emit = defineEmits(['close']);
 
 const props = defineProps({
     currentProvider: String,
+    modalita: {
+        type: String,
+        default: 'registrazione', // 'login' o 'registrazione'
+    }
 });
 
 
-const localPassword = ref('');
-const localConfirmPassword = ref('');
-
-const resolver = ({ values }) => {
-    const errors = {};
-
-    const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$£%^&+=!?\-_]).{8,16}$/;
-    if (!passwordPattern.test(values.password)) {
-        errors.password = [{ message: 'La password deve avere tra 8 e 16 caratteri e includere almeno un numero, una lettera maiuscola, una lettera minuscola e un simbolo.' }];
-    }
-
-    if (values.password !== values.confirmPassword) {
-        errors.confirmPassword = [{ message: 'Le password non corrispondono.' }];
-    }
-
-    return {
-        errors
-    };
+const providerNames = {
+    'google-oauth2': 'Google',
+    'facebook': 'Facebook',
+    'github': 'GitHub',
 };
 
-const confirmPasswordAction = () => {
-    const validationResult = resolver({ values: { password: localPassword.value, confirmPassword: localConfirmPassword.value } });
-    
-    if (Object.keys(validationResult.errors).length > 0) {
-        // Gestisci gli errori di validazione qui, ad esempio mostrando un messaggio all'utente
-        console.error('Errori di validazione:', validationResult.errors);
-        return; // Non procedere se ci sono errori
-    }
+const stato = ref('caricamento'); // può essere: 'caricamento', 'pronto', 'errore'
 
-    handleLogin(props.currentProvider);
-   
+const utente = ref(null); // Per visualizzare il nome utente
+
+const ruoloLogin=ref('')
+
+const vaiAllaHome = () => {
+    emit('close');
+    reindirizza(ruoloLogin.value);
 };
 
-const handleLogin = async (provider) => {
+onMounted(async () => {
     try {
         await loginWithPopup({
             authorizationParams: {
                 screen_hint: 'signup',
-                connection: provider,
-                scope: 'openid profile email'
-            }
+                connection: props.currentProvider,
+                scope: 'openid profile email',
+            },
         });
 
-        const response = await AuthService.register({
-            username: user.value.email,
-            email: user.value.email,
-            nomeVisualizzato: user.value.name,
-            password: localPassword.value
+        utente.value = user.value;
+        stato.value = 'verifica';
+
+        try {
+            const response= await AuthService.loginIdProvvider(idTokenClaims.value.__raw);
+
+            if (props.modalita === 'registrazione') {
+                // Caso limite: utente esiste già ma ha cliccato "Registrati"
+                ruoloLogin.value=response.ruolo;
+                stato.value = 'esistente';
+            } else {
+                // Accesso riuscito, vai subito alla home
+                emit('close');
+                reindirizza(response.ruolo);
+            }
+
+        } catch (erroreLogin) {
+            if (erroreLogin.response?.status === 404) {
+                if (props.modalita === 'login') {
+                    // L'utente ha provato ad accedere ma non esiste offri la possibilità di registrarsi
+                    stato.value = 'offriRegistrazione';
+                } else {
+                    stato.value = 'pronto'; // procedi normale con registrazione
+                }
+            } else {
+                stato.value = 'errore';
+                emit('close', erroreLogin);
+            }
+        }
+    } catch (errore) {
+        stato.value = 'errore';
+        emit('close', errore);
+    }
+});
+
+
+const completaRegistrazione = async ({ password, confermaPassword }) => {
+    try {
+        const risposta = await AuthService.register({
+            email: utente.value.email,
+            nomeVisualizzato: utente.value.name,
+            password: password,
         });
-        router.push({ name: 'confirmRegistration', params: { message: encodeURIComponent(response)} });
-    } catch (error) {
-        console.error('Login fallito:', error);
-        emit('close', error); // Passa l'errore al genitore
+
+        console.log('Registrazione avvenuta con successo:', risposta);
+        // Reindirizza alla home o mostra un messaggio di successo
+        emit('close', risposta);
+        reindirizza(risposta.ruolo)
+    } catch (errore) {
+        console.error('Errore nella registrazione:', errore);
+        emit('close', errore);
     }
 };
-</script>
 
-<style>
-/* Aggiungi eventuali stili personalizzati qui */
-</style> 
+function reindirizza(ruolo){
+    console.log("Reindirizzamentoooooooooooooooooooooooo");
+    if(ruolo === 'MEMBER'){
+            router.push({ path: '/' });
+          }else{
+                router.push({ path: '/PortaleAgenzia' });
+            }           
+}
+</script>

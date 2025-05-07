@@ -69,7 +69,7 @@
         </Form>
     </div>
     
-    <Dialog v-model:visible="showDialog" :style="{ width: '50vw' }" modal header="Inserire la password per questo account">
+    <Dialog v-model:visible="showDialog" :style="{ width: '50vw' }" modal header="Completa la registrazione" :closable>
         <PasswordConfirmationDialog 
             @close="handleDialogClose" 
             :showDialog="showDialog" 
