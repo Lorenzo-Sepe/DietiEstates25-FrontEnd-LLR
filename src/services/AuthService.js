@@ -30,14 +30,6 @@ export default {
 
         })
     },
-    registerIdProvvider(credentials){
-        return Api()
-        .post('pb/auth/registerIdProv',credentials)
-        .then((response)=> {
-            console.log('Id provvider success,',response);
-            return response.data;
-        })
-    },
     logout() {
         return Api()
             .post('auth/logout')
