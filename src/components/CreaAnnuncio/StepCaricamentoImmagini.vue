@@ -165,7 +165,6 @@ const formattaDimensione = (byte) => {
 };
 
 
-
 // Funzione per creare un oggetto File da un URL base64
 function creaFileDaUrl(base64, nomeFile) {
   return new Promise((resolve, reject) => {
