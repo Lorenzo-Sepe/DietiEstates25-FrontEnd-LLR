@@ -38,12 +38,7 @@ const routes = [
     component: () => import('../views/AgencyRegistrationView.vue')
     
   },
-  {
-    path: '/confirm-registration/',
-    name: 'confirmRegistration',
-    component: () => import('../components/Logins/ConfirmRegistration.vue'),
-    props: true
-  },
+ 
 
   {
     path: '/PortaleAgenzia',
