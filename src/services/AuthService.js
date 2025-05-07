@@ -7,7 +7,7 @@ export default {
         return Api()
             .post('pb/auth/signup', credentials) 
             .then((response) => {
-                return response.data;
+                return setUser(response.data);
             });
     },
     
