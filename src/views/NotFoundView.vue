@@ -8,16 +8,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import  Button from 'primevue/button';
-import logo from '../assets/Icon/icona.svg'; // Assicurati che il percorso sia corretto
+import { ref } from "vue";
+import Button from "primevue/button";
+import logo from "../assets/Icon/icona.svg"; // Assicurati che il percorso sia corretto
 
 const logoRef = ref(logo);
 
 const goHome = () => {
   // Reindirizza alla home
   const router = useRouter();
-  router.push('/');
+  router.push("/");
 };
 </script>
 

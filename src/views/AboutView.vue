@@ -3,11 +3,12 @@
     <h1>Chi Siamo</h1>
     <div class="content">
       <p>
-        Benvenuti nella nostra pagina "Chi Siamo". Siamo un'azienda dedicata 
-        all'innovazione e alla creazione di soluzioni tecnologiche all'avanguardia.
+        Benvenuti nella nostra pagina "Chi Siamo". Siamo un'azienda dedicata
+        all'innovazione e alla creazione di soluzioni tecnologiche
+        all'avanguardia.
       </p>
       <p>
-        La nostra missione è fornire servizi di alta qualità e soluzioni 
+        La nostra missione è fornire servizi di alta qualità e soluzioni
         innovative per soddisfare le esigenze dei nostri clienti.
       </p>
     </div>

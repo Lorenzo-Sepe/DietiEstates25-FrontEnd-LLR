@@ -1,41 +1,41 @@
-import axios from 'axios';
-import { useEmployeeStore } from '../stores/EmployeeStore.js';
-import { useStoreUtente } from '../stores/UserStore.js';
+import axios from "axios";
+import { useEmployeeStore } from "../stores/EmployeeStore.js";
+import { useStoreUtente } from "../stores/UserStore.js";
 // Definisci l'URL di base come costante
-const BASE_URL = 'http://localhost:8081/api/';
+const BASE_URL = "http://localhost:8081/api/";
 const TIMEOUT = 90000; // Timeout per Api e ApiPublic
 const AGENT_TIMEOUT = 9000; // Timeout specifico per ApiAgent
 
 // Crea un'istanza di Axios con la configurazione base
 const Api = () => {
   const store = useStoreUtente();
-  const token= store.utente.token;
-  console.log('token API',token);
+  const token = store.utente.token;
+  console.log("token API", token);
 
   return axios.create({
     baseURL: BASE_URL,
     timeout: TIMEOUT,
     withCredentials: true,
     headers: {
-      'Content-Type': 'application/json',
-      ...(token && { Authorization: `Bearer ${token}` })
-    }
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
   });
 };
 
 const ApiAgent = () => {
   const employeeStoreInstance = useEmployeeStore();
   const token = employeeStoreInstance.employee.token;
-  console.log('token',token);
+  console.log("token", token);
 
   return axios.create({
     baseURL: BASE_URL,
     timeout: AGENT_TIMEOUT,
     withCredentials: true,
     headers: {
-      'Content-Type': 'application/json',
-      ...(token && { Authorization: `Bearer ${token}` })
-    }
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
   });
 };
 
@@ -45,8 +45,8 @@ const ApiPublic = () => {
     baseURL: BASE_URL,
     timeout: TIMEOUT,
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   });
 };
 

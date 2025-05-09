@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@theme{
+@theme {
   --color-primary-50: oklch(97.16% 0.019 161.52);
   --color-primary-100: oklch(92.87% 0.044 161.47);
   --color-primary-200: oklch(85.02% 0.098 161.48);
@@ -69,7 +69,7 @@ h4 {
 
 h5 {
   display: block;
-  font-size: .83em;
+  font-size: 0.83em;
   margin-top: 1.67em;
   margin-bottom: 1.67em;
   margin-left: 0;
@@ -79,7 +79,7 @@ h5 {
 
 h6 {
   display: block;
-  font-size: .67em;
+  font-size: 0.67em;
   margin-top: 2.33em;
   margin-bottom: 2.33em;
   margin-left: 0;
@@ -95,8 +95,6 @@ p {
   margin-left: 0;
   margin-right: 0;
 }
-
-
 
 #app {
   max-width: 100%;
@@ -114,4 +112,3 @@ body {
 .bg-primary-400 {
   background-color: var(--color-primary-400);
 }
-
