@@ -30,11 +30,7 @@ const payload = {
   oggetto: "Test",
   criteridiRicerca: {
     areaDiInteresse: "Napoli",
-    tipoDiContrattoDiInteresse: "AFFITTO",
-    tipologiaDiImmobileDiInteresse: "TERRENO",
-    budgetMin: 0,
-    budgetMax: 0,
-    intervallogiorniStoricoRicerca: 0
+    intervallogiorniStoricoRicerca: 70
   }
 }
 
