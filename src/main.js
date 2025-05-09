@@ -45,7 +45,7 @@ app.use(
         domain: 'dev-16vw3v8k1jpn1obn.us.auth0.com',
         clientId: 'XVNwEJow6VjIO56oApqlTYeeyt8pgzvI',
         authorizationParams: {
-            redirect_uri: window.location.origin + '/callback',
+            redirect_uri: window.location.origin + '/',
         },
     })
 );

@@ -1,8 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 // Simulazione di un sistema di autenticazione
+const isAuthenticatedMember = () => {
+  return true; // Esempio semplice
+}
+const isAuthenticatedEmployee = () => {
+  return true; // Esempio semplice
+}
+//TODO ELIMARE ED USARE QUELLA PIU SPECIFICA
 const isAuthenticated = () => {
-  return false; // Esempio semplice
+  return true; // Esempio semplice
 }
 
 // Definisci le tue rotte
@@ -33,7 +40,7 @@ const routes = [
     component: () => import('../views/RegistrationView.vue')
   },
   {
-    path: '/register-agency',
+    path: '/PortaleAgenzia/register-agency',
     name: 'registerAgency',
     component: () => import('../views/AgencyRegistrationView.vue')
     
@@ -45,7 +52,7 @@ const routes = [
     name: 'PortaleAgenzia',
     component: () => import('../views/PortaleAgenzia.vue'),
     beforeEnter: (to, from, next) => {
-      if (isAuthenticated()) {
+      if (isAuthenticatedEmployee()) {
         next({ name: 'MieiAnnunci' }); // L'utente è loggato, vai alla pagina dei miei annunci
       } else {
         next({ name: 'registerAgency' }); // Reindirizza a una pagina informativa
@@ -60,7 +67,7 @@ const routes = [
   {
     path: '/PortaleAgenzia/miei-annunci',
     name: 'MieiAnnunci',
-    component: () => import('../views/MieiAnnunci.vue'), // Pagina dei miei annunci
+    component: () => import('../views/pannelloStaff.vue'), // Pagina dei miei annunci
     beforeEnter: (to, from, next) => {
       if (isAuthenticated()) {
         next(); // L'utente è loggato, consenti l'accesso
@@ -92,11 +99,6 @@ const routes = [
     component: () => import('../views/Notifiche.vue')
   },
 
-  {
-    path: '/callback',
-    name: 'callback',
-    component: () => import('../views/CallbackView.vue')
-  },
 
   {
     path: '/annunci',
