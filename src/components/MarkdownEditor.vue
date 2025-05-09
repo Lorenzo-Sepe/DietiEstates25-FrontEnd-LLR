@@ -58,7 +58,7 @@
             icon="pi pi-minus"
             @click="editor.chain().focus().setFontSize(convertToFontSize(--fontsizeNumber)).run()"
           />
-          <span style="color: #000; font-weight: bold;">{{ fontsizeNumber }}</span>
+          <span style="font-weight: bold;">{{ fontsizeNumber }}</span>
           <Button
             icon="pi pi-plus"
             @click="editor.chain().focus().setFontSize(convertToFontSize(++fontsizeNumber)).run()"
@@ -67,31 +67,44 @@
   
         <!-- Lists, Code, Image, Horizontal Rule -->
         <div class="GruppoBottoni OrganizazioneTesto">
+          <!-- Bullet List Button -->
           <Button
             class="tagButton"
-            @click="editor.chain().focus().toggleBulletList().run()"
+            @click="() => { editor.chain().focus().toggleBulletList().run(); }"
             :class="{ 'is-active': editor.isActive('bulletList') }"
             icon="bi bi-list-ul"
-          >
-          </Button>
+          />
+
+          <!-- Ordered List Button -->
           <Button
             class="tagButton"
-            @click="editor.chain().focus().toggleOrderedList().run()"
+            @click="() => { editor.chain().focus().toggleOrderedList().run(); }"
             :class="{ 'is-active': editor.isActive('orderedList') }"
             icon="bi bi-list-ol"
-            >
-            
-          </Button>
+          />
           <Button
             class="tagButton"
-            @click="editor.chain().focus().toggleCode().run()"
-            :disabled="!editor.can().chain().focus().toggleCode().run()"
+            @click="editor.chain().focus().toggleCodeBlock().run()"
+            :disabled="!editor.can().chain().focus().toggleCodeBlock().run()"
             :class="{ 'is-active': editor.isActive('code') }"
           >
             <i class="bi bi-code"   ></i>
           </Button>
           <Button @click="addImage" class="tagButton">
             <i class="bi bi-image"   ></i>
+            <Dialog
+              header="Insert Image"
+              :visible="showInsertImageDialog"
+              :modal="true"
+              :closable="false"
+              :dismissableMask="true"
+              @hide="showInsertImageDialog = false"
+              :style="{ width: '50vw' }"
+            >
+            <InsertFileDialog 
+              @close="showInsertImageDialog = false" 
+              @image-uploaded="handleImageUpload" />
+            </Dialog>
           </Button>
           <Button 
             class="tagButton" 
@@ -152,7 +165,7 @@
         </div>
       </section>
   
-      <editor-content :editor="editor" />
+      <editor-content :editor="editor" class="editor-content" />
     </div>
   </template>
   
@@ -160,25 +173,29 @@
   import { useEditor, EditorContent } from '@tiptap/vue-3'
   import { ref } from 'vue'
   import Button from 'primevue/button'
+  import Dialog from 'primevue/dialog'
+
+  import InsertFileDialog from './Dialogs/InsertFileDialog.vue'
   
   // TipTap extensions
   import StarterKit from '@tiptap/starter-kit'
-  import Bold from '@tiptap/extension-bold'
+  
   import { Color } from '@tiptap/extension-color'
-  import Document from '@tiptap/extension-document'
+  
+  
   import FontSize from '@tiptap/extension-font-size'
   import { FontFamily } from '@tiptap/extension-font-family'
   import Underline from '@tiptap/extension-underline'
-  import Paragraph from '@tiptap/extension-paragraph'
-  import Text from '@tiptap/extension-text'
   import TextStyle from '@tiptap/extension-text-style'
   import Image from '@tiptap/extension-image'
   import TextAlign from '@tiptap/extension-text-align'
   import Highlight from '@tiptap/extension-highlight'
   
   
+  const showInsertImageDialog = ref(false)
   const fontsizeNumber = ref(12)
-  
+
+
   const props = defineProps({
     modelValue: String,
   })
@@ -187,49 +204,80 @@
   const editor = useEditor({
     editorProps: {
       attributes: {
-        class: ' border-2  border-primary-400 rounded-b  p-2  min-h-[12rem]  max-h-[12rem]  overflow-y-auto  outline-none',
+        class: 'border-2 border-primary-400 rounded-b p-2 min-h-[20rem] max-h-[12rem] overflow-y-auto  outline-none',
       },
     },
     content: props.modelValue,
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        codeBlock: {
+          HTMLAttributes: {
+            class: 'tiptap-code',
+          },
+        },
+        
+        listItem: {
+          nested: true,
+        },
+      }),
       Highlight,
-      Image,
-      Document,
-      Paragraph,
-      Text,
+      Image.configure({
+        HTMLAttributes: {
+          class: 'tiptap-image',
+        },
+      }),
       Underline,
       FontSize,
-      TextStyle.configure({ mergeNestedSpanStyles: true }),
+      TextStyle.configure({ 
+        mergeNestedSpanStyles: true 
+      }),
       Color,
-      Bold,
       FontFamily,
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
     ],
     onUpdate: ({ editor }) => {
-      emit('update:modelValue', editor.getHTML())
+      const rawHtml = editor.getHTML();
+      const flattened = flattenParagraphsInList(rawHtml);
+      emit('update:modelValue', flattened);
+
+      // Controlla se il contenuto è vuoto e aggiungi un paragrafo con allineamento predefinito
+      if (editor.isEmpty) {
+        editor.commands.setContent('<p style="text-align: left;"></p>');
+      }
     },
     onCreate: ({ editor }) => {
-    // Ensure text is aligned left by default
-    editor.chain().focus().setTextAlign('left').run();
-  },
+      // Assicurati che il testo sia allineato a sinistra per impostazione predefinita
+      editor.chain().focus().setTextAlign('left').run();
+    },
   })
   
   function convertToFontSize(fontSize) {
     return fontSize + 'pt'
   }
+
+  function flattenParagraphsInList(html) {
+    return html.replace(/<li>\s*<p>(.*?)<\/p>\s*<\/li>/g, '<li>$1</li>');
+  }
+
+  const handleImageUpload = (imageUrl) => {
+    console.log('URL immagine caricata:', imageUrl);
+    console.log('Test url', imageUrl.value);
+    if (imageUrl) {
+      editor.value?.chain().focus().setImage({ src: imageUrl }).run()
+    }
+    showInsertImageDialog.value = false
+    // Aggiungi l'URL al contenuto del markdown editor o gestiscilo come necessario
+  };
   
   function addImage() {
-    const url = window.prompt('URL')
-    if (url) {
-      editor.value?.chain().focus().setImage({ src: url }).run()
-    }
+    showInsertImageDialog.value = true
   }
+
   </script>
   
-  <style scoped>
+  <style >
   button.tagButton {
     font-weight: bold;
     padding: 0.25rem 0.5rem;
@@ -244,6 +292,47 @@
     outline-offset: -1px;
     outline-style: groove;
   }
+
+  .tiptap-code {
+    display: block;
+    text-align: left;
+    background-color: #f0f0f0;
+    border-radius: 0.4rem;
+    color: #000;
+    font-size: 0.85rem;
+    padding: 0.25em 0.3em;
+  }
+
+  .tiptap-paragraph {
+    text-align: left;
+  }
   
+  .editor-content ul,
+  .editor-content ol {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+  }
+
+  .editor-content ul {
+    list-style-type: disc;
+  }
+
+  .editor-content ol {
+    list-style-type: decimal;
+  }
+
+  .editor-content li {
+    margin-bottom: 0.25rem;
+  }
+
+  .editor-content li p {
+    text-align: left;
+  }
+
+  .tiptap-image {
+  margin: 1.5rem auto; /* top/bottom = 1.5rem, left/right = auto */
+  max-width: 100%;
+  height: auto;
+}
+
   </style>
-  
