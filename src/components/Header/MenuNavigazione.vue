@@ -1,6 +1,6 @@
 <template>
-    <nav class="pb-2 lg:pb-0 lg:mr-5 flex gap-2 lg:gap-4 flex-col lg:flex-row items-center justify-between">
-      <router-link 
+   <nav class="pb-2 lg:pb-0 lg:mr-5 flex gap-2 lg:gap-4 flex-col lg:flex-row items-start justify-start lg:items-center lg:justify-between">
+    <router-link 
         v-for="voce in menuCorrente" 
         :key="voce.nome"
         :to="voce.percorso"

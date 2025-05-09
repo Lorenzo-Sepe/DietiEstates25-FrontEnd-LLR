@@ -13,6 +13,18 @@ export const useStoreUtente = defineStore('utente', {
     }
   }),
   getters: {
+    getNomeVisulizzato: (state) => {
+      // Controlla se il nome visualizzato è disponibile
+      console.log("getNomeVisualizzato: ", state.utente.Info.nomeVisualizzato);
+      if (state.utente.Info.nomeVisualizzato) {
+        return state.utente.Info.nomeVisualizzato;
+      } else {
+        //return email without domain
+        const emailParts = state.utente.email.split('@');
+        return emailParts[0];
+      }
+    },
+      
     isAutenticato: (state) => {
       try {
         return !state.isTokenScaduto();

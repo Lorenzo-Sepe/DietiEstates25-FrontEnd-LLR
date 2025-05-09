@@ -1,52 +1,56 @@
 <template>
-  loggggg:
-  {{ logged  }}
-  <div class="flex px-3 flex-row justify-between items-center w-full top-0 h-25 z-50 sticky text-black text-2xl bg-white shadow-md">
-    <LogoPortale v-if="isInPortale" class="pt-4"/>
-    <Logo v-else class="pt-4"/>
+  <div
+    class="flex px-3 flex-row justify-between items-center w-full top-0 h-25 z-50 sticky text-black text-2xl bg-white shadow-md">
+    <LogoPortale v-if="isInPortale" class="pt-4" />
+    <Logo v-else class="pt-4" />
 
-        <!-- Menu di Navigazione con prop -->
-        <div class="hidden lg:flex">
-          <MenuNavigazione :isInPortale="isInPortale" />
-    
-          <div v-if="!logged" class="flex gap-2 items-center flex-col lg:flex-row ">
+    <!-- Menu di Navigazione con prop -->
+    <div class="hidden lg:flex">
+      <MenuNavigazione :isInPortale="isInPortale" />
+
+      <div v-if="!logged" class="flex gap-2 items-center flex-col lg:flex-row ">
+        <Button label="Accedi" @click="openDialog"></Button>
+
+        <Button label="Registrati" asChild v-slot="slotProps">
+          <RouterLink to="/register" :class="slotProps.class">Registrati</RouterLink>
+        </Button>
+      </div>
+      <div v-else>
+        <AvatarAccount :avatarUrl="avatarUrl" :nomeVisualizzato="nomeVisualizzato" :nomeAzienda="nomeAzienda">
+        </AvatarAccount>
+      </div>
+    </div>
+
+    <div class="block lg:hidden">
+      <Drawer v-model:visible="drawer" position="right">
+        <div v-if="!logged" class="flex gap-2 items-center flex-col lg:flex-row ">
           <Button label="Accedi" @click="openDialog"></Button>
-          
           <Button label="Registrati" asChild v-slot="slotProps">
             <RouterLink to="/register" :class="slotProps.class">Registrati</RouterLink>
           </Button>
-          </div>
-          <div v-else>
-            sei loggato
-          </div>
         </div>
+        <div v-else class="flex gap-2 flex-col lg:flex-row pb-4">
+          <AvatarAccount :avatarUrl="avatarUrl" :nomeVisualizzato="nomeVisualizzato" :nomeAzienda="nomeAzienda">
+          </AvatarAccount>
+        </div>
+        <MenuNavigazione :isInPortale="isInPortale"/>
 
-        <div class="block lg:hidden">
-          <Drawer v-model:visible="drawer" position="right">
-            <MenuNavigazione :isInPortale="isInPortale" />
-            <div v-if="!logged" class="flex gap-2 items-center flex-col lg:flex-row ">
-            <Button label="Accedi" @click="openDialog"></Button>
-            <Button label="Registrati" asChild v-slot="slotProps">
-            <RouterLink to="/register" :class="slotProps.class">Registrati</RouterLink>
-          </Button>
-            </div>
-            <div v-else class="">
-              sei loggato 
-            </div>
-          </Drawer>
-          <Button icon="pi pi-bars" @click="drawer = true" />
-        </div>
-        <Dialog v-model:visible="visible" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" modal header="Login">
-          <LoginDialog :dipendente="false" @close="closeDialog"></LoginDialog>
-        </Dialog>
+      </Drawer>
+      <Button icon="pi pi-bars" @click="drawer = true" />
+    </div>
+    <Dialog v-model:visible="visible" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+      modal header="Login">
+      <LoginDialog :dipendente="false" @close="closeDialog"></LoginDialog>
+    </Dialog>
   </div>
 </template>
 
 <script setup>
+import AvatarAccount from "./AvatarPersonale.vue";
 import Logo from "./Logo.vue"
 import LogoPortale from "./LogoPortale.vue"
 import MenuNavigazione from "./MenuNavigazione.vue";
-import {  defineProps,ref, onMounted, onBeforeUnmount, computed} from 'vue'
+import { defineProps, ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import Button from 'primevue/button';
 import Drawer from 'primevue/drawer';
 import Dialog from 'primevue/dialog';
@@ -60,27 +64,47 @@ const storeUtente = useStoreUtente();
 const storeEmployee = useEmployeeStore();
 
 const logged = computed(() => {
-  return false;
   if (props.isInPortale) {
     return storeEmployee.isAutenticato;
   } else {
     return storeUtente.isAutenticato;
   }
 });
+const nomeVisualizzato = computed(() => {
+  if (props.isInPortale) {
+    return storeEmployee.getNomeVisualizzato;
+  } else {
+    return storeUtente.getNomeVisulizzato;
+  }
+});
+const nomeAzienda = computed(() => {
+  if (props.isInPortale) {
+    return storeEmployee.getNomeAzienda;
+  } else {
+    return '';
+  }
+});
+const avatarUrl = computed(() => {
+  if (props.isInPortale) {
+    return storeEmployee.UrlFotoProfilo;
+  } else {
+    return storeUtente.UrlFotoProfilo;
+  }
+});
 
 const props = defineProps({
-    isInPortale: Boolean
-  });
-  
+  isInPortale: Boolean
+});
 
 
-function openDialog(){
+
+function openDialog() {
   visible.value = true;
-} 
+}
 
-function closeDialog(){
+function closeDialog() {
   visible.value = false;
-} 
+}
 
 onMounted(() => {
   const handleResize = () => {
@@ -98,4 +122,3 @@ onMounted(() => {
 });
 
 </script>
-

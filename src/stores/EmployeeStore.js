@@ -16,6 +16,33 @@ state: () => ({
   }
 }),
 getters: {
+  getNomeVisualizzato: (state) => {
+    // Controlla se il nome visualizzato è disponibile
+    if (state.employee.Info.nomeVisualizzato) {
+      return state.employee.Info.nomeVisualizzato;
+    } else if (state.employee.Info.Nome) {
+      if (state.employee.Info.Cognome) {
+        return state.employee.Info.Nome + " " + state.employee.Info.Cognome;
+      }else {
+        return state.employee.Info.Nome;
+      }
+    } else {
+      //return email without domain
+      const emailParts = state.employee.email.split('@');
+      return emailParts[0];
+    }
+  },
+  getNomeAzienda: (state) => {
+    // Controlla se il nome dell'azienda è disponibile
+    if (state.employee.DatiAgenziaImmobiliare.nomeAzienda) {
+      return state.employee.DatiAgenziaImmobiliare.nomeAzienda;
+    } else {
+      //return domain 
+      const emailParts = state.employee.email.split('@');
+      const domainParts = emailParts[1].split('.');
+      return domainParts[0];
+    }
+  },
   isAutenticato: (state) => !!state.employee.token,
   datiUtente: (state) => state.employee.Info,
   UrlFotoProfilo: (state) => {
