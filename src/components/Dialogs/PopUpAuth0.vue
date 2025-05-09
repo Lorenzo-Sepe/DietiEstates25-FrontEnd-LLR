@@ -60,7 +60,7 @@ import { useRouter } from 'vue-router';
 
 const { loginWithPopup, user, idTokenClaims } = useAuth0();
 const router = useRouter();
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close','autenticazione-errore', 'autenticazione-successo']);
 
 const props = defineProps({
     currentProvider: String,
@@ -84,6 +84,7 @@ const utente = ref(null); // Per visualizzare il nome utente
 const ruoloLogin=ref('')
 
 const vaiAllaHome = () => {
+    emit('autenticazione-successo');
     emit('close');
     reindirizza(ruoloLogin.value);
 };
@@ -110,6 +111,7 @@ onMounted(async () => {
                 stato.value = 'esistente';
             } else {
                 // Accesso riuscito, vai subito alla home
+                emit('autenticazione-successo');
                 emit('close');
                 reindirizza(response.ruolo);
             }
@@ -124,11 +126,14 @@ onMounted(async () => {
                 }
             } else {
                 stato.value = 'errore';
+                emit('autenticazione-errore',erroreLogin);
                 emit('close', erroreLogin);
             }
         }
     } catch (errore) {
         stato.value = 'errore';
+        console.error('Errore durante il login con Auth0:', errore);
+        emit('autenticazione-errore',errore);
         emit('close', errore);
     }
 });
@@ -144,10 +149,12 @@ const completaRegistrazione = async ({ password, confermaPassword }) => {
 
         console.log('Registrazione avvenuta con successo:', risposta);
         // Reindirizza alla home o mostra un messaggio di successo
+        emit('autenticazione-successo');
         emit('close', risposta);
         reindirizza(risposta.ruolo)
     } catch (errore) {
         console.error('Errore nella registrazione:', errore);
+        emit('autenticazione-errore',errore);
         emit('close', errore);
     }
 };

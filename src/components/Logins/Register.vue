@@ -70,7 +70,7 @@
     </div>
     
     <Dialog v-model:visible="showDialog" :style="{ width: '50vw' }" modal header="Completa la registrazione" :closable>
-        <PasswordConfirmationDialog 
+        <PopUpAuth0 
             @close="handleDialogClose" 
             :showDialog="showDialog" 
             :currentProvider="currentProvider" 
@@ -89,7 +89,7 @@ import { useRouter } from 'vue-router';
 import AuthService from '../../services/AuthService';
 
 import  Dialog  from 'primevue/dialog';
-import PasswordConfirmationDialog from '../Dialogs/PasswordConfirmationDialog.vue';
+import PopUpAuth0 from '../Dialogs/PopUpAuth0.vue';
 
 const mediumRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!?\-_]).{8,11}$/;
 const strongRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$£%^&+=!?\-_]).{12,16}$/;
