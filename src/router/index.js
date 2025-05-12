@@ -45,7 +45,6 @@ const routes = [
     component: () => import('../views/AgencyRegistrationView.vue')
     
   },
- 
 
   {
     path: '/PortaleAgenzia',
@@ -68,6 +67,19 @@ const routes = [
     path: '/PortaleAgenzia/miei-annunci',
     name: 'MieiAnnunci',
     component: () => import('../views/pannelloStaff.vue'), // Pagina dei miei annunci
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) {
+        next(); // L'utente è loggato, consenti l'accesso
+      } else {
+        next({ name: 'loginAgent' }); // Reindirizza alla pagina di login
+      }
+    }
+  },
+
+  {
+    path: '/PortaleAgenzia/crea-annunci',
+    name: 'NuovoAnnuncio',
+    component: () => import('../views/CreaPromozioniView.vue'), // Pagina dei miei annunci
     beforeEnter: (to, from, next) => {
       if (isAuthenticated()) {
         next(); // L'utente è loggato, consenti l'accesso

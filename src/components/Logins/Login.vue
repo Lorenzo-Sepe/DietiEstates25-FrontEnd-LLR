@@ -22,7 +22,8 @@
           severity="error"
           size="small"
           variant="simple"
-          >{{ $form.email.error?.message }}</Message
+          >{{ $form.email.error?.message }}
+          </Message
         >
 
         <Password

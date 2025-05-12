@@ -1,205 +1,73 @@
 <template>
-    <div class="p-5">
+    <div :class="['p-5', { 'contrast-mode': contrastMode }]">
       <section
         v-if="editor"
-        class="areaButtons  flex  flex-wrap rounded-t items-center  gap-x-4  border-2  border-b-0  border-primary-400  p-2"
+        :class="[
+          'areaButtons flex flex-wrap rounded-t items-center gap-x-4 border-2 p-2',
+          contrastMode ? 'border-black' : 'border-primary-400'
+        ]"
       >
         <!-- Bold, Italic, Strike, Underline, Highlight -->
         <div class="GruppoBottoni FomattazioneEDecorazioni">
-          <Button
-            class="tagButton"
-            size="small"
-            @click="editor.chain().focus().toggleBold().run()"
-            :disabled="!editor.can().chain().focus().toggleBold().run()"
-            :class="{ 'is-active': editor.isActive('bold') }"
-             v-tooltip.top="'Grassetto'"
-          >
-            <i class="bi bi-type-bold " ></i>
-          </Button>
-          <Button
-            class="tagButton"
-            size="small"
-            @click="editor.chain().focus().toggleItalic().run()"
-            :disabled="!editor.can().chain().focus().toggleItalic().run()"
-            :class="{ 'is-active': editor.isActive('italic') }"
-             v-tooltip.top="'Corsivo'"
-          >
-            <i class="bi bi-type-italic" ></i>
-          </Button>
-          
-          <Button
-            class="tagButton"
-            size="small"
-            @click="editor.chain().focus().toggleStrike().run()"
-            :disabled="!editor.can().chain().focus().toggleStrike().run()"
-            :class="{ 'is-active': editor.isActive('strike') }"
-             v-tooltip.top="'Barrato'"
-          >
-            <i class="bi bi-type-strikethrough" ></i>
-          </Button>
-
-          <Button
-            class="tagButton"
-            size="small"
-            @click="editor.chain().focus().toggleUnderline().run()"
-            :disabled="!editor.can().chain().focus().toggleUnderline().run()"
-            :class="{ 'is-active': editor.isActive('underline') }"
-             v-tooltip.top="'Sottolineato'"
-          >
-            <i class="bi bi-type-underline"></i>
-          </Button>
-
-          <Button
-            class="tagButton"
-            size="small"
-            @click="editor.chain().focus().toggleHighlight().run()"
-            :class="{ 'is-active': editor.isActive('highlight') }"
-             v-tooltip.top="'Evidenziatore'"
-          >
-            <i class="bi bi-highlighter" ></i>
-          </Button>
+          <Button class="tagButton" size="small" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }" v-tooltip.top="'Grassetto'"><i class="bi bi-type-bold"></i></Button>
+          <Button class="tagButton" size="small" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().toggleItalic().run()" :disabled="!editor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }" v-tooltip.top="'Corsivo'"><i class="bi bi-type-italic"></i></Button>
+          <Button class="tagButton" size="small" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().toggleStrike().run()" :disabled="!editor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }" v-tooltip.top="'Barrato'"><i class="bi bi-type-strikethrough"></i></Button>
+          <Button class="tagButton" size="small" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().toggleUnderline().run()" :disabled="!editor.can().chain().focus().toggleUnderline().run()" :class="{ 'is-active': editor.isActive('underline') }" v-tooltip.top="'Sottolineato'"><i class="bi bi-type-underline"></i></Button>
+          <Button class="tagButton" size="small" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': editor.isActive('highlight') }" v-tooltip.top="'Evidenziatore'"><i class="bi bi-highlighter"></i></Button>
         </div>
-  
+
         <!-- Font size +/- -->
-        <div class="GruppoBottoni ring-2 ring-primary-400 rounded-md FontSize  flex  items-center  gap-2">
+        <div 
+          class="GruppoBottoni rounded-md FontSize flex items-center gap-2"
+          :class="['ring-2', contrastMode ? 'ring-black' : 'ring-primary-400']"
+        >
           <Button
-            icon="pi pi-minus  "
+            icon="pi pi-minus"
             size="small"
+            :severity="contrastMode ? 'contrast' : undefined"
             @click="editor.chain().focus().setFontSize(convertToFontSize(--fontsizeNumber)).run()"
-             v-tooltip.top="'Riduci dimensione font'"
+            v-tooltip.top="'Riduci dimensione font'"
           />
           <span style="font-weight: bold;">{{ fontsizeNumber }}</span>
           <Button
-            icon="pi pi-plus  "
+            icon="pi pi-plus"
             size="small"
+            :severity="contrastMode ? 'contrast' : undefined"
             @click="editor.chain().focus().setFontSize(convertToFontSize(++fontsizeNumber)).run()"
-             v-tooltip.top="'Aumenta dimensione font'"
+            v-tooltip.top="'Aumenta dimensione font'"
           />
         </div>
-  
+
         <!-- Lists, Code, Image, Horizontal Rule -->
         <div class="GruppoBottoni OrganizazioneTesto">
-          <Button
-            class="tagButton "
-            @click="() => { editor.chain().focus().toggleBulletList().run(); }"
-            :class="{ 'is-active': editor.isActive('bulletList') }"
-            icon="bi bi-list-ul  "
-             v-tooltip.top="'Elenco puntato'"
-          />
-          <Button
-            class="tagButton "
-            
-            @click="() => { editor.chain().focus().toggleOrderedList().run(); }"
-            :class="{ 'is-active': editor.isActive('orderedList') }"
-            icon="bi  bi-list-ol  "
-             v-tooltip.top="'Elenco numerato'"
-          />
-          <Button
-            class="tagButton"
-            size="small"
-            @click="editor.chain().focus().toggleCodeBlock().run()"
-            :disabled="!editor.can().chain().focus().toggleCodeBlock().run()"
-            :class="{ 'is-active': editor.isActive('code') }"
-             v-tooltip.top="'Blocco di codice'"
-          >
-            <i class="bi bi-code" ></i>
-          </Button>
-          <Button 
-            @click="addImage" 
-            class="tagButton"
-            size="small"
-             v-tooltip.top="'Inserisci immagine'"
-          >
-            <i class="bi bi-image" ></i>
-            <Dialog
-              header="Insert Image"
-              :visible="showInsertImageDialog"
-              :modal="true"
-              :closable="false"
-              :dismissableMask="true"
-              @hide="showInsertImageDialog = false"
-              :style="{ width: '50vw' }"
-            >
-            <InsertFileDialog 
-              @close="showInsertImageDialog = false" 
-              @image-uploaded="handleImageUpload" />
-            </Dialog>
-          </Button>
-          <Button 
-            class="tagButton" 
-            @click="editor.chain().focus().setHorizontalRule().run()"
-            icon="bi bi-hr"
-             v-tooltip.top="'Inserisci linea orizzontale'"
-          >
-          </Button>
+          <Button class="tagButton" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': editor.isActive('bulletList') }" icon="bi bi-list-ul" v-tooltip.top="'Elenco puntato'" />
+          <Button class="tagButton" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': editor.isActive('orderedList') }" icon="bi bi-list-ol" v-tooltip.top="'Elenco numerato'" />
+          <Button class="tagButton" size="small" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().toggleCodeBlock().run()" :disabled="!editor.can().chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': editor.isActive('code') }" v-tooltip.top="'Blocco di codice'"><i class="bi bi-code"></i></Button>
+          <Button @click="addImage" class="tagButton" size="small" :severity="contrastMode ? 'contrast' : undefined" v-tooltip.top="'Inserisci immagine'"><i class="bi bi-image"></i></Button>
+          <Dialog header="Insert Image" :visible="showInsertImageDialog" :modal="true" :closable="false" :dismissableMask="true" @hide="showInsertImageDialog = false" :style="{ width: '50vw' }">
+            <InsertFileDialog @close="showInsertImageDialog = false" @image-uploaded="handleImageUpload" />
+          </Dialog>
+          <Button class="tagButton" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().setHorizontalRule().run()" icon="bi bi-hr" v-tooltip.top="'Inserisci linea orizzontale'" />
         </div>
-  
+
         <!-- Text Alignment -->
         <div class="GruppoBottoni allinieamento">
-          <Button
-            class="tagButton"
-            size="small"
-            @click="editor.chain().focus().setTextAlign('left').run()"
-            :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }"
-             v-tooltip.top="'Allinea a sinistra'"
-          >
-            <i class="bi bi-text-left" ></i>
-          </Button>
-          <Button
-            class="tagButton"
-            size="small"
-            @click="editor.chain().focus().setTextAlign('center').run()"
-            :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }"
-             v-tooltip.top="'Allinea al centro'"
-          >
-            <i class="bi bi-text-center"></i>
-          </Button>
-          <Button
-            class="tagButton"
-            size="small"
-            @click="editor.chain().focus().setTextAlign('right').run()"
-            :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }"
-             v-tooltip.top="'Allinea a destra'"
-          >
-            <i class="bi bi-text-right"></i>
-          </Button>
-          <Button
-            class="tagButton"
-            size="small"
-            @click="editor.chain().focus().setTextAlign('justify').run()"
-            :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }"
-             v-tooltip.top="'Giustifica testo'"
-          >
-            <i class="bi bi-justify" ></i>
-          </Button>
+          <Button class="tagButton" size="small" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().setTextAlign('left').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }" v-tooltip.top="'Allinea a sinistra'"><i class="bi bi-text-left"></i></Button>
+          <Button class="tagButton" size="small" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().setTextAlign('center').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }" v-tooltip.top="'Allinea al centro'"><i class="bi bi-text-center"></i></Button>
+          <Button class="tagButton" size="small" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().setTextAlign('right').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }" v-tooltip.top="'Allinea a destra'"><i class="bi bi-text-right"></i></Button>
+          <Button class="tagButton" size="small" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().setTextAlign('justify').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }" v-tooltip.top="'Giustifica testo'"><i class="bi bi-justify"></i></Button>
         </div>
-  
+
         <!-- Undo/Redo -->
         <div class="GruppoBottoni navigazioneStoriaTesto">
-          <Button
-            class="tagButton"
-            size="small"
-            @click="editor.chain().focus().undo().run()"
-            :disabled="!editor.can().chain().focus().undo().run()"
-             v-tooltip.top="'Annulla'"
-          >
-            <i class="bi bi-arrow-counterclockwise" ></i>
-          </Button>
-          <Button
-            class="tagButton"
-            size="small"
-            @click="editor.chain().focus().redo().run()"
-            :disabled="!editor.can().chain().focus().redo().run()"
-             v-tooltip.top="'Ripristina'"
-          >
-            <i class="bi bi-arrow-clockwise"></i>
-          </Button>
+          <Button class="tagButton" size="small" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().undo().run()" :disabled="!editor.can().chain().focus().undo().run()" v-tooltip.top="'Annulla'"><i class="bi bi-arrow-counterclockwise"></i></Button>
+          <Button class="tagButton" size="small" :severity="contrastMode ? 'contrast' : undefined" @click="editor.chain().focus().redo().run()" :disabled="!editor.can().chain().focus().redo().run()" v-tooltip.top="'Ripristina'"><i class="bi bi-arrow-clockwise"></i></Button>
         </div>
       </section>
-  
+
       <editor-content :editor="editor" class="editor-content" />
     </div>
-  </template>
+</template>
   
   <script setup>
   import { useEditor, EditorContent } from '@tiptap/vue-3'
@@ -230,13 +98,18 @@
 
   const props = defineProps({
     modelValue: String,
+    contrastMode: {
+      type: Boolean,
+      default: false,
+    }
   })
+
   const emit = defineEmits(['update:modelValue'])
   
   const editor = useEditor({
     editorProps: {
       attributes: {
-        class: 'overflow-auto border-2 border-primary-400 rounded-b p-2 min-h-[20rem] max-h-[12rem] overflow-y-auto  outline-none',
+        class: 'tiptap-editor bg-surface-100 overflow-auto rounded-b p-2 min-h-[20rem] max-h-[12rem] overflow-y-auto outline-none',
       },
     },
     content: props.modelValue,
@@ -394,5 +267,7 @@
     max-width: 100%; /* Assicurati che il contenitore non limiti la larghezza */
     overflow-x: hidden; /* Evita lo scorrimento orizzontale */
   }
+
+  
 
   </style>
