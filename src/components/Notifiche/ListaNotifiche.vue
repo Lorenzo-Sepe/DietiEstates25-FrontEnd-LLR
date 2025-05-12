@@ -8,7 +8,7 @@
     class="w-full border-2 border-black rounded-lg p-4 hover:bg-green-400! cursor-pointer"
     @click="emit('visualizzaNotifica', notifica)"
   >
-    <label class="font-medium">{{ notifica.id }}</label>
+    <label class="font-medium">{{ notifica.oggetto }}</label>
   </div>
 </template>
 
