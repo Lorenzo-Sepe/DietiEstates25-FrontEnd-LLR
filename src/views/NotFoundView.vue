@@ -1,5 +1,5 @@
 <template>
-  <div class="not-found flex items-center justify-center flex-col">
+  <div class="not-found pb-4 flex items-center justify-center flex-col">
     <img :src="logo" alt="Logo" class="logo" />
     <h1>404 - Pagina non trovata</h1>
     <p>Ci dispiace, ma la pagina che stai cercando non esiste.</p>

@@ -7,7 +7,7 @@
       class="area-annuncio w-full md:w-[90%] lg:w-[55%] flex flex-col gap-2 mx-auto"
     >
       <div
-        class="intestazione-schemi-piccoli w-full flex flex-row gap-2 p-2 block lg:hidden"
+        class="intestazione-schemi-piccoli w-full flex flex-row gap-2 p-2  lg:hidden"
       >
         <Button
           label="Mostra contatti agenti"
