@@ -50,6 +50,10 @@ function openDialog() {
   visible.value = true;
 }
 
+function closeDialog() {
+  visible.value = false;
+}
+
 function navigatePortale() {
   // Naviga alla pagina desiderata
   router.push("/PortaleAgenzia");

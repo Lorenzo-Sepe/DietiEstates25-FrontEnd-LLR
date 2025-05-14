@@ -12,11 +12,9 @@ export default {
   },
 
   login(credentials) {
-    console.log("service login");
     return Api()
       .post("pb/auth/signin", credentials)
       .then((response) => {
-        console.log("login service then", response);
         return setUser(response.data);
       });
   },

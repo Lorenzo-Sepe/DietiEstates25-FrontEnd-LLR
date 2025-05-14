@@ -98,18 +98,25 @@
         @click="registrationVisible = true"
         raised
       />
+      <Button
+        severity="contrast"
+        class="mb-2"
+        label="Crea Notifica Promozionale"
+        @click="newNotification"
+        raised
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 import Accordion from "primevue/accordion";
 import AccordionPanel from "primevue/accordionpanel";
 import AccordionHeader from "primevue/accordionheader";
 import AccordionContent from "primevue/accordioncontent";
-import Avatar from "primevue/avatar";
 import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import ProgressSpinner from "primevue/progressspinner";
@@ -123,6 +130,8 @@ import PropostaService from "../services/PropostaService";
 import { FiltroAnnuncioRequest } from "../dto/FiltroAnnunciRequest";
 import { PropostaRequest } from "../dto/PropostaRequest";
 import { useEmployeeStore } from "../stores/EmployeeStore";
+
+const router = useRouter();
 
 const getImg = (agente) => {
   console.log("avatar url:", agente.infoUtente.urlFotoProfilo);
@@ -345,4 +354,9 @@ const changeControposta = (idProposta, prezzoControproposta) => {
     });
   });
 };
+
+function newNotification() {
+  router.push({ name: "NuovaPromozione" });
+}
+
 </script>

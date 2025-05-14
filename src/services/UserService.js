@@ -44,7 +44,6 @@ export function getDatiImpiegato(email) {
   return ApiPublic()
     .get("/pb/impiegato/email", { params: { email } })
     .then((response) => {
-      console.log("/pb/impiegato/email response: ", response.data);
       const res = new DatiImpiegatoResponse(response.data);
       return res;
     })
@@ -74,7 +73,6 @@ export function getDatiUser(email) {
   return ApiPublic()
     .get("/pb/user", { params: { email } })
     .then((response) => {
-      console.log("pb/user response: ", response.data);
       const ret = new UserInfoResponse(response.data); // Restituisci l'oggetto creato
       if (
         ret.UrlFotoProfilo === null ||

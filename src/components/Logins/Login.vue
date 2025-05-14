@@ -117,16 +117,13 @@ const onFormSubmit = async ({ valid }) => {
     loading.value = false; // Assicurati di fermare il caricamento se non è valido
     return;
   }
-
   errorMessage.value = "";
-  //console.log(signInRequest.value);
 
   try {
     const response = await AuthService.login({
       Email: signInRequest.value.usernameOrEmail,
       password: signInRequest.value.password,
     });
-
     loading.value = false;
     if (response.ruolo !== "MEMBER") {
       router.push({ path: "/PortaleAgenzia/pannelloStaff" });

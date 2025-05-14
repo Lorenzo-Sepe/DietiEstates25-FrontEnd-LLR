@@ -23,11 +23,12 @@ pinia.use(({ store }) => {
   });
 });
 
+pinia.use(piniaPersistedState);
+
 app.use(pinia);
 
+ // Abilita la persistenza
 
-pinia.use(piniaPersistedState); // Abilita la persistenza
-app.use(pinia)
 
 app.use(PrimeVue, {
     ripple: true,

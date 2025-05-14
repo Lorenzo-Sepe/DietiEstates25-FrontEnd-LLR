@@ -77,8 +77,8 @@ const routes = [
   },
 
   {
-    path: '/PortaleAgenzia/crea-annunci',
-    name: 'NuovoAnnuncio',
+    path: '/PortaleAgenzia/creaPromozione',
+    name: 'NuovaPromozione',
     component: () => import('../views/CreaPromozioniView.vue'), // Pagina dei miei annunci
     beforeEnter: (to, from, next) => {
       if (isAuthenticated()) {
