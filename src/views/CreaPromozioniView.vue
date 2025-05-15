@@ -15,22 +15,72 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Left Column -->
         <div class="space-y-6">
+
           <!-- Oggetto -->
-          <FormField 
-            name="oggetto" 
-            v-slot="$campo">
-              <label for="oggetto" class="font-semibold text-lg mb-1 block">Oggetto</label>
-              <InputText
-                v-bind="field"
-                id="oggetto"
-                type="text"
-                placeholder="Oggetto"
-                class="w-full"
-              />
-              <Message v-if="campo?.invalid" severity="error" size="small" variant="simple">
-                {{$campo.error?.message}} 
-              </Message>
+          <FormField name="oggetto" v-slot="$campo">
+            <label for="oggetto" class="font-semibold text-lg mb-1 block">Oggetto</label>
+            <InputText
+              v-bind="$campo.field"
+              id="oggetto"
+              type="text"
+              placeholder="Oggetto"
+              class="w-full"
+            />
+            <Message
+              v-if="$campo?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              class="mt-1"
+            >
+              {{ $campo.error?.message }}
+            </Message>
           </FormField>
+
+          <!-- Area di Interesse -->
+
+        <FormField name="areaDiInteresse" v-slot="$campo">
+          <label for="areaDiInteresse" class="text-lg font-semibold mb-2 block">Area di Interesse</label>
+          <InputRicerca
+            id="areaDiInteresse"
+            v-bind="$campo.field"
+            :luogoCercato="NotificaPromozionaleRequest.criteridiRicerca.areaDiInteresse"
+            class="w-full"
+          />
+          <Message
+            v-if="$campo?.invalid"
+            severity="error"
+            size="small"
+            variant="simple"
+            class="mt-1"
+          >
+            {{ $campo.error?.message }}
+          </Message>
+        </FormField>
+
+          <!-- Intervallo giorni -->
+
+        <FormField name="intervalloGiorniStoricoRicerca" v-slot="$campo">
+          <label for="intervalloGiorniStoricoRicerca" class="text-lg font-semibold mb-2 block">Intervallo giorni Ricerca</label>
+          <InputNumber 
+            v-model="NotificaPromozionaleRequest.criteridiRicerca.intervalloGiorniStoricoRicerca"  
+            inputId="minmax-buttons" 
+            mode="decimal" 
+            showButtons 
+            :min="1" 
+            :max="100" 
+            fluid />
+
+          <Message
+            v-if="$campo?.invalid"
+            severity="error"
+            size="small"
+            variant="simple"
+            class="mt-1"
+          >
+            {{ $campo.error?.message }}
+          </Message>
+        </FormField>
 
           <!-- Budget Slider -->
           <FormField 
@@ -51,9 +101,6 @@
                 <span>€{{ budgetRange[0] }}</span>
                 <span>€{{ budgetRange[1] }}</span>
               </div>
-              <Message v-if="$campo?.invalid" severity="error" size="small" variant="simple">
-                {{ $campo.error?.message }}
-              </Message>
           </FormField>
 
           <!-- Contratto e Tipologia -->
@@ -105,27 +152,38 @@
         </div>
 
         <!-- Right Column -->
-        <div class="flex flex-col justify-between h-full">
-          <FormField name="contenuto" v-slot="$campo">
-              <label for="contenuto" class="text-lg font-semibold block mb-2">Contenuto</label>
-              <Markdown
-               contrastMode="true"
-                v-model="NotificaPromozionaleRequest.contenuto"
-                class="w-full h-full max-w-full overflow-x-auto"
-                label="Contenuto"
 
-              />
-              <Message v-if="$campo?.invalid" severity="error" size="small" variant="simple">
-                {{ $campo.error?.message }}
-              </Message>
-              
+        <!-- Contenuto -->
+
+        <div class="flex flex-col justify-between h-full mb-6">
+          <FormField name="contenuto" v-slot="$campo">
+            <label for="contenuto" class="text-lg font-semibold block mb-2">Contenuto</label>
+            <Markdown
+              contrastMode="true"
+              v-model="NotificaPromozionaleRequest.contenuto"
+              class="w-full h-full max-w-full overflow-x-auto"
+              label="Contenuto"
+              :class="{
+                'ring-1 ring-red-500 rounded-md': $campo.invalid,
+                'ring-1 ring-surface-400 rounded-md': !$campo.invalid
+              }"
+            />
+            <Message
+              v-if="$campo?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              class="mt-1"
+            >
+              {{ $campo.error?.message }}
+            </Message>
           </FormField>
         </div>
       </div>
 
       <!-- Submit Button -->
       <div class="flex justify-end mt-6">
-        <Button type="submit" label="Invia" icon="pi pi-send" :disabled="$form.$invalid"/>
+        <Button severity="contrast" type="submit" label="Invia" icon="pi pi-send" :disabled="$form.$invalid"/>
       </div>
     </Form>
   </div>
@@ -136,6 +194,7 @@ import { ref, reactive, computed } from "vue";
 import { Form, FormField } from "@primevue/forms";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
+import InputNumber  from "primevue/inputnumber";
 import Message from "primevue/message";
 import RadioButton from "primevue/radiobutton";
 import RadioButtonGroup from "primevue/radiobuttongroup";
@@ -144,6 +203,8 @@ import Markdown from "../components/MarkdownEditor.vue";
 import NotificheService from "../services/NotificheService";
 import DOMPurify from "dompurify";
 import { useRouter } from "vue-router";
+import InputRicerca from "../components/Homepage/InputRicerca.vue";
+
 
 const router = useRouter();
 const contrastMode = ref(true);
@@ -152,10 +213,12 @@ const NotificaPromozionaleRequest = reactive({
   oggetto: "",
   contenuto: "",
   criteridiRicerca: {
+    areaDiInteresse: "",
     tipoDiContrattoDiInteresse: "AFFITTO",
     tipologiaDiImmobileDiInteresse: "APPARTAMENTO",
     budgetMin: 0,
     budgetMax: 50000,
+    intervalloGiorniStoricoRicerca: 30,
   },
 });
 
@@ -188,14 +251,22 @@ const resolver = ({ values }) => {
   if (!values.contenuto) {
     errors.contenuto = [{ message: "Inserire contenuto del messaggio." }];
   }
+  if (!values.areaDiInteresse) {
+    errors.areaDiInteresse = [{ message: "Selezionare un'area di interesse." }];
+  }
+
+  
   return { values, errors };
 };
 
 function onFormSubmit({ values }) {
   NotificaPromozionaleRequest.oggetto = values.oggetto;
-  NotificaPromozionaleRequest.contenuto = DOMPurify.sanitize(values.contenuto);
+  NotificaPromozionaleRequest.contenuto = DOMPurify.sanitize(NotificaPromozionaleRequest.contenuto);
+  NotificaPromozionaleRequest.criteridiRicerca.areaDiInteresse = values.areaDiInteresse;
   NotificaPromozionaleRequest.criteridiRicerca.tipoDiContrattoDiInteresse = values.tipoDiContrattoDiInteresse;
   NotificaPromozionaleRequest.criteridiRicerca.tipologiaDiImmobileDiInteresse = values.tipologiaDiImmobileDiInteresse;
+  NotificaPromozionaleRequest.criteridiRicerca.intervalloGiorniStoricoRicerca = values.intervalloGiorniStoricoRicerca;
+  console.log("Notifica Promozionale Request:", NotificaPromozionaleRequest);
 
   NotificheService.creaNotifica(NotificaPromozionaleRequest)
     .then((response) => {
