@@ -91,20 +91,22 @@
         </AccordionPanel>
       </Accordion>
 
-      <Button
-        severity="contrast"
-        class="mb-2"
-        label="Aggiungi Agente"
-        @click="registrationVisible = true"
-        raised
-      />
-      <Button
-        severity="contrast"
-        class="mb-2"
-        label="Crea Notifica Promozionale"
-        @click="newNotification"
-        raised
-      />
+      <div class="buttonArea flex flex-row gap-2 justify-center items-center">
+          <Button
+          severity="contrast"
+          class="mb-2"
+          label="Aggiungi Agente"
+          @click="registrationVisible = true"
+          raised
+        />
+        <Button
+          severity="contrast"
+          class="mb-2"
+          label="Crea Notifica Promozionale"
+          @click="newNotification"
+          raised
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -143,6 +145,7 @@ const annunci = ref([]);
 const loading = ref(true);
 const loadingListaAgenti = ref(true);
 const employeeStore = useEmployeeStore();
+
 const okAllert = ref(false);
 const erroreAllert = ref(false);
 const registrationVisible = ref(false);

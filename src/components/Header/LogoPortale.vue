@@ -1,7 +1,7 @@
 <template>
   <div class="mx-4 flex flex-col items-center justify-center">
     <img
-      src="/src/assets/vue.svg"
+      src="/src/assets/Icon/icona.svg"
       alt="Logo del Sito"
       width="64"
       height="64"

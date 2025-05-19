@@ -5,6 +5,12 @@
       :label="isRegister ? 'Registrati' : 'Chiudi'"
       @click="isRegister ? goToRegister : closeDialog"
     />
+    <Button
+      v-if="isLogin"
+      label="Accedi"
+      @click="goToLogin"
+      class="p-button-secondary"
+    />
   </div>
 </template>
 
@@ -12,6 +18,8 @@
 import { defineProps } from "vue";
 import { useRouter } from "vue-router";
 import Button from "primevue/button";
+
+const emit = defineEmits(["close", "goToLogin"]);
 
 const props = defineProps({
   message: {
@@ -22,15 +30,24 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isLogin: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const router = useRouter();
 
 const closeDialog = () => {
+  emit("close");
   router.push("/");
 };
 
 const goToRegister = () => {
   router.push("/register");
 };
+
+const goToLogin = () => {
+  emit("goToLogin");
+};  
 </script>

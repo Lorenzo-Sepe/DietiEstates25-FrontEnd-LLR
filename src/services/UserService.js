@@ -1,4 +1,4 @@
-import { ApiPublic, Api } from "../api/axiosConfig";
+import { ApiPublic, Api,ApiAgent } from "../api/axiosConfig";
 import { UserInfoResponse } from "../dto/Response/UserInfoResponse";
 import { DatiImpiegatoResponse } from "../dto/Response/DatiImpiegato";
 import { useStoreUtente } from "../stores/UserStore";
@@ -67,6 +67,29 @@ export function getDatiImpiegato(email) {
         throw new Error("Errore nella richiesta.");
       }
     });
+}
+
+export async function isTokenValid(email) {
+  try {
+    await ApiAgent().get("user", { params: { email } });
+    return true;
+  } catch (error) {
+    if (error.response) {
+      if (error.response.status === 403) {
+        console.warn("Attenzione: Token non valido o scaduto.");
+        return false;
+      } else {
+        console.error("Errore:", error.response.status, error.response.data);
+        throw new Error("Errore durante il recupero dei dati.");
+      }
+    } else if (error.request) {
+      console.error("Nessuna risposta ricevuta dal server:", error.request);
+      throw new Error("Nessuna risposta dal server.");
+    } else {
+      console.error("Errore:", error.message);
+      throw new Error("Errore nella richiesta.");
+    }
+  }
 }
 
 export function getDatiUser(email) {
