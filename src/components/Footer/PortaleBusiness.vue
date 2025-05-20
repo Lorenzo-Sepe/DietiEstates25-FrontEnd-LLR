@@ -25,6 +25,7 @@
               :isRegister="false"
               :isLogin="true"
               @close="closeDialog"
+              @goToLogin="goToLogin"
             />
           </Dialog>
         </li>
@@ -74,6 +75,11 @@ function openDialog() {
 
 function closeDialog() {
   visible.value = false;
+}
+
+function goToLogin() {
+  visibleAllert.value = false;
+  visible.value = true;
 }
 
 async function navigatePortale() {

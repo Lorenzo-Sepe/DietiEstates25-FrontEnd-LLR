@@ -1,7 +1,8 @@
 <template>
   <div>
     <p>{{ message }}</p>
-    <Button
+    <div class="flex flex-row gap-2">
+      <Button
       :label="isRegister ? 'Registrati' : 'Chiudi'"
       @click="isRegister ? goToRegister : closeDialog"
     />
@@ -11,6 +12,7 @@
       @click="goToLogin"
       class="p-button-secondary"
     />
+    </div>
   </div>
 </template>
 
