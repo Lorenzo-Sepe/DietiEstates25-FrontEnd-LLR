@@ -47,6 +47,26 @@ const routes = [
   },
 
   {
+    path: '/callback',
+    name: 'callback',
+    component: () => import('../views/HomeView.vue') 
+   },
+ 
+  {
+    path: '/PortaleAgenzia/creaPromozione',
+    name: 'NuovaPromozione',
+    component: () => import('../views/CreaPromozioniView.vue'), // Pagina dei miei annunci
+    beforeEnter: (to, from, next) => {
+      if (isAuthenticated()) {
+        next(); // L'utente è loggato, consenti l'accesso
+      } else {
+        next({ name: 'loginAgent' }); // Reindirizza alla pagina di login
+      }
+    }
+  },
+
+
+  {
     path: '/PortaleAgenzia',
     name: 'PortaleAgenzia',
     component: () => import('../views/PortaleAgenzia.vue'),
@@ -67,19 +87,6 @@ const routes = [
     path: '/PortaleAgenzia/miei-annunci',
     name: 'MieiAnnunci',
     component: () => import('../views/pannelloStaff.vue'), // Pagina dei miei annunci
-    beforeEnter: (to, from, next) => {
-      if (isAuthenticated()) {
-        next(); // L'utente è loggato, consenti l'accesso
-      } else {
-        next({ name: 'loginAgent' }); // Reindirizza alla pagina di login
-      }
-    }
-  },
-
-  {
-    path: '/PortaleAgenzia/creaPromozione',
-    name: 'NuovaPromozione',
-    component: () => import('../views/CreaPromozioniView.vue'), // Pagina dei miei annunci
     beforeEnter: (to, from, next) => {
       if (isAuthenticated()) {
         next(); // L'utente è loggato, consenti l'accesso
