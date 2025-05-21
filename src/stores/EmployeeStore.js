@@ -64,6 +64,13 @@ actions: {
     this.employee.token = token;
     this.aggiorna();
   },
+  async logout() {
+  // Ritardo fittizio per miglior UX (opzionale)
+  await new Promise(resolve => setTimeout(resolve, 800));
+
+  this.clear(); // resetta stato
+
+},
   clear() {
     this.employee = {
       email: '',

@@ -30,7 +30,8 @@
           </Button>
         </div>
         <div v-else class="flex gap-2 flex-col lg:flex-row pb-4">
-          <AvatarAccount :avatarUrl="avatarUrl" :nomeVisualizzato="nomeVisualizzato" :nomeAzienda="nomeAzienda">
+          <AvatarAccount :avatarUrl="avatarUrl" :nomeVisualizzato="nomeVisualizzato" :nomeAzienda="nomeAzienda" :email="email"   :isInPortale="isInPortale"
+ @Avatarclick="avatarClicked">
           </AvatarAccount>
         </div>
         <MenuNavigazione :isInPortale="isInPortale"/>
@@ -89,6 +90,16 @@ const avatarUrl = computed(() => {
     return storeEmployee.UrlFotoProfilo;
   } else {
     return storeUtente.UrlFotoProfilo;
+  }
+});
+
+const email = computed(() => {
+  if (props.isInPortale) {
+alert('storeEmployee.getEmail');
+    return storeEmployee.getEmail;
+  } else {
+    alert('storeUtente.getEmail');
+    return storeUtente.getEmail;
   }
 });
 
