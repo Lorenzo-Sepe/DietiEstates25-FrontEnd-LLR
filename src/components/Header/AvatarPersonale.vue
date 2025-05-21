@@ -96,16 +96,23 @@ const logout = async () => {
     }
 
     isLoggingOut.value = false;
-    visible.value = false;
+
+    
+  } catch (error) {
+    console.error("Errore durante il logout:", error);
+    isLoggingOut.value = false;
+    erroreLogout.value = true;
+  }
+
+  if(!erroreLogout.value){
+        visible.value = false;
+
     if (props.isInPortale) {
       router.push('/PortaleAgenzia');
     } else {
       router.push("/");
     }
-  } catch (error) {
-    console.error("Errore durante il logout:", error);
-    isLoggingOut.value = false;
-    erroreLogout.value = true;
+
   }
 };
 
