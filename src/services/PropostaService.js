@@ -23,7 +23,7 @@ export default {
         "proposta/" +
           idProposta +
           "/controproposta?controproposta=" +
-          prezzoControproposta
+          prezzoControproposta,
       )
       .then((response) => {
         return response.data;

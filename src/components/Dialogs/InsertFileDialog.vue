@@ -1,27 +1,47 @@
 <template>
-    <div class="card flex flex-col gap-6 items-center justify-center">
-        <input type="file" multiple accept="image/*" @change="onSelectedFiles" hidden ref="inputFile" />
-        <Button @click="apriSelettore" icon="pi pi-image" label="Scegli Immagine" outlined class="pulsante" />
-    </div>
+  <div class="card flex flex-col gap-6 items-center justify-center">
+    <input
+      type="file"
+      multiple
+      accept="image/*"
+      @change="onSelectedFiles"
+      hidden
+      ref="inputFile"
+    />
+    <Button
+      @click="apriSelettore"
+      icon="pi pi-image"
+      label="Scegli Immagine"
+      outlined
+      class="pulsante"
+    />
+  </div>
 </template>
 
-<script setup> 
-import { ref, defineEmits , reactive} from 'vue'; 
+<script setup>
+import { ref, defineEmits, reactive } from "vue";
 
-import Button from 'primevue/button'; 
+import Button from "primevue/button";
 
-const inputFile = ref(null); 
+const inputFile = ref(null);
 
 const errori = reactive({
-  immagineiVuote: { invalid: false, messaggio: 'Devi caricare almeno un\'immagine' },
-  dimensioneTotale: { invalid: false, messaggio: 'Le immagini caricate superano i 50 MB totali' },
-  descrizioneLunga: { invalid: false, messaggio: 'Ogni descrizione deve essere di massimo 20 caratteri' },
-  descrizione: [] // Inizializza come array vuoto
-
+  immagineiVuote: {
+    invalid: false,
+    messaggio: "Devi caricare almeno un'immagine",
+  },
+  dimensioneTotale: {
+    invalid: false,
+    messaggio: "Le immagini caricate superano i 50 MB totali",
+  },
+  descrizioneLunga: {
+    invalid: false,
+    messaggio: "Ogni descrizione deve essere di massimo 20 caratteri",
+  },
+  descrizione: [], // Inizializza come array vuoto
 });
 
-const emit = defineEmits(['image-uploaded']); 
-
+const emit = defineEmits(["image-uploaded"]);
 
 const apriSelettore = () => {
   inputFile.value.click();
@@ -29,34 +49,36 @@ const apriSelettore = () => {
 
 const onSelectedFiles = (event) => {
   const files = Array.from(event.target.files);
-  files.forEach(file => {
+  files.forEach((file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      errori.descrizione.push({ invalid: false, messaggio: '' });
+      errori.descrizione.push({ invalid: false, messaggio: "" });
       const urlImage = e.target.result;
-      console.log('Immagini:', urlImage);
-      emit('image-uploaded', urlImage);
+      console.log("Immagini:", urlImage);
+      emit("image-uploaded", urlImage);
     };
     reader.readAsDataURL(file);
   });
-  event.target.value = '';
+  event.target.value = "";
   //emit('image-uploaded', urlImage); // Emetti l'evento con l'array di immagini
 };
-
-
 
 // Funzione per creare un oggetto File da un URL base64
 function creaFileDaUrl(base64, nomeFile) {
   return new Promise((resolve, reject) => {
     try {
       // Estrazione della parte MIME e dei dati base64
-      const [header, base64Data] = base64.split(',');
+      const [header, base64Data] = base64.split(",");
 
       // Estrazione del tipo MIME dall'header
-      const tipo = header.split(':')[1].split(';')[0];
+      const tipo = header.split(":")[1].split(";")[0];
 
       // Converte la parte base64 in un array di byte
-      const byteArray = new Uint8Array(atob(base64Data).split("").map(char => char.charCodeAt(0)));
+      const byteArray = new Uint8Array(
+        atob(base64Data)
+          .split("")
+          .map((char) => char.charCodeAt(0)),
+      );
 
       // Crea un oggetto Blob con il tipo MIME estratto
       const blob = new Blob([byteArray], { type: tipo });
@@ -72,5 +94,4 @@ function creaFileDaUrl(base64, nomeFile) {
     }
   });
 }
-
 </script>

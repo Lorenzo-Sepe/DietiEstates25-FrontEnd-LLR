@@ -1,9 +1,16 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, defineProps, defineEmits, watch } from 'vue';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import datiComuni from '../../assets/comuniCap.json';
-import { Indirizzo } from '../../dto/RequestAnnuncio';
+import {
+  ref,
+  onMounted,
+  onBeforeUnmount,
+  defineProps,
+  defineEmits,
+  watch,
+} from "vue";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import datiComuni from "../../assets/comuniCap.json";
+import { Indirizzo } from "../../dto/RequestAnnuncio";
 // Lista dei comuni dal JSON
 const listaComuni = ref(datiComuni);
 
@@ -16,7 +23,7 @@ const props = defineProps({
   Indirizzo: Indirizzo,
 });
 
-const emit = defineEmits(['posizione-aggiornata']);
+const emit = defineEmits(["posizione-aggiornata"]);
 
 const contenitoreMappa = ref(null);
 const istanzaMappa = ref(null);
@@ -24,28 +31,27 @@ const marcatore = ref(null);
 
 // Inizializza la mappa
 const inizializzaMappa = () => {
-  istanzaMappa.value = L.map('mappa').setView([41.8719, 12.5674], 6);
-  
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  istanzaMappa.value = L.map("mappa").setView([41.8719, 12.5674], 6);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
-    attribution: '© OpenStreetMap',
+    attribution: "© OpenStreetMap",
   }).addTo(istanzaMappa.value);
 };
 
 // Ottiene le coordinate con fallback se il civico non è trovato
 const ottieniCoordinate = async () => {
   if (!props.via || !props.cap || !props.citta) {
-    console.warn('Mancano alcuni dati essenziali dell’indirizzo.');
+    console.warn("Mancano alcuni dati essenziali dell’indirizzo.");
     return null;
   }
-
 
   const querySoloVia = new URLSearchParams({
     street: props.via,
     city: props.citta,
     postalcode: props.cap,
-    country: 'Italia',
-    format: 'json'
+    country: "Italia",
+    format: "json",
   }).toString();
 
   return await faiRichiestaGeocodifica(querySoloVia);
@@ -54,29 +60,36 @@ const ottieniCoordinate = async () => {
 // Funzione per chiamare l'API di geocodifica
 const faiRichiestaGeocodifica = async (query) => {
   try {
-    const url= `https://nominatim.openstreetmap.org/search?${query}`;
-    const risposta = await fetch(`https://nominatim.openstreetmap.org/search?${query}`);
+    const url = `https://nominatim.openstreetmap.org/search?${query}`;
+    const risposta = await fetch(
+      `https://nominatim.openstreetmap.org/search?${query}`,
+    );
     const dati = await risposta.json();
-    console.log('url:', url);  
-    console.log('Dati:', dati);
+    console.log("url:", url);
+    console.log("Dati:", dati);
     if (dati.length > 0) {
       return {
         latitudine: parseFloat(dati[0].lat),
         longitudine: parseFloat(dati[0].lon),
       };
-    }else
-    {
-      console.warn('Nessun risultato trovato per l’indirizzo:', query);
-      console.log('Inserisco come cordinate quelle associta alla città:', props.via);
-      const comune = listaComuni.value.find(comune => comune.denominazione_ita.toLowerCase() === props.citta.toLowerCase());
+    } else {
+      console.warn("Nessun risultato trovato per l’indirizzo:", query);
+      console.log(
+        "Inserisco come cordinate quelle associta alla città:",
+        props.via,
+      );
+      const comune = listaComuni.value.find(
+        (comune) =>
+          comune.denominazione_ita.toLowerCase() === props.citta.toLowerCase(),
+      );
       if (comune) {
         return {
           latitudine: parseFloat(comune.latitudine),
           longitudine: parseFloat(comune.longitudine),
         };
       } else {
-        console.warn('Comune non trovato nella lista dei comuni:', props.citta);
-        console.log('inserisco cordinate di default');
+        console.warn("Comune non trovato nella lista dei comuni:", props.citta);
+        console.log("inserisco cordinate di default");
         return {
           latitudine: 41.8719, // Latitudine di default (Italia centrale)
           longitudine: 12.5674, // Longitudine di default (Italia centrale)
@@ -84,7 +97,10 @@ const faiRichiestaGeocodifica = async (query) => {
       }
     }
   } catch (errore) {
-    console.error('Errore durante la richiesta al servizio di geocodifica:', errore);
+    console.error(
+      "Errore durante la richiesta al servizio di geocodifica:",
+      errore,
+    );
   }
 
   return null;
@@ -92,17 +108,16 @@ const faiRichiestaGeocodifica = async (query) => {
 
 // Aggiorna la mappa con il nuovo indirizzo
 const aggiornaMappa = async () => {
-
   const coordinate = await ottieniCoordinate();
   if (coordinate) {
     const { latitudine, longitudine } = coordinate;
-    
-    istanzaMappa.value.setView([latitudine, longitudine], 17); 
+
+    istanzaMappa.value.setView([latitudine, longitudine], 17);
 
     if (marcatore.value) {
       istanzaMappa.value.removeLayer(marcatore.value);
     }
-    
+
     // Crea il marker trascinabile con popup informativo
     marcatore.value = L.marker([latitudine, longitudine], { draggable: true })
       .addTo(istanzaMappa.value)
@@ -110,45 +125,58 @@ const aggiornaMappa = async () => {
       .openPopup(); // Mostra subito il messaggio
 
     // Ascolta l'evento di trascinamento e aggiorna le coordinate
-    marcatore.value.on('dragend', () => {
+    marcatore.value.on("dragend", () => {
       const nuovaPosizione = marcatore.value.getLatLng();
-      console.log('Nuova posizione:', nuovaPosizione);
-      emit('posizione-aggiornata', { latitudine: nuovaPosizione.lat, longitudine: nuovaPosizione.lng });
+      console.log("Nuova posizione:", nuovaPosizione);
+      emit("posizione-aggiornata", {
+        latitudine: nuovaPosizione.lat,
+        longitudine: nuovaPosizione.lng,
+      });
       props.Indirizzo.latitudine = nuovaPosizione.lat;
       props.Indirizzo.longitudine = nuovaPosizione.lng;
       istanzaMappa.value.setView([nuovaPosizione.lat, nuovaPosizione.lng], 17);
 
-// Usa un piccolo ritardo per garantire che la mappa abbia il tempo di aggiornarsi
-setTimeout(() => {
-istanzaMappa.value.panTo(nuovaPosizione, { animate: true });
-}, 100);  
+      // Usa un piccolo ritardo per garantire che la mappa abbia il tempo di aggiornarsi
+      setTimeout(() => {
+        istanzaMappa.value.panTo(nuovaPosizione, { animate: true });
+      }, 100);
       // Dopo il trascinamento, mostra un popup di conferma
       marcatore.value
         .bindPopup("✅ Posizione aggiornata! Se necessario, trascina ancora.")
         .openPopup();
     });
   } else {
-    console.warn('Indirizzo non trovato.');
+    console.warn("Indirizzo non trovato.");
   }
-
 };
-watch(() => props.activeStep, (nuovoStep) => {
-  if (nuovoStep === 4) {
-    console.log('Attivato il passo 4, ridisegno la mappa');
-    forzaRidisegnoMappa();
-  }
-});
+watch(
+  () => props.activeStep,
+  (nuovoStep) => {
+    if (nuovoStep === 4) {
+      console.log("Attivato il passo 4, ridisegno la mappa");
+      forzaRidisegnoMappa();
+    }
+  },
+);
 // Quando cambia l'indirizzo, aggiorniamo la mappa
-watch([() => props.via, () => props.numeroCivico, () => props.cap, () => props.citta], () => {
-  aggiornaMappa();
-});
+watch(
+  [
+    () => props.via,
+    () => props.numeroCivico,
+    () => props.cap,
+    () => props.citta,
+  ],
+  () => {
+    aggiornaMappa();
+  },
+);
 
 onMounted(() => {
   inizializzaMappa();
-  if(props.citta) {
+  if (props.citta) {
     aggiornaMappa();
   } else {
-    console.warn('Indirizzo non valido, non posso inizializzare la mappa.');
+    console.warn("Indirizzo non valido, non posso inizializzare la mappa.");
   }
 });
 
@@ -158,21 +186,25 @@ onBeforeUnmount(() => {
   }
 });
 
-
 const forzaRidisegnoMappa = () => {
-    const elementoMappa = document.getElementById('mappa');
-    const altezzaOriginale = elementoMappa.style.height;
-    const larghezzaOriginale = elementoMappa.style.width;
-  
-    elementoMappa.style.height = '401px';
-    setTimeout(() => {
-      elementoMappa.style.height = altezzaOriginale;
-      elementoMappa.style.width = larghezzaOriginale;
-      istanzaMappa.value.invalidateSize();
-    }, 100);
-  };
+  const elementoMappa = document.getElementById("mappa");
+  const altezzaOriginale = elementoMappa.style.height;
+  const larghezzaOriginale = elementoMappa.style.width;
+
+  elementoMappa.style.height = "401px";
+  setTimeout(() => {
+    elementoMappa.style.height = altezzaOriginale;
+    elementoMappa.style.width = larghezzaOriginale;
+    istanzaMappa.value.invalidateSize();
+  }, 100);
+};
 </script>
 
 <template>
-  <div id="mappa" ref="contenitoreMappa" class="z-1" style="height: 400px; width: 100%;"></div>
+  <div
+    id="mappa"
+    ref="contenitoreMappa"
+    class="z-1"
+    style="height: 400px; width: 100%"
+  ></div>
 </template>

@@ -1,33 +1,27 @@
-import {ApiAgent} from '../api/axiosConfig'
+import { ApiAgent } from "../api/axiosConfig";
 
 export default {
+  getAnnunciByStaff(filtro) {
+    return ApiAgent()
+      .post("annuncioImmobiliare/cercaByStaff", filtro)
+      .then((response) => {
+        return response.data;
+      });
+  },
 
-    getAnnunciByStaff(filtro){
+  getNumeroAnnunciByStaff() {
+    return ApiAgent()
+      .get("annuncioImmobiliare/numeroByStaff")
+      .then((response) => {
+        return response.data;
+      });
+  },
 
-        return ApiAgent()
-            .post('annuncioImmobiliare/cercaByStaff',filtro)
-            .then((response) => {
-                return response.data;
-            })
-    },
-
-    getNumeroAnnunciByStaff(){
-
-        return ApiAgent()
-            .get('annuncioImmobiliare/numeroByStaff')
-            .then((response) => {
-                return response.data;
-            })
-    },
-
-    postPropostaManuale(proposta){
-
-        return ApiAgent()
-            .post('proposta/manuale',proposta)
-            .then((response) => {
-                return response.data;
-            })
-    }
-
+  postPropostaManuale(proposta) {
+    return ApiAgent()
+      .post("proposta/manuale", proposta)
+      .then((response) => {
+        return response.data;
+      });
+  },
 };
-

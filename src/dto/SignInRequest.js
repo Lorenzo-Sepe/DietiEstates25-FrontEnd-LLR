@@ -1,35 +1,35 @@
 class SignInRequest {
-    usernameOrEmail;
-    password;
+  usernameOrEmail;
+  password;
 
-    constructor(builder) {
-        this.usernameOrEmail = builder.usernameOrEmail;
-        this.password = builder.password;
+  constructor(builder) {
+    this.usernameOrEmail = builder.usernameOrEmail;
+    this.password = builder.password;
+  }
+
+  static get Builder() {
+    class Builder {
+      constructor() {
+        this.usernameOrEmail = "";
+        this.password = "";
+      }
+
+      setUsernameOrEmail(usernameOrEmail) {
+        this.usernameOrEmail = usernameOrEmail;
+        return this;
+      }
+
+      setEmail(email) {
+        this.email = email;
+        return this;
+      }
+
+      build() {
+        return new SignInRequest(this);
+      }
     }
-
-    static get Builder() {
-        class Builder {
-            constructor() {
-                this.usernameOrEmail = '';
-                this.password = '';
-            }
-
-            setUsernameOrEmail(usernameOrEmail) {
-                this.usernameOrEmail = usernameOrEmail;
-                return this;
-            }
-
-            setEmail(email) {
-                this.email = email;
-                return this;
-            }
-
-            build() {
-                return new SignInRequest(this);
-            }
-        }
-        return Builder;
-    }
+    return Builder;
+  }
 }
 
 export default SignInRequest;

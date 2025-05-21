@@ -1,49 +1,39 @@
 <template>
-
   <div class="home_image-container">
-
     <img src="/src/assets/copertina_home.png" alt="home" class="home_image" />
 
     <div class="home_ricerca">
       <AreaRicerca />
       <span
         class="text-lg font-semibold text-primary-600 hover:primary-blue-800 underline decoration-2 transition duration-200 ease-in-out cursor-pointer"
-        @click="vaiAllaMappa">
+        @click="vaiAllaMappa"
+      >
         Oppure clicca qui per disegnare la tua zona di interesse
       </span>
     </div>
-
   </div>
-
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 
-import AreaRicerca from "../components/Homepage/AreaRicerca.vue"
+import AreaRicerca from "../components/Homepage/AreaRicerca.vue";
 
 const router = useRouter();
 
 const vaiAllaMappa = () => {
-
   router.push({
-
-    path: '/mappa-annunci',
-    query: {  immobile: 'APPARTAMENTO', contratto: 'AFFITTO' }
-
+    path: "/mappa-annunci",
+    query: { immobile: "APPARTAMENTO", contratto: "AFFITTO" },
   });
-
 };
-
 </script>
 
 <style scoped>
 .home_image-container {
-
   position: relative;
   width: 90%;
   margin: 2rem;
-
 }
 
 .home_image-container .home_image {
@@ -99,7 +89,7 @@ const vaiAllaMappa = () => {
     height: auto;
     position: static;
     transform: none;
-    background-color: #E5E7EB;
+    background-color: #e5e7eb;
   }
 
   .home_ricerca .flex {
