@@ -33,6 +33,7 @@ export const useStoreUtente = defineStore('utente', {
         return false; // Restituisce false in caso di errore
       }
     },
+      getEmail: (state) => state.utente.email,
     datiUtente: (state) => state.utente.Info,
     UrlFotoProfilo: (state) => {
       // Controlla se l'URL della foto del profilo è disponibile
@@ -71,19 +72,23 @@ export const useStoreUtente = defineStore('utente', {
         });
     },
 
+    
     isTokenScaduto() {
+  const token = this.utente.token;
 
-      const token = this.utente.token;
+  if (!token) {
+    return true; // Se non c'è un token, consideralo scaduto
+  }
 
-      try {
-        const decoded = jwtDecode(token)
-        const now = Date.now().valueOf() / 1000 // tempo in secondi
-        return decoded.exp < now
-      } catch (error) {
-        console.error("Errore durante la decodifica del token:", error);
-        return true // token malformato, considerato non valido
-      }
-    }
+  try {
+    const decoded = jwtDecode(token);
+    const now = Date.now() / 1000; // tempo in secondi
+    return decoded.exp < now;
+  } catch (error) {
+    console.error("Errore durante la decodifica del token:", error);
+    return true; // token malformato, considerato non valido
+  }
+}
   },
   persist: true // Abilita la persistenza dello stato
 });
