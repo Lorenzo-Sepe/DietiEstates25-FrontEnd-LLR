@@ -204,7 +204,7 @@
   .tiptap-code {
     display: block;
     text-align: left;
-    background-color: #f0f0f0;
+    background-color: #cff1de;
     border-radius: 0.4rem;
     color: #000;
     font-size: 0.85rem;

@@ -1,7 +1,4 @@
 <template>
-
- 
-
   <div>
     <h4 class="font-bold">Area Agenzie</h4>
     <div class="text-sm">
