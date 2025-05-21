@@ -5,11 +5,11 @@
   >
     <h1 class="text-2xl font-semibold mb-4">Crea Notifica Promozionale</h1>
     <Form 
-    
       :initial-values="initialValues" 
       v-slot="$form"
-      :resolver
-      :validate-on-blur
+      :resolver="resolver"
+      :validate-on-change="true"
+      :validate-on-blur="true"
       @submit="onFormSubmit">
       <!-- Grid Layout -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -44,7 +44,7 @@
           <InputRicerca
             id="areaDiInteresse"
             v-bind="$campo.field"
-            :luogoCercato="NotificaPromozionaleRequest.criteridiRicerca.areaDiInteresse"
+            :luogoCercato="NotificaPromozionaleRequest.criteriDiRicerca.areaDiInteresse"
             class="w-full"
           />
           <Message
@@ -63,7 +63,7 @@
         <FormField name="intervalloGiorniStoricoRicerca" v-slot="$campo">
           <label for="intervalloGiorniStoricoRicerca" class="text-lg font-semibold mb-2 block">Intervallo giorni Ricerca</label>
           <InputNumber 
-            v-model="NotificaPromozionaleRequest.criteridiRicerca.intervalloGiorniStoricoRicerca"  
+            v-model="NotificaPromozionaleRequest.criteriDiRicerca.intervalloGiorniStoricoRicerca"  
             inputId="minmax-buttons" 
             mode="decimal" 
             showButtons 
@@ -112,7 +112,7 @@
                 <div class="flex flex-col items-center text-center">
                   <label for="tipoDiContrattoDiInteresse" class="text-lg font-semibold mb-2 block">Tipo Contratto</label>
                   <RadioButtonGroup
-                    v-model="NotificaPromozionaleRequest.criteridiRicerca.tipoDiContrattoDiInteresse"
+                    v-model="NotificaPromozionaleRequest.criteriDiRicerca.tipoDiContrattoDiInteresse"
                     name="tipoDiContrattoDiInteresse"
                     class="flex flex-wrap justify-center gap-4 p-4 rounded-md ring-1 ring-surface-400 bg-surface-100 w-full"
                   >
@@ -134,7 +134,7 @@
                 <div class="flex flex-col items-center text-center">
                   <label for="tipologiaDiImmobileDiInteresse" class="text-lg font-semibold mb-2 block">Tipologia Immobile</label>
                   <RadioButtonGroup
-                    v-model="NotificaPromozionaleRequest.criteridiRicerca.tipologiaDiImmobileDiInteresse"
+                    v-model="NotificaPromozionaleRequest.criteriDiRicerca.tipologiaDiImmobileDiInteresse"
                     name="tipologiaDiImmobileDiInteresse"
                     class="flex flex-wrap justify-center gap-4 p-4 rounded-md ring-1 ring-surface-400 bg-surface-100 w-full"
                   >
@@ -212,7 +212,7 @@ const contrastMode = ref(true);
 const NotificaPromozionaleRequest = reactive({
   oggetto: "",
   contenuto: "",
-  criteridiRicerca: {
+  criteriDiRicerca: {
     areaDiInteresse: "",
     tipoDiContrattoDiInteresse: "AFFITTO",
     tipologiaDiImmobileDiInteresse: "APPARTAMENTO",
@@ -226,20 +226,20 @@ const immobileTypes = ['APPARTAMENTO', 'UFFICIO', 'POSTOAUTO', 'TERRENO', 'ALTRO
 
 const budgetRange = computed({
   get: () => [
-    NotificaPromozionaleRequest.criteridiRicerca.budgetMin,
-    NotificaPromozionaleRequest.criteridiRicerca.budgetMax,
+    NotificaPromozionaleRequest.criteriDiRicerca.budgetMin,
+    NotificaPromozionaleRequest.criteriDiRicerca.budgetMax,
   ],
   set: ([min, max]) => {
-    NotificaPromozionaleRequest.criteridiRicerca.budgetMin = min;
-    NotificaPromozionaleRequest.criteridiRicerca.budgetMax = max;
+    NotificaPromozionaleRequest.criteriDiRicerca.budgetMin = min;
+    NotificaPromozionaleRequest.criteriDiRicerca.budgetMax = max;
   },
 });
 
 const initialValues = reactive({
   oggetto: NotificaPromozionaleRequest.oggetto,
   contenuto: NotificaPromozionaleRequest.contenuto,
-  tipoDiContrattoDiInteresse: NotificaPromozionaleRequest.criteridiRicerca.tipoDiContrattoDiInteresse,
-  tipologiaDiImmobileDiInteresse: NotificaPromozionaleRequest.criteridiRicerca.tipologiaDiImmobileDiInteresse,
+  tipoDiContrattoDiInteresse: NotificaPromozionaleRequest.criteriDiRicerca.tipoDiContrattoDiInteresse,
+  tipologiaDiImmobileDiInteresse: NotificaPromozionaleRequest.criteriDiRicerca.tipologiaDiImmobileDiInteresse,
   budget: budgetRange.value,
 });
 
@@ -262,10 +262,10 @@ const resolver = ({ values }) => {
 function onFormSubmit({ values }) {
   NotificaPromozionaleRequest.oggetto = values.oggetto;
   NotificaPromozionaleRequest.contenuto = DOMPurify.sanitize(NotificaPromozionaleRequest.contenuto);
-  NotificaPromozionaleRequest.criteridiRicerca.areaDiInteresse = values.areaDiInteresse;
-  NotificaPromozionaleRequest.criteridiRicerca.tipoDiContrattoDiInteresse = values.tipoDiContrattoDiInteresse;
-  NotificaPromozionaleRequest.criteridiRicerca.tipologiaDiImmobileDiInteresse = values.tipologiaDiImmobileDiInteresse;
-  NotificaPromozionaleRequest.criteridiRicerca.intervalloGiorniStoricoRicerca = values.intervalloGiorniStoricoRicerca;
+  NotificaPromozionaleRequest.criteriDiRicerca.areaDiInteresse = values.areaDiInteresse;
+  NotificaPromozionaleRequest.criteriDiRicerca.tipoDiContrattoDiInteresse = values.tipoDiContrattoDiInteresse;
+  NotificaPromozionaleRequest.criteriDiRicerca.tipologiaDiImmobileDiInteresse = values.tipologiaDiImmobileDiInteresse;
+  NotificaPromozionaleRequest.criteriDiRicerca.intervalloGiorniStoricoRicerca = values.intervalloGiorniStoricoRicerca;
   console.log("Notifica Promozionale Request:", NotificaPromozionaleRequest);
 
   NotificheService.creaNotifica(NotificaPromozionaleRequest)
