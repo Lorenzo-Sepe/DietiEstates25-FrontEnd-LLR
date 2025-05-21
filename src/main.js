@@ -23,12 +23,11 @@ pinia.use(({ store }) => {
   });
 });
 
-pinia.use(piniaPersistedState);
-
 app.use(pinia);
 
- // Abilita la persistenza
 
+pinia.use(piniaPersistedState); // Abilita la persistenza
+app.use(pinia)
 
 app.use(PrimeVue, {
     ripple: true,
@@ -46,7 +45,7 @@ app.use(
         domain: 'dev-16vw3v8k1jpn1obn.us.auth0.com',
         clientId: 'XVNwEJow6VjIO56oApqlTYeeyt8pgzvI',
         authorizationParams: {
-            redirect_uri: window.location.origin + '/',
+            redirect_uri: window.location.origin + '/callback',
         },
     })
 );

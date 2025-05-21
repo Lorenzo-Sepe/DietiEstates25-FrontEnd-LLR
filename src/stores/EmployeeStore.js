@@ -43,7 +43,31 @@ getters: {
       return domainParts[0];
     }
   },
-  isAutenticato: (state) => !!state.employee.token,
+   isAutenticato: (state) => {
+      try {
+        return !state.isTokenScaduto();
+      } catch (error) {
+        console.error("Errore durante la verifica dell'autenticazione:", error);
+        return false; // Restituisce false in caso di errore
+      }
+    },
+      isTokenScaduto() {
+    const token = this.utente.token;
+  
+    if (!token) {
+      return true; // Se non c'è un token, consideralo scaduto
+    }
+  
+    try {
+      const decoded = jwtDecode(token);
+      const now = Date.now() / 1000; // tempo in secondi
+      return decoded.exp < now;
+    } catch (error) {
+      console.error("Errore durante la decodifica del token:", error);
+      return true; // token malformato, considerato non valido
+    }
+  },
+  getEmail: (state) => state.employee.email,
   datiUtente: (state) => state.employee.Info,
   UrlFotoProfilo: (state) => {
     return state.employee.Info.UrlFotoProfilo || getDefaultAvatar(state.employee.email);
@@ -64,6 +88,13 @@ actions: {
     this.employee.token = token;
     this.aggiorna();
   },
+  async logout() {
+  // Ritardo fittizio per miglior UX (opzionale)
+  await new Promise(resolve => setTimeout(resolve, 800));
+
+  this.clear(); // resetta stato
+
+},
   clear() {
     this.employee = {
       email: '',
