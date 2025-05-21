@@ -1,10 +1,10 @@
-import { Api } from "../api/axiosConfig";
+import { Api, ApiAgent,ApiPublic} from "../api/axiosConfig";
 
 import { setUser } from "./UserService";
 export default {
   register(credentials) {
     console.log("service register");
-    return Api()
+    return ApiPublic()
       .post("pb/auth/signup", credentials)
       .then((response) => {
         return setUser(response.data);
@@ -12,14 +12,14 @@ export default {
   },
 
   login(credentials) {
-    return Api()
+    return ApiPublic()
       .post("pb/auth/signin", credentials)
       .then((response) => {
         return setUser(response.data);
       });
   },
   loginIdProvvider(credentials) {
-    return Api()
+    return ApiPublic()
       .post("pb/auth/signinIdProv", credentials)
       .then((response) => {
         console.log("Id provvider success,", response);
@@ -31,10 +31,22 @@ export default {
       .post("auth/logout")
       .then((response) => response.data);
   },
-  updateUser(newCredentials) {
+  changePassword(oldPassword, newPassword, newPasswordConfirm,isEmployee=false) {
+    const newCredentials = {
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+      confirmPassword: newPasswordConfirm,
+    };
     console.log("New Credentials: ", newCredentials);
-    return Api()
-      .put("auth/change_password", newCredentials)
-      .then((response) => response.data);
+    if (isEmployee) {
+      return Api()
+        .put("auth/change_password_employee", newCredentials)
+        .then((response) => response.data);
+    }else{
+      return ApiAgent()
+        .put("auth/change_password", newCredentials)
+        .then((response) => response.data);
+
+    }
   },
 };

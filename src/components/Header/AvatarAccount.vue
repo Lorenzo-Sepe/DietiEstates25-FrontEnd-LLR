@@ -1,7 +1,7 @@
 <template>
   <div class="profile-avatar">
     <Avatar 
-    @click="$emit('Avatarclick')"
+@click="$emit('avatarclick')"
       :image="avatarUrl"
       :label="initials"
       shape="circle"

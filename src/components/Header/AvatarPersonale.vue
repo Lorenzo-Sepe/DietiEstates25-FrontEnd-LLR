@@ -3,7 +3,7 @@
     :nomeVisualizzato="nomeVisualizzato"
     :nomeAzienda="nomeAzienda"
     :avatarUrl="avatarUrl"
-    @Avatarclick="avatarClicked"
+@avatarclick="avatarClicked"
     onlyAvatar
   />
 
@@ -50,9 +50,24 @@
       <slot name="extraInfo" />
     </div>
   </Dialog>
+
+  <Dialog
+    v-model:visible="dialogChangePassword"
+    :style="{ width: '50vw' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+    :closable
+    modal
+    header="Cambia Password">
+    <PopUpCambioPassword
+      @close="dialogChangePassword = false"
+      @password-cambiata="dialogChangePassword = false"
+      >
+      </PopUpCambioPassword>
+  </Dialog>
 </template>
 
 <script setup>
+import PopUpCambioPassword from "../Dialogs/PopUpCambioPassword.vue";
 import AvatarAccount from "./AvatarAccount.vue";
 import { ref } from "vue";
 import { defineProps } from "vue";
@@ -76,9 +91,10 @@ const avatarClicked = () => {
   visible.value = true;
 };
 
+
+const dialogChangePassword = ref(false);
 const changePassword = () => {
-  // Logica per cambio password
-  alert("TODO: cambia password");
+  dialogChangePassword.value = true;
 };
 const router = useRouter();
 const isLoggingOut = ref(false);
