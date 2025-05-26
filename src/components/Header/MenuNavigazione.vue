@@ -26,9 +26,9 @@
   ];
   
   const menuVenditore = [
-    { nome: "Gestisci i tuoi annunci immobiliari", percorso: "/gestisci-annunci" },
-    { nome: "Messaggi promozionali", percorso: "/messaggi-promozionali" },
-    { nome: "Team", percorso: "/team" }
+    { nome: "Gestisci i tuoi annunci immobiliari", percorso: "/PortaleAgenzia/miei-annunci" },
+    { nome: "Messaggi promozionali", percorso: "/PortaleAgenzia/messaggi-promozionali" },
+    { nome: "Team", percorso: "/PortaleAgenzia/team" }
   ];
   
   // Menu dinamico in base alla prop ricevuta dal padre

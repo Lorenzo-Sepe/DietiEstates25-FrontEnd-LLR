@@ -161,19 +161,13 @@
 
 
 <script setup>
-import Tabs from 'primevue/tabs';
-import TabList from 'primevue/tablist';
-import Tab from 'primevue/tab';
-import TabPanels from 'primevue/tabpanels';
-import TabPanel from 'primevue/tabpanel';
-import { ref, reactive, computed, watch } from "vue";
+import { ref, reactive, computed } from "vue";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import InputNumber from "primevue/inputnumber";
 import Message from "primevue/message";
 import RadioButton from "primevue/radiobutton";
 import RadioButtonGroup from "primevue/radiobuttongroup";
-import Slider from "primevue/slider";
 import Markdown from "../components/MarkdownEditor.vue";
 import NotificheService from "../services/NotificheService";
 import DOMPurify from "dompurify";
@@ -227,31 +221,55 @@ const formIsValid = computed(() => {
   return Object.values(errors).every((e) => e == null);
 });
 
-function validateForm() {
+function validateOggetto() {
   if (touched.oggetto) {
     errors.oggetto = form.oggetto ? null : "Inserire oggetto del messaggio";
   }
+}
+
+function validateContenuto() {
   if (touched.contenuto) {
     errors.contenuto = form.contenuto ? null : "Inserire contenuto del messaggio.";
   }
+}
+
+function validateAreaDiInteresse() {
   if (touched.areaDiInteresse) {
     errors.areaDiInteresse = form.areaDiInteresse ? null : "Selezionare un'area di interesse.";
   }
+}
+
+function validateIntervalloGiorniStoricoRicerca() {
   if (touched.intervalloGiorniStoricoRicerca) {
     errors.intervalloGiorniStoricoRicerca =
       form.intervalloGiorniStoricoRicerca >= 1 ? null : "Intervallo giorni non valido.";
   }
+}
+
+function validateTipologiaDiImmobileDiInteresse() {
   if (touched.tipologiaDiImmobileDiInteresse) {
     errors.tipologiaDiImmobileDiInteresse = form.tipologiaDiImmobileDiInteresse
       ? null
       : "Selezionare una tipologia di immobile.";
   }
-  if (touched.budgetRange) {
+}
+
+function validateBudgetRange() {
+  if (touched.budgetMin || touched.budgetMax) {
     errors.budgetRange =
-      budgetRangeLocal[0] < budgetRangeLocal[1]
+      form.budgetMin < form.budgetMax
         ? null
         : "Il budget minimo deve essere inferiore al massimo.";
   }
+}
+
+function validateForm() {
+  validateOggetto();
+  validateContenuto();
+  validateAreaDiInteresse();
+  validateIntervalloGiorniStoricoRicerca();
+  validateTipologiaDiImmobileDiInteresse();
+  validateBudgetRange();
 
   return Object.values(errors).every((e) => e == null);
 }
@@ -274,11 +292,8 @@ function onFormSubmit() {
 
   NotificheService.creaNotifica(NotificaPromozionaleRequest)
     .then((response) => {
-      if (response.status === 200) {
-        router.push({ name: "Notifiche" });
-      } else {
-        console.error("Errore nell'invio della notifica", response);
-      }
+      console.log("Notifica creata con successo:", response);
+      router.push({ name: "PortaleAgenzia" });
     })
     .catch((error) => {
       console.error("Errore durante l'invio:", error);

@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded border p-6">
+  <div class="rounded border p-6 w-full">
     <ul class="m-0 p-0 list-none">
       <li class="mb-4">
         <div class="flex">

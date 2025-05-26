@@ -45,6 +45,15 @@
             <LoginDialog @close="closeDialog" :dipendente="true"></LoginDialog>
           </Dialog>
         </li>
+        <li>
+          <Button
+            class="mb-2"
+            label="Crea la tua agenzia Immobiliare"
+            severity="contrast"
+            @click="goToRegisterAgency"
+            raised
+          />
+        </li>
       </ul>
     </div>
      
@@ -77,6 +86,10 @@ function closeDialog() {
 function goToLogin() {
   visibleAllert.value = false;
   visible.value = true;
+}
+
+function goToRegisterAgency() {
+  router.push({ name: "registerAgency" });
 }
 
 async function navigatePortale() {

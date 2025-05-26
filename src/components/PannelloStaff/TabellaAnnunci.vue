@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col w-full h-full">
-    <ScheletroTabella v-if="props.propLoading" />
+    <ScheletroTabella v-if="props.propLoading" class="w-full"/>
 
     <div v-else class="flex-grow">
       <DataTable

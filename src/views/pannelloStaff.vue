@@ -42,12 +42,12 @@
 
   <!-------------------------------------------- ------------------------------------------------>
 
-  <div class="w-full flex flex-col gap-2">
+  <div class="w-full flex flex-col gap-2 px-4">
     <AreaSuperiore class="w-full items-center justify-center" />
 
-    <ScheletroListaAgenti v-if="loadingListaAgenti" />
+    <ScheletroListaAgenti v-if="loadingListaAgenti" class="w-full"/>
 
-    <div v-else class="w-full p-4">
+    <div v-else class="w-full">
       <h2 v-if="!isAgente">Lista agenti dell'agenzia:</h2>
       <Accordion
         v-model:activeIndex="activeIndex"

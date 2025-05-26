@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card w-full">
     <DataTable :value="products">
       <Column field="code" header="Titolo">
         <template #body>
