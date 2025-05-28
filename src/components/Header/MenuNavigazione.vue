@@ -20,7 +20,6 @@
   
   // Definizione dei menu per le diverse aree
   const menuGenerale = [
-    { nome: "Cerca Annunci", percorso: "/cerca-annunci" },
     { nome: "Storico ricerche", percorso: "/storico-ricerche" },
     { nome: "Le mie notifiche", percorso: "/notifiche" }
   ];

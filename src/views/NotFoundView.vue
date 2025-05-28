@@ -11,13 +11,14 @@
 import { ref } from "vue";
 import Button from "primevue/button";
 import logo from "../assets/Icon/icona.svg"; // Assicurati che il percorso sia corretto
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const logoRef = ref(logo);
 
 const goHome = () => {
   // Reindirizza alla home
-  const router = useRouter();
-  router.push("/");
+  router.push({ name: 'home' });
 };
 </script>
 
