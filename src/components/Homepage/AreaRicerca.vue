@@ -1,6 +1,8 @@
 <template>
   <Fluid class="flex flex-col gap-[1rem] justify-around">
-    <div class="flex flex-row gap-[1rem] not-lg:flex-wrap align-center justify-center">
+    <div
+      class="flex flex-row gap-[1rem] not-lg:flex-wrap align-center justify-center"
+    >
       <ToggleVenditaAffitto
         class="min-w-50"
         :contrattoSelezionato="datiInputRicerca.tipoContratto"

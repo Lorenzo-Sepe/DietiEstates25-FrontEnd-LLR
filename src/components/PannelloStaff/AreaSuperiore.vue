@@ -32,7 +32,6 @@ const employeeStore = useEmployeeStore();
 onMounted(() => {
   console.log("EmployeeStore initialized");
   console.log(employeeStore.UrlFotoProfilo);
-
 });
 </script>
 

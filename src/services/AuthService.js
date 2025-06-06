@@ -1,4 +1,4 @@
-import { Api, ApiAgent,ApiPublic} from "../api/axiosConfig";
+import { Api, ApiAgent, ApiPublic } from "../api/axiosConfig";
 
 import { setUser } from "./UserService";
 export default {
@@ -31,7 +31,12 @@ export default {
       .post("auth/logout")
       .then((response) => response.data);
   },
-  changePassword(oldPassword, newPassword, newPasswordConfirm,isEmployee=false) {
+  changePassword(
+    oldPassword,
+    newPassword,
+    newPasswordConfirm,
+    isEmployee = false,
+  ) {
     const newCredentials = {
       oldPassword: oldPassword,
       newPassword: newPassword,
@@ -42,11 +47,10 @@ export default {
       return Api()
         .put("auth/change_password_employee", newCredentials)
         .then((response) => response.data);
-    }else{
+    } else {
       return ApiAgent()
         .put("auth/change_password", newCredentials)
         .then((response) => response.data);
-
     }
   },
 };

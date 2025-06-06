@@ -45,7 +45,7 @@
   <div class="w-full flex flex-col gap-2 px-4">
     <AreaSuperiore class="w-full items-center justify-center" />
 
-    <ScheletroListaAgenti v-if="loadingListaAgenti" class="w-full"/>
+    <ScheletroListaAgenti v-if="loadingListaAgenti" class="w-full" />
 
     <div v-else class="w-full">
       <h2 v-if="!isAgente">Lista agenti dell'agenzia:</h2>
@@ -92,7 +92,7 @@
       </Accordion>
 
       <div class="buttonArea flex flex-row gap-2 justify-center items-center">
-          <Button
+        <Button
           severity="contrast"
           class="mb-2"
           label="Aggiungi Agente"
@@ -135,10 +135,6 @@ import { useEmployeeStore } from "../stores/EmployeeStore";
 
 const router = useRouter();
 
-const getImg = (agente) => {
-  console.log("avatar url:", agente.infoUtente.urlFotoProfilo);
-  return agente.infoUtente.urlFotoProfilo;
-};
 const activeIndex = ref(null);
 const numeroAnnunci = ref(0);
 const annunci = ref([]);
@@ -152,6 +148,7 @@ const registrationVisible = ref(false);
 const loadingOperazione = ref(false);
 const agenti = ref([]);
 const isAgente = ref(false);
+const isAnnunciEmpty = ref(false);
 
 const filtroAnnunci = reactive(new FiltroAnnuncioRequest());
 const propostaRequest = reactive(new PropostaRequest());
@@ -170,6 +167,9 @@ onMounted(async () => {
         ),
       );
       loadingListaAgenti.value = false;
+      if (agenti.value.length === 0) {
+        isAnnunciEmpty.value = true;
+      }
     } else {
       const dettagliAgente = ref({
         infoUtente: {
@@ -361,5 +361,4 @@ const changeControposta = (idProposta, prezzoControproposta) => {
 function newNotification() {
   router.push({ name: "NuovaPromozione" });
 }
-
 </script>

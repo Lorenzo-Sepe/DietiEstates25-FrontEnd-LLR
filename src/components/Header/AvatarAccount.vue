@@ -1,7 +1,7 @@
 <template>
   <div class="profile-avatar">
-    <Avatar 
-@click="$emit('avatarclick')"
+    <Avatar
+      @click="$emit('avatarclick')"
       :image="avatarUrl"
       :label="initials"
       shape="circle"
@@ -16,39 +16,38 @@
 </template>
 
 <script setup>
-import { computed ,defineProps} from 'vue'
-import { Avatar } from 'primevue'
+import { computed, defineProps } from "vue";
+import { Avatar } from "primevue";
 
-const props= defineProps({
+const props = defineProps({
   avatarUrl: {
     type: String,
-    default: 'https://placehold.co/400x400/4B00B4/FFFFFF?text=P'
+    default: "https://placehold.co/400x400/4B00B4/FFFFFF?text=P",
   },
   nomeVisualizzato: {
     type: String,
     required: true,
-    default: 'Nome Visualizzato'
+    default: "Nome Visualizzato",
   },
   nomeAzienda: {
     type: String,
-    default: ''
+    default: "",
   },
   onlyAvatar: {
     type: Boolean,
-    default: false
-  }
-})
-
+    default: false,
+  },
+});
 
 const initials = computed(() => {
-  if (props.avatarUrl) return ''
-  const names = props.nomeVisualizzato.split(' ')
+  if (props.avatarUrl) return "";
+  const names = props.nomeVisualizzato.split(" ");
   if (names.length === 1) {
-    return names[0].charAt(0).toUpperCase()
+    return names[0].charAt(0).toUpperCase();
   } else {
-    return names[0].charAt(0).toUpperCase() + names[1].charAt(0).toUpperCase()
+    return names[0].charAt(0).toUpperCase() + names[1].charAt(0).toUpperCase();
   }
-})
+});
 </script>
 
 <style scoped>
@@ -56,7 +55,7 @@ const initials = computed(() => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .avatar {

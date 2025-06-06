@@ -3,15 +3,15 @@
     <p>{{ message }}</p>
     <div class="flex flex-row gap-2">
       <Button
-      :label="isRegister ? 'Registrati' : 'Chiudi'"
-      @click="isRegister ? goToRegister : closeDialog"
-    />
-    <Button
-      v-if="isLogin"
-      label="Accedi"
-      @click="goToLogin"
-      class="p-button-secondary"
-    />
+        :label="isRegister ? 'Registrati' : 'Chiudi'"
+        @click="isRegister ? goToRegister : closeDialog"
+      />
+      <Button
+        v-if="isLogin"
+        label="Accedi"
+        @click="goToLogin"
+        class="p-button-secondary"
+      />
     </div>
   </div>
 </template>
@@ -51,5 +51,5 @@ const goToRegister = () => {
 
 const goToLogin = () => {
   emit("goToLogin");
-};  
+};
 </script>

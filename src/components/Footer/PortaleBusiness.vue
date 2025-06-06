@@ -16,7 +16,8 @@
             :style="{ width: '50vw' }"
             :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
             modal
-            header="Attenzione">
+            header="Attenzione"
+          >
             <AllertDialog
               :message="'Token non valido'"
               :isRegister="false"
@@ -56,12 +57,11 @@
         </li>
       </ul>
     </div>
-     
   </div>
 </template>
 
 <script setup>
-import AllertDialog from "../Dialogs/AllertMessageDialog.vue"
+import AllertDialog from "../Dialogs/AllertMessageDialog.vue";
 import Button from "primevue/button";
 import { ref } from "vue";
 import Dialog from "primevue/dialog";

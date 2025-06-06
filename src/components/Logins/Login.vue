@@ -23,8 +23,7 @@
           size="small"
           variant="simple"
           >{{ $form.email.error?.message }}
-          </Message
-        >
+        </Message>
 
         <Password
           fluid

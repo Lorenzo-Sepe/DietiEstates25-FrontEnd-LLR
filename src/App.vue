@@ -9,7 +9,6 @@ const route = useRoute();
 
 // Determina se l'utente è nell'area venditore
 const isInPortale = computed(() => isPortaleAgenziaAreaPage(route));
-
 </script>
 
 <template>

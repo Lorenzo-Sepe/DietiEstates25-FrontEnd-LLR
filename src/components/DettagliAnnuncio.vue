@@ -224,9 +224,7 @@
             <span
               >Durata:
               {{ annuncio.contratto.contrattoAffittoResponse.tempoMinimo }} -
-              {{
-                annuncio.contratto.contrattoAffittoResponse.tempoMassimo
-              }}
+              {{ annuncio.contratto.contrattoAffittoResponse.tempoMassimo }}
               mesi</span
             >
           </div>

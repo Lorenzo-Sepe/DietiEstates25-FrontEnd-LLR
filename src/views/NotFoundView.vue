@@ -18,7 +18,7 @@ const logoRef = ref(logo);
 
 const goHome = () => {
   // Reindirizza alla home
-  router.push({ name: 'home' });
+  router.push({ name: "home" });
 };
 </script>
 

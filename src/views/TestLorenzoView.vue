@@ -30,16 +30,14 @@ const payload = {
   oggetto: "Test",
   criteridiRicerca: {
     areaDiInteresse: "Napoli",
-    intervallogiorniStoricoRicerca: 70
-  }
-}
+    intervallogiorniStoricoRicerca: 70,
+  },
+};
 
 function sendTest() {
+  payload.contenuto = DOMPurify.sanitize(payload.contenuto);
 
-  payload.contenuto = DOMPurify.sanitize(payload.contenuto)
-
-  NotificheService
-    .creaNotifica(payload)
+  NotificheService.creaNotifica(payload)
     .then((response) => {
       console.log("Response:", response);
       // Handle success

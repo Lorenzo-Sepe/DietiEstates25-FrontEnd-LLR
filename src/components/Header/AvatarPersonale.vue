@@ -3,7 +3,7 @@
     :nomeVisualizzato="nomeVisualizzato"
     :nomeAzienda="nomeAzienda"
     :avatarUrl="avatarUrl"
-@avatarclick="avatarClicked"
+    @avatarclick="avatarClicked"
     onlyAvatar
   />
 
@@ -57,12 +57,13 @@
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     :closable
     modal
-    header="Cambia Password">
+    header="Cambia Password"
+  >
     <PopUpCambioPassword
       @close="dialogChangePassword = false"
       @password-cambiata="dialogChangePassword = false"
-      >
-      </PopUpCambioPassword>
+    >
+    </PopUpCambioPassword>
   </Dialog>
 </template>
 
@@ -76,13 +77,13 @@ import Button from "primevue/button";
 import { useStoreUtente } from "../../stores/UserStore";
 import { useEmployeeStore } from "../../stores/EmployeeStore";
 import { useRouter } from "vue-router";
-import {Message} from "primevue";
+import { Message } from "primevue";
 const props = defineProps([
   "nomeVisualizzato",
   "nomeAzienda",
   "avatarUrl",
   "email",
-  "isInPortale"
+  "isInPortale",
 ]);
 
 const visible = ref(false);
@@ -90,7 +91,6 @@ const visible = ref(false);
 const avatarClicked = () => {
   visible.value = true;
 };
-
 
 const dialogChangePassword = ref(false);
 const changePassword = () => {
@@ -112,24 +112,20 @@ const logout = async () => {
     }
 
     isLoggingOut.value = false;
-
-    
   } catch (error) {
     console.error("Errore durante il logout:", error);
     isLoggingOut.value = false;
     erroreLogout.value = true;
   }
 
-  if(!erroreLogout.value){
-        visible.value = false;
+  if (!erroreLogout.value) {
+    visible.value = false;
 
     if (props.isInPortale) {
-      router.push('/PortaleAgenzia');
+      router.push("/PortaleAgenzia");
     } else {
       router.push("/");
     }
-
   }
 };
-
 </script>

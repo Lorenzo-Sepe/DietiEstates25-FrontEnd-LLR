@@ -15,8 +15,7 @@
     >
       <Password
         fluid
-                :feedback="false"
-
+        :feedback="false"
         v-model="passwordAttuale"
         placeholder="Inserisci la tua password attuale"
       />
@@ -102,7 +101,7 @@
 import { ref, computed, defineProps } from "vue";
 import { Form, FormField } from "@primevue/forms";
 import Password from "primevue/password";
-import Message from "primevue/message"; 
+import Message from "primevue/message";
 import Button from "primevue/button";
 import Divider from "primevue/divider";
 
@@ -125,7 +124,7 @@ const regexRequisiti = {
   maiuscola: /[A-Z]/,
   numero: /\d/,
   simbolo: /[@#$£%^&+=!?\\-_]/,
-  lunghezzaMin: /^.{8,}$/,  // almeno 8 caratteri
+  lunghezzaMin: /^.{8,}$/, // almeno 8 caratteri
   lunghezzaMax: /^.{0,16}$/, // max 16 caratteri (puoi regolare se vuoi)
 };
 
@@ -133,7 +132,10 @@ const requisitiPassword = [
   { testo: "Almeno una lettera minuscola", regex: regexRequisiti.minuscola },
   { testo: "Almeno una lettera maiuscola", regex: regexRequisiti.maiuscola },
   { testo: "Almeno un numero", regex: regexRequisiti.numero },
-  { testo: "Almeno un simbolo (@#$£%^&+=!?\\-_)", regex: regexRequisiti.simbolo },
+  {
+    testo: "Almeno un simbolo (@#$£%^&+=!?\\-_)",
+    regex: regexRequisiti.simbolo,
+  },
   { testo: "Minimo 8 caratteri", regex: regexRequisiti.lunghezzaMin },
   { testo: "Massimo 16 caratteri", regex: regexRequisiti.lunghezzaMax },
 ];
@@ -158,8 +160,7 @@ const risolutore = ({ values }) => {
   if (!regexPassword.test(values.password)) {
     errori.password = [
       {
-        message:
-          "La password non è abbastanza forte.",
+        message: "La password non è abbastanza forte.",
       },
     ];
   }
@@ -183,17 +184,17 @@ const onInvio = () => {
   if (Object.keys(risultato.errors).length > 0) {
     console.warn(
       "Warning Tentativo di invio\n non puoi inviare fino a quando non inserisci una password valida:",
-      risultato.errors
+      risultato.errors,
     );
     return;
   }
-  if(props.cambioPassword){
+  if (props.cambioPassword) {
     emit("submit", {
       passwordAttuale: passwordAttuale.value,
       password: password.value,
       confermaPassword: confermaPassword.value,
     });
-  }else{
+  } else {
     emit("submit", {
       password: password.value,
       confermaPassword: confermaPassword.value,
