@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import SchedaAutenticazione from "./SchedaAutenticazione.vue";
+import SchedaAutenticazione from "./SchedaAutenticazioneView.vue";
 
 export default {
   components: {

@@ -69,7 +69,7 @@ const routes = [
   {
     path: '/PortaleAgenzia',
     name: 'PortaleAgenzia',
-    component: () => import('../views/PortaleAgenzia.vue'),
+    component: () => import('../views/PortaleAgenziaView.vue'),
     beforeEnter: (to, from, next) => {
       if (isAuthenticatedEmployee()) {
         next({ name: 'MieiAnnunci' }); // L'utente è loggato, vai alla pagina dei miei annunci
@@ -86,7 +86,7 @@ const routes = [
   {
     path: '/PortaleAgenzia/miei-annunci',
     name: 'MieiAnnunci',
-    component: () => import('../views/pannelloStaff.vue'), // Pagina dei miei annunci
+    component: () => import('../views/pannelloStaffView.vue'), // Pagina dei miei annunci
     beforeEnter: (to, from, next) => {
       if (isAuthenticated()) {
         next(); // L'utente è loggato, consenti l'accesso
@@ -99,12 +99,12 @@ const routes = [
   {
     path: '/PortaleAgenzia/pannelloStaff',
     name: 'pannellStaff',
-    component: () => import('../views/pannelloStaff.vue')
+    component: () => import('../views/pannelloStaffView.vue')
 
   },  {
     path: '/PortaleAgenzia/CreaAnnuncio',
     name: 'CreaAnnuncio',
-    component: () => import('../views/CreazioneAnnuncio.vue')
+    component: () => import('../views/CreazioneAnnuncioView.vue')
 
   },
   {
@@ -115,20 +115,20 @@ const routes = [
   {
     path: '/notifiche',
     name: 'notifiche',
-    component: () => import('../views/Notifiche.vue')
+    component: () => import('../views/NotificheView.vue')
   },
 
 
   {
     path: '/annunci',
     name: 'annunci',
-    component: () => import('../views/Annunci.vue')
+    component: () => import('../views/AnnunciView.vue')
   },
 
   {
     path: '/mappa-annunci',
     name: 'mappa-annunci',
-    component: () => import('../views/RicercaAnnunciNellaMappa.vue')
+    component: () => import('../views/RicercaAnnunciNellaMappaView.vue')
   },
 
   //ROUTE 404

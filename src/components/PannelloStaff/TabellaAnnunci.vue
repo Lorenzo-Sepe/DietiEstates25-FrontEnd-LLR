@@ -404,11 +404,7 @@ const controproposta = (idProposta, controproposta) => {
 };
 
 const controPropostaAbilitato = (proposta) => {
-  if (proposta.controproposta === null) {
-    return true;
-  } else {
-    return false;
-  }
+  return proposta.controproposta === null;
 };
 
 watch(
