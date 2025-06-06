@@ -2,6 +2,7 @@
   <!-------------  SEZIONE DIALOG PER GLI ALLERT ------------------------------------------------>
   <Dialog
     v-model:visible="loadingOperazione"
+    @close="loadingOperazione = false"
     header="OPERAZIONE IN CORSO"
     :style="{ width: 'auto' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
@@ -13,6 +14,7 @@
 
   <Dialog
     v-model:visible="okAllert"
+    @close="okAllert = false"
     header="CONFERMA OPERAZIONE"
     :style="{ width: 'auto' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
@@ -24,6 +26,7 @@
   <Dialog
     v-model:visible="erroreAllert"
     header="ERRORE"
+    @close="erroreAllert = false"
     :style="{ width: 'auto' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
   >
@@ -33,13 +36,14 @@
 
   <Dialog
     v-model:visible="registrationVisible"
+    @close="registrationVisible = false"
     header="REGISTRA NUOVO DIPENDENTE"
     :style="{ width: 'auto' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
   >
     <RegisterAgentDialog @close="registrationVisible = false" />
   </Dialog>
-
+  
   <!-------------------------------------------- ------------------------------------------------>
 
   <div class="w-full flex flex-col gap-2 px-4">
@@ -132,6 +136,7 @@ import PropostaService from "../services/PropostaService";
 import { FiltroAnnuncioRequest } from "../dto/FiltroAnnunciRequest";
 import { PropostaRequest } from "../dto/PropostaRequest";
 import { useEmployeeStore } from "../stores/EmployeeStore";
+import AllertMessageDialog from "../components/Dialogs/AllertMessageDialog.vue";
 
 const router = useRouter();
 

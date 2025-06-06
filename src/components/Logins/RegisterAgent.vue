@@ -1,4 +1,5 @@
 <template>
+  
   <div fluid class="card p-4 fluid">
     <Form
       v-slot="$form"
@@ -68,12 +69,16 @@ import Button from "primevue/button";
 import Message from "primevue/message";
 import AgenziaImmobiliareService from "../../services/AgenziaImmobiliareService";
 
+const emit = defineEmits(["close"]);
+
 const initialValues = reactive({
   nome: "",
   cognome: "",
   ruolo: "",
 });
 
+const isRegistrationSuccess = ref(false);
+const message = ref("");
 const NewAgentRequest = ref(initialValues);
 
 const roles = ref([
@@ -114,6 +119,9 @@ const handleRegister = async () => {
       NewAgentRequest.value,
     );
     console.log("Registrazione avvenuta con successo:", response);
+    message.value = "Registrazione avvenuta con successo!";
+    isRegistrationSuccess.value = true;
+    // emit("close"); // Se vuoi chiudere il dialog subito dopo, decommenta questa riga
   } catch (error) {
     registrationError.value = error;
     console.error("Registrazione fallita:", error);
