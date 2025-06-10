@@ -70,14 +70,16 @@
 <script setup>
 import PopUpCambioPassword from "../Dialogs/PopUpCambioPassword.vue";
 import AvatarAccount from "./AvatarAccount.vue";
-import { ref } from "vue";
-import { defineProps } from "vue";
-import { Dialog } from "primevue";
+import { ref,defineProps } from "vue";
+import  Dialog  from "primevue/dialog";
 import Button from "primevue/button";
 import { useStoreUtente } from "../../stores/UserStore";
 import { useEmployeeStore } from "../../stores/EmployeeStore";
 import { useRouter } from "vue-router";
 import { Message } from "primevue";
+
+const router = useRouter();
+
 const props = defineProps([
   "nomeVisualizzato",
   "nomeAzienda",
@@ -96,19 +98,22 @@ const dialogChangePassword = ref(false);
 const changePassword = () => {
   dialogChangePassword.value = true;
 };
-const router = useRouter();
+
 const isLoggingOut = ref(false);
-const store = useStoreUtente();
+const storeUtente = useStoreUtente();
 const storeEmployee = useEmployeeStore();
 const erroreLogout = ref(false);
+
 const logout = async () => {
   isLoggingOut.value = true;
   erroreLogout.value = false;
   try {
     if (props.isInPortale) {
       await storeEmployee.logout();
+      router.push("/");
     } else {
-      await store.logout();
+      await storeUtente.logout();
+      router.push("/");
     }
 
     isLoggingOut.value = false;

@@ -12,7 +12,6 @@ import StepDatiPrincipali from "../components/CreaAnnuncio/StepDatiPrincipali.vu
 import StepIndirizzo from "../components/CreaAnnuncio/StepIndirizzo.vue";
 import StepImmagini from "../components/CreaAnnuncio/StepCaricamentoImmagini.vue";
 import { useStoreAnnuncio } from "../stores/CreazioneAnnuncioStore";
-import { Button } from "primevue";
 import Tag from "primevue/tag";
 import Anteprima from "../components/CreaAnnuncio/Anteprima.vue";
 import StepCaratteristiche from "../components/CreaAnnuncio/StepCaratteristiche.vue";
@@ -72,11 +71,11 @@ watch(activeStep, (newVal) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 w-full items-center justify-center">
+  <div class="flex flex-col gap-4 w-full mx-3 items-center justify-center">
     <h1 class="my-4 mx-4">CREAZIONE NUOVO ANNUNCIO</h1>
 
     <div
-      class="justify-center border-1 border-green-300 rounded-lg p-2 bg-gray-100 my-2 mx-auto w-full md:w-3/4 lg:w-2/3 xl:w-3/4 2xl:w-4/5 flex"
+      class="justify-center border-1 border-green-300 rounded-lg p-2 bg-gray-100 my-2 mx-auto w-full  flex"
     >
       <Stepper v-model:value="activeStep" class="w-full max-w-full">
         <StepList>
@@ -134,7 +133,7 @@ watch(activeStep, (newVal) => {
 
         <StepPanels>
           <StepPanel class="!bg-gray-100" :value="1">
-            <Tag class="my-4">
+            <Tag severity="contrast" class="primeTags">
               <h3>Informazioni di Base</h3>
             </Tag>
             <StepDatiIniziali
@@ -147,7 +146,7 @@ watch(activeStep, (newVal) => {
           </StepPanel>
 
           <StepPanel class="!bg-gray-100" :value="2">
-            <Tag class="my-4">
+            <Tag class="primeTags">
               <h3>Dettagli Annuncio</h3>
             </Tag>
             <StepDatiPrincipali
@@ -159,7 +158,7 @@ watch(activeStep, (newVal) => {
             />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="4">
-            <Tag class="my-4">
+            <Tag class="primeTags">
               <h3>Indirizzo e Posizione</h3>
             </Tag>
             <StepIndirizzo
@@ -172,7 +171,7 @@ watch(activeStep, (newVal) => {
             />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="3">
-            <Tag class="my-4">
+            <Tag class="primeTags">
               <h3>Caratteristiche</h3>
             </Tag>
             <StepCaratteristiche
@@ -213,5 +212,11 @@ watch(activeStep, (newVal) => {
 .error-message {
   color: red;
   font-weight: bold;
+}
+
+.primeTags{
+  margin-block: calc(var(--spacing) * 2) /* 1rem = 16px */;
+  width: calc(1/2 * 100%) /* 50% */;
+  text-align: center;
 }
 </style>

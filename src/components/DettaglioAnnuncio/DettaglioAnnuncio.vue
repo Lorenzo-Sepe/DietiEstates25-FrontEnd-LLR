@@ -60,23 +60,29 @@
         </span>
 
         <span
-          v-if="props.annuncio.contratto.tipoContratto == 'AFFITTO'"
+          v-if="props.annuncio.contratto.tipoContratto == 'AFFITTO' && props.annuncio.contratto.contrattoAffittoResponse"
           class="indirizzo text-3xl text-left font-bold"
         >
           {{
             formattaPrezzo(
-              props.annuncio.contratto.contrattoAffittoResponse.prezzoAffitto,
+              props.annuncio.contratto.contrattoAffittoResponse?.prezzoAffitto,
             )
           }}
           € /mese
         </span>
-        <span v-else class="indirizzo text-3xl text-left font-bold">
+        <span
+          v-else-if="props.annuncio.contratto.tipoContratto == 'VENDITA' && props.annuncio.contratto.contrattoVenditaResponse"
+          class="indirizzo text-3xl text-left font-bold"
+        >
           {{
             formattaPrezzo(
-              props.annuncio.contratto.contrattoVenditaResponse.prezzoVendita,
+              props.annuncio.contratto.contrattoVenditaResponse?.prezzoVendita,
             )
           }}
           €
+        </span>
+        <span v-else class="indirizzo text-3xl text-left font-bold">
+          <!-- Nessun dato disponibile -->
         </span>
 
         <div class="caratteristiche-principali flex flex-row gap-2">
@@ -206,15 +212,14 @@
             <AccordionHeader>CONDIZIONI CONTRATTUALI</AccordionHeader>
             <AccordionContent>
               <div
-                v-if="props.annuncio.contratto.tipoContratto === 'AFFITTO'"
+                v-if="props.annuncio.contratto.tipoContratto === 'AFFITTO' && props.annuncio.contratto.contrattoAffittoResponse"
                 class="informazioni-affitto w-full flex flex-col gap-2"
               >
                 <span class="text-lg">
                   Tempo minimo di affitto:
                   <span class="font-medium"
                     >{{
-                      props.annuncio.contratto.contrattoAffittoResponse
-                        .tempoMinimo
+                      props.annuncio.contratto.contrattoAffittoResponse?.tempoMinimo
                     }}
                     mesi</span
                   >
@@ -223,8 +228,7 @@
                   Tempo massimo di affitto:
                   <span class="font-medium"
                     >{{
-                      props.annuncio.contratto.contrattoAffittoResponse
-                        .tempoMassimo
+                      props.annuncio.contratto.contrattoAffittoResponse?.tempoMassimo
                     }}
                     mesi</span
                   >
@@ -235,8 +239,7 @@
                   <span class="font-medium"
                     >{{
                       formattaPrezzo(
-                        props.annuncio.contratto.contrattoAffittoResponse
-                          .prezzoAffitto,
+                        props.annuncio.contratto.contrattoAffittoResponse?.prezzoAffitto,
                       )
                     }}
                     €</span
@@ -247,8 +250,7 @@
                   <span class="font-medium"
                     >{{
                       formattaPrezzo(
-                        props.annuncio.contratto.contrattoAffittoResponse
-                          .caparra,
+                        props.annuncio.contratto.contrattoAffittoResponse?.caparra,
                       )
                     }}
                     €</span
@@ -256,34 +258,28 @@
                 </span>
               </div>
               <div
-                v-else
+                v-else-if="props.annuncio.contratto.tipoContratto === 'VENDITA' && props.annuncio.contratto.contrattoVenditaResponse"
                 class="informazioni-vendita w-full flex flex-col gap-2"
               >
-                <span class="mt-4 text-lg">
+                <div>
                   Prezzo Vendita:
-                  <span class="font-medium"
-                    >{{
-                      formattaPrezzo(
-                        props.annuncio.contratto.contrattoVenditaResponse
-                          .prezzoVendita,
-                      )
-                    }}
-                    €</span
-                  >
-                </span>
+                  <span class="font-medium">
+                    {{ formattaPrezzo(props.annuncio.contratto.contrattoVenditaResponse?.prezzoVendita) }} €
+                  </span>
+                </div>
                 <span class="mt-4 text-lg">
                   Mutuo estinto:
                   <span
                     class="font-medium"
-                    v-if="
-                      props.annuncio.contratto.contrattoVenditaResponse
-                        .mutuoEstinto
-                    "
+                    v-if="props.annuncio.contratto.contrattoVenditaResponse?.mutuoEstinto"
                   >
                     Si
                   </span>
                   <span class="font-medium" v-else> No</span>
                 </span>
+              </div>
+              <div v-else>
+                <span>Nessuna informazione contrattuale disponibile.</span>
               </div>
             </AccordionContent>
           </AccordionPanel>

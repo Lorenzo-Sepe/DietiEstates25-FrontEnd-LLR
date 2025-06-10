@@ -8,7 +8,8 @@
       />
       <div class="info-profilo flex flex-col">
         <p>
-          Agente:
+          <span v-if="isAgente">Agente: &nbsp;</span>
+          <span v-else>Manager: &nbsp;</span>
           <b>
             {{ employeeStore.employee.datiImpiegato.nome }}
             {{ employeeStore.employee.datiImpiegato.cognome }}
@@ -24,14 +25,21 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted,ref } from "vue";
 import { useEmployeeStore } from "../../stores/EmployeeStore";
 
 const employeeStore = useEmployeeStore();
 
+const isAgente = ref(false);
+
 onMounted(() => {
   console.log("EmployeeStore initialized");
   console.log(employeeStore.UrlFotoProfilo);
+  if(employeeStore.employee.datiImpiegato.ruolo === "AGENT") {
+    isAgente.value = true;
+  } else {
+    isAgente.value = false;
+  }
 });
 </script>
 

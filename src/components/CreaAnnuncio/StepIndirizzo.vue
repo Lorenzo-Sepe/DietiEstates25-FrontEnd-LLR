@@ -111,6 +111,7 @@ import {
   defineExpose,
   reactive,
   computed,
+  onMounted
 } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
@@ -121,6 +122,7 @@ import SelectComuni from "./SelectComuni.vue";
 import StickyButtons from "./StickyButtons.vue";
 
 import { scrollToFirstError } from "../../utils/scrollToError";
+
 const props = defineProps({
   annuncio: AnnuncioImmobiliareRequest,
   activeStep: Number,
@@ -132,6 +134,14 @@ const errori = reactive({
   via: { invalid: false, messaggio: "" },
   numeroCivico: { invalid: false, messaggio: "" },
   comune: { invalid: false, messaggio: "Seleziona un comune" },
+});
+
+onMounted(() => {
+  const container = document.getElementById('map');
+  if (!container) return;
+
+  const map = L.map('map').setView([45.4642, 9.19], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 });
 
 // Funzione di validazione

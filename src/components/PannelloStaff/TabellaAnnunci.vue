@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col w-full h-full">
-    <ScheletroTabella v-if="props.propLoading" class="flex-grow" />
+    <ScheletroTabella v-if="props.propLoading" class="flex-grow max-w-full" />
     <div v-else>
       <div
         v-if="isAnnunciEmpty"
@@ -9,7 +9,7 @@
         <Tag
           value="Non ci sono annunci immobiliari per questo agente"
           severity="secondary"
-          class="w-full text-center"
+          class="w-full text-center h-10"
         />
       </div>
 

@@ -43,7 +43,7 @@
   >
     <RegisterAgentDialog @close="registrationVisible = false" />
   </Dialog>
-  
+
   <!-------------------------------------------- ------------------------------------------------>
 
   <div class="w-full flex flex-col gap-2 px-4">
@@ -81,6 +81,7 @@
           </AccordionHeader>
           <AccordionContent>
             <TabellaAnnunci
+              class="w-full mb-2"
               :propAnnunci="annunci"
               :propLoading="loading"
               :propostaRequest="propostaRequest"
@@ -91,11 +92,12 @@
               @accettaProposta="accettaProposta"
               @controproposta="controproposta"
             />
+            <Button severity="contrast" icon="pi pi-plus" @click="toCreaAnnuncio" label="Crea un Annuncio" raised></Button>
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
 
-      <div class="buttonArea flex flex-row gap-2 justify-center items-center">
+      <div v-if="!isAgente" class="buttonArea flex flex-row gap-2 justify-center items-center">
         <Button
           severity="contrast"
           class="mb-2"
@@ -136,7 +138,6 @@ import PropostaService from "../services/PropostaService";
 import { FiltroAnnuncioRequest } from "../dto/FiltroAnnunciRequest";
 import { PropostaRequest } from "../dto/PropostaRequest";
 import { useEmployeeStore } from "../stores/EmployeeStore";
-import AllertMessageDialog from "../components/Dialogs/AllertMessageDialog.vue";
 
 const router = useRouter();
 
@@ -195,7 +196,8 @@ onMounted(async () => {
 const filterAgenti = (dipendenti) => {
   return dipendenti
     ? dipendenti.filter(
-        (dipendente) => dipendente.infoUtente.tipoAccount === "AGENT",
+        (dipendente) =>
+          dipendente.infoUtente.tipoAccount === "AGENT" 
       )
     : [];
 };
@@ -207,6 +209,10 @@ const onAccordionToggle = (newIndex) => {
       agenti.value[newIndex].infoUtente.email;
     getAnnunci();
   }
+};
+
+const toCreaAnnuncio = () => {
+  router.push({ name: "CreaAnnuncio" });
 };
 
 const getNumeroAnnunci = async () => {

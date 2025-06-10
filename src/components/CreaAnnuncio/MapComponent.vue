@@ -6,6 +6,7 @@ import {
   defineProps,
   defineEmits,
   watch,
+  nextTick,
 } from "vue";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -31,13 +32,22 @@ const marcatore = ref(null);
 
 // Inizializza la mappa
 const inizializzaMappa = () => {
-  istanzaMappa.value = L.map("mappa").setView([41.8719, 12.5674], 6);
+  if (!contenitoreMappa.value) {
+    console.error("Contenitore mappa non trovato.");
+    return;
+  }
+
+  istanzaMappa.value = L.map(contenitoreMappa.value).setView(
+    [41.8719, 12.5674],
+    6,
+  );
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: "© OpenStreetMap",
   }).addTo(istanzaMappa.value);
 };
+
 
 // Ottiene le coordinate con fallback se il civico non è trovato
 const ottieniCoordinate = async () => {
@@ -171,7 +181,12 @@ watch(
   },
 );
 
-onMounted(() => {
+onMounted(async () => {
+  await nextTick(); // Wait until DOM is ready
+  if (!contenitoreMappa.value) {
+    console.error("Il contenitore della mappa non è disponibile.");
+    return;
+  }
   inizializzaMappa();
   if (props.citta) {
     aggiornaMappa();

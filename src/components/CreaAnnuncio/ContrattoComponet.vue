@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, defineExpose, reactive, computed, watch, ref } from "vue";
-import InputText from "primevue/inputtext";
+import InputNumber from "primevue/inputnumber";
 import Select from "primevue/select";
 
 import ToggleSwitch from "primevue/toggleswitch";
@@ -144,10 +144,10 @@ watch(
             <label for="prezzoAffitto" class="font-semibold"
               >Prezzo di Affitto</label
             >
-            <InputText
+            <InputNumber
               id="prezzoAffitto"
               v-model="contratto.datiAffittoRequest.prezzo"
-              type="number"
+              mode="currency" currency="EUR" locale="de-DE"
               :invalid="errori.prezzo.invalid"
               @input="verificaDati('prezzo')"
               @blur="verificaDati('prezzo')"
@@ -168,7 +168,7 @@ watch(
           <!-- Caparra -->
           <div class="flex flex-col">
             <label for="caparra" class="font-semibold">Caparra</label>
-            <InputText
+            <InputNumber
               id="caparra"
               v-model="contratto.datiAffittoRequest.caparra"
               type="number"
@@ -196,7 +196,7 @@ watch(
 
           <div class="flex flex-col">
             <label for="tempoMinimo" class="font-semibold">Tempo Minimo</label>
-            <InputText
+            <InputNumber
               id="tempoMinimo"
               v-model="contratto.datiAffittoRequest.tempoMinimo"
               type="number"
@@ -222,7 +222,7 @@ watch(
             <label for="tempoMassimo" class="font-semibold"
               >Tempo massimo</label
             >
-            <InputText
+            <InputNumber
               id="tempoMassimo"
               v-model="contratto.datiAffittoRequest.tempoMassimo"
               type="number"
@@ -255,7 +255,7 @@ watch(
           <label for="prezzoVendita" class="font-semibold"
             >Prezzo di Vendita</label
           >
-          <InputText
+          <InputNumber
             id="prezzoVendita"
             v-model="contratto.datiVenditaRequest.prezzo"
             type="number"
