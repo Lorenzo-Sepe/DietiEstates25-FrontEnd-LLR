@@ -15,18 +15,9 @@ import piniaPersistedState from "pinia-plugin-persistedstate";
 import { createAuth0 } from "@auth0/auth0-vue";
 
 const app = createApp(App);
+
 //const pinia = createPinia()
-const pinia = createPinia();
-pinia.use(({ store }) => {
-  store.$onAction(({ name }) => {
-    console.log(`Action triggered: ${name}`);
-  });
-});
 
-app.use(pinia);
-
-pinia.use(piniaPersistedState); // Abilita la persistenza
-app.use(pinia);
 
 app.use(PrimeVue, {
   ripple: true,
@@ -55,4 +46,17 @@ app.use(DialogService);
 app.directive("tooltip", Tooltip);
 
 app.use(router);
+
+const pinia = createPinia();
+pinia.devtools = true;
+pinia.use(({ store }) => {
+  store.$onAction(({ name }) => {
+    console.log(`Action triggered: ${name}`);
+  });
+});
+
+pinia.use(piniaPersistedState); // Abilita la persistenza
+
+app.use(pinia);
+
 app.mount("#app");

@@ -7,7 +7,7 @@ import {
   reactive,
   computed,
 } from "vue";
-import InputText from "primevue/inputtext";
+import InputNumber from "primevue/inputnumber";
 import Select from "primevue/select";
 import Button from "primevue/button";
 import Message from "primevue/message";
@@ -173,10 +173,10 @@ const refContratto = ref({});
         <label for="metriQuadri" class="block font-semibold mb-2"
           >Metri Quadri</label
         >
-        <InputText
+        <InputNumber
           id="metriQuadri"
           v-model="annuncio.immobile.metriQuadri"
-          type="number"
+          suffix=" m²"
           :invalid="errori.metriQuadri.invalid"
           @input="verificaDati('metriQuadri')"
           @blur="verificaDati('metriQuadri')"
@@ -197,10 +197,10 @@ const refContratto = ref({});
         <label for="numeroDiPiani" class="block font-semibold mb-2"
           >Numero di Piani</label
         >
-        <InputText
+        <InputNumber
           id="numeroDiPiani"
           v-model="annuncio.immobile.numeroDiPiani"
-          type="number"
+          suffix=" piani"
           :invalid="errori.numeroDiPiani.invalid"
           @input="verificaDati('numeroDiPiani')"
           @blur="verificaDati('numeroDiPiani')"
@@ -221,10 +221,9 @@ const refContratto = ref({});
         <label for="numeroStanze" class="block font-semibold mb-2"
           >Numero di Stanze</label
         >
-        <InputText
+        <InputNumber
           id="numeroStanze"
           v-model="annuncio.immobile.numeroStanze"
-          type="number"
           :invalid="errori.numeroStanze.invalid"
           @input="verificaDati('numeroStanze')"
           @blur="verificaDati('numeroStanze')"
@@ -245,10 +244,9 @@ const refContratto = ref({});
         <label for="numeroServizi" class="block font-semibold mb-2"
           >Numero di Servizi</label
         >
-        <InputText
+        <InputNumber
           id="numeroServizi"
           v-model="annuncio.immobile.numeroServizi"
-          type="number"
           :invalid="errori.numeroServizi.invalid"
           @input="verificaDati('numeroServizi')"
           @blur="verificaDati('numeroServizi')"

@@ -1,11 +1,11 @@
 <template>
-<div v-if="isRegistrationSuccess" fluid class="card p-4 fluid">
+  <div v-if="isRegistrationSuccess" fluid class="card p-4 fluid">
     <Message severity="success" size="small">
       {{ message }}
     </Message>
     <Button label="Chiudi" @click="emit('close')" />
-</div>
-<div v-else fluid class="card p-4 fluid">
+  </div>
+  <div v-else fluid class="card p-4 fluid">
     <Form
       v-slot="$form"
       :initialValues="initialValues"

@@ -70,8 +70,8 @@
 <script setup>
 import PopUpCambioPassword from "../Dialogs/PopUpCambioPassword.vue";
 import AvatarAccount from "./AvatarAccount.vue";
-import { ref,defineProps } from "vue";
-import  Dialog  from "primevue/dialog";
+import { ref, defineProps } from "vue";
+import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import { useStoreUtente } from "../../stores/UserStore";
 import { useEmployeeStore } from "../../stores/EmployeeStore";

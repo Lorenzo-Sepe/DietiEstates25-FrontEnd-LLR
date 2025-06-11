@@ -147,7 +147,9 @@ watch(
             <InputNumber
               id="prezzoAffitto"
               v-model="contratto.datiAffittoRequest.prezzo"
-              mode="currency" currency="EUR" locale="de-DE"
+              mode="currency"
+              currency="EUR"
+              locale="it-IT"
               :invalid="errori.prezzo.invalid"
               @input="verificaDati('prezzo')"
               @blur="verificaDati('prezzo')"
@@ -171,7 +173,9 @@ watch(
             <InputNumber
               id="caparra"
               v-model="contratto.datiAffittoRequest.caparra"
-              type="number"
+              mode="currency"
+              currency="EUR"
+              locale="it-IT"
               :invalid="errori.caparra.invalid"
               @input="verificaDati('caparra')"
               @blur="verificaDati('caparra')"
@@ -199,7 +203,8 @@ watch(
             <InputNumber
               id="tempoMinimo"
               v-model="contratto.datiAffittoRequest.tempoMinimo"
-              type="number"
+              suffix=" mesi"
+              :min="0"
               :invalid="errori.tempoMinimo.invalid"
               @input="verificaDati('tempoMinimo')"
               @blur="verificaDati('tempoMinimo')"
@@ -225,7 +230,8 @@ watch(
             <InputNumber
               id="tempoMassimo"
               v-model="contratto.datiAffittoRequest.tempoMassimo"
-              type="number"
+              suffix=" mesi"
+              :min="1"
               :invalid="errori.tempoMassimo.invalid"
               @input="verificaDati('tempoMassimo')"
               @blur="verificaDati('tempoMassimo')"

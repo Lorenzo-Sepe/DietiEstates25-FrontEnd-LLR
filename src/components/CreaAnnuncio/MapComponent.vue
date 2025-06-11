@@ -48,7 +48,6 @@ const inizializzaMappa = () => {
   }).addTo(istanzaMappa.value);
 };
 
-
 // Ottiene le coordinate con fallback se il civico non è trovato
 const ottieniCoordinate = async () => {
   if (!props.via || !props.cap || !props.citta) {

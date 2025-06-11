@@ -23,7 +23,7 @@ const activeStep = ref(1);
 const tentativoInvio = reactive({ valore: false });
 
 const vaiAvanti = () => {
-  if (activeStep.value < 5) activeStep.value++;
+  if (activeStep.value < 6) activeStep.value++;
 };
 
 const vaiIndietro = () => {
@@ -57,7 +57,12 @@ const inviaAnnuncio = () => {
     activeStep.value = 4;
     return;
   }
-  CreaAnnuncio(annuncio);
+  const response = CreaAnnuncio(annuncio);
+  if(response) {
+    console.log("Annuncio inviato con successo:", response);
+    alert(response.value);
+  }
+  
 };
 
 watch(activeStep, (newVal) => {
@@ -75,7 +80,7 @@ watch(activeStep, (newVal) => {
     <h1 class="my-4 mx-4">CREAZIONE NUOVO ANNUNCIO</h1>
 
     <div
-      class="justify-center border-1 border-green-300 rounded-lg p-2 bg-gray-100 my-2 mx-auto w-full  flex"
+      class="justify-center border-1 border-green-300 rounded-lg p-2 bg-gray-100 my-2 mx-auto w-full flex"
     >
       <Stepper v-model:value="activeStep" class="w-full max-w-full">
         <StepList>
@@ -146,7 +151,7 @@ watch(activeStep, (newVal) => {
           </StepPanel>
 
           <StepPanel class="!bg-gray-100" :value="2">
-            <Tag class="primeTags">
+            <Tag severity="contrast" class="primeTags">
               <h3>Dettagli Annuncio</h3>
             </Tag>
             <StepDatiPrincipali
@@ -158,7 +163,7 @@ watch(activeStep, (newVal) => {
             />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="4">
-            <Tag class="primeTags">
+            <Tag severity="contrast" class="primeTags">
               <h3>Indirizzo e Posizione</h3>
             </Tag>
             <StepIndirizzo
@@ -171,7 +176,7 @@ watch(activeStep, (newVal) => {
             />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="3">
-            <Tag class="primeTags">
+            <Tag severity="contrast" class="primeTags">
               <h3>Caratteristiche</h3>
             </Tag>
             <StepCaratteristiche
@@ -192,7 +197,7 @@ watch(activeStep, (newVal) => {
           <StepPanel class="!bg-gray-100" :value="6">
             <Anteprima
               v-model:annuncio="annuncio"
-              @indietro="vaiIndietro"
+              @indietro="vaiIndietro"clearable
               @invia="inviaAnnuncio"
             />
           </StepPanel>
@@ -214,9 +219,9 @@ watch(activeStep, (newVal) => {
   font-weight: bold;
 }
 
-.primeTags{
+.primeTags {
   margin-block: calc(var(--spacing) * 2) /* 1rem = 16px */;
-  width: calc(1/2 * 100%) /* 50% */;
+  width: calc(1 / 2 * 100%) /* 50% */;
   text-align: center;
 }
 </style>

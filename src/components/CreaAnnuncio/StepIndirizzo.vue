@@ -111,7 +111,7 @@ import {
   defineExpose,
   reactive,
   computed,
-  onMounted
+  onMounted,
 } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
@@ -137,11 +137,11 @@ const errori = reactive({
 });
 
 onMounted(() => {
-  const container = document.getElementById('map');
+  const container = document.getElementById("map");
   if (!container) return;
 
-  const map = L.map('map').setView([45.4642, 9.19], 13);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+  const map = L.map("map").setView([45.4642, 9.19], 13);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 });
 
 // Funzione di validazione

@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { onMounted,ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useEmployeeStore } from "../../stores/EmployeeStore";
 
 const employeeStore = useEmployeeStore();
@@ -35,7 +35,7 @@ const isAgente = ref(false);
 onMounted(() => {
   console.log("EmployeeStore initialized");
   console.log(employeeStore.UrlFotoProfilo);
-  if(employeeStore.employee.datiImpiegato.ruolo === "AGENT") {
+  if (employeeStore.employee.datiImpiegato.ruolo === "AGENT") {
     isAgente.value = true;
   } else {
     isAgente.value = false;

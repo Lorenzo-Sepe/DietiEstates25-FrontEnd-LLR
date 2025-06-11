@@ -92,12 +92,21 @@
               @accettaProposta="accettaProposta"
               @controproposta="controproposta"
             />
-            <Button severity="contrast" icon="pi pi-plus" @click="toCreaAnnuncio" label="Crea un Annuncio" raised></Button>
+            <Button
+              severity="contrast"
+              icon="pi pi-plus"
+              @click="toCreaAnnuncio"
+              label="Crea un Annuncio"
+              raised
+            ></Button>
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
 
-      <div v-if="!isAgente" class="buttonArea flex flex-row gap-2 justify-center items-center">
+      <div
+        v-if="!isAgente"
+        class="buttonArea flex flex-row gap-2 justify-center items-center"
+      >
         <Button
           severity="contrast"
           class="mb-2"
@@ -196,8 +205,7 @@ onMounted(async () => {
 const filterAgenti = (dipendenti) => {
   return dipendenti
     ? dipendenti.filter(
-        (dipendente) =>
-          dipendente.infoUtente.tipoAccount === "AGENT" 
+        (dipendente) => dipendente.infoUtente.tipoAccount === "AGENT",
       )
     : [];
 };

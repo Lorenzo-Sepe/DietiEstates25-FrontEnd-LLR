@@ -149,6 +149,7 @@ import {
   Immagine,
 } from "../../dto/RequestAnnuncio";
 import StickyButtons from "./StickyButtons.vue";
+import { scrollToFirstError } from "../../utils/scrollToError";
 
 const errori = reactive({
   immagineiVuote: {
@@ -182,11 +183,36 @@ const dimensioneTotaleMB = computed(() => {
   return (totale / (1024 * 1024)).toFixed(2);
 });
 
-const emit = defineEmits(["indietro", "invia"]);
+const emit = defineEmits(["indietro", "avanti"]);
 const props = defineProps({
   annuncio: AnnuncioImmobiliareRequest,
   tentativoInvio: Boolean,
 });
+
+const validaCampi = () => {
+  errori.immagineiVuote.invalid =
+    props.annuncio.immobile.immagini.length === 0;
+  errori.dimensioneTotale.invalid = dimensioneTotaleMB.value > 10; // Limite di 10 MB
+  errori.descrizioneLunga.invalid = props.annuncio.immobile.immagini.some(
+    (img) => img.descrizione.length > 20,
+  );
+
+  // Verifica descrizioni per ogni immagine
+  props.annuncio.immobile.immagini.forEach((img, index) => {
+    verificaDati(index);
+  });
+};
+
+
+const validaEAvanza = () => {
+  validaCampi();
+  if (!Object.values(errori).some((e) => e.invalid)) {
+    emit("avanti");
+    console.log("validaEAvanza")
+  } else {
+    scrollToFirstError(errori);
+  }
+};
 
 const inputFile = ref(null);
 
