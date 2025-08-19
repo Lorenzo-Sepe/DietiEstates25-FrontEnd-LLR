@@ -127,6 +127,12 @@ const routes = [
     component: () => import("../views/RicercaAnnunciNellaMappaView.vue"),
   },
 
+  {
+    path: "/storico-ricerche",
+    name: "storico-ricerche",
+    component: () => import("../views/StoricoRicercheView.vue"),
+  },
+
   //ROUTE 404
   {
     path: "/:pathMatch(.*)*",

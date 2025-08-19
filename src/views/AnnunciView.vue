@@ -23,7 +23,7 @@
         class="lista-annunci w-full min-h-screen md:w-[85%] lg:w-full flex flex-col gap-4"
       >
         <div
-          class="menuSuperiore flex flex-row border-b border-b-2 border-b-gray-400 p-2 gap-2 mb-4 mx-2 justify-between"
+          class="menuSuperiore flex flex-row border-b-2 border-b-gray-400 p-2 gap-2 mb-4 mx-2 justify-between"
         >
           <div class="flex justify-center block md:hidden">
             <Drawer v-model:visible="visible" header="Filtro">
@@ -124,7 +124,7 @@ onMounted(() => {
 const mostraAnnunci = async () => {
   try {
     loadingAnnunci.value = true;
-    numeroAnnunci.value = await getNumeroAnnunci();
+    //numeroAnnunci.value = await getNumeroAnnunci();
     const annunci = await getAnnunci();
     setAnnunciResponse(annunci);
     console.log("Annunci response: ", annunciResponse.value);
@@ -147,10 +147,13 @@ const getAnnunci = async () => {
   return AnnunciImmobiliService.getAnnunci(filtroAnnunci);
 };
 
-const setFiltro = async () => {
+const setNumeroPagina = () => {
   filtroAnnunci.numeroPagina = route.query.page
     ? parseInt(route.query.page)
     : 1;
+};
+
+const setOrdini = () => {
   filtroAnnunci.ordinePrezzoAsc = route.query.ordinePrezzoAsc
     ? route.query.ordinePrezzoAsc
     : false;
@@ -163,12 +166,18 @@ const setFiltro = async () => {
   filtroAnnunci.ordineDataDesc = route.query.ordineDataDesc
     ? route.query.ordineDataDesc
     : false;
+};
+
+const setTipologie = () => {
   filtroAnnunci.tipologiaImmobile = route.query.immobile
     ? route.query.immobile
     : null;
   filtroAnnunci.tipologiaContratto = route.query.contratto
     ? route.query.contratto
     : null;
+};
+
+const setPrezziEDimensioni = () => {
   filtroAnnunci.prezzoMin = route.query.prezzoMin
     ? parseInt(route.query.prezzoMin)
     : null;
@@ -181,16 +190,15 @@ const setFiltro = async () => {
   filtroAnnunci.metriQuadriMax = route.query.mqMax
     ? parseInt(route.query.mqMax)
     : null;
+};
+
+const setCaratteristiche = () => {
   filtroAnnunci.provincia = route.query.comune ? route.query.comune : null;
   filtroAnnunci.balconi = route.query.balconi ? route.query.balconi : null;
   filtroAnnunci.garage = route.query.garage ? route.query.garage : null;
-  filtroAnnunci.postiAuto = route.query.postiAuto
-    ? route.query.postiAuto
-    : null;
+  filtroAnnunci.postiAuto = route.query.postiAuto ? route.query.postiAuto : null;
   filtroAnnunci.giardino = route.query.giardino ? route.query.giardino : null;
-  filtroAnnunci.ascensore = route.query.ascensore
-    ? route.query.ascensore
-    : null;
+  filtroAnnunci.ascensore = route.query.ascensore ? route.query.ascensore : null;
   filtroAnnunci.portiere = route.query.portiere ? route.query.portiere : null;
   filtroAnnunci.riscaldamentoCentralizzato = route.query.riscaldamento
     ? route.query.riscaldamento
@@ -198,12 +206,26 @@ const setFiltro = async () => {
   filtroAnnunci.climatizzatore = route.query.climatizzatore
     ? route.query.climatizzatore
     : null;
-  filtroAnnunci.pannelliSolari = route.query.pannelli
-    ? route.query.pannelli
-    : null;
+  filtroAnnunci.pannelliSolari = route.query.pannelli ? route.query.pannelli : null;
   filtroAnnunci.cantina = route.query.cantina ? route.query.cantina : null;
   filtroAnnunci.soffitta = route.query.soffitta ? route.query.soffitta : null;
 };
+
+const setAgente = () => {
+  filtroAnnunci.agenteCreatoreAnnuncio = route.query.agenteCreatoreAnnuncio
+    ? route.query.agenteCreatoreAnnuncio
+    : null;
+};
+
+const setFiltro = async () => {
+  setNumeroPagina();
+  setOrdini();
+  setTipologie();
+  setPrezziEDimensioni();
+  setCaratteristiche();
+  setAgente();
+};
+
 
 const setAnnunciResponse = (annunci) => {
   annunciResponse.value = [];
