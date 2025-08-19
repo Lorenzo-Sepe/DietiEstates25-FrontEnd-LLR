@@ -1,6 +1,7 @@
 <template>
   <div class="form-proposta">
-    <div class="card flex justify-center gap-2">
+
+    <div class="riga">
       <div class="flex-auto my-2">
         <label for="Nome" class="font-bold block mb-2"> Nome </label>
         <InputText id="nome" v-model="nome" :invalid="nomeNonValido" />
@@ -16,31 +17,24 @@
         }}</Message>
       </div>
     </div>
-    <div class="flex-auto my-2">
-      <label for="Prezzo" class="font-bold block mb-2"> Prezzo </label>
-      <InputNumber
-        v-model="prezzo"
-        :invalid="prezzoNonValido"
-        inputId="prezzo"
-        fluid
-      />
-      <Message severity="error" variant="simple" size="small">{{
-        errori.prezzo.messaggio
-      }}</Message>
+
+    <div class="riga">
+      <div class="flex-auto my-2">
+        <label for="Prezzo" class="font-bold block mb-2"> Prezzo </label>
+        <InputNumber v-model="prezzo" :invalid="prezzoNonValido" inputId="prezzo" fluid />
+        <Message severity="error" variant="simple" size="small">{{
+          errori.prezzo.messaggio
+          }}</Message>
+      </div>
     </div>
-    <div class="card flex justify-center gap-2 my-2">
+
+    <div class="riga">
       <div class="flex-auto my-2">
         <label for="TipoContatto" class="font-bold block mb-2">
           Tipo contatto
         </label>
-        <Select
-          v-model="selectedTipoContatto"
-          :invalid="tipoContattoNonValido"
-          :options="tipiContatto"
-          optionLabel="name"
-          placeholder="Seleziona tipo contatto"
-          class="w-full md:w-56"
-        />
+        <Select v-model="selectedTipoContatto" :invalid="tipoContattoNonValido" :options="tipiContatto"
+          optionLabel="name" placeholder="Seleziona tipo contatto" class="w-full md:w-56" />
         <Message severity="error" variant="simple" size="small">{{
           errori.tipoContatto.messaggio
         }}</Message>
@@ -49,21 +43,14 @@
         <label for="Contatto" class="font-bold block mb-2">
           Info contatto
         </label>
-        <InputText
-          id="contatto"
-          v-model="contatto"
-          :invalid="contattoNonValido"
-        />
+        <InputText id="contatto" v-model="contatto" :invalid="contattoNonValido" />
         <Message severity="error" variant="simple" size="small">{{
           errori.contatto.messaggio
         }}</Message>
       </div>
     </div>
-    <Button
-      label="Aggiungi proposta"
-      class="w-full"
-      @click="clickNuovaProposta"
-    />
+
+    <Button label="Aggiungi proposta" class="w-full" @click="clickNuovaProposta" />
   </div>
 </template>
 
@@ -225,3 +212,19 @@ const clickNuovaProposta = async () => {
   emit("nuovaProposta");
 };
 </script>
+
+<style scoped>
+.form-proposta {
+
+  display: flex;
+  flex-direction: column;
+
+}
+
+.riga {
+
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+</style>
