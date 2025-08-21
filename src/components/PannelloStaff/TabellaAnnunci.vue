@@ -218,7 +218,7 @@
                           </template>
                         </Button>
                         <Button
-                          v-if="props.isAgent"
+                          v-if="props.isAgente"
                           variant="text"
                           rounded
                           aria-label="Filter"
@@ -330,8 +330,11 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
 import Tag from "primevue/tag";
+import Dialog from "primevue/dialog";
 
 import ScheletroTabella from "../PannelloStaff/ScheletroTabella.vue";
+import FormControproposta from "./FormControproposta.vue";
+import AggiungiPropostaManuale from "./AggiungiPropostaManuale.vue";
 
 const props = defineProps([
   "propAnnunci",
