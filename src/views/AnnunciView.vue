@@ -14,7 +14,7 @@
       class="w-full h-full flex flex-row gap-2 mt-2 items-start justify-start"
     >
       <div
-        class="menuLaterale flex flex-col gap-2 w-120 h-full p-2 hidden md:block mx-2"
+        class="menuLaterale flex flex-col gap-2 w-120 h-full p-2  md:block mx-2"
       >
         <ContenutoMenuFiltro />
       </div>
@@ -25,7 +25,7 @@
         <div
           class="menuSuperiore flex flex-row border-b-2 border-b-gray-400 p-2 gap-2 mb-4 mx-2 justify-between"
         >
-          <div class="flex justify-center block md:hidden">
+          <div class="flex justify-center  md:hidden">
             <Drawer v-model:visible="visible" header="Filtro">
               <ContenutoMenuFiltro />
             </Drawer>
@@ -34,18 +34,20 @@
 
           <div class="filtro-ordine">
             <div
-              class="filtro-schermi-grandi hidden md:block flex flex-row justify-end"
+              class="filtro-schermi-grandi md:block flex flex-row justify-end"
             >
-              <label class="text-lg font-semibold mr-2">Ordina per:</label>
+              <label for="ordine-selectbutton" class="text-lg font-semibold mr-2">Ordina per:</label>
               <SelectButton
+                id="ordine-selectbutton"
                 v-model="selectedOrdine"
                 :options="opzioniDiOrdinamento"
                 @click="setOrdineToQueryRoute"
               />
             </div>
-            <div class="filtro-schermi-piccolo block md:hidden flex flex-col">
-              <label class="text-lg font-semibold mb-1">Ordina per</label>
+            <div class="filtro-schermi-piccolo md:hidden flex flex-col">
+              <label for="ordine-select" class="text-lg font-semibold mb-1">Ordina per</label>
               <Select
+                id="ordine-select"
                 v-model="selectedOrdine"
                 :options="opzioniDiOrdinamento"
                 class="w-40"
@@ -124,7 +126,7 @@ onMounted(() => {
 const mostraAnnunci = async () => {
   try {
     loadingAnnunci.value = true;
-    //numeroAnnunci.value = await getNumeroAnnunci();
+    numeroAnnunci.value = await getNumeroAnnunci();
     const annunci = await getAnnunci();
     setAnnunciResponse(annunci);
     console.log("Annunci response: ", annunciResponse.value);
@@ -144,7 +146,19 @@ const getNumeroAnnunci = async () => {
 const getAnnunci = async () => {
   setFiltro();
 
-  return AnnunciImmobiliService.getAnnunci(filtroAnnunci);
+   try {
+    const response = await AnnunciImmobiliService.getAnnunci(filtroAnnunci);
+
+    // Mappare l'array generico in un array di istanze di AnnuncioImmobiliareResponse
+    const annunci = response.map((annuncioData) => new AnnuncioImmobiliareResponse(annuncioData));
+
+    // Ora `annunci` è un array di oggetti di tipo AnnuncioImmobiliareResponse
+    return annunci;
+
+  } catch (error) {
+    console.error("Errore durante il caricamento degli annunci:", error);
+    throw error; // Rilancia l'errore per una gestione successiva
+  } 
 };
 
 const setNumeroPagina = () => {
@@ -193,6 +207,9 @@ const setPrezziEDimensioni = () => {
 };
 
 const setCaratteristiche = () => {
+  filtroAnnunci.latCentro = route.query.lat ? route.query.lat : null;
+  filtroAnnunci.lonCentro = route.query.lon ? route.query.lon : null;
+  filtroAnnunci.raggioKm = route.query.raggioKm ? route.query.raggioKm : null;
   filtroAnnunci.provincia = route.query.comune ? route.query.comune : null;
   filtroAnnunci.balconi = route.query.balconi ? route.query.balconi : null;
   filtroAnnunci.garage = route.query.garage ? route.query.garage : null;

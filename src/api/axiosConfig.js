@@ -10,14 +10,14 @@ const AGENT_TIMEOUT = 9000; // Timeout specifico per ApiAgent
 const Api = () => {
   const store = useStoreUtente();
   const token = store.utente.token;
-
+  //console.log("Token utente:", token);
   return axios.create({
     baseURL: BASE_URL,
     timeout: TIMEOUT,
     withCredentials: true,
     headers: {
       "Content-Type": "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
+      Authorization: `Bearer ${token}`,
     },
   });
 };
@@ -32,7 +32,7 @@ const ApiAgent = () => {
     withCredentials: true,
     headers: {
       "Content-Type": "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
+      Authorization: `Bearer ${token}`,
     },
   });
 };

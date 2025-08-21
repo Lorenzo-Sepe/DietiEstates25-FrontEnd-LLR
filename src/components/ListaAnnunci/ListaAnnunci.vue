@@ -165,7 +165,7 @@ const router = useRouter();
 
 const props = defineProps({
   annunci: {
-    type: [AnnuncioImmobiliareResponse],
+    type: Array,
     required: true,
   },
 });

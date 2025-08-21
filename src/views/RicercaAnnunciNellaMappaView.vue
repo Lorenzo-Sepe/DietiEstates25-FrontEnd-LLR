@@ -6,7 +6,7 @@
       </div>
 
       <div class="area-centrale flex flex-col w-full gap-2">
-        <div class="area-superiore w-full flex items-start block lg:hidden">
+        <div class="area-superiore w-full flex items-start  lg:hidden">
           <Drawer v-model:visible="drawerVisible" header="Filtro">
             <ContenutoMenuFiltro />
           </Drawer>
@@ -81,41 +81,37 @@ const setFiltro = () => {
 
   //Caratteristiche aggiuntive
   filtroAnnunci.balconi =
-    route.query.balconi == true || route.query.balconi == "true" ? true : null;
+    route.query.balconi === "true" ? true : null;
   filtroAnnunci.garage =
-    route.query.garage == true || route.query.garage == "true" ? true : null;
+    route.query.garage === "true" ? true : null;
   filtroAnnunci.postiAuto =
-    route.query.postiAuto == true || route.query.postiAuto == "true"
-      ? true
-      : null;
+    route.query.postiAuto === "true" ? true : null;
   filtroAnnunci.giardino =
-    route.query.giardino == true || route.query.giardino == "true"
-      ? true
-      : null;
+    route.query.giardino === "true" ? true : null;
   filtroAnnunci.ascensore =
-    route.query.ascensore == true || route.query.ascensore == "true"
+    route.query.ascensore === "true"
       ? true
       : null;
   filtroAnnunci.portiere =
-    route.query.portiere == true || route.query.portiere == "true"
+    route.query.portiere === "true"
       ? true
       : null;
   filtroAnnunci.riscaldamentoCentralizzato =
-    route.query.riscaldamento == true || route.query.riscaldamento == "true"
+    route.query.riscaldamento === "true"
       ? true
       : null;
   filtroAnnunci.climatizzatori =
-    route.query.climatizzatore == true || route.query.climatizzatore == "true"
+    route.query.climatizzatore === "true"
       ? true
       : null;
   filtroAnnunci.pannelliSolari =
-    route.query.pannelliSolari == true || route.query.pannelliSolari == "true"
+    route.query.pannelliSolari === "true"
       ? true
       : null;
   filtroAnnunci.cantina =
-    route.query.cantina == true || route.query.cantina == "true" ? true : null;
+    route.query.cantina === "true" ? true : null;
   filtroAnnunci.soffitta =
-    route.query.soffitta == true || route.query.soffitta == "true"
+    route.query.soffitta === "true"
       ? true
       : null;
 
@@ -166,21 +162,21 @@ const setQueryRoute = () => {
     mqMin: filtroAnnunci.metriQuadriMin ? filtroAnnunci.metriQuadriMin : null,
     mqMax: filtroAnnunci.metriQuadriMax ? filtroAnnunci.metriQuadriMax : null,
 
-    balconi: filtroAnnunci.balconi ? true : false,
-    garage: filtroAnnunci.garage ? true : false,
-    postiAuto: filtroAnnunci.postiAuto ? true : false,
-    giardino: filtroAnnunci.giardino ? true : false,
-    ascensore: filtroAnnunci.ascensore ? true : false,
-    portiere: filtroAnnunci.portiere ? true : false,
-    riscaldamento: filtroAnnunci.riscaldamentoCentralizzato ? true : false,
-    climatizzatore: filtroAnnunci.climatizzatori ? true : false,
-    pannelliSolari: filtroAnnunci.pannelliSolari ? true : false,
-    cantina: filtroAnnunci.cantina ? true : false,
-    soffitta: filtroAnnunci.soffitta ? true : false,
+    balconi: filtroAnnunci.balconi,
+    garage: filtroAnnunci.garage ,
+    postiAuto: filtroAnnunci.postiAuto,
+    giardino: filtroAnnunci.giardino ,
+    ascensore: filtroAnnunci.ascensore,
+    portiere: filtroAnnunci.portiere ,
+    riscaldamento: filtroAnnunci.riscaldamentoCentralizzato ,
+    climatizzatore: filtroAnnunci.climatizzatori ,
+    pannelliSolari: filtroAnnunci.pannelliSolari ,
+    cantina: filtroAnnunci.cantina ,
+    soffitta: filtroAnnunci.soffitta ,
 
     lat: filtroAnnunci.latCentro ? filtroAnnunci.latCentro : null,
     lon: filtroAnnunci.lonCentro ? filtroAnnunci.lonCentro : null,
-    raggio: filtroAnnunci.raggioKm ? filtroAnnunci.raggioKm : null,
+    raggioKm: filtroAnnunci.raggioKm ? filtroAnnunci.raggioKm : null,
   };
 
   router.push({ query });

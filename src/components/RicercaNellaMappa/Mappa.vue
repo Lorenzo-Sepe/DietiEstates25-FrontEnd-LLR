@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, defineProps, defineEmits, watch } from "vue";
+import { ref, onMounted, defineProps,  watch , onBeforeUnmount} from "vue";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
@@ -188,6 +188,17 @@ watch([() => props.annunci], () => {
 
   aggiornaMarker();
 });
+
+onBeforeUnmount(() => {
+  if (istanzaMappa.value) {
+    istanzaMappa.value.off();          // rimuove tutti i listener
+    istanzaMappa.value.remove();       // distrugge completamente la mappa
+    istanzaMappa.value = null;
+  }
+  marcatore.value = null;
+  drawCircle = null;
+  markersAnnunci.value = [];
+});
 </script>
 
 <template>
@@ -199,7 +210,7 @@ watch([() => props.annunci], () => {
       class="absolute top-1/2 left-1/2 transform -translate-x-1/2 z-10 flex gap-2"
     >
       <ProgressSpinner
-        style="width: 128px; height: 128x"
+        style="width: 128px; height: 128px"
         strokeWidth="8"
         fill="transparent"
         animationDuration=".5s"

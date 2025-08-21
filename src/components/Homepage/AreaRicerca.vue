@@ -40,11 +40,17 @@ const datiInputRicerca = {
 };
 
 const clickCerca = () => {
+  console.log("Cerca cliccato con dati:", datiInputRicerca);
   const comune = datiInputRicerca.luogoCercato.value.comune;
   const tipoImmobile = datiInputRicerca.tipoImmobile.value.name;
   const tipoContratto = datiInputRicerca.tipoContratto.value;
   const latitutine = datiInputRicerca.luogoCercato.value.latitudine;
   const longitudine = datiInputRicerca.luogoCercato.value.longitudine;
+  const raggioKm =datiInputRicerca.luogoCercato.value.raggioKm;
+
+  console.log("Latitudine:", latitutine);
+  console.log("Longitudine:", longitudine);
+  console.log("Raggio Km:", raggioKm);
 
   router.push({
     path: "/annunci",
@@ -56,6 +62,7 @@ const clickCerca = () => {
       page: 1,
       lat: latitutine,
       lon: longitudine,
+      raggioKm : raggioKm,
       ordineDataDesc: true,
     },
   });
