@@ -1,7 +1,7 @@
 <template>
   <div class="p-4 w-full">
     <h2 class="text-2xl font-bold mb-4">Ricerche Annunci Effettuate</h2>
-
+    
     <!-- DataTable con paginazione PrimeVue -->
 <DataTable
   :value="ricerche"
@@ -51,9 +51,11 @@
     </template>
   </Column>
 
-  <Column field="provincia" header="Provincia" sortable>
+  <Column field="Comune" header="Comune" sortable>
     <template #body="slotProps">
-      {{ slotProps.data.provincia ?? '---' }}
+      {{ slotProps.data.locality?.length === 1 
+          ? slotProps.data.locality[0] 
+          : (slotProps.data.locality?.length ? slotProps.data.locality.join(", ") : "---") }}
     </template>
   </Column>
 
@@ -72,58 +74,7 @@
 
 
 
-    <!-- Dialog con dettagli filtro -->
-    <Dialog
-      v-model:visible="filtroDialog"
-      modal
-      header="Dettagli Filtro Annuncio"
-      class="w-[600px]"
-    >
-      <div v-if="filtro">
-
-
-        <!-- Dati principali -->
-        <div class="grid grid-cols-2 gap-4 mb-4">
-          <div>
-            <p><b>Titolo:</b> {{ filtro.titolo }}</p>
-            <p><b>Tipologia:</b> {{ filtro.tipologiaImmobile }}</p>
-            <p><b>Contratto:</b> {{ filtro.tipologiaContratto }}</p>
-          </div>
-          <div>
-            <p><b>Prezzo:</b> {{ filtro.prezzoMin }} - {{ filtro.prezzoMax }}</p>
-            <p><b>Metri quadri:</b> {{ filtro.metriQuadriMin }} - {{ filtro.metriQuadriMax }}</p>
-          </div>
-        </div>
-
-        <!-- Posizione -->
-        <div class="mb-4">
-          <h3 class="font-semibold mb-2">Posizione</h3>
-          <p><b>Provincia:</b> {{ filtro.provincia }}</p>
-          <p><b>Lat/Lon:</b> {{ filtro.latCentro }} , {{ filtro.lonCentro }}</p>
-          <p><b>Raggio km:</b> {{ filtro.raggioKm }}</p>
-        </div>
-
-        <!-- Caratteristiche aggiuntive -->
-        <div class="mb-4">
-        <h3 class="font-semibold mb-2">Caratteristiche</h3>
-        <div class="flex flex-wrap gap-2">
-            <Tag
-            v-for="car in caratteristicheAbilitate"
-            :key="car.nome"
-            :value="car.nome"
-            :severity="car.valore ? 'success' : 'danger'"
-            />
-        </div>
-        </div>
-
-
-        <!-- Staff -->
-        <div>
-          <h3 class="font-semibold mb-2">Agente</h3>
-          <p>{{ filtro.agenteCreatoreAnnuncio }}</p>
-        </div>
-      </div>
-    </Dialog>
+    
   </div>
 </template>
 
@@ -133,8 +84,7 @@ import { useRouter, useRoute } from "vue-router";
 import StoricoRicercheService from "../services/StoricoRicercheService";
 import  DataTable  from "primevue/datatable";
 import  Column  from "primevue/column";
-import  Dialog  from "primevue/dialog";
-import  Tag  from "primevue/tag";
+
 
 const router = useRouter();
 const route = useRoute();
@@ -176,22 +126,27 @@ const caratteristicheAbilitate = computed(() => {
 onMounted(async () => {
   try {
     const data = await StoricoRicercheService.getStoricoRicercheUtente();
-    ricerche.value = data;
-    console.log("Storico ricerche: ", ricerche.value);
+
+    // Parse di filtroUsatoJson per ogni elemento
+    ricerche.value = data.map(r => ({
+      ...r,
+      filtroParsed: JSON.parse(r.filtroUsatoJson) // nuovo campo già parsato
+    }));
+
+    console.log("Storico ricerche:", ricerche.value);
   } catch (err) {
     console.error("Errore caricamento storico ricerche:", err);
-  };
+  }
 });
 
 // Quando seleziono una ricerca, apro il dettaglio filtro
 function onSelectRicerca(e) {
-  filtro.value = JSON.parse(e.data.filtroUsatoJson);
-  //filtroDialog.value = true;
+  filtro.value = e.data.filtroParsed;
   clickCerca();
 }
 
 const clickCerca = () => {
-  const provincia = filtro.value.provincia;
+  const comune = filtro.value.provincia;
   const tipoImmobile = filtro.value.tipologiaImmobile;
   const tipoContratto = filtro.value.tipologiaContratto;
   const latitudine = filtro.value.latCentro;
@@ -204,7 +159,7 @@ const clickCerca = () => {
     
 
   console.log("Cerca cliccato con dati:", {
-    provincia,
+    comune,
     tipoImmobile,
     tipoContratto,
     latitudine,
@@ -221,7 +176,7 @@ const clickCerca = () => {
   path: "/annunci", 
   query: {
       ...route.query,
-      provincia: provincia,
+      comune: comune,
       immobile: tipoImmobile,
       contratto: tipoContratto,
       page: 1,
