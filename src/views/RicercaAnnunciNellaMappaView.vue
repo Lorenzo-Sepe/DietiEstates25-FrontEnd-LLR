@@ -6,7 +6,7 @@
       </div>
 
       <div class="area-centrale flex flex-col w-full gap-2">
-        <div class="area-superiore w-full flex items-start  lg:hidden">
+        <div class="area-superiore w-full flex items-start lg:hidden">
           <Drawer v-model:visible="drawerVisible" header="Filtro">
             <ContenutoMenuFiltro />
           </Drawer>
@@ -80,40 +80,20 @@ const setFiltro = () => {
     : null;
 
   //Caratteristiche aggiuntive
-  filtroAnnunci.balconi =
-    route.query.balconi === "true" ? true : null;
-  filtroAnnunci.garage =
-    route.query.garage === "true" ? true : null;
-  filtroAnnunci.postiAuto =
-    route.query.postiAuto === "true" ? true : null;
-  filtroAnnunci.giardino =
-    route.query.giardino === "true" ? true : null;
-  filtroAnnunci.ascensore =
-    route.query.ascensore === "true"
-      ? true
-      : null;
-  filtroAnnunci.portiere =
-    route.query.portiere === "true"
-      ? true
-      : null;
+  filtroAnnunci.balconi = route.query.balconi === "true" ? true : null;
+  filtroAnnunci.garage = route.query.garage === "true" ? true : null;
+  filtroAnnunci.postiAuto = route.query.postiAuto === "true" ? true : null;
+  filtroAnnunci.giardino = route.query.giardino === "true" ? true : null;
+  filtroAnnunci.ascensore = route.query.ascensore === "true" ? true : null;
+  filtroAnnunci.portiere = route.query.portiere === "true" ? true : null;
   filtroAnnunci.riscaldamentoCentralizzato =
-    route.query.riscaldamento === "true"
-      ? true
-      : null;
+    route.query.riscaldamento === "true" ? true : null;
   filtroAnnunci.climatizzatori =
-    route.query.climatizzatore === "true"
-      ? true
-      : null;
+    route.query.climatizzatore === "true" ? true : null;
   filtroAnnunci.pannelliSolari =
-    route.query.pannelliSolari === "true"
-      ? true
-      : null;
-  filtroAnnunci.cantina =
-    route.query.cantina === "true" ? true : null;
-  filtroAnnunci.soffitta =
-    route.query.soffitta === "true"
-      ? true
-      : null;
+    route.query.pannelliSolari === "true" ? true : null;
+  filtroAnnunci.cantina = route.query.cantina === "true" ? true : null;
+  filtroAnnunci.soffitta = route.query.soffitta === "true" ? true : null;
 
   //Localizzazione
   filtroAnnunci.latCentro = route.query.lat
@@ -163,16 +143,16 @@ const setQueryRoute = () => {
     mqMax: filtroAnnunci.metriQuadriMax ? filtroAnnunci.metriQuadriMax : null,
 
     balconi: filtroAnnunci.balconi,
-    garage: filtroAnnunci.garage ,
+    garage: filtroAnnunci.garage,
     postiAuto: filtroAnnunci.postiAuto,
-    giardino: filtroAnnunci.giardino ,
+    giardino: filtroAnnunci.giardino,
     ascensore: filtroAnnunci.ascensore,
-    portiere: filtroAnnunci.portiere ,
-    riscaldamento: filtroAnnunci.riscaldamentoCentralizzato ,
-    climatizzatore: filtroAnnunci.climatizzatori ,
-    pannelliSolari: filtroAnnunci.pannelliSolari ,
-    cantina: filtroAnnunci.cantina ,
-    soffitta: filtroAnnunci.soffitta ,
+    portiere: filtroAnnunci.portiere,
+    riscaldamento: filtroAnnunci.riscaldamentoCentralizzato,
+    climatizzatore: filtroAnnunci.climatizzatori,
+    pannelliSolari: filtroAnnunci.pannelliSolari,
+    cantina: filtroAnnunci.cantina,
+    soffitta: filtroAnnunci.soffitta,
 
     lat: filtroAnnunci.latCentro ? filtroAnnunci.latCentro : null,
     lon: filtroAnnunci.lonCentro ? filtroAnnunci.lonCentro : null,

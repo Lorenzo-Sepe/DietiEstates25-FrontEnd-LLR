@@ -14,7 +14,7 @@
       class="w-full h-full flex flex-row gap-2 mt-2 items-start justify-start"
     >
       <div
-        class="menuLaterale flex flex-col gap-2 w-120 h-full p-2  md:block mx-2"
+        class="menuLaterale flex flex-col gap-2 w-120 h-full p-2 md:block mx-2"
       >
         <ContenutoMenuFiltro />
       </div>
@@ -25,7 +25,7 @@
         <div
           class="menuSuperiore flex flex-row border-b-2 border-b-gray-400 p-2 gap-2 mb-4 mx-2 justify-between"
         >
-          <div class="flex justify-center  md:hidden">
+          <div class="flex justify-center md:hidden">
             <Drawer v-model:visible="visible" header="Filtro">
               <ContenutoMenuFiltro />
             </Drawer>
@@ -36,7 +36,11 @@
             <div
               class="filtro-schermi-grandi md:block flex flex-row justify-end"
             >
-              <label for="ordine-selectbutton" class="text-lg font-semibold mr-2">Ordina per:</label>
+              <label
+                for="ordine-selectbutton"
+                class="text-lg font-semibold mr-2"
+                >Ordina per:</label
+              >
               <SelectButton
                 id="ordine-selectbutton"
                 v-model="selectedOrdine"
@@ -45,7 +49,9 @@
               />
             </div>
             <div class="filtro-schermi-piccolo md:hidden flex flex-col">
-              <label for="ordine-select" class="text-lg font-semibold mb-1">Ordina per</label>
+              <label for="ordine-select" class="text-lg font-semibold mb-1"
+                >Ordina per</label
+              >
               <Select
                 id="ordine-select"
                 v-model="selectedOrdine"
@@ -146,19 +152,20 @@ const getNumeroAnnunci = async () => {
 const getAnnunci = async () => {
   setFiltro();
 
-   try {
+  try {
     const response = await AnnunciImmobiliService.getAnnunci(filtroAnnunci);
 
     // Mappare l'array generico in un array di istanze di AnnuncioImmobiliareResponse
-    const annunci = response.map((annuncioData) => new AnnuncioImmobiliareResponse(annuncioData));
+    const annunci = response.map(
+      (annuncioData) => new AnnuncioImmobiliareResponse(annuncioData),
+    );
 
     // Ora `annunci` è un array di oggetti di tipo AnnuncioImmobiliareResponse
     return annunci;
-
   } catch (error) {
     console.error("Errore durante il caricamento degli annunci:", error);
     throw error; // Rilancia l'errore per una gestione successiva
-  } 
+  }
 };
 
 const setNumeroPagina = () => {
@@ -213,9 +220,13 @@ const setCaratteristiche = () => {
   filtroAnnunci.provincia = route.query.comune ? route.query.comune : null;
   filtroAnnunci.balconi = route.query.balconi ? route.query.balconi : null;
   filtroAnnunci.garage = route.query.garage ? route.query.garage : null;
-  filtroAnnunci.postiAuto = route.query.postiAuto ? route.query.postiAuto : null;
+  filtroAnnunci.postiAuto = route.query.postiAuto
+    ? route.query.postiAuto
+    : null;
   filtroAnnunci.giardino = route.query.giardino ? route.query.giardino : null;
-  filtroAnnunci.ascensore = route.query.ascensore ? route.query.ascensore : null;
+  filtroAnnunci.ascensore = route.query.ascensore
+    ? route.query.ascensore
+    : null;
   filtroAnnunci.portiere = route.query.portiere ? route.query.portiere : null;
   filtroAnnunci.riscaldamentoCentralizzato = route.query.riscaldamento
     ? route.query.riscaldamento
@@ -223,7 +234,9 @@ const setCaratteristiche = () => {
   filtroAnnunci.climatizzatore = route.query.climatizzatore
     ? route.query.climatizzatore
     : null;
-  filtroAnnunci.pannelliSolari = route.query.pannelli ? route.query.pannelli : null;
+  filtroAnnunci.pannelliSolari = route.query.pannelli
+    ? route.query.pannelli
+    : null;
   filtroAnnunci.cantina = route.query.cantina ? route.query.cantina : null;
   filtroAnnunci.soffitta = route.query.soffitta ? route.query.soffitta : null;
 };
@@ -242,7 +255,6 @@ const setFiltro = async () => {
   setCaratteristiche();
   setAgente();
 };
-
 
 const setAnnunciResponse = (annunci) => {
   annunciResponse.value = [];

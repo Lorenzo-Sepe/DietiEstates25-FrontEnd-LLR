@@ -46,7 +46,7 @@ const clickCerca = () => {
   const tipoContratto = datiInputRicerca.tipoContratto.value;
   const latitutine = datiInputRicerca.luogoCercato.value.latitudine;
   const longitudine = datiInputRicerca.luogoCercato.value.longitudine;
-  const raggioKm =datiInputRicerca.luogoCercato.value.raggioKm;
+  const raggioKm = datiInputRicerca.luogoCercato.value.raggioKm;
 
   console.log("Latitudine:", latitutine);
   console.log("Longitudine:", longitudine);
@@ -62,7 +62,7 @@ const clickCerca = () => {
       page: 1,
       lat: latitutine,
       lon: longitudine,
-      raggioKm : raggioKm,
+      raggioKm: raggioKm,
       ordineDataDesc: true,
     },
   });

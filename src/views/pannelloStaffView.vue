@@ -1,26 +1,46 @@
 <template>
   <!-------------  SEZIONE DIALOG PER GLI ALLERT ------------------------------------------------>
-  <Dialog v-model:visible="loadingOperazione" @close="loadingOperazione = false" header="OPERAZIONE IN CORSO"
-    :style="{ width: 'auto' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+  <Dialog
+    v-model:visible="loadingOperazione"
+    @close="loadingOperazione = false"
+    header="OPERAZIONE IN CORSO"
+    :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+  >
     <div class="card flex justify-center">
       <ProgressSpinner />
     </div>
   </Dialog>
 
-  <Dialog v-model:visible="okAllert" @close="okAllert = false" header="CONFERMA OPERAZIONE" :style="{ width: 'auto' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+  <Dialog
+    v-model:visible="okAllert"
+    @close="okAllert = false"
+    header="CONFERMA OPERAZIONE"
+    :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+  >
     <p class="m-0">Operazione conclusa con successo</p>
     <Button severity="contrast" label="OK" @click="okAllert = false" />
   </Dialog>
 
-  <Dialog v-model:visible="erroreAllert" header="ERRORE" @close="erroreAllert = false" :style="{ width: 'auto' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+  <Dialog
+    v-model:visible="erroreAllert"
+    header="ERRORE"
+    @close="erroreAllert = false"
+    :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+  >
     <p class="m-0">Errore di rete, riprovare più tardi.</p>
     <Button label="OK" @click="erroreAllert = false" severity="contrast" />
   </Dialog>
 
-  <Dialog v-model:visible="registrationVisible" @close="registrationVisible = false" header="REGISTRA NUOVO DIPENDENTE"
-    :style="{ width: 'auto' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+  <Dialog
+    v-model:visible="registrationVisible"
+    @close="registrationVisible = false"
+    header="REGISTRA NUOVO DIPENDENTE"
+    :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+  >
     <RegisterAgentDialog @close="registrationVisible = false" />
   </Dialog>
 
@@ -33,14 +53,26 @@
 
     <div v-else class="w-full">
       <h2 v-if="!isAgente">Lista agenti dell'agenzia:</h2>
-      <Accordion v-model:activeIndex="activeIndex" :multiple="false" @update:activeIndex="onAccordionToggle"
-        expandIcon="pi pi-plus" collapseIcon="pi pi-minus">
-        <AccordionPanel class="my-2" v-for="(agente, index) in agenti" :value="index">
+      <Accordion
+        v-model:activeIndex="activeIndex"
+        :multiple="false"
+        @update:activeIndex="onAccordionToggle"
+        expandIcon="pi pi-plus"
+        collapseIcon="pi pi-minus"
+      >
+        <AccordionPanel
+          class="my-2"
+          v-for="(agente, index) in agenti"
+          :value="index"
+        >
           <AccordionHeader class="!bg-surface-100 hover:bg-surface-300!">
             <span class="flex items-center gap-2 w-full">
               <div class="w-10 h-10 rounded-full overflow-hidden">
-                <img :src="agente.infoUtente.urlFotoProfilo" :alt="agente.infoUtente.nomeVisualizzato"
-                  class="w-full h-full object-cover" />
+                <img
+                  :src="agente.infoUtente.urlFotoProfilo"
+                  :alt="agente.infoUtente.nomeVisualizzato"
+                  class="w-full h-full object-cover"
+                />
               </div>
               <span class="font-bold whitespace-nowrap">{{
                 agente.infoUtente.nomeVisualizzato
@@ -48,19 +80,47 @@
             </span>
           </AccordionHeader>
           <AccordionContent>
-            <TabellaAnnunci class="w-full mb-2" :propAnnunci="annunci" :propLoading="loading"
-              :propostaRequest="propostaRequest" :isAgente="isAgente" :agente="employeeStore.dipendenti"
-              @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta"
-              @accettaProposta="accettaProposta" @controproposta="controproposta" />
-            <Button severity="contrast" icon="pi pi-plus" @click="toCreaAnnuncio" label="Crea un Annuncio"
-              raised></Button>
+            <TabellaAnnunci
+              class="w-full mb-2"
+              :propAnnunci="annunci"
+              :propLoading="loading"
+              :propostaRequest="propostaRequest"
+              :isAgente="isAgente"
+              :agente="employeeStore.dipendenti"
+              @nuovaProposta="aggiungiPropostaManuale"
+              @eliminaProposta="rifiutaProposta"
+              @accettaProposta="accettaProposta"
+              @controproposta="controproposta"
+            />
+            <Button
+              severity="contrast"
+              icon="pi pi-plus"
+              @click="toCreaAnnuncio"
+              label="Crea un Annuncio"
+              raised
+            ></Button>
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
 
-      <div v-if="!isAgente" class="buttonArea flex flex-row gap-2 justify-center items-center">
-        <Button severity="contrast" class="mb-2" label="Aggiungi Agente" @click="registrationVisible = true" raised />
-        <Button severity="contrast" class="mb-2" label="Crea Notifica Promozionale" @click="newNotification" raised />
+      <div
+        v-if="!isAgente"
+        class="buttonArea flex flex-row gap-2 justify-center items-center"
+      >
+        <Button
+          severity="contrast"
+          class="mb-2"
+          label="Aggiungi Agente"
+          @click="registrationVisible = true"
+          raised
+        />
+        <Button
+          severity="contrast"
+          class="mb-2"
+          label="Crea Notifica Promozionale"
+          @click="newNotification"
+          raised
+        />
       </div>
     </div>
   </div>
@@ -145,8 +205,8 @@ onMounted(async () => {
 const filterAgenti = (dipendenti) => {
   return dipendenti
     ? dipendenti.filter(
-      (dipendente) => dipendente.infoUtente.tipoAccount === "AGENT",
-    )
+        (dipendente) => dipendente.infoUtente.tipoAccount === "AGENT",
+      )
     : [];
 };
 

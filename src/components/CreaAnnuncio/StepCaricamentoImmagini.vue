@@ -190,8 +190,7 @@ const props = defineProps({
 });
 
 const validaCampi = () => {
-  errori.immagineiVuote.invalid =
-    props.annuncio.immobile.immagini.length === 0;
+  errori.immagineiVuote.invalid = props.annuncio.immobile.immagini.length === 0;
   errori.dimensioneTotale.invalid = dimensioneTotaleMB.value > 10; // Limite di 10 MB
   errori.descrizioneLunga.invalid = props.annuncio.immobile.immagini.some(
     (img) => img.descrizione.length > 20,
@@ -203,12 +202,11 @@ const validaCampi = () => {
   });
 };
 
-
 const validaEAvanza = () => {
   validaCampi();
   if (!Object.values(errori).some((e) => e.invalid)) {
     emit("avanti");
-    console.log("validaEAvanza")
+    console.log("validaEAvanza");
   } else {
     scrollToFirstError(errori);
   }

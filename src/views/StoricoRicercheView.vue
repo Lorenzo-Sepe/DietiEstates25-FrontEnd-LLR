@@ -1,80 +1,94 @@
 <template>
   <div class="p-4 w-full">
     <h2 class="text-2xl font-bold mb-4">Ricerche Annunci Effettuate</h2>
-    
+
     <!-- DataTable con paginazione PrimeVue -->
-<DataTable
-  :value="ricerche"
-  dataKey="id"
-  paginator
-  :rows="10"
-  :rowsPerPageOptions="[5,10,20,50]"
-  responsiveLayout="scroll"
-  selectionMode="single"
-  v-model:selection="selectedRicerca"
-  @rowSelect="onSelectRicerca"
->
-  <Column field="tipologiaImmobile" header="Tipologia" sortable>
-    <template #body="slotProps">
-      {{ slotProps.data.tipologiaImmobile ?? '---' }}
-    </template>
-  </Column>
+    <DataTable
+      :value="ricerche"
+      dataKey="id"
+      paginator
+      :rows="10"
+      :rowsPerPageOptions="[5, 10, 20, 50]"
+      responsiveLayout="scroll"
+      selectionMode="single"
+      v-model:selection="selectedRicerca"
+      @rowSelect="onSelectRicerca"
+    >
+      <Column field="dataRicerca" header="Data Ricerca" sortable>
+        <template #body="slotProps">
+          {{
+            slotProps.data.createdAt?.length
+              ? new Date(
+                  slotProps.data.createdAt[0], // anno
+                  slotProps.data.createdAt[1] - 1, // mese (0-based in JS)
+                  slotProps.data.createdAt[2], // giorno
+                ).toLocaleDateString("it-IT")
+              : "---"
+          }}
+        </template>
+      </Column>
 
-  <Column field="tipologiaContratto" header="Contratto" sortable>
-    <template #body="slotProps">
-      {{ slotProps.data.tipologiaContratto ?? '---' }}
-    </template>
-  </Column>
+      <Column field="tipologiaImmobile" header="Tipologia" sortable>
+        <template #body="slotProps">
+          {{ slotProps.data.tipologiaImmobile ?? "---" }}
+        </template>
+      </Column>
 
-  <Column field="prezzoMin" header="Prezzo Min" sortable>
-    <template #body="slotProps">
-      {{ slotProps.data.prezzoMin ?? '---' }}
-    </template>
-  </Column>
+      <Column field="tipologiaContratto" header="Contratto" sortable>
+        <template #body="slotProps">
+          {{ slotProps.data.tipologiaContratto ?? "---" }}
+        </template>
+      </Column>
 
-  <Column field="prezzoMax" header="Prezzo Max" sortable>
-    <template #body="slotProps">
-      {{ slotProps.data.prezzoMax ?? '---' }}
-    </template>
-  </Column>
+      <Column field="prezzoMin" header="Prezzo Min" sortable>
+        <template #body="slotProps">
+          {{ slotProps.data.prezzoMin ?? "---" }}
+        </template>
+      </Column>
 
-  <!-- 🔹 Nuove colonne dai dati del filtro -->
-  <Column field="metriQuadriMin" header="Metri Quadri Min" sortable>
-    <template #body="slotProps">
-      {{ slotProps.data.metriQuadriMin ?? '---' }}
-    </template>
-  </Column>
+      <Column field="prezzoMax" header="Prezzo Max" sortable>
+        <template #body="slotProps">
+          {{ slotProps.data.prezzoMax ?? "---" }}
+        </template>
+      </Column>
 
-  <Column field="metriQuadriMax" header="Metri Quadri Max" sortable>
-    <template #body="slotProps">
-      {{ slotProps.data.metriQuadriMax ?? '---' }}
-    </template>
-  </Column>
+      <!-- 🔹 Nuove colonne dai dati del filtro -->
+      <Column field="metriQuadriMin" header="Metri Quadri Min" sortable>
+        <template #body="slotProps">
+          {{ slotProps.data.metriQuadriMin ?? "---" }}
+        </template>
+      </Column>
 
-  <Column field="Comune" header="Comune" sortable>
-    <template #body="slotProps">
-      {{ slotProps.data.locality?.length === 1 
-          ? slotProps.data.locality[0] 
-          : (slotProps.data.locality?.length ? slotProps.data.locality.join(", ") : "---") }}
-    </template>
-  </Column>
+      <Column field="metriQuadriMax" header="Metri Quadri Max" sortable>
+        <template #body="slotProps">
+          {{ slotProps.data.metriQuadriMax ?? "---" }}
+        </template>
+      </Column>
 
-  <Column field="raggioKm" header="Raggio (km)" sortable>
-    <template #body="slotProps">
-      {{ slotProps.data.raggioKm ?? '---' }}
-    </template>
-  </Column>
+      <Column field="Comune" header="Comune" sortable>
+        <template #body="slotProps">
+          {{
+            slotProps.data.locality?.length === 1
+              ? slotProps.data.locality[0]
+              : slotProps.data.locality?.length
+                ? slotProps.data.locality.join(", ")
+                : "---"
+          }}
+        </template>
+      </Column>
 
-  <Column field="agenteCreatoreAnnuncio" header="Agente" sortable>
-    <template #body="slotProps">
-      {{ slotProps.data.agenteCreatoreAnnuncio ?? '---' }}
-    </template>
-  </Column>
-</DataTable>
+      <Column field="raggioKm" header="Raggio (km)" sortable>
+        <template #body="slotProps">
+          {{ slotProps.data.raggioKm ?? "---" }}
+        </template>
+      </Column>
 
-
-
-    
+      <Column field="agenteCreatoreAnnuncio" header="Agente" sortable>
+        <template #body="slotProps">
+          {{ slotProps.data.agenteCreatoreAnnuncio ?? "---" }}
+        </template>
+      </Column>
+    </DataTable>
   </div>
 </template>
 
@@ -82,9 +96,8 @@
 import { ref, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import StoricoRicercheService from "../services/StoricoRicercheService";
-import  DataTable  from "primevue/datatable";
-import  Column  from "primevue/column";
-
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
 
 const router = useRouter();
 const route = useRoute();
@@ -120,17 +133,15 @@ const caratteristicheAbilitate = computed(() => {
     }));
 });
 
-
-
 // Simula caricamento da backend
 onMounted(async () => {
   try {
     const data = await StoricoRicercheService.getStoricoRicercheUtente();
 
     // Parse di filtroUsatoJson per ogni elemento
-    ricerche.value = data.map(r => ({
+    ricerche.value = data.map((r) => ({
       ...r,
-      filtroParsed: JSON.parse(r.filtroUsatoJson) // nuovo campo già parsato
+      filtroParsed: JSON.parse(r.filtroUsatoJson), // nuovo campo già parsato
     }));
 
     console.log("Storico ricerche:", ricerche.value);
@@ -153,10 +164,9 @@ const clickCerca = () => {
   const longitudine = filtro.value.lonCentro;
   const raggioKm = filtro.value.raggioKm;
   const metriQuadriMax = filtro.value.metriQuadriMax;
-    const metriQuadriMin = filtro.value.metriQuadriMin;
-    const prezzoMax = filtro.value.prezzoMax;
-    const prezzoMin = filtro.value.prezzoMin;
-    
+  const metriQuadriMin = filtro.value.metriQuadriMin;
+  const prezzoMax = filtro.value.prezzoMax;
+  const prezzoMin = filtro.value.prezzoMin;
 
   console.log("Cerca cliccato con dati:", {
     comune,
@@ -169,12 +179,11 @@ const clickCerca = () => {
     metriQuadriMin,
     prezzoMax,
     prezzoMin,
-    });
+  });
 
-
-    router.push({    
-  path: "/annunci", 
-  query: {
+  router.push({
+    path: "/annunci",
+    query: {
       ...route.query,
       comune: comune,
       immobile: tipoImmobile,
@@ -183,14 +192,12 @@ const clickCerca = () => {
       lat: latitudine,
       lon: longitudine,
       ordineDataDesc: true,
-        raggioKm: raggioKm,
-        metriQuadriMax: metriQuadriMax,
-        metriQuadriMin: metriQuadriMin,
-        prezzoMax: prezzoMax, 
-        prezzoMin: prezzoMin,
- 
+      raggioKm: raggioKm,
+      metriQuadriMax: metriQuadriMax,
+      metriQuadriMin: metriQuadriMin,
+      prezzoMax: prezzoMax,
+      prezzoMin: prezzoMin,
     },
   });
-  
 };
 </script>

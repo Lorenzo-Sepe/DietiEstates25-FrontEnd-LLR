@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, defineProps,  watch , onBeforeUnmount} from "vue";
+import { ref, onMounted, defineProps, watch, onBeforeUnmount } from "vue";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
@@ -191,8 +191,8 @@ watch([() => props.annunci], () => {
 
 onBeforeUnmount(() => {
   if (istanzaMappa.value) {
-    istanzaMappa.value.off();          // rimuove tutti i listener
-    istanzaMappa.value.remove();       // distrugge completamente la mappa
+    istanzaMappa.value.off(); // rimuove tutti i listener
+    istanzaMappa.value.remove(); // distrugge completamente la mappa
     istanzaMappa.value = null;
   }
   marcatore.value = null;

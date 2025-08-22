@@ -34,7 +34,7 @@ export function CreaAnnuncio(oggettoAnnuncio) {
     annuncio.immobile.immagini.forEach((img) => {
       if (img.file) {
         formData.append("immagini", img.file);
-      }else{
+      } else {
         console.warn("Immagine senza file:", img);
       }
     });

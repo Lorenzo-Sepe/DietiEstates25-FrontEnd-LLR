@@ -6,7 +6,11 @@
       <div
         class="Comune-nella-mappa flex flex-col items-start justify-start mb-2"
       >
-        <label for="autocomplete-comune" class="block text-lg font-semibold mb-1">Comune</label>
+        <label
+          for="autocomplete-comune"
+          class="block text-lg font-semibold mb-1"
+          >Comune</label
+        >
         <AutoComplete
           id="autocomplete-comune"
           :fluid="true"
@@ -24,7 +28,11 @@
     </div>
 
     <div class="tipologia-immobile flex flex-col items-start justify-start">
-      <label for="select-tipologia-immobile" class="block text-lg font-semibold mb-1">Tipologia immobile</label>
+      <label
+        for="select-tipologia-immobile"
+        class="block text-lg font-semibold mb-1"
+        >Tipologia immobile</label
+      >
       <Select
         id="select-tipologia-immobile"
         v-model="selectedTipologiaImmobile"
@@ -37,11 +45,17 @@
     </div>
 
     <div class="contratto-immobile flex flex-col items-start justify-start">
-      <label for="selectbutton-contratto" class="block text-lg font-semibold mb-1"
+      <label
+        for="selectbutton-contratto"
+        class="block text-lg font-semibold mb-1"
         >Tipologia contratto</label
       >
       <div class="card flex justify-center">
-        <SelectButton id="selectbutton-contratto" v-model="selectedContratto" :options="opzioniContratto" />
+        <SelectButton
+          id="selectbutton-contratto"
+          v-model="selectedContratto"
+          :options="opzioniContratto"
+        />
       </div>
     </div>
 

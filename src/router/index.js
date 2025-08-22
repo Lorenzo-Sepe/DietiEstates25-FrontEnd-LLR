@@ -133,6 +133,12 @@ const routes = [
     component: () => import("../views/StoricoRicercheView.vue"),
   },
 
+  {
+    path: "/PortaleAgenzia/messaggi-promozionali",
+    name: "messaggi-promozionali",
+    component: () => import("../views/CreaNotificaView.vue"),
+  },
+
   //ROUTE 404
   {
     path: "/:pathMatch(.*)*",

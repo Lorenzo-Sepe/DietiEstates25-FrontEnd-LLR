@@ -1,13 +1,10 @@
-import { Api} from "../api/axiosConfig";
+import { Api } from "../api/axiosConfig";
 export default {
-   getStoricoRicercheUtente() {
+  getStoricoRicercheUtente() {
     return Api()
       .get("/storicoRicerche")
       .then((response) => {
         return response.data;
       });
   },
-
- 
-
 };

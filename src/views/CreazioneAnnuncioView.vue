@@ -58,11 +58,10 @@ const inviaAnnuncio = () => {
     return;
   }
   const response = CreaAnnuncio(annuncio);
-  if(response) {
+  if (response) {
     console.log("Annuncio inviato con successo:", response);
     alert(response.value);
   }
-  
 };
 
 watch(activeStep, (newVal) => {
@@ -197,7 +196,8 @@ watch(activeStep, (newVal) => {
           <StepPanel class="!bg-gray-100" :value="6">
             <Anteprima
               v-model:annuncio="annuncio"
-              @indietro="vaiIndietro"clearable
+              @indietro="vaiIndietro"
+              clearable
               @invia="inviaAnnuncio"
             />
           </StepPanel>

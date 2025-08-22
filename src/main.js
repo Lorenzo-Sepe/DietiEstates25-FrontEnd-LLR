@@ -18,7 +18,6 @@ const app = createApp(App);
 
 //const pinia = createPinia()
 
-
 app.use(PrimeVue, {
   ripple: true,
   theme: {
