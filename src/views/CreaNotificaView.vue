@@ -1,8 +1,8 @@
 <template>
   <div class="p-6 space-y-6">
     <h2 class="text-xl font-bold">Crea Notifica Promozionale</h2>
-    <div class="flex flex-col">
-      <div>
+    <div class="flex flex-row gap-3">
+      <div class="flex flex-col gap-2">
         <!-- Oggetto -->
         <div class="field">
           <label class="font-semibold" for="oggetto-input">Oggetto</label>
@@ -19,7 +19,7 @@
           <MarkdownEditor id="contenuto-editor" v-model="form.contenuto" />
         </div>
       </div>
-      <div>
+      <div class="flex flex-col gap-2 items-start">
         <!-- Area di interesse -->
         <div class="field">
           <label class="font-semibold" for="area-interesse-input"
@@ -60,8 +60,8 @@
           />
         </div>
         <!-- Budget -->
-        <div class="flex gap-4">
-          <div class="field flex-1">
+        <div class="flex flex-row gap-4">
+          <div class="">
             <label class="font-semibold" for="budget-min-input"
               >Budget Min</label
             >
@@ -73,7 +73,7 @@
               currency="EUR"
             />
           </div>
-          <div class="field flex-1">
+          <div class="  ">
             <label class="font-semibold" for="budget-max-input"
               >Budget Max</label
             >
@@ -147,3 +147,9 @@ function salvaNotifica() {
   // Qui chiamata API per salvarla
 }
 </script>
+
+<style scoped>
+.field {
+  width: 100%;
+}
+</style>
