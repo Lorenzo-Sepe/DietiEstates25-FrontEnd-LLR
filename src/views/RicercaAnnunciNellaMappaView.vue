@@ -14,11 +14,7 @@
         </div>
 
         <div class="mappa w-full lg:h-120 h-100">
-          <Mappa
-            :annunci="annunciResponse"
-            :loading="loadingAnnunci"
-            :filtro="filtroAnnunci"
-          />
+          <Mappa :annunci="annunciResponse" :loading="loadingAnnunci" :filtro="filtroAnnunci" />
         </div>
       </div>
     </div>
@@ -175,9 +171,11 @@ const setAnnunciResponse = (annunci) => {
 watch(
   () => route.query,
   () => {
+
     setFiltro();
 
-    if (route.query.lat && route.query.lon && route.query.raggio) {
+    if (route.query.lat && route.query.lon && route.query.raggioKm) {
+
       mostraAnnunciSullaMappa();
     }
   },
