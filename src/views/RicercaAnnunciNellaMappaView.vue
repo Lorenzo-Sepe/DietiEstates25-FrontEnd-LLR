@@ -98,8 +98,8 @@ const setFiltro = () => {
   filtroAnnunci.lonCentro = route.query.lon
     ? parseFloat(route.query.lon)
     : null;
-  filtroAnnunci.raggioKm = route.query.raggio
-    ? parseFloat(route.query.raggio)
+  filtroAnnunci.raggioKm = route.query.raggioKm
+    ? parseFloat(route.query.raggioKm)
     : null;
 
   //Tutti gli annunci
