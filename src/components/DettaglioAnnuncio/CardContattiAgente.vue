@@ -12,7 +12,7 @@
       >
         <div class="immagine-agente w-16 h-16 rounded-full bg-gray-200">
           <img
-            src="https://primefaces.org/cdn/primevue/images/organization/walter.jpg"
+            :src="props.agente.urlFotoProfilo"
             size="xlarge"
             alt="Immagine agente"
             class="w-full h-full rounded-full"
@@ -20,7 +20,7 @@
         </div>
 
         <div class="flex flex-col ml-2">
-          <span class="text-xl font-medium">Nome agente</span>
+          <span class="text-xl font-medium">{{ props.agente.nome }}  {{ props.agente.cognome }}</span>
           <span class="text-base font-normal">Nome agenzia</span>
         </div>
       </div>
@@ -46,3 +46,14 @@
     </div>
   </div>
 </template>
+
+<script setup>
+
+import {ref, onMounted, defineProps} from "vue";
+
+onMounted(() => {
+});
+
+const props = defineProps(["agente"]);
+
+</script>

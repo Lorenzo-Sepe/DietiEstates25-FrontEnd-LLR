@@ -190,11 +190,11 @@ onMounted(async () => {
   setPrezzoImmobile();
 
   try {
-    await userStore.aggiorna();
+     userStore.aggiorna();
   } catch (error) {
     console.error("Errore durante aggiornamento di userStore:", error);
   } finally {
-    if (!userStore.isTokenScaduto()) {
+    if (userStore.isAutenticato) {
       mostraButtonNuovaProposta.value = true;
     }
   }

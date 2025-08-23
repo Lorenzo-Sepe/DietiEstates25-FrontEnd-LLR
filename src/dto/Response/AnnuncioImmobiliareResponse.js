@@ -31,6 +31,9 @@ export class Agente {
     this.email = data.email || "";
     this.username = data.username || "";
     this.urlFotoProfilo = data.urlFotoProfilo || "";
+    this.nome = data.nome || "";
+    this.cognome = data.cognome || "";
+    this.contatti = data.contatti || [];
   }
 }
 
