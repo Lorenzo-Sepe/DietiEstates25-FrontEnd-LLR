@@ -34,6 +34,7 @@ export class Agente {
     this.nome = data.nome || "";
     this.cognome = data.cognome || "";
     this.contatti = data.contatti || [];
+    this.agenzia = data.agenzia || "";
   }
 }
 
