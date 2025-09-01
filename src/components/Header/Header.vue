@@ -23,6 +23,7 @@
           :avatarUrl="avatarUrl"
           :nomeVisualizzato="nomeVisualizzato"
           :nomeAzienda="nomeAzienda"
+          :email="email"
         >
         </AvatarAccount>
       </div>

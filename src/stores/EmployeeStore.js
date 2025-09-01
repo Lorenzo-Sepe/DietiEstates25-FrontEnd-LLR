@@ -73,6 +73,7 @@ export const useEmployeeStore = defineStore("employee", {
     ruolo: (state) =>
       state.employee.datiImpiegato.ruolo || new DatiImpiegatoResponse(),
     infoUtente: (state) => state.employee.Info || new UserInfoResponse(),
+    getContatti: (state) => state.employee.datiImpiegato.contatti || [],
   },
   actions: {
     impostaImpiegato(email, token) {

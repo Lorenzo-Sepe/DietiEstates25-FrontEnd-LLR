@@ -69,6 +69,18 @@ export function getDatiImpiegato(email) {
     });
 }
 
+export async function aggiungiContattoDipendente(contattoRequest){
+
+  return ApiAgent()
+  .post("agenzia/dipendente/contatto", contattoRequest)
+  .then( (response) => {
+    return response.data
+  })
+  .catch( (error) => {
+    console.error("Errore durante l'aggiunta del contatto:", error);
+  });
+}
+
 export async function isTokenValid(email) {
   try {
     await ApiAgent().get("user", { params: { email } });

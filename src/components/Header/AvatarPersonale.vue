@@ -25,6 +25,14 @@
       </div>
 
       <Button
+        label="Aggiungi contatto"
+        icon="pi pi-address-book"
+        class="w-full p-button-secondary"
+        @click="addContact"
+        :disabled="isLoggingOut"
+      />
+
+      <Button
         label="Cambia Password"
         icon="pi pi-key"
         class="w-full p-button-secondary"
@@ -65,10 +73,24 @@
     >
     </PopUpCambioPassword>
   </Dialog>
+
+   <Dialog
+    v-model:visible="dialogAddContact"
+    :style="{ width: '35vw' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+    :closable
+    modal
+    header="Aggiungi Contatto"
+  >
+
+  <PopUpAddContact :contatti="storeEmployee.getContatti" />
+    
+  </Dialog>
 </template>
 
 <script setup>
 import PopUpCambioPassword from "../Dialogs/PopUpCambioPassword.vue";
+import PopUpAddContact from "../Dialogs/PopUpAddContact.vue";
 import AvatarAccount from "./AvatarAccount.vue";
 import { ref, defineProps } from "vue";
 import Dialog from "primevue/dialog";
@@ -97,6 +119,11 @@ const avatarClicked = () => {
 const dialogChangePassword = ref(false);
 const changePassword = () => {
   dialogChangePassword.value = true;
+};
+
+const dialogAddContact = ref(false);
+const addContact = () => {
+  dialogAddContact.value = true;
 };
 
 const isLoggingOut = ref(false);
