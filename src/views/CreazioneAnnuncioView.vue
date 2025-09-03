@@ -60,7 +60,7 @@ const inviaAnnuncio = () => {
   const response = CreaAnnuncio(annuncio);
   if (response) {
     console.log("Annuncio inviato con successo:", response);
-    alert(response.value);
+    alert("Annuncio creato con successo",response.value);
   }
 };
 
