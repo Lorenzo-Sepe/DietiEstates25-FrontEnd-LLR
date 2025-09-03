@@ -131,12 +131,12 @@ const storeUtente = useStoreUtente();
 const storeEmployee = useEmployeeStore();
 const erroreLogout = ref(false);
 
-const logout = async () => {
+async function logout() {
   isLoggingOut.value = true;
   erroreLogout.value = false;
   try {
     if (props.isInPortale) {
-      await storeEmployee.logout();
+      await useEmployeeStore().logout();
       router.push("/");
     } else {
       await storeUtente.logout();

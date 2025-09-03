@@ -23,6 +23,8 @@
           :avatarUrl="avatarUrl"
           :nomeVisualizzato="nomeVisualizzato"
           :nomeAzienda="nomeAzienda"
+                      :isInPortale="isInPortale"
+
           :email="email"
         >
         </AvatarAccount>
@@ -118,10 +120,8 @@ const avatarUrl = computed(() => {
 
 const email = computed(() => {
   if (props.isInPortale) {
-    alert("storeEmployee.getEmail");
     return storeEmployee.getEmail;
   } else {
-    alert("storeUtente.getEmail");
     return storeUtente.getEmail;
   }
 });
