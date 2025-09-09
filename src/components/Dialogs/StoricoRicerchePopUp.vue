@@ -107,7 +107,6 @@ function showDetails(ricerca) {
   selectedRicerca.value = ricerca;
   console.log("Dettagli ricerca selezionata:", ricerca);
   console.log(".filtroUsatoJson:", ricerca.filtroUsatoJson);
-  alert("controlla la console per i dettagli della ricerca selezionata");
   dialogVisible.value = true;
 }
 function formatTimeAgo(dateArray) {

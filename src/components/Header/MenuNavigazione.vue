@@ -23,7 +23,10 @@
       :modal="true"
       :style="{ width: '80vw' }"
     >
-      <StoricoRicercheTable :ricerche="ricerche" :onSelectRicerca="onSelectRicerca" />
+      <ScheletroDatatable v-if="scheletroCaricamento"></ScheletroDatatable>
+
+      <StoricoRicercheTable v-else :ricerche="ricerche" :onSelectRicerca="onSelectRicerca" />
+
     </Dialog>
 </template>
 
@@ -35,6 +38,7 @@ import StoricoRicercheService from "../../services/StoricoRicercheService";
 import StoricoRicercheTable from "../Dialogs/StoricoRicerchePopUp.vue"; 
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
+import ScheletroDatatable from "../ScheletroDatatable.vue";
 
 const visible = ref(false);
 
@@ -42,15 +46,20 @@ const router = useRouter();
 const route = useRoute();
 // Stato
 const ricerche = ref([]);
+const scheletroCaricamento = ref(true);
+
 
 // Simula caricamento da backend
 onMounted(async () => {
   try {
     ricerche.value = await StoricoRicercheService.getStoricoRicercheUtente();
+        scheletroCaricamento.value = false;
 
     console.log("Storico ricerche:", ricerche.value);
   } catch (err) {
     console.error("Errore caricamento storico ricerche:", err);
+        scheletroCaricamento.value = false;
+
   }
 });
 
