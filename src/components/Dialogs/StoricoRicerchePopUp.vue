@@ -1,5 +1,5 @@
 <template>
-  <DataTable
+  <DataTable v-if="ricerche && ricerche.length > 0"
     :value="ricerche"
     dataKey="id"
     sortField="dataRicerca"
@@ -40,6 +40,12 @@
       </template>
     </Column>
   </DataTable>
+
+  <div v-else>
+    <p class="m-3 text-center">
+      Non sono presenti ricerche salvate.
+    </p>
+  </div>
 </template>
 
 <script setup>

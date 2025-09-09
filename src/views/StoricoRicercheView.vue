@@ -9,18 +9,24 @@
       header="Ricerche Annunci Effettuate"
       v-model:visible="visible"
       :modal="true"
-      :style="{ width: '80vw' }"
+      :style="{ width: '80vw', height: '70vh' }"
     >
-      <StoricoRicercheTable :ricerche="ricerche" :onSelectRicerca="onSelectRicerca" />
+
+      <ScheletroDatatable v-if="scheletroCaricamento"></ScheletroDatatable>
+
+      <StoricoRicercheTable v-else :ricerche="ricerche" :onSelectRicerca="onSelectRicerca" />
+
+
     </Dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted,reactive } from "vue";
+import { ref, computed, onMounted,reactive, h } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import StoricoRicercheService from "../services/StoricoRicercheService";
 import StoricoRicercheTable from "../components/Dialogs/StoricoRicerchePopUp.vue";
+import ScheletroDatatable from "../components/ScheletroDatatable.vue";
 
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
@@ -32,6 +38,7 @@ const route = useRoute();
 // Stato
 const ricerche = ref([]);
 const filtro = ref(null);
+const scheletroCaricamento = ref(true);
 
 // Caratteristiche attive
 const caratteristicheAbilitate = computed(() => {
@@ -63,10 +70,12 @@ const caratteristicheAbilitate = computed(() => {
 onMounted(async () => {
   try {
     ricerche.value = await StoricoRicercheService.getStoricoRicercheUtente();
+    scheletroCaricamento.value = false;
 
     console.log("Storico ricerche:", ricerche.value);
   } catch (err) {
     console.error("Errore caricamento storico ricerche:", err);
+    scheletroCaricamento.value = false;
   }
 });
 
