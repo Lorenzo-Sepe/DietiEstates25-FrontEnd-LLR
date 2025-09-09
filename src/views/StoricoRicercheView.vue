@@ -16,15 +16,7 @@
     >
       <Column field="dataRicerca" header="Data Ricerca" sortable>
         <template #body="slotProps">
-          {{
-            slotProps.data.createdAt?.length
-              ? new Date(
-                  slotProps.data.createdAt[0], // anno
-                  slotProps.data.createdAt[1] - 1, // mese (0-based in JS)
-                  slotProps.data.createdAt[2], // giorno
-                ).toLocaleDateString("it-IT")
-              : "---"
-          }}
+              {{ formatTimeAgo(slotProps.data.createdAt) }}
         </template>
       </Column>
 
@@ -200,4 +192,59 @@ const clickCerca = () => {
     },
   });
 };
+
+function formatTimeAgo(dateArray) {
+  if (!dateArray || dateArray.length < 3) return "---";
+
+  // accetta anche ora, minuti, secondi (default = 0)
+  const [year, month, day, hour = 0, minute = 0, second = 0] = dateArray;
+  const date = new Date(year, month - 1, day, hour, minute, second);
+  const now = new Date();
+
+  const diffMs = now - date;
+  if (diffMs < 0) return "---"; // caso futuro
+
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+  const diffWeek = Math.floor(diffDay / 7);
+  const diffMonth = Math.floor(diffDay / 30);
+  const diffYear = Math.floor(diffDay / 365);
+
+  // Anni → data precisa
+  if (diffYear >= 1) {
+    return date.toLocaleDateString("it-IT");
+  }
+
+  // Mesi
+  if (diffMonth >= 1) {
+    return diffMonth === 1 ? "un mese fa" : `${diffMonth} mesi fa`;
+  }
+
+  // Settimane
+  if (diffWeek >= 1) {
+    return diffWeek === 1 ? "una settimana fa" : `${diffWeek} settimane fa`;
+  }
+
+  // Giorni
+  if (diffDay >= 1) {
+    return diffDay === 1 ? "ieri" : `${diffDay} giorni fa`;
+  }
+
+  // Ore
+  if (diffHour >= 1) {
+    return diffHour === 1 ? "un'ora fa" : `${diffHour} ore fa`;
+  }
+
+  // Minuti
+  if (diffMin >= 1) {
+    return diffMin === 1 ? "un minuto fa" : `${diffMin} minuti fa`;
+  }
+
+  // Secondi
+  return "pochi secondi fa";
+}
+
+
 </script>
