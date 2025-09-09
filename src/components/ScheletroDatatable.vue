@@ -22,6 +22,11 @@
                     <Skeleton></Skeleton>
                 </template>
             </Column>
+            <Column field="azioni" header="Azioni">
+                <template #body>
+                    <Skeleton></Skeleton>
+                </template>
+            </Column>
         </DataTable>
     </div>
 </template>
