@@ -31,33 +31,6 @@ const router = useRouter();
 const route = useRoute();
 // Stato
 const ricerche = ref([]);
-const filtro = ref(null);
-
-// Caratteristiche attive
-const caratteristicheAbilitate = computed(() => {
-  if (!filtro.value) return [];
-
-  const caratteristicheConsentite = [
-    "balconi",
-    "garage",
-    "postiAuto",
-    "giardino",
-    "ascensore",
-    "portiere",
-    "riscaldamentoCentralizzato",
-    "climatizzatori",
-    "pannelliSolari",
-    "cantina",
-    "soffitta",
-  ];
-
-  return Object.entries(filtro.value)
-    .filter(([k, v]) => caratteristicheConsentite.includes(k)) // 🔹 tieni solo quelli della whitelist
-    .map(([k, v]) => ({
-      nome: k,
-      valore: v === true, // null o false diventano false
-    }));
-});
 
 // Simula caricamento da backend
 onMounted(async () => {

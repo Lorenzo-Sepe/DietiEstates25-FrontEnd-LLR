@@ -30,7 +30,7 @@
 
     <Column field="tipologiaImmobile" header="Tipologia">
       <template #body="slotProps">
-        {{ slotProps.data.tipologiaImmobile ?? "---" }}
+        {{ slotProps.data.tipologiaImmobile ?? "Qualsiasi" }}
       </template>
     </Column>
 
@@ -39,11 +39,49 @@
         {{ slotProps.data.tipologiaContratto ?? "Tutti" }}
       </template>
     </Column>
+
+
+    <Column header="Azioni" :style="{ width: '120px', textAlign: 'center' }">
+  <template #body="slotProps">
+    <Button 
+      icon="pi pi-info-circle" 
+      class="p-button-text p-button-sm"
+      @click="showDetails(slotProps.data)"
+      tooltip="Mostra dettagli"
+    />
+  </template>
+</Column>
   </DataTable>
+
+  <Dialog v-model:visible="dialogVisible" header="Dettagli Ricerca" :modal="true" :closable="true">
+  <div v-if="selectedRicerca">
+    <p><strong>Data:</strong> {{ formatTimeAgo(selectedRicerca.createdAt) }}</p>
+    <p><strong>Comune:</strong> 
+      {{ selectedRicerca.locality?.length === 1 
+          ? selectedRicerca.locality[0] 
+          : selectedRicerca.locality?.length 
+            ? selectedRicerca.locality.join(", ") 
+            : "Italia" }}
+    </p>
+    <p><strong>Tipologia Immobile:</strong> {{ selectedRicerca.tipologiaImmobile ?? "Qualsiasi" }}</p>
+    <p><strong>Contratto:</strong> {{ selectedRicerca.tipologiaContratto ?? "Tutti" }}</p>
+    <!--Altri filtri -->
+    <div style="text-align: center; margin: 16px 0;">
+    <h3 style="margin: 0; font-weight: bold;">Filtri Usati</h3>
+    </div>
+    <div v-for="(value, key) in JSON.parse(selectedRicerca.filtroUsatoJson)" :key="key">
+      <template v-if="value !== null && value !== '' && value !== false && key!='locality' && key!='dataRicerca' && key!='tipologiaImmobile' && key!='tipologiaContratto' && key!='numeroPagina' && key!='numeroDiElementiPerPagina'">
+       <span v-html="renderFiltro(key, value)"></span>
+      </template>  
+    </div>
+  </div>
+</Dialog>
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps,ref } from "vue";
+import Button from "primevue/button";
+import Dialog from "primevue/dialog";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 
@@ -57,7 +95,16 @@ const props = defineProps({
     required: true,
   },
 });
+const selectedRicerca = ref(null);
+const dialogVisible = ref(false);
 
+function showDetails(ricerca) {
+  selectedRicerca.value = ricerca;
+  console.log("Dettagli ricerca selezionata:", ricerca);
+  console.log(".filtroUsatoJson:", ricerca.filtroUsatoJson);
+  alert("controlla la console per i dettagli della ricerca selezionata");
+  dialogVisible.value = true;
+}
 function formatTimeAgo(dateArray) {
   if (!dateArray || dateArray.length < 3) return "---";
   const [year, month, day, hour = 0, minute = 0, second = 0] = dateArray;
@@ -83,4 +130,44 @@ function formatTimeAgo(dateArray) {
   if (diffMin >= 1) return diffMin === 1 ? "un minuto fa" : `${diffMin} minuti fa`;
   return "pochi secondi fa";
 }
+
+// Funzione che restituisce il contenuto da renderizzare
+function renderFiltro(key, value) {
+  if (value === null || value === '' || value === false) return null;
+
+  // Chiavi da ignorare completamente
+  const skipKeys = [
+    'locality', 
+    'dataRicerca', 
+    'tipologiaImmobile', 
+    'tipologiaContratto', 
+    'numeroPagina', 
+    'numeroDiElementiPerPagina',
+    'ordineDataDesc',
+    'provincia'
+  ];
+  if (skipKeys.includes(key)) return null;
+
+  // Casi speciali
+  if (key === 'postiAuto' && value === true) {
+    return `<strong>Con posto auto</strong>`;
+  }
+  if (value === true) {
+    return `<strong>Con ${formatKey(key)}</strong>`;
+  }
+  if( key=='prezzoMin'){
+    return `<strong>Prezzo Minimo:</strong> ${value}€`;
+  }
+    if( key=='prezzoMax'){
+        return `<strong>Prezzo Massimo:</strong> ${value}€`;
+    }
+
+  // Caso generico
+  return `<strong>${formatKey(key)}:</strong> ${value}`;
+}
+
+// Trasforma chiavi camelCase in testo leggibile
+function formatKey(key) {
+  return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+} 
 </script>
