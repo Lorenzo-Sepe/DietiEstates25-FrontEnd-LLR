@@ -2,101 +2,35 @@
   <div class="p-4 w-full">
     <h2 class="text-2xl font-bold mb-4">Ricerche Annunci Effettuate</h2>
 
-    <!-- DataTable con paginazione PrimeVue -->
-    <DataTable
-      :value="ricerche"
-      dataKey="id"
-      paginator
-      :rows="10"
-      :rowsPerPageOptions="[5, 10, 20, 50]"
-      responsiveLayout="scroll"
-      selectionMode="single"
-      v-model:selection="selectedRicerca"
-      @rowSelect="onSelectRicerca"
+       <Button label="Mostra Ricerche Effettuate" icon="pi pi-history" @click="visible = true" />
+
+    <!-- Dialog con DataTable -->
+    <Dialog
+      header="Ricerche Annunci Effettuate"
+      v-model:visible="visible"
+      :modal="true"
+      :style="{ width: '80vw' }"
     >
-      <Column field="dataRicerca" header="Data Ricerca" sortable>
-        <template #body="slotProps">
-              {{ formatTimeAgo(slotProps.data.createdAt) }}
-        </template>
-      </Column>
-
-      <Column field="tipologiaImmobile" header="Tipologia" sortable>
-        <template #body="slotProps">
-          {{ slotProps.data.tipologiaImmobile ?? "---" }}
-        </template>
-      </Column>
-
-      <Column field="tipologiaContratto" header="Contratto" sortable>
-        <template #body="slotProps">
-          {{ slotProps.data.tipologiaContratto ?? "---" }}
-        </template>
-      </Column>
-
-      <Column field="prezzoMin" header="Prezzo Min" sortable>
-        <template #body="slotProps">
-          {{ slotProps.data.prezzoMin ?? "---" }}
-        </template>
-      </Column>
-
-      <Column field="prezzoMax" header="Prezzo Max" sortable>
-        <template #body="slotProps">
-          {{ slotProps.data.prezzoMax ?? "---" }}
-        </template>
-      </Column>
-
-      <!-- 🔹 Nuove colonne dai dati del filtro -->
-      <Column field="metriQuadriMin" header="Metri Quadri Min" sortable>
-        <template #body="slotProps">
-          {{ slotProps.data.metriQuadriMin ?? "---" }}
-        </template>
-      </Column>
-
-      <Column field="metriQuadriMax" header="Metri Quadri Max" sortable>
-        <template #body="slotProps">
-          {{ slotProps.data.metriQuadriMax ?? "---" }}
-        </template>
-      </Column>
-
-      <Column field="Comune" header="Comune" sortable>
-        <template #body="slotProps">
-          {{
-            slotProps.data.locality?.length === 1
-              ? slotProps.data.locality[0]
-              : slotProps.data.locality?.length
-                ? slotProps.data.locality.join(", ")
-                : "---"
-          }}
-        </template>
-      </Column>
-
-      <Column field="raggioKm" header="Raggio (km)" sortable>
-        <template #body="slotProps">
-          {{ slotProps.data.raggioKm ?? "---" }}
-        </template>
-      </Column>
-
-      <Column field="agenteCreatoreAnnuncio" header="Agente" sortable>
-        <template #body="slotProps">
-          {{ slotProps.data.agenteCreatoreAnnuncio ?? "---" }}
-        </template>
-      </Column>
-    </DataTable>
+      <StoricoRicercheTable :ricerche="ricerche" :onSelectRicerca="onSelectRicerca" />
+    </Dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted,reactive } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import StoricoRicercheService from "../services/StoricoRicercheService";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
+import StoricoRicercheTable from "../components/Dialogs/StoricoRicerchePopUp.vue";
+
+import Button from "primevue/button";
+import Dialog from "primevue/dialog";
+
+const visible = ref(false);
 
 const router = useRouter();
 const route = useRoute();
 // Stato
 const ricerche = ref([]);
-const selectedRicerca = ref(null);
-const filtroDialog = ref(false);
 const filtro = ref(null);
 
 // Caratteristiche attive
@@ -128,13 +62,7 @@ const caratteristicheAbilitate = computed(() => {
 // Simula caricamento da backend
 onMounted(async () => {
   try {
-    const data = await StoricoRicercheService.getStoricoRicercheUtente();
-
-    // Parse di filtroUsatoJson per ogni elemento
-    ricerche.value = data.map((r) => ({
-      ...r,
-      filtroParsed: JSON.parse(r.filtroUsatoJson), // nuovo campo già parsato
-    }));
+    ricerche.value = await StoricoRicercheService.getStoricoRicercheUtente();
 
     console.log("Storico ricerche:", ricerche.value);
   } catch (err) {
@@ -142,55 +70,86 @@ onMounted(async () => {
   }
 });
 
+const filtroAnnunci = reactive({
+  numeroPagina: 1,
+  numeroDiElementiPerPagina: 5,
+  ordinePrezzoAsc: false,
+  ordinePrezzoDesc: false,
+  ordineDataAsc: false,
+  ordineDataDesc: true,
+  titolo: null,
+  tipologiaImmobile: "APPARTAMENTO",
+  tipologiaContratto: "AFFITTO",
+  prezzoMin: 150.0,
+  prezzoMax: null,
+  metriQuadriMin: null,
+  metriQuadriMax: null,
+  provincia: null,
+  latCentro: null,
+  lonCentro: null,
+  raggioKm: null,
+  balconi: null,
+  garage: null,
+  postiAuto: null,
+  giardino: null,
+  ascensore: null,
+  portiere: null,
+  riscaldamentoCentralizzato: null,
+  climatizzatori: null,
+  pannelliSolari: null,
+  cantina: null,
+  soffitta: null,
+  descrizioneAggiuntiva: null,
+  agenteCreatoreAnnuncio: null
+})
+
 // Quando seleziono una ricerca, apro il dettaglio filtro
 function onSelectRicerca(e) {
-  filtro.value = e.data.filtroParsed;
-  clickCerca();
+  console.log("Ricerca selezionata:", e.data);
+   try {
+    Object.assign(filtroAnnunci, JSON.parse(e.data.filtroUsatoJson))
+    console.log("JSON.parse:", JSON.parse(e.data.filtroUsatoJson))
+    console.log("Filtro ricostruito:", filtroAnnunci)
+    clickCerca()
+  } catch (err) {
+    console.error("Errore parsing JSON:", err)
+  }
 }
 
 const clickCerca = () => {
-  const comune = filtro.value.provincia;
-  const tipoImmobile = filtro.value.tipologiaImmobile;
-  const tipoContratto = filtro.value.tipologiaContratto;
-  const latitudine = filtro.value.latCentro;
-  const longitudine = filtro.value.lonCentro;
-  const raggioKm = filtro.value.raggioKm;
-  const metriQuadriMax = filtro.value.metriQuadriMax;
-  const metriQuadriMin = filtro.value.metriQuadriMin;
-  const prezzoMax = filtro.value.prezzoMax;
-  const prezzoMin = filtro.value.prezzoMin;
-
-  console.log("Cerca cliccato con dati:", {
-    comune,
-    tipoImmobile,
-    tipoContratto,
-    latitudine,
-    longitudine,
-    raggioKm,
-    metriQuadriMax,
-    metriQuadriMin,
-    prezzoMax,
-    prezzoMin,
-  });
-
-  router.push({
+    router.push({
     path: "/annunci",
     query: {
       ...route.query,
-      comune: comune,
-      immobile: tipoImmobile,
-      contratto: tipoContratto,
+      comune: filtroAnnunci.locality?.length === 1
+        ? filtroAnnunci.locality[0]
+        : null,
+      immobile: filtroAnnunci.tipologiaImmobile,
+      contratto: filtroAnnunci.tipologiaContratto,
       page: 1,
-      lat: latitudine,
-      lon: longitudine,
-      ordineDataDesc: true,
-      raggioKm: raggioKm,
-      metriQuadriMax: metriQuadriMax,
-      metriQuadriMin: metriQuadriMin,
-      prezzoMax: prezzoMax,
-      prezzoMin: prezzoMin,
+      raggio: filtroAnnunci.raggioKm,
+      lat: filtroAnnunci.latCentro,
+      lon: filtroAnnunci.lonCentro,
+      prezzoMin: filtroAnnunci.prezzoMin,
+      prezzoMax: filtroAnnunci.prezzoMax,
+      mqMin: filtroAnnunci.metriQuadriMin,
+      mqMax: filtroAnnunci.metriQuadriMax,
+
+      balconi: filtroAnnunci.balconi,
+      garage: filtroAnnunci.garage,
+      postiAuto: filtroAnnunci.postiAuto,
+      giardino: filtroAnnunci.giardino,
+      ascensore: filtroAnnunci.ascensore,
+      portiere: filtroAnnunci.portiere,
+      riscaldamentoCentralizzato: filtroAnnunci.riscaldamentoCentralizzato,
+      climatizzatore: filtroAnnunci.climatizzatori,
+      pannelliSolari: filtroAnnunci.pannelliSolari,
+      cantina: filtroAnnunci.cantina,
+      soffitta:filtroAnnunci.soffitta,
     },
   });
+
+
 };
 
 function formatTimeAgo(dateArray) {
