@@ -52,7 +52,11 @@
   </template>
 </Column>
   </DataTable>
-
+  <div v-else>
+    <p class="m-3 text-center">
+      Non sono presenti ricerche salvate.
+    </p>
+  </div>
   <Dialog v-model:visible="dialogVisible" header="Dettagli Ricerca" :modal="true" :closable="true">
   <div v-if="selectedRicerca">
     <p><strong>Data:</strong> {{ formatTimeAgo(selectedRicerca.createdAt) }}</p>
@@ -76,11 +80,7 @@
     </div>
   </div>
 </Dialog>
-  <div v-else>
-    <p class="m-3 text-center">
-      Non sono presenti ricerche salvate.
-    </p>
-  </div>
+
 </template>
 
 <script setup>

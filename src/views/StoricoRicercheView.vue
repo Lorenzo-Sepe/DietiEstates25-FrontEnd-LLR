@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted,reactive, h } from "vue";
+import { ref, computed, onMounted,reactive } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import StoricoRicercheService from "../services/StoricoRicercheService";
 import StoricoRicercheTable from "../components/Dialogs/StoricoRicerchePopUp.vue";
@@ -40,31 +40,6 @@ const ricerche = ref([]);
 const filtro = ref(null);
 const scheletroCaricamento = ref(true);
 
-// Caratteristiche attive
-const caratteristicheAbilitate = computed(() => {
-  if (!filtro.value) return [];
-
-  const caratteristicheConsentite = [
-    "balconi",
-    "garage",
-    "postiAuto",
-    "giardino",
-    "ascensore",
-    "portiere",
-    "riscaldamentoCentralizzato",
-    "climatizzatori",
-    "pannelliSolari",
-    "cantina",
-    "soffitta",
-  ];
-
-  return Object.entries(filtro.value)
-    .filter(([k, v]) => caratteristicheConsentite.includes(k)) // 🔹 tieni solo quelli della whitelist
-    .map(([k, v]) => ({
-      nome: k,
-      valore: v === true, // null o false diventano false
-    }));
-});
 
 // Simula caricamento da backend
 onMounted(async () => {
