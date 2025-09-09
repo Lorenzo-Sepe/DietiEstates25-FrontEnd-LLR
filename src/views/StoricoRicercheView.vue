@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted,reactive } from "vue";
+import { ref, onMounted,reactive } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import StoricoRicercheService from "../services/StoricoRicercheService";
 import StoricoRicercheTable from "../components/Dialogs/StoricoRicerchePopUp.vue";
@@ -37,7 +37,6 @@ const router = useRouter();
 const route = useRoute();
 // Stato
 const ricerche = ref([]);
-const filtro = ref(null);
 const scheletroCaricamento = ref(true);
 
 
