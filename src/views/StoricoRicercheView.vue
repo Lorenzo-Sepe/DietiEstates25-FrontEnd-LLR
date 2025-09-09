@@ -9,18 +9,24 @@
       header="Ricerche Annunci Effettuate"
       v-model:visible="visible"
       :modal="true"
-      :style="{ width: '80vw' }"
+      :style="{ width: '80vw', height: '70vh' }"
     >
-      <StoricoRicercheTable :ricerche="ricerche" :onSelectRicerca="onSelectRicerca" />
+
+      <ScheletroDatatable v-if="scheletroCaricamento"></ScheletroDatatable>
+
+      <StoricoRicercheTable v-else :ricerche="ricerche" :onSelectRicerca="onSelectRicerca" />
+
+
     </Dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted,reactive } from "vue";
+import { ref, computed, onMounted,reactive, h } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import StoricoRicercheService from "../services/StoricoRicercheService";
 import StoricoRicercheTable from "../components/Dialogs/StoricoRicerchePopUp.vue";
+import ScheletroDatatable from "../components/ScheletroDatatable.vue";
 
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
@@ -31,15 +37,45 @@ const router = useRouter();
 const route = useRoute();
 // Stato
 const ricerche = ref([]);
+const filtro = ref(null);
+const scheletroCaricamento = ref(true);
+
+// Caratteristiche attive
+const caratteristicheAbilitate = computed(() => {
+  if (!filtro.value) return [];
+
+  const caratteristicheConsentite = [
+    "balconi",
+    "garage",
+    "postiAuto",
+    "giardino",
+    "ascensore",
+    "portiere",
+    "riscaldamentoCentralizzato",
+    "climatizzatori",
+    "pannelliSolari",
+    "cantina",
+    "soffitta",
+  ];
+
+  return Object.entries(filtro.value)
+    .filter(([k, v]) => caratteristicheConsentite.includes(k)) // 🔹 tieni solo quelli della whitelist
+    .map(([k, v]) => ({
+      nome: k,
+      valore: v === true, // null o false diventano false
+    }));
+});
 
 // Simula caricamento da backend
 onMounted(async () => {
   try {
     ricerche.value = await StoricoRicercheService.getStoricoRicercheUtente();
+    scheletroCaricamento.value = false;
 
     console.log("Storico ricerche:", ricerche.value);
   } catch (err) {
     console.error("Errore caricamento storico ricerche:", err);
+    scheletroCaricamento.value = false;
   }
 });
 
