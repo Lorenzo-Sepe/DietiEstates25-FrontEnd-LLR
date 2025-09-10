@@ -1,114 +1,74 @@
 <template>
-  <Dialog
-    v-model:visible="loadingOperazione"
-    modal
-    header="OPERAZIONE IN CORSO"
-    :style="{ width: 'auto' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-  >
+  <Dialog v-model:visible="loadingOperazione" modal header="OPERAZIONE IN CORSO" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <div class="card flex justify-center">
       <ProgressSpinner />
     </div>
   </Dialog>
 
-  <Dialog
-    v-model:visible="okAllert"
-    modal
-    header="CONFERMA OPERAZIONE"
-    :style="{ width: 'auto' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-  >
+  <Dialog v-model:visible="okAllert" modal header="CONFERMA OPERAZIONE" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <p class="m-0">Operazione conclusa con successo</p>
     <Button label="OK" @click="okAllert = false" />
   </Dialog>
 
-  <Dialog
-    v-model:visible="erroreAllert"
-    modal
-    header="ERRORE"
-    :style="{ width: 'auto' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-  >
+  <Dialog v-model:visible="erroreAllert" modal header="ERRORE" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <p class="m-0">Errore di rete, riprovare più tardi.</p>
     <Button label="OK" @click="erroreAllert = false" />
   </Dialog>
 
-  <Dialog
-    v-model:visible="contenutoNotifica"
-    modal
-    :style="{ width: '40rem' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-  >
+  <Dialog v-model:visible="contenutoNotifica" modal :style="{ width: '40rem' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <div v-html="contenutoHtml"></div>
 
     <div>
-      <div
-        class="flex justify-center border-t-2 border-black w-full mx-auto my-2"
-      ></div>
+      <div class="flex justify-center border-t-2 border-black w-full mx-auto my-2"></div>
       <div v-if="isAttivoCategoriaNotificaVisualizzata">
         <p>
           Questa notifica appartiene alla categoria
           <Tag severity="secondary">
-            {{ nomeCategoriaNotificaVisualizzata }} </Tag
-          >, se non vuoi ricevere ultetiori notifiche di questa categoria clicca
+            {{ nomeCategoriaNotificaVisualizzata }} </Tag>, se non vuoi ricevere ultetiori notifiche di questa categoria
+          clicca
           disattiva
         </p>
-        <Button severity="secondary" @click="clickAttivaOrDisattivaCategoria"
-          >Disattiva {{ nomeCategoriaNotificaVisualizzata }}</Button
-        >
+        <Button severity="secondary" @click="clickAttivaOrDisattivaCategoria">Disattiva {{
+          nomeCategoriaNotificaVisualizzata }}</Button>
       </div>
       <div v-else>
         <p class="!text-red-500">
           Attenzione, la notifica che stai visualizzando appartiene alla
           categoria
           <Tag severity="secondary">
-            {{ nomeCategoriaNotificaVisualizzata }} </Tag
-          >. Questa categoria è disattivata pertanto non stai ricevendo
+            {{ nomeCategoriaNotificaVisualizzata }} </Tag>. Questa categoria è disattivata pertanto non stai ricevendo
           ulteriori notifiche di questa categoria
         </p>
         <Button severity="success" @click="clickAttivaOrDisattivaCategoria">
-          Attiva {{ nomeCategoriaNotificaVisualizzata }}</Button
-        >
+          Attiva {{ nomeCategoriaNotificaVisualizzata }}</Button>
       </div>
     </div>
   </Dialog>
 
-  <div class="flex flex-row p-4 items-start gap-4 w-full">
-    <div
-      class="contenitore-menuLaterale border-2 border-black rounded-lg my-10 hidden md:block"
-    >
-      <MenuLaterale
-        :categorie="categorieNotifiche"
-        :categoriaSelected="categoriaSelected"
-        @modificaSottoscrizioni="modificaSottoscrizioni"
-      />
+  <div
+    class="flex flex-row p-4 items-start gap-4 w-full">
+    <div v-if="caricamentoCategorieCompletate" class="contenitore-menuLaterale border-2 border-black rounded-lg my-10 hidden md:block">
+      <MenuLaterale :categorie="categorieNotifiche" :categoriaSelected="categoriaSelected"
+        @modificaSottoscrizioni="modificaSottoscrizioni" />
     </div>
-    <div class="contenitore-notifiche p-2 flex flex-col gap-4">
-      <div
-        class="flex md:hidden border-1 border-gray-500 rounded-lg p-4 justify-center gap-4 w-auto"
-      >
-        <MenuCategoriaSuperiore
-          :categorie="categorieNotifiche"
-          @modificaSottoscrizioni="modificaSottoscrizioni"
-        />
+    <ScheletroCategorie v-else></ScheletroCategorie>
+    <div v-if="caricamentoNotificheCompletate" class="contenitore-notifiche p-2 flex flex-col gap-4">
+      <div class="flex md:hidden border-1 border-gray-500 rounded-lg p-4 justify-center gap-4 w-auto">
+        <MenuCategoriaSuperiore :categorie="categorieNotifiche" @modificaSottoscrizioni="modificaSottoscrizioni" />
       </div>
-      <span v-if="numeroNotifche < 1" class="text-2xl"
-        >Non hai ricevuto nessuna notifica</span
-      >
-      <ListaNotifiche
-        v-else
-        :notifiche="notifiche"
-        @visualizzaNotifica="visualizzaNotifica"
-      />
+      <span v-if="numeroNotifche < 1" class="text-2xl">Non hai ricevuto nessuna notifica</span>
+      <ListaNotifiche v-else :notifiche="notifiche" @visualizzaNotifica="visualizzaNotifica" />
       <div class="mt-auto">
-        <Paginator
-          :rows="5"
-          :totalRecords="numeroNotifche"
-          @page="onPage"
-        ></Paginator>
+        <Paginator :rows="5" :totalRecords="numeroNotifche" @page="onPage"></Paginator>
       </div>
     </div>
+    <ScheletroCaricamentoNotifiche v-else></ScheletroCaricamentoNotifiche>
   </div>
+
 </template>
 
 <script setup>
@@ -126,6 +86,8 @@ import Button from "primevue/button";
 import Tag from "primevue/tag";
 
 import { CategoriaNotificaRequest } from "../dto/CategoriaNotificaRequest.js";
+import ScheletroCaricamentoNotifiche from "../components/Notifiche/ScheletroCaricamentoNotifiche.vue";
+import ScheletroCategorie from "../components/Notifiche/ScheletroCategorie.vue";
 
 const categorieNotifiche = ref([]);
 
@@ -146,6 +108,9 @@ const isAttivoCategoriaNotificaVisualizzata = ref(false);
 const nomeCategoriaNotificaVisualizzata = ref("");
 const idCategoriaNotificaVisualizzata = ref(0);
 
+const caricamentoCategorieCompletate = ref(false);
+const caricamentoNotificheCompletate = ref(false);
+
 onMounted(async () => {
   router.push({
     path: route.path,
@@ -154,42 +119,37 @@ onMounted(async () => {
 
   try {
     categorieNotifiche.value = await NotificheService.getSottoscrizioni();
-
-    console.log("sottoscrizioniNotifiche:", categorieNotifiche.value);
   } catch (error) {
-    console.log("errore chaimata get sottoscrizioni:", error);
   }
 
   numeroNotifche.value = getNumeroNotifiche();
   notifiche.value = getNotifiche();
+
+  caricamentoCategorieCompletate.value = true;
+  caricamentoNotificheCompletate.value = true
 });
 
 const getNumeroNotifiche = async () => {
   if (route.query.id == 0) {
     try {
       numeroNotifche.value = await NotificheService.getNumeroNotifiche();
-      console.log("numeroNotifiche:", numeroNotifche.value);
     } catch (error) {
-      console.log("errore chiamata get numero notifiche:", error);
     }
   } else {
     try {
       numeroNotifche.value =
         await NotificheService.getNumeroNotificheByCategoria(route.query.id);
-      console.log("numeroNotifiche:", numeroNotifiche.value);
     } catch (error) {
-      console.log("errore chiamata get numero notifiche:", error);
     }
   }
 };
 
 const getNotifiche = async () => {
+  caricamentoNotificheCompletate.value = false;
   if (route.query.id == 0) {
     try {
       notifiche.value = await NotificheService.getNotifiche(route.query.pagina);
-      console.log("notifiche:", notifiche.value);
     } catch (error) {
-      console.log("errore chiamata get notifiche:", error);
     }
   } else {
     try {
@@ -197,11 +157,11 @@ const getNotifiche = async () => {
         route.query.pagina,
         route.query.id,
       );
-      console.log("notifiche:", notifiche.value);
+
     } catch (error) {
-      console.log("errore chiamata get notifiche:", error);
     }
   }
+  caricamentoNotificheCompletate.value = true;
 };
 
 const onPage = (event) => {
@@ -214,6 +174,7 @@ const onPage = (event) => {
 watch(
   () => route.query,
   () => {
+    
     numeroNotifche.value = getNumeroNotifiche();
     notifiche.value = getNotifiche();
   },
@@ -256,13 +217,10 @@ const visualizzaNotifica = (notifica) => {
   try {
     NotificheService.setVisualizzazioneNotifica(notifica.id)
       .then(() => {
-        console.log("notifica visualizzata correttamente");
       })
       .catch((error) => {
-        console.log("errore chiamata visualizza notifica:", error);
       });
   } catch (error) {
-    console.log("errore chiamata check notifica:", error);
   }
 };
 
