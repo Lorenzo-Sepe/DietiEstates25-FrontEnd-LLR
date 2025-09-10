@@ -128,12 +128,6 @@ const routes = [
   },
 
   {
-    path: "/storico-ricerche",
-    name: "storico-ricerche",
-    component: () => import("../views/StoricoRicercheView.vue"),
-  },
-
-  {
     path: "/PortaleAgenzia/messaggi-promozionali",
     name: "messaggi-promozionali",
     component: () => import("../views/CreaNotificaView.vue"),
