@@ -16,7 +16,7 @@
       </template>
     </Column>
 
-    <Column field="Comune" header="Comune">
+    <Column field="Comune" header="Zona">
       <template #body="slotProps">
         {{
           slotProps.data.locality?.length === 1
@@ -148,7 +148,9 @@ function renderFiltro(key, value) {
     'numeroPagina', 
     'numeroDiElementiPerPagina',
     'ordineDataDesc',
-    'provincia'
+    'provincia',
+    'latCentro',
+    'lonCentro',
   ];
   if (skipKeys.includes(key)) return null;
 

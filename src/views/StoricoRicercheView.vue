@@ -63,7 +63,7 @@ const filtroAnnunci = reactive({
   titolo: null,
   tipologiaImmobile: "APPARTAMENTO",
   tipologiaContratto: "AFFITTO",
-  prezzoMin: 150.0,
+  prezzoMin: null,
   prezzoMax: null,
   metriQuadriMin: null,
   metriQuadriMax: null,
@@ -104,9 +104,7 @@ const clickCerca = () => {
     path: "/annunci",
     query: {
       ...route.query,
-      comune: filtroAnnunci.locality?.length === 1
-        ? filtroAnnunci.locality[0]
-        : null,
+      comune: filtroAnnunci.provincia,
       immobile: filtroAnnunci.tipologiaImmobile,
       contratto: filtroAnnunci.tipologiaContratto,
       page: 1,
