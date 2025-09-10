@@ -1,11 +1,13 @@
 <template>
 
 
-  <!---------------------------------- Dialog---------------------->
+  <!---------------------------------- Dialog------------------------------------------------------------------------------------>
 
   <DialogStoricoRicerche ref="dialogRef" />
 
-  <!------------------------------------------------------------------->
+  <DialogAvatar ref="dialogAvatarRef" :avatarUrl="avatarUrl" :nomeVisualizzato="nomeVisualizzato" :email="email" />
+
+  <!------------------------------------------------------------------------------------------------------------------------------->
 
   <div
     class="flex px-3 flex-row justify-between items-center w-full top-0 h-25 z-50 sticky text-black text-2xl bg-white shadow-md">
@@ -24,8 +26,8 @@
         </Button>
       </div>
       <div v-else>
-        <AvatarAccount :avatarUrl="avatarUrl" :nomeVisualizzato="nomeVisualizzato" :nomeAzienda="nomeAzienda"
-          :isInPortale="isInPortale" :email="email">
+        <AvatarAccount  :avatarUrl="avatarUrl" :nomeVisualizzato="nomeVisualizzato" :nomeAzienda="nomeAzienda"
+          :isInPortale="isInPortale" :email="email" @avatarClick="chiudiDrawer">
         </AvatarAccount>
       </div>
     </div>
@@ -40,7 +42,7 @@
         </div>
         <div v-else class="flex gap-2 flex-col lg:flex-row pb-4">
           <AvatarAccount :avatarUrl="avatarUrl" :nomeVisualizzato="nomeVisualizzato" :nomeAzienda="nomeAzienda"
-            :email="email" :isInPortale="isInPortale" @Avatarclick="avatarClicked">
+            :email="email" :isInPortale="isInPortale" @avatarClick="chiudiDrawer">
           </AvatarAccount>
         </div>
         <MenuNavigazione :isInPortale="isInPortale" @chiudiDrawer="chiudiDrawer" />
@@ -62,6 +64,7 @@ import Logo from "./Logo.vue";
 import LogoPortale from "./LogoPortale.vue";
 import MenuNavigazione from "./MenuNavigazione.vue";
 import DialogStoricoRicerche from "../Dialogs/DialogStoricoRicerche.vue";
+import DialogAvatar from "../Dialogs/DialogAvatar.vue"; 
 
 import Button from "primevue/button";
 import Drawer from "primevue/drawer";
@@ -78,6 +81,7 @@ const drawer = ref(false);
 const dialogRef = ref(null);
 const storeUtente = useStoreUtente();
 const storeEmployee = useEmployeeStore();
+const dialogAvatarRef = ref(false);
 
 const logged = computed(() => {
   if (props.isInPortale) {
@@ -147,11 +151,17 @@ onMounted(() => {
 
 function apriStorico() { dialogRef.value.apriDialog() }
 
+function apriImpostazioni() { dialogAvatarRef.value.apriImpostazioni() }
+
 const chiudiDrawer = (evento) => {
   drawer.value = false;
 
   if(evento === 'storicoRicerche') {
     apriStorico();
+  }
+
+  if(evento === 'impostazioniAvatar') {
+    apriImpostazioni();
   }
 }
 

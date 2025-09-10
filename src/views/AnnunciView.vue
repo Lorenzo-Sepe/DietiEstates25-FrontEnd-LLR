@@ -1,8 +1,6 @@
 <template>
   <div class="w-full h-full flex flex-col bg-gray-100">
-    <div
-      class="intestazione w-full p-4 items-start justify-start flex flex-col"
-    >
+    <div class="intestazione w-full p-4 items-start justify-start flex flex-col">
       <h2>
         {{ numeroAnnunci }}
         {{ formattaInPlurale(route.query.immobile, numeroAnnunci) }} in
@@ -10,55 +8,30 @@
       </h2>
     </div>
 
-    <div
-      class="w-full h-full flex flex-row gap-2 mt-2 items-start justify-start"
-    >
-      <div
-        class="menuLaterale flex flex-col gap-2 w-120 h-full p-2 md:block mx-2"
-      >
+    <div class="w-full h-full flex flex-row gap-2 mt-2 items-start justify-start">
+      <div class="hidden menuLaterale flex flex-col gap-2 w-120 h-full p-2 md:block mx-2">
         <ContenutoMenuFiltro />
       </div>
 
-      <div
-        class="lista-annunci w-full min-h-screen md:w-[85%] lg:w-full flex flex-col gap-4"
-      >
-        <div
-          class="menuSuperiore flex flex-row border-b-2 border-b-gray-400 p-2 gap-2 mb-4 mx-2 justify-between"
-        >
-          <div class="flex justify-center md:hidden">
+      <div class="lista-annunci w-full min-h-screen md:w-[85%] lg:w-full flex flex-col gap-4">
+        <div class="menuSuperiore flex flex-row border-b-2 border-b-gray-400 p-2 gap-2 mb-4 mx-2 justify-between">
+          <div class="block flex justify-center md:hidden">
             <Drawer v-model:visible="visible" header="Filtro">
-              <ContenutoMenuFiltro />
+              <ContenutoMenuFiltro @chiudiDrawer="visible = false" />
             </Drawer>
             <Button class="!w-16" label="Filtra" @click="visible = true" />
           </div>
 
           <div class="filtro-ordine">
-            <div
-              class="filtro-schermi-grandi md:block flex flex-row justify-end"
-            >
-              <label
-                for="ordine-selectbutton"
-                class="text-lg font-semibold mr-2"
-                >Ordina per:</label
-              >
-              <SelectButton
-                id="ordine-selectbutton"
-                v-model="selectedOrdine"
-                :options="opzioniDiOrdinamento"
-                @click="setOrdineToQueryRoute"
-              />
+            <div class="filtro-schermi-grandi hidden md:block flex flex-row justify-end">
+              <label for="ordine-selectbutton" class="text-lg font-semibold mr-2">Ordina per:</label>
+              <SelectButton id="ordine-selectbutton" v-model="selectedOrdine" :options="opzioniDiOrdinamento"
+                @click="setOrdineToQueryRoute" />
             </div>
-            <div class="filtro-schermi-piccolo md:hidden flex flex-col">
-              <label for="ordine-select" class="text-lg font-semibold mb-1"
-                >Ordina per</label
-              >
-              <Select
-                id="ordine-select"
-                v-model="selectedOrdine"
-                :options="opzioniDiOrdinamento"
-                class="w-40"
-                @change="setOrdineToQueryRoute"
-              />
+            <div class="filtro-schermi-piccolo block md:hidden flex flex-col">
+              <label for="ordine-select" class="text-lg font-semibold mb-1">Ordina per</label>
+              <Select id="ordine-select" v-model="selectedOrdine" :options="opzioniDiOrdinamento" class="w-40"
+                @change="setOrdineToQueryRoute" />
             </div>
           </div>
         </div>
@@ -66,22 +39,14 @@
         <ScheletroLista v-if="loadingAnnunci" />
 
         <div class="w-full h-full mx-2" v-else>
-          <ListaAnnunci
-            v-if="annunciResponse.length > 0"
-            :annunci="annunciResponse"
-          />
+          <ListaAnnunci v-if="annunciResponse.length > 0" :annunci="annunciResponse" />
           <div class="w-[95%] h-150" v-else>
             <h3>Non sono stati trovati annunci</h3>
           </div>
         </div>
 
         <div class="my-2 mx-2">
-          <Paginator
-            v-model:first="resetPage"
-            :rows="5"
-            :totalRecords="numeroAnnunci"
-            @page="setPage"
-          >
+          <Paginator v-model:first="resetPage" :rows="5" :totalRecords="numeroAnnunci" @page="setPage">
           </Paginator>
         </div>
       </div>

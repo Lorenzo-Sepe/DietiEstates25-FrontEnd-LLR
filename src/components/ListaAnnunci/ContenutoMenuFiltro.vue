@@ -118,7 +118,7 @@
     </div>
   </div>
   <!-- Bottone sempre visibile -->
-  <Button class="!fixed !bottom-4 !left-4" @click="onApliccaFiltro" on>
+  <Button class="!fixed !bottom-4 !left-4" @click="onApliccaFiltro">
     Applica filtro
   </Button>
 </template>
@@ -134,13 +134,15 @@ import MultiSelect from "primevue/multiselect";
 
 import Mappa from "../ListaAnnunci/Mappa.vue";
 
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, defineEmits } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 import { CountryService } from "../../services/ComuniItalianiService";
 
 const router = useRouter();
 const route = useRoute();
+
+const emit = defineEmits(["chiudiDrawer"]);
 
 const countries = ref();
 const filteredCountries = ref();
@@ -249,6 +251,8 @@ const onApliccaFiltro = () => {
       soffitta: isCaratteristicaSelezionata("Soffitta") ? true : null,
     },
   });
+
+  emit("chiudiDrawer");
 };
 
 const isCaratteristicaSelezionata = (caratteristica) => {
