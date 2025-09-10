@@ -7,7 +7,7 @@
                     <Skeleton></Skeleton>
                 </template>
             </Column>
-            <Column field="comune" header="Comune">
+            <Column field="comune" header="Zona">
                 <template #body>
                     <Skeleton></Skeleton>
                 </template>
