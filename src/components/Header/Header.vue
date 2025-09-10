@@ -7,18 +7,18 @@
 
     <!-- Menu di Navigazione con prop -->
     <div class="hidden lg:flex">
-      
+      <MenuNavigazione v-if="logged" :isInPortale="isInPortale" />
+
       <div v-if="!logged" class="flex gap-2 items-center flex-col lg:flex-row">
         <Button label="Accedi" @click="openDialog"></Button>
-        
+
         <Button label="Registrati" asChild v-slot="slotProps">
           <RouterLink to="/register" :class="slotProps.class"
-          >Registrati</RouterLink
+            >Registrati</RouterLink
           >
         </Button>
       </div>
       <div v-else>
-        <MenuNavigazione  :isInPortale="isInPortale" />
         <AvatarAccount
           :avatarUrl="avatarUrl"
           :nomeVisualizzato="nomeVisualizzato"
