@@ -39,7 +39,7 @@
         >
           <Button label="Accedi" @click="openDialog"></Button>
           <Button label="Registrati" asChild v-slot="slotProps">
-            <RouterLink to="/register" :class="slotProps.class"
+            <RouterLink to="/register" :class="slotProps.class"  @click="drawer = false"
               >Registrati</RouterLink
             >
           </Button>
