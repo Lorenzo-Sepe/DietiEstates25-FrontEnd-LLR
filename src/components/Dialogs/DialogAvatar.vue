@@ -70,6 +70,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  isInPortale: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const dialogChangePassword = ref(false);

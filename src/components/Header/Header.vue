@@ -5,7 +5,7 @@
 
   <DialogStoricoRicerche ref="dialogRef" />
 
-  <DialogAvatar ref="dialogAvatarRef" :avatarUrl="avatarUrl" :nomeVisualizzato="nomeVisualizzato" :email="email" />
+  <DialogAvatar ref="dialogAvatarRef" :avatarUrl="avatarUrl" :nomeVisualizzato="nomeVisualizzato" :email="email" :isInPortale="isInPortale"/>
 
   <!------------------------------------------------------------------------------------------------------------------------------->
 
