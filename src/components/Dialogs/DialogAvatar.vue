@@ -92,7 +92,7 @@ async function logout() {
   try {
     if (props.isInPortale) {
       await useEmployeeStore().logout();
-      router.push("/");
+      router.push("/PortaleAgenzia");
     } else {
       await storeUtente.logout();
       router.push("/");
