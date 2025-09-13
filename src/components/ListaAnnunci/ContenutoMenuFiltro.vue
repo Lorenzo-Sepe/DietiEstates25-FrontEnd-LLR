@@ -1,25 +1,10 @@
 <template>
-  <div
-    class="flex flex-col gap-8 w-full md:min-h-screen md:max-h-100 overflow-y-auto items-start justify-start p-2 bg-white"
-  >
+  <div class="flex flex-col gap-8 w-full h-[65%] items-start justify-start p-2 overflow-y-auto bg-gray-100">
     <div class="luogo w-full">
-      <div
-        class="Comune-nella-mappa flex flex-col items-start justify-start mb-2"
-      >
-        <label
-          for="autocomplete-comune"
-          class="block text-lg font-semibold mb-1"
-          >Comune</label
-        >
-        <AutoComplete
-          id="autocomplete-comune"
-          :fluid="true"
-          v-model="luogoCercato"
-          optionLabel="comune"
-          :suggestions="filteredCountries"
-          placeholder="Scrivi dove cerchi l'immobile"
-          @complete="search"
-        />
+      <div class="Comune-nella-mappa flex flex-col items-start justify-start mb-2">
+        <label for="autocomplete-comune" class="block text-lg font-semibold mb-1">Comune</label>
+        <AutoComplete id="autocomplete-comune" :fluid="true" v-model="luogoCercato" optionLabel="comune"
+          :suggestions="filteredCountries" placeholder="Scrivi dove cerchi l'immobile" @complete="search" />
       </div>
 
       <div class="w-[90%] h-60">
@@ -28,99 +13,57 @@
     </div>
 
     <div class="tipologia-immobile flex flex-col items-start justify-start">
-      <label
-        for="select-tipologia-immobile"
-        class="block text-lg font-semibold mb-1"
-        >Tipologia immobile</label
-      >
-      <Select
-        id="select-tipologia-immobile"
-        v-model="selectedTipologiaImmobile"
-        :options="opzioniTipologiaImmobile"
-        optionLabel="name"
-        placeholder="Select a City"
-        class="w-full md:w-56"
-        @change="buckupSelectedImmobile"
-      />
+      <label for="select-tipologia-immobile" class="block text-lg font-semibold mb-1">Tipologia immobile</label>
+      <Select id="select-tipologia-immobile" v-model="selectedTipologiaImmobile" :options="opzioniTipologiaImmobile"
+        optionLabel="name" placeholder="Select a City" class="w-full md:w-56" @change="buckupSelectedImmobile" />
     </div>
 
     <div class="contratto-immobile flex flex-col items-start justify-start">
-      <label
-        for="selectbutton-contratto"
-        class="block text-lg font-semibold mb-1"
-        >Tipologia contratto</label
-      >
+      <label for="selectbutton-contratto" class="block text-lg font-semibold mb-1">Tipologia contratto</label>
       <div class="card flex justify-center">
-        <SelectButton
-          id="selectbutton-contratto"
-          v-model="selectedContratto"
-          :options="opzioniContratto"
-        />
+        <SelectButton id="selectbutton-contratto" v-model="selectedContratto" :options="opzioniContratto" />
       </div>
     </div>
 
     <div class="prezzo-immobile flex flex-row gap-2">
       <div class="flex flex-col items-start justify-start">
         <label class="block text-lg font-semibold mb-1">Prezzo minimo</label>
-        <InputNumber
-          v-model="valorePrezzoMinimo"
-          inputId="locale-german"
-          locale="de-DE"
-          :min="0"
-          fluid
-        />
+        <InputNumber v-model="valorePrezzoMinimo" inputId="locale-german" locale="de-DE" :min="0" fluid />
       </div>
       <div class="flex flex-col items-start justify-start">
         <label class="block text-lg font-semibold mb-1">Prezzo massimo</label>
-        <InputNumber
-          v-model="valorePrezzoMassimo"
-          inputId="locale-german"
-          locale="de-DE"
-          :min="0"
-          fluid
-        />
+        <InputNumber v-model="valorePrezzoMassimo" inputId="locale-german" locale="de-DE" :min="0" fluid />
       </div>
     </div>
 
     <div class="dimensione-immobile flex flex-row gap-2">
       <div class="flex flex-col items-start justify-start">
-        <label class="block text-lg font-semibold mb-1"
-          >Metri quadri minimo</label
-        >
+        <label class="block text-lg font-semibold mb-1">Metri quadri minimo</label>
         <InputNumber v-model="valoreMetriQuadriMinimo" :min="0" fluid />
       </div>
       <div class="flex flex-col items-start justify-start">
-        <label class="block text-lg font-semibold mb-1"
-          >Metri quadri massimo</label
-        >
+        <label class="block text-lg font-semibold mb-1">Metri quadri massimo</label>
         <InputNumber v-model="valoreMetriQuadriMassimo" :min="0" fluid />
       </div>
     </div>
 
-    <div
-      class="altre-caratteristiche flex flex-col items-start justify-start gap-2"
-    >
-      <label class="block text-lg font-semibold mb-1"
-        >Caratteristiche Aggiuntive</label
-      >
+    <div class="altre-caratteristiche flex flex-col items-start justify-start gap-2">
+      <label class="block text-lg font-semibold mb-1">Caratteristiche Aggiuntive</label>
 
       <div class="card flex justify-center">
-        <MultiSelect
-          v-model="caratteristicheSelezionate"
-          :options="caratteristiche"
-          optionLabel="name"
-          filter
-          placeholder="Caratteristiche aggiuntive"
-          :maxSelectedLabels="3"
-          class="w-full md:w-80"
-        />
+        <MultiSelect v-model="caratteristicheSelezionate" :options="caratteristiche" optionLabel="name" filter
+          placeholder="Caratteristiche aggiuntive" :maxSelectedLabels="3" class="w-full md:w-80" />
       </div>
     </div>
   </div>
+
   <!-- Bottone sempre visibile -->
-  <Button class="!fixed !bottom-4 !left-4" @click="onApliccaFiltro">
-    Applica filtro
-  </Button>
+  <div class="mt-4 bg-gray-100 p-4 w-full flex justify-center border-t border-gray-300">
+    <Button class="w-full" @click="onApliccaFiltro">
+      Applica filtro
+    </Button>
+  </div>
+
 </template>
 
 <script setup>
