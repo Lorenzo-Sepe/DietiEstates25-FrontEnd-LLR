@@ -8,7 +8,7 @@
       <div class="area-centrale flex flex-col w-full gap-2">
         <div class="area-superiore w-full flex items-start lg:hidden">
           <Drawer v-model:visible="drawerVisible" header="Filtro">
-            <ContenutoMenuFiltro />
+            <ContenutoMenuFiltro v-if="valoriCaricati" :filtro="filtroAnnunci" />
           </Drawer>
           <Button label="Filtro" @click="drawerVisible = true" />
         </div>
