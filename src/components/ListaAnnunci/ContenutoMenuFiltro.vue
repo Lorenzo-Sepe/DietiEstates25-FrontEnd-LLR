@@ -89,11 +89,7 @@ const emit = defineEmits(["chiudiDrawer"]);
 
 const countries = ref();
 const filteredCountries = ref();
-const luogoCercato = ref({
-  comune: route.query.comune,
-  latitudine: route.query.lat,
-  longitudine: route.query.lon,
-});
+const luogoCercato = ref(route.query.comune);
 
 const selectedTipologiaImmobile = ref();
 selectedTipologiaImmobile.value = route.query.immobile
@@ -248,6 +244,8 @@ const inizializzaCaratteristicheSelezionate = () => {
 
 watch(route, (newRoute) => {
   caratteristicheSelezionate.value = [];
+
+  luogoCercato.value = newRoute.query.comune
 
   valorePrezzoMinimo.value = route.query.prezzoMin
     ? parseInt(route.query.prezzoMin)
