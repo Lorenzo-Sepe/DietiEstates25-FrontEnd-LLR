@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full h-full flex flex-col bg-gray-100">
-    <div class="intestazione w-full p-4 items-start justify-start flex flex-col">
+  <div class="w-full flex flex-col bg-gray-100">
+    <div class="intestazione w-full md:h-16 p-4 items-start justify-start flex flex-col">
       <h2>
         {{ numeroAnnunci }}
         {{ formattaInPlurale(route.query.immobile, numeroAnnunci) }} in
@@ -8,12 +8,13 @@
       </h2>
     </div>
 
-    <div class="w-full h-full flex flex-row gap-2 mt-2 items-start justify-start">
-      <div class="hidden menuLaterale  flex flex-col gap-2 w-120 h-full p-2 md:block mx-2">
+    <div class="w-full flex flex-row gap-2 mt-2 items-start justify-start">
+
+      <div class="hidden menuLaterale flex flex-col gap-4 w-125 p-2 md:block mx-2 h-screen overflow-y-auto sticky top-0">
         <ContenutoMenuFiltro />
       </div>
 
-      <div class="lista-annunci w-full min-h-screen md:w-[85%] lg:w-full flex flex-col gap-4">
+      <div class="lista-annunci w-full min-h-screen 2xl:w-[75%] xl:w-[85%] md:w-[65%] flex flex-col gap-4">
         <div class="menuSuperiore flex flex-row border-b-2 border-b-gray-400 p-2 gap-2 mb-4 mx-2 justify-between">
           <div class="block flex justify-center md:hidden">
             <Drawer v-model:visible="visible" header="Filtro">

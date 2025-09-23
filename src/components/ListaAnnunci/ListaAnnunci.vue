@@ -19,7 +19,7 @@
   <div
     v-for="annuncio in annunci"
     :key="annuncio.id"
-    class="w-[95%] h-150 lg:h-80 flex flex-col lg:flex-row bg-white gap-4 mb-4 border border-gray-200 rounded-md"
+    class="w-[95%] h-160 lg:h-80 flex flex-col lg:flex-row bg-white gap-4 mb-4 border border-gray-200 rounded-md"
   >
     <div
       class="immagine w-full h-45 lg:w-115 lg:h-full md:w-90 md:mx-auto md:mt-1 border border-gray-200 rounded-md"
