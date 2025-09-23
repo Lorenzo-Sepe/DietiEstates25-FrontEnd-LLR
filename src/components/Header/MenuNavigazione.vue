@@ -31,14 +31,13 @@ const menuGenerale = [
 
 const menuVenditore = [
   {
-    nome: "Gestisci i tuoi annunci immobiliari",
+    nome: "Gestisci annunci immobiliari",
     percorso: "/PortaleAgenzia/miei-annunci",
   },
   {
     nome: "Messaggi promozionali",
     percorso: "/PortaleAgenzia/messaggi-promozionali",
   },
-  { nome: "Team", percorso: "/PortaleAgenzia/team" },
 ];
 
 // Menu dinamico in base alla prop ricevuta dal padre

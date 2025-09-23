@@ -27,13 +27,13 @@
   <!-------------------------------------------- ------------------------------------------------>
 
   <div class="w-full flex flex-col gap-2 px-4">
-    <AreaSuperiore class="w-full items-center justify-center" />
+    <AreaSuperiore class="w-full items-center justify-center" @aggiungiDipendente="registrationVisible = true" />
 
     <ScheletroListaAgenti v-if="loadingListaAgenti" class="w-full" />
 
     <div v-else class="w-full">
       <h2 v-if="!isAgente">Lista agenti dell'agenzia:</h2>
-      <Accordion v-model:activeIndex="activeIndex" :multiple="false" @update:activeIndex="onAccordionToggle"
+      <Accordion v-model:activeIndex="activeIndex"  @update:activeIndex="onAccordionToggle"
         expandIcon="pi pi-plus" collapseIcon="pi pi-minus">
         <AccordionPanel class="my-2" v-for="(agente, index) in agenti" :value="index">
           <AccordionHeader class="!bg-surface-100 hover:bg-surface-300!">
@@ -55,11 +55,6 @@
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
-
-      <div v-if="!isAgente" class="buttonArea flex flex-row gap-2 justify-center items-center">
-        <Button severity="contrast" class="mb-2" label="Aggiungi Agente" @click="registrationVisible = true" raised />
-        <Button severity="contrast" class="mb-2" label="Crea Notifica Promozionale" @click="newNotification" raised />
-      </div>
     </div>
   </div>
 </template>
@@ -88,8 +83,7 @@ import { useEmployeeStore } from "../stores/EmployeeStore";
 
 const router = useRouter();
 
-const activeIndex = ref(null);
-const numeroAnnunci = ref(0);
+const activeIndex = ref(0);
 const annunci = ref([]);
 const loading = ref(true);
 const loadingListaAgenti = ref(true);
@@ -136,6 +130,7 @@ onMounted(async () => {
       agenti.value.push(dettagliAgente.value);
       isAgente.value = true;
       loadingListaAgenti.value = false;
+      activeIndex.value = 0;
     }
   }
 });
@@ -149,6 +144,7 @@ const filterAgenti = (dipendenti) => {
 };
 
 const onAccordionToggle = (newIndex) => {
+  console.log("Accordion toggled, new index:", newIndex);
   if (newIndex !== null) {
     console.log("Dati utente:", agenti.value[newIndex].infoUtente.email);
     filtroAnnunci.agenteCreatoreAnnuncio =
@@ -299,7 +295,4 @@ const changeControposta = (idProposta, prezzoControproposta) => {
   });
 };
 
-function newNotification() {
-  router.push({ name: "NuovaPromozione" });
-}
 </script>

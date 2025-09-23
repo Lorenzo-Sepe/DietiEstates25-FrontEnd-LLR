@@ -18,18 +18,20 @@
     </div>
 
     <div class="titolo-pagina">
-      <h1>Gestione annunci immobiliari</h1>
+      <h1 v-if="isAgente">Gestione dei tuoi annunci immobiliari</h1>
+      <h1 v-else>Gestione annunci immobiliari di tutti gli agenti</h1>
     </div>
 
     <div class="contenitore-btn-nuovo-annuncio">
       <Button v-if="isAgente" @click="toCreaAnnuncio" label="Aggiungi annuncio immobilare" />
+      <Button v-else @click="$emit('aggiungiDipendente')" label="Aggiungi dipendente" />
     </div>
 
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, defineEmits } from "vue";
 import { useEmployeeStore } from "../../stores/EmployeeStore";
 import { useRouter } from "vue-router";
 
@@ -40,6 +42,8 @@ const router = useRouter();
 const employeeStore = useEmployeeStore();
 
 const isAgente = ref(false);
+
+const emits = defineEmits(["aggiungiDipendente"]);
 
 onMounted(() => {
   console.log("EmployeeStore initialized");
@@ -59,10 +63,14 @@ const toCreaAnnuncio = () => {
 
 <style scoped>
 .contenitore-area-superiore {
+
   display: flex;
   flex-direction: row;
   gap: 6rem;
   padding: 1rem;
+  margin: 0.5rem;
+  background-color: whitesmoke;
+
 }
 
 .img-profilo {
