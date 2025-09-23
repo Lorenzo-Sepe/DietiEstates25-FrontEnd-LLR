@@ -49,7 +49,7 @@ export const useStoreUtente = defineStore("utente", {
     UrlFotoProfilo: (state) => {
       // Controlla se l'URL della foto del profilo è disponibile
       return (
-        state.utente.Info.UrlFotoProfilo || getDefaultAvatar(state.utente.email)
+        state.utente.Info.urlFotoProfilo || getDefaultAvatar(state.utente.email)
       );
     },
   },
@@ -84,7 +84,7 @@ export const useStoreUtente = defineStore("utente", {
             "Attenzione: si è verificato un errore durante l'aggiornamento dei dati dell'utente.",
             error,
           );
-          this.utente.Info.UrlFotoProfilo = getDefaultAvatar(this.utente.email);
+          this.utente.Info.urlFotoProfilo = getDefaultAvatar(this.utente.email);
         });
     },
   },

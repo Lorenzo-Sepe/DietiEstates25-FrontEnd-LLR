@@ -110,11 +110,11 @@ export function getDatiUser(email) {
     .then((response) => {
       const ret = new UserInfoResponse(response.data); // Restituisci l'oggetto creato
       if (
-        ret.UrlFotoProfilo === null ||
-        ret.UrlFotoProfilo === undefined ||
-        ret.UrlFotoProfilo === ""
+        ret.urlFotoProfilo === null ||
+        ret.urlFotoProfilo === undefined ||
+        ret.urlFotoProfilo === ""
       ) {
-        ret.UrlFotoProfilo = getDefaultAvatar(email);
+        ret.urlFotoProfilo = getDefaultAvatar(email);
       }
       return ret;
     })

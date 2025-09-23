@@ -66,7 +66,7 @@ export const useEmployeeStore = defineStore("employee", {
     getEmail: (state) => state.employee.email,
     datiUtente: (state) => state.employee.Info,
     UrlFotoProfilo: (state) =>
-      state.employee.Info.UrlFotoProfilo ||
+      state.employee.Info.urlFotoProfilo ||
       getDefaultAvatar(state.employee.email),
     dipendenti: (state) =>
       state.employee.DatiAgenziaImmobiliare.dipendentiDettagli || new Map(),
