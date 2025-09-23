@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col gap-8 w-full md:min-h-screen md:max-h-100 overflow-y-auto items-start justify-start p-2 bg-white"
+    class="flex flex-col gap-8 w-full sticky top-0 items-start justify-start p-2 bg-white"
   >
     <div class="luogo w-full">
       <div

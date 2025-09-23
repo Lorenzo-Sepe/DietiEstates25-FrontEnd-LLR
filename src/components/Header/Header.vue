@@ -51,13 +51,18 @@
     </div>
     <Dialog v-model:visible="visible" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
       modal header="Login">
+      
+      <div v-if="uiStore.loginReason === 'authRequired'">
+        Stai provando ad accedere a: {{ uiStore.toPath }}
+        <p class="font-bold">"Questa pagina richiede l'autenticazione."</p>
+      </div>
       <LoginDialog :dipendente="false" @close="closeDialog"></LoginDialog>
     </Dialog>
   </div>
 </template>
 
 <script setup>
-import { defineProps, ref, onMounted, onBeforeUnmount, computed } from "vue";
+import { defineProps, ref, onMounted, onBeforeUnmount, computed ,watch} from "vue";
 
 import AvatarAccount from "./AvatarPersonale.vue";
 import Logo from "./Logo.vue";
@@ -65,6 +70,8 @@ import LogoPortale from "./LogoPortale.vue";
 import MenuNavigazione from "./MenuNavigazione.vue";
 import DialogStoricoRicerche from "../Dialogs/DialogStoricoRicerche.vue";
 import DialogAvatar from "../Dialogs/DialogAvatar.vue"; 
+import { useUIStore } from "../../stores/UiStore";
+const uiStore = useUIStore();
 
 import Button from "primevue/button";
 import Drawer from "primevue/drawer";
@@ -129,6 +136,7 @@ function openDialog() {
 }
 
 function closeDialog() {
+  uiStore.showLoginModal = false;
   visible.value = false;
 }
 
@@ -165,4 +173,18 @@ const chiudiDrawer = (evento) => {
   }
 }
 
+
+
+watch(() => uiStore.showLoginModal, (newVal) => {
+  console.log("Login modal visibility prop changed:", newVal);
+  if (newVal === true){
+    visible.value = true;
+  }
+});
+watch(visible, (newVal) => {
+  console.log("Login modal visibility changed:", newVal);
+  if (newVal === false){
+    uiStore.showLoginModal = false;
+  }
+});
 </script>

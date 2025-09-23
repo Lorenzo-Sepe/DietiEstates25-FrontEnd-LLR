@@ -9,7 +9,7 @@
     </div>
 
     <div class="w-full h-full flex flex-row gap-2 mt-2 items-start justify-start">
-      <div class="hidden menuLaterale flex flex-col gap-2 w-120 h-full p-2 md:block mx-2">
+      <div class="hidden menuLaterale  flex flex-col gap-2 w-120 h-full p-2 md:block mx-2">
         <ContenutoMenuFiltro />
       </div>
 
@@ -18,6 +18,7 @@
           <div class="block flex justify-center md:hidden">
             <Drawer v-model:visible="visible" header="Filtro">
               <ContenutoMenuFiltro @chiudiDrawer="visible = false" />
+              
             </Drawer>
             <Button class="!w-16" label="Filtra" @click="visible = true" />
           </div>
