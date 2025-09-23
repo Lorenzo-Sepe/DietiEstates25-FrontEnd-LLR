@@ -1,11 +1,9 @@
 <template>
+
   <div class="contenitore-area-superiore items-center flex flex-row">
+
     <div class="contenitore-foto-profilo flex items-start gap-4">
-      <img
-        :src="employeeStore.UrlFotoProfilo"
-        alt="Foto profilo"
-        class="img-profilo"
-      />
+      <img :src="employeeStore.UrlFotoProfilo" alt="Foto profilo" class="img-profilo" />
       <div class="info-profilo flex flex-col">
         <p>
           <span v-if="isAgente">Agente: &nbsp;</span>
@@ -18,15 +16,26 @@
         <p>{{ employeeStore.employee.DatiAgenziaImmobiliare.nomeAzienda }}</p>
       </div>
     </div>
+
     <div class="titolo-pagina">
       <h1>Gestione annunci immobiliari</h1>
     </div>
+
+    <div class="contenitore-btn-nuovo-annuncio">
+      <Button v-if="isAgente" @click="toCreaAnnuncio" label="Aggiungi annuncio immobilare" />
+    </div>
+
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
 import { useEmployeeStore } from "../../stores/EmployeeStore";
+import { useRouter } from "vue-router";
+
+import Button from "primevue/button";
+
+const router = useRouter();
 
 const employeeStore = useEmployeeStore();
 
@@ -41,6 +50,11 @@ onMounted(() => {
     isAgente.value = false;
   }
 });
+
+const toCreaAnnuncio = () => {
+  router.push({ name: "CreaAnnuncio" });
+}
+
 </script>
 
 <style scoped>
