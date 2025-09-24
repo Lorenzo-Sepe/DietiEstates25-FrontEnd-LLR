@@ -1,6 +1,6 @@
 <template>
 
-  <div class="contenitore-area-superiore items-center flex flex-row">
+  <div class="hidden lg:flex flex-row gap-24 p-4 m-2 bg-[whitesmoke] items-center justify-center">
 
     <div class="contenitore-foto-profilo flex items-start gap-4">
       <img :src="employeeStore.UrlFotoProfilo" alt="Foto profilo" class="img-profilo" />
@@ -28,6 +28,37 @@
     </div>
 
   </div>
+
+
+  <div class="flex lg:hidden flex-col gap-4 p-4 m-2 bg-[whitesmoke] items-center justify-center">
+
+    <div class="contenitore-foto-profilo flex items-start gap-4">
+      <img :src="employeeStore.UrlFotoProfilo" alt="Foto profilo" class="img-profilo" />
+      <div class="info-profilo flex flex-col">
+        <p>
+          <span v-if="isAgente">Agente: &nbsp;</span>
+          <span v-else>Manager: &nbsp;</span>
+          <b>
+            {{ employeeStore.employee.datiImpiegato.nome }}
+            {{ employeeStore.employee.datiImpiegato.cognome }}
+          </b>
+        </p>
+        <p>{{ employeeStore.employee.DatiAgenziaImmobiliare.nomeAzienda }}</p>
+      </div>
+    </div>
+
+    <div class="titolo-pagina">
+      <h1 v-if="isAgente">Gestione dei tuoi annunci immobiliari</h1>
+      <h1 v-else>Gestione annunci immobiliari di tutti gli agenti</h1>
+    </div>
+
+    <div class="contenitore-btn-nuovo-annuncio">
+      <Button v-if="isAgente" @click="toCreaAnnuncio" label="Aggiungi annuncio immobilare" />
+      <Button v-else @click="$emit('aggiungiDipendente')" label="Aggiungi dipendente" />
+    </div>
+
+  </div>
+
 </template>
 
 <script setup>
