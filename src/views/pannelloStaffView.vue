@@ -33,7 +33,7 @@
 
     <div v-else class="w-full">
 
-      <div v-if="!isAgente">
+      <div class="w-full" v-if="!isAgente">
         <h2>Lista agenti dell'agenzia:</h2>
         <Accordion v-model:activeIndex="activeIndex" @update:activeIndex="onAccordionToggle" expandIcon="pi pi-plus"
           collapseIcon="pi pi-minus">
