@@ -32,29 +32,40 @@
     <ScheletroListaAgenti v-if="loadingListaAgenti" class="w-full" />
 
     <div v-else class="w-full">
-      <h2 v-if="!isAgente">Lista agenti dell'agenzia:</h2>
-      <Accordion v-model:activeIndex="activeIndex"  @update:activeIndex="onAccordionToggle"
-        expandIcon="pi pi-plus" collapseIcon="pi pi-minus">
-        <AccordionPanel class="my-2" v-for="(agente, index) in agenti" :value="index">
-          <AccordionHeader class="!bg-surface-100 hover:bg-surface-300!">
-            <span class="flex items-center gap-2 w-full">
-              <div class="w-10 h-10 rounded-full overflow-hidden">
-                <img :src="agente.infoUtente.urlFotoProfilo" :alt="agente.infoUtente.nomeVisualizzato"
-                  class="w-full h-full object-cover" />
-              </div>
-              <span class="font-bold whitespace-nowrap">{{
-                agente.infoUtente.nomeVisualizzato
-              }}</span>
-            </span>
-          </AccordionHeader>
-          <AccordionContent>
-            <TabellaAnnunci class="w-full mb-2" :propAnnunci="annunci" :propLoading="loading"
-              :propostaRequest="propostaRequest" :isAgente="isAgente" :agente="employeeStore.dipendenti"
-              @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta"
-              @accettaProposta="accettaProposta" @controproposta="controproposta" />
-          </AccordionContent>
-        </AccordionPanel>
-      </Accordion>
+
+      <div v-if="!isAgente">
+        <h2>Lista agenti dell'agenzia:</h2>
+        <Accordion v-model:activeIndex="activeIndex" @update:activeIndex="onAccordionToggle" expandIcon="pi pi-plus"
+          collapseIcon="pi pi-minus">
+          <AccordionPanel class="my-2" v-for="(agente, index) in agenti" :value="index">
+            <AccordionHeader class="!bg-surface-100 hover:bg-surface-300!">
+              <span class="flex items-center gap-2 w-full">
+                <div class="w-10 h-10 rounded-full overflow-hidden">
+                  <img :src="agente.infoUtente.urlFotoProfilo" :alt="agente.infoUtente.nomeVisualizzato"
+                    class="w-full h-full object-cover" />
+                </div>
+                <span class="font-bold whitespace-nowrap">{{
+                  agente.infoUtente.nomeVisualizzato
+                }}</span>
+              </span>
+            </AccordionHeader>
+            <AccordionContent>
+              <TabellaAnnunci class="w-full mb-2" :propAnnunci="annunci" :propLoading="loading"
+                :propostaRequest="propostaRequest" :isAgente="isAgente" :agente="employeeStore.dipendenti"
+                @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta"
+                @accettaProposta="accettaProposta" @controproposta="controproposta" />
+            </AccordionContent>
+          </AccordionPanel>
+        </Accordion>
+      </div>
+
+      <div v-else>
+        <TabellaAnnunci class="w-full mb-2" :propAnnunci="annunci" :propLoading="loading"
+          :propostaRequest="propostaRequest" :isAgente="isAgente" :agente="employeeStore.dipendenti"
+          @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta" @accettaProposta="accettaProposta"
+          @controproposta="controproposta" />
+      </div>
+
     </div>
   </div>
 </template>
@@ -102,21 +113,31 @@ const propostaRequest = reactive(new PropostaRequest());
 
 onMounted(async () => {
   try {
+
     await employeeStore.aggiorna();
+
   } catch (error) {
+
     console.log("errore durante l'aggiormamento dati pinia: ", error);
     return;
+
   } finally {
+
     if (employeeStore.ruolo === "MANAGER") {
+
       agenti.value = filterAgenti(
         Array.from(
           employeeStore.employee.DatiAgenziaImmobiliare.dipendentiDettagli.values(),
         ),
       );
+
       loadingListaAgenti.value = false;
+
       if (agenti.value.length === 0) {
+
         isAnnunciEmpty.value = true;
       }
+
     } else {
       const dettagliAgente = ref({
         infoUtente: {
@@ -127,10 +148,14 @@ onMounted(async () => {
           urlFotoProfilo: employeeStore.infoUtente.urlFotoProfilo,
         },
       });
+
       agenti.value.push(dettagliAgente.value);
+
       isAgente.value = true;
+
+      onAccordionToggle(0);
+
       loadingListaAgenti.value = false;
-      activeIndex.value = 0;
     }
   }
 });
@@ -144,13 +169,15 @@ const filterAgenti = (dipendenti) => {
 };
 
 const onAccordionToggle = (newIndex) => {
-  console.log("Accordion toggled, new index:", newIndex);
+
   if (newIndex !== null) {
-    console.log("Dati utente:", agenti.value[newIndex].infoUtente.email);
+
     filtroAnnunci.agenteCreatoreAnnuncio =
       agenti.value[newIndex].infoUtente.email;
     getAnnunci();
+
   }
+
 };
 
 const getAnnunci = async () => {
