@@ -15,12 +15,21 @@ import { useStoreAnnuncio } from "../stores/CreazioneAnnuncioStore";
 import Tag from "primevue/tag";
 import Anteprima from "../components/CreaAnnuncio/Anteprima.vue";
 import StepCaratteristiche from "../components/CreaAnnuncio/StepCaratteristiche.vue";
+import Dialog from 'primevue/dialog';
+import ProgressSpinner from 'primevue/progressspinner';
+import Button from 'primevue/button';
+
 const storeAnnuncio = useStoreAnnuncio();
 
 const annuncio = storeAnnuncio.annuncio;
 const activeStep = ref(1);
 
 const tentativoInvio = reactive({ valore: false });
+
+const dialogCaricamento = ref(false);
+const progressSpinner = ref(true);
+const isSuccess = ref(false);
+const isError = ref(false);
 
 const vaiAvanti = () => {
   if (activeStep.value < 6) activeStep.value++;
@@ -36,8 +45,10 @@ const step2 = ref({});
 const step3 = ref({});
 const step4 = ref({});
 
-const inviaAnnuncio = () => {
+const inviaAnnuncio = async () => {
+
   tentativoInvio.valore = true;
+
   if (!step1.value.validaCampi()) {
     activeStep.value = 1;
     step2.value.validaCampi();
@@ -57,11 +68,24 @@ const inviaAnnuncio = () => {
     activeStep.value = 4;
     return;
   }
-  const response = CreaAnnuncio(annuncio);
-  if (response) {
-    console.log("Annuncio inviato con successo:", response);
-    alert("Annuncio creato con successo",response.value);
+
+  dialogCaricamento.value = true;
+  progressSpinner.value = true;
+
+  try {
+
+    const response = await CreaAnnuncio(annuncio);
+
+  } catch (error) {
+    console.error("Errore durante la creazione dell'annuncio:", error);
+    progressSpinner.value = false;
+    isError.value = true;
+    return;
   }
+
+  progressSpinner.value = false;
+  isSuccess.value = true;
+
 };
 
 watch(activeStep, (newVal) => {
@@ -71,64 +95,83 @@ watch(activeStep, (newVal) => {
   if (newVal > 2) {
     step2.value.validaCampi();
   }
+
 });
 </script>
 
 <template>
+
+
+  <!--------------------------------------------------------------------------------------------------------------------------->
+
+  <Dialog v-model:visible="dialogCaricamento" modal :closable="false"
+    class="bg-green-50 border border-green-300 rounded-xl shadow animate-fade-in p-4">
+
+    <div v-if="progressSpinner">
+      <ProgressSpinner />
+    </div>
+
+    <div v-if="isSuccess" class="flex flex-col items-center gap-3">
+      <div class="flex items-center gap-2 text-green-700 text-lg font-semibold">
+        <i class="pi pi-check-circle text-2xl"></i>
+        <span>Annuncio salvato con successo!</span>
+      </div>
+
+      <Button label="OK" icon="pi pi-check" @click="dialogCaricamento = false"
+        class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg shadow" />
+    </div>
+
+
+    <div v-if="isError" class="flex flex-col items-center gap-3">
+      <div class="flex items-center gap-2 text-red-700 text-lg font-semibold">
+        <i class="pi pi-times-circle text-2xl"></i>
+        <span>Si è verificato un errore durante il salvataggio!</span>
+      </div>
+    </div>
+
+  </Dialog>
+
+  <!--------------------------------------------------------------------------------------------------------------------------->
+
   <div class="flex flex-col gap-4 w-full mx-3 items-center justify-center">
     <h1 class="my-4 mx-4">CREAZIONE NUOVO ANNUNCIO</h1>
 
-    <div
-      class="justify-center border-1 border-green-300 rounded-lg p-2 bg-gray-100 my-2 mx-auto w-full flex"
-    >
+    <div class="justify-center border-1 border-green-300 rounded-lg p-2 bg-gray-100 my-2 mx-auto w-full flex">
       <Stepper v-model:value="activeStep" class="w-full max-w-full">
         <StepList>
-          <Step
-            :value="1"
-            :style="{
-              '--p-stepper-step-number-background': step1.hasErrori
-                ? '#ad0000'
-                : '',
-              '--p-stepper-step-number-color': step1.hasErrori ? 'white' : '',
-            }"
-          >
+          <Step :value="1" :style="{
+            '--p-stepper-step-number-background': step1.hasErrori
+              ? '#ad0000'
+              : '',
+            '--p-stepper-step-number-color': step1.hasErrori ? 'white' : '',
+          }">
             <i class="pi pi-home" />
           </Step>
           <Divider />
-          <Step
-            :value="2"
-            :style="{
-              '--p-stepper-step-number-background': step2.hasErrori
-                ? '#ad0000'
-                : '',
-              '--p-stepper-step-number-color': step2.hasErrori ? 'white' : '',
-            }"
-          >
+          <Step :value="2" :style="{
+            '--p-stepper-step-number-background': step2.hasErrori
+              ? '#ad0000'
+              : '',
+            '--p-stepper-step-number-color': step2.hasErrori ? 'white' : '',
+          }">
             <i class="pi pi-home" />
           </Step>
           <Divider />
-          <Step
-            :value="3"
-            :style="{
-              '--p-stepper-step-number-background': step3.hasErrori
-                ? '#ad0000'
-                : '',
-              '--p-stepper-step-number-color': step3.hasErrori ? 'white' : '',
-            }"
-          >
-            <i class="pi pi-map"
-          /></Step>
+          <Step :value="3" :style="{
+            '--p-stepper-step-number-background': step3.hasErrori
+              ? '#ad0000'
+              : '',
+            '--p-stepper-step-number-color': step3.hasErrori ? 'white' : '',
+          }">
+            <i class="pi pi-map" />
+          </Step>
           <Divider />
-          <Step
-            :value="4"
-            :style="{
-              '--p-stepper-step-number-background': step4.hasErrori
-                ? '#ad0000'
-                : '',
-              '--p-stepper-step-number-color': step4.hasErrori ? 'white' : '',
-            }"
-            ><i class="pi pi-map"
-          /></Step>
+          <Step :value="4" :style="{
+            '--p-stepper-step-number-background': step4.hasErrori
+              ? '#ad0000'
+              : '',
+            '--p-stepper-step-number-color': step4.hasErrori ? 'white' : '',
+          }"><i class="pi pi-map" /></Step>
           <Divider />
           <Step :value="5"><i class="pi pi-images" /></Step>
           <Divider />
@@ -140,66 +183,36 @@ watch(activeStep, (newVal) => {
             <Tag severity="contrast" class="primeTags">
               <h3>Informazioni di Base</h3>
             </Tag>
-            <StepDatiIniziali
-              class=""
-              ref="step1"
-              v-model:annuncio="annuncio"
-              :tentativoInvio="tentativoInvio.valore"
-              @avanti="vaiAvanti"
-            />
+            <StepDatiIniziali class="" ref="step1" v-model:annuncio="annuncio" :tentativoInvio="tentativoInvio.valore"
+              @avanti="vaiAvanti" />
           </StepPanel>
 
           <StepPanel class="!bg-gray-100" :value="2">
             <Tag severity="contrast" class="primeTags">
               <h3>Dettagli Annuncio</h3>
             </Tag>
-            <StepDatiPrincipali
-              ref="step2"
-              v-model:annuncio="annuncio"
-              @indietro="vaiIndietro"
-              @avanti="vaiAvanti"
-              :tentativoInvio="tentativoInvio.valore"
-            />
+            <StepDatiPrincipali ref="step2" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti"
+              :tentativoInvio="tentativoInvio.valore" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="4">
             <Tag severity="contrast" class="primeTags">
               <h3>Indirizzo e Posizione</h3>
             </Tag>
-            <StepIndirizzo
-              ref="step4"
-              :tentativoInvio="tentativoInvio.valore"
-              :activeStep="activeStep"
-              v-model:annuncio="annuncio"
-              @indietro="vaiIndietro"
-              @avanti="vaiAvanti"
-            />
+            <StepIndirizzo ref="step4" :tentativoInvio="tentativoInvio.valore" :activeStep="activeStep"
+              v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="3">
             <Tag severity="contrast" class="primeTags">
               <h3>Caratteristiche</h3>
             </Tag>
-            <StepCaratteristiche
-              ref="step3"
-              v-model:annuncio="annuncio"
-              @indietro="vaiIndietro"
-              @avanti="vaiAvanti"
-              :tentativoInvio="tentativoInvio.valore"
-            />
+            <StepCaratteristiche ref="step3" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti"
+              :tentativoInvio="tentativoInvio.valore" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="5">
-            <StepImmagini
-              v-model:annuncio="annuncio"
-              @indietro="vaiIndietro"
-              @avanti="vaiAvanti"
-            />
+            <StepImmagini v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="6">
-            <Anteprima
-              v-model:annuncio="annuncio"
-              @indietro="vaiIndietro"
-              clearable
-              @invia="inviaAnnuncio"
-            />
+            <Anteprima v-model:annuncio="annuncio" @indietro="vaiIndietro" clearable @invia="inviaAnnuncio" />
           </StepPanel>
         </StepPanels>
       </Stepper>
@@ -220,8 +233,12 @@ watch(activeStep, (newVal) => {
 }
 
 .primeTags {
-  margin-block: calc(var(--spacing) * 2) /* 1rem = 16px */;
-  width: calc(1 / 2 * 100%) /* 50% */;
+  margin-block: calc(var(--spacing) * 2)
+    /* 1rem = 16px */
+  ;
+  width: calc(1 / 2 * 100%)
+    /* 50% */
+  ;
   text-align: center;
 }
 </style>

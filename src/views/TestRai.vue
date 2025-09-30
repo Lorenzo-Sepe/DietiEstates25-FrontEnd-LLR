@@ -23,6 +23,9 @@ const activeStep = ref(5);
 
 const tentativoInvio = reactive({ valore: false });
 
+const dialogCaricamento = ref(false);
+const progressSpinner = ref(true);
+
 const vaiAvanti = () => {
   if (activeStep.value < 6) {
     activeStep.value++;
@@ -43,7 +46,7 @@ const step2 = ref({});
 const step3 = ref({});
 const step4 = ref({});
 
-const inviaAnnuncio = () => {
+const inviaAnnuncio = async () => {
   tentativoInvio.valore = true;
   if (!step1.value.validaCampi()) {
     activeStep.value = 1;
@@ -64,7 +67,21 @@ const inviaAnnuncio = () => {
     activeStep.value = 4;
     return;
   }
-  CreaAnnuncio(annuncio);
+
+  dialogCaricamento.value = true;
+  progressSpinner.value = true;
+
+  try{
+
+    await CreaAnnuncio(annuncio);
+
+  }catch(error){
+
+    console.error("Errore durante la creazione dell'annuncio:", error);
+    return;
+  }
+
+  progressSpinner.value = false;
 };
 
 watch(activeStep, (newVal) => {
@@ -78,6 +95,29 @@ watch(activeStep, (newVal) => {
 </script>
 
 <template>
+
+  <!--------------------------------------------------------------------------------------------------------------------------->
+
+    <Dialog v-model:visible="dialogCaricamento" modal :closable="false"
+        class="bg-green-50 border border-green-300 rounded-xl shadow animate-fade-in p-4">
+
+        <div v-if="progressSpinner">
+            <ProgressSpinner />
+        </div>
+
+        <div v-else class="flex flex-col items-center gap-3">
+            <div class="flex items-center gap-2 text-green-700 text-lg font-semibold">
+                <i class="pi pi-check-circle text-2xl"></i>
+                <span>Annuncio salvato con successo!</span>
+            </div>
+
+            <Button label="OK" icon="pi pi-check" @click="dialogCaricamento = false"
+                class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg shadow" />
+        </div>
+    </Dialog>
+
+    <!--------------------------------------------------------------------------------------------------------------------------->
+
   <div class="flex flex-col gap-4 w-full items-center justify-center">
     <div
       class="justify-center border-1 border-green-300 rounded-lg p-2 bg-gray-100 my-2 mx-auto w-full md:w-3/4 lg:w-2/3 xl:w-3/4 2xl:w-4/5 flex"
