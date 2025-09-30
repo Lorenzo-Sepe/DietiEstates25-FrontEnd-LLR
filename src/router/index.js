@@ -98,6 +98,12 @@ const routes = [
     component: () => import("../views/DettagliAnnuncioView.vue"),
   },
   {
+    path: "/PortaleAgenzia/ModificaAnnuncio/:id",
+    name: "modificaAnnuncio",
+    component: () => import("../views/ModificaAnnuncio.vue"),
+    meta: { requiresAuth: true, role: "employee" },
+  },
+  {
     path: "/notifiche",
     name: "notifiche",
     component: () => import("../views/NotificheView.vue"),

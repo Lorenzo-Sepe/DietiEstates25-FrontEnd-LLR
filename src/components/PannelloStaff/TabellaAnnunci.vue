@@ -42,9 +42,9 @@
           </Column>
           <Column field="contratto.tipoContratto" header="Contratto"></Column>
           <Column headerStyle="width:4rem">
-            <template #body>
+            <template #body="slotProps">
               <div class="flex flex-row gap-2">
-                <Button variant="text" rounded aria-label="Filter" v-tooltip="{
+                <Button variant="text" rounded aria-label="Filter" @click="onClickModificaAnnuncio(slotProps.data.id)" v-tooltip="{
                   value: 'Modifica annuncio',
                   showDelay: 300,
                   hideDelay: 300,
@@ -180,6 +180,7 @@
 
 <script setup>
 import { ref, onMounted, defineProps, defineEmits, watch, computed } from "vue";
+import { useRouter } from "vue-router";
 
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
@@ -204,6 +205,8 @@ const emit = defineEmits([
   "accettaProposta",
   "controproposta",
 ]);
+
+const router = useRouter();
 
 const annunci = ref([]);
 
@@ -278,6 +281,15 @@ watch(
   },
   { immediate: true },
 );
+
+
+const onClickModificaAnnuncio = (idAnnuncio) => {
+
+  router.push({ 
+    path: `/PortaleAgenzia/ModificaAnnuncio/${idAnnuncio}`
+   });
+}
+
 </script>
 
 <style>
