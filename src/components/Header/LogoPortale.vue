@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-4 flex flex-col items-center justify-center" @click="router.push('/PortaleAgenzia')">
+  <div class="mx-4 flex flex-col items-center justify-center cursor-pointer" @click="router.push('/PortaleAgenzia')">
     <img
       src="/src/assets/Icon/icona.svg"
       alt="Logo del Sito"
