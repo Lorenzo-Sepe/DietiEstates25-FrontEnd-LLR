@@ -145,7 +145,7 @@ watch(activeStep, (newVal) => {
               : '',
             '--p-stepper-step-number-color': step1.hasErrori ? 'white' : '',
           }">
-            <i class="pi pi-home" />
+            <i class="pi pi-building" />
           </Step>
           <Divider />
           <Step :value="2" :style="{
@@ -154,18 +154,18 @@ watch(activeStep, (newVal) => {
               : '',
             '--p-stepper-step-number-color': step2.hasErrori ? 'white' : '',
           }">
-            <i class="pi pi-home" />
+            <i class="pi pi-file-edit" />
           </Step>
-          <Divider />
+          <Divider/>
           <Step :value="3" :style="{
             '--p-stepper-step-number-background': step3.hasErrori
               ? '#ad0000'
               : '',
             '--p-stepper-step-number-color': step3.hasErrori ? 'white' : '',
           }">
-            <i class="pi pi-map" />
+            <i class="pi pi-tags" />
           </Step>
-          <Divider />
+          <Divider  />
           <Step :value="4" :style="{
             '--p-stepper-step-number-background': step4.hasErrori
               ? '#ad0000'
@@ -175,36 +175,28 @@ watch(activeStep, (newVal) => {
           <Divider />
           <Step :value="5"><i class="pi pi-images" /></Step>
           <Divider />
-          <Step :value="6"><i class="pi pi-images" /></Step>
+          <Step :value="6"><i class="pi pi-file-check" /></Step>
         </StepList>
 
         <StepPanels>
           <StepPanel class="!bg-gray-100" :value="1">
-            <Tag severity="contrast" class="primeTags">
               <h3>Informazioni di Base</h3>
-            </Tag>
             <StepDatiIniziali class="" ref="step1" v-model:annuncio="annuncio" :tentativoInvio="tentativoInvio.valore"
               @avanti="vaiAvanti" />
           </StepPanel>
 
           <StepPanel class="!bg-gray-100" :value="2">
-            <Tag severity="contrast" class="primeTags">
               <h3>Dettagli Annuncio</h3>
-            </Tag>
             <StepDatiPrincipali ref="step2" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti"
               :tentativoInvio="tentativoInvio.valore" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="4">
-            <Tag severity="contrast" class="primeTags">
               <h3>Indirizzo e Posizione</h3>
-            </Tag>
             <StepIndirizzo ref="step4" :tentativoInvio="tentativoInvio.valore" :activeStep="activeStep"
               v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="3">
-            <Tag severity="contrast" class="primeTags">
               <h3>Caratteristiche</h3>
-            </Tag>
             <StepCaratteristiche ref="step3" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti"
               :tentativoInvio="tentativoInvio.valore" />
           </StepPanel>
