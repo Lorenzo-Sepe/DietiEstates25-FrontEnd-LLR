@@ -50,20 +50,22 @@
               </span>
             </AccordionHeader>
             <AccordionContent>
-              <TabellaAnnunci class="w-full mb-2" :propAnnunci="annunci" :propLoading="loading"
+              <TabellaAnnunci class="w-full mb-2" 
+                :propAnnunci="annunci" :propLoading="loading" :propNumeroAnnunci="totaleAnnunci"
                 :propostaRequest="propostaRequest" :isAgente="isAgente" :agente="employeeStore.dipendenti"
                 @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta"
-                @accettaProposta="accettaProposta" @controproposta="controproposta" />
+                @accettaProposta="accettaProposta" @controproposta="controproposta" @onPage="getAnnunciByPagina" />
             </AccordionContent>
           </AccordionPanel>
         </Accordion>
       </div>
 
       <div v-else>
-        <TabellaAnnunci class="w-full mb-2" :propAnnunci="annunci" :propLoading="loading"
+        <TabellaAnnunci class="w-full mb-2" 
+          :propAnnunci="annunci" :propLoading="loading" :propNumeroAnnunci="totaleAnnunci"
           :propostaRequest="propostaRequest" :isAgente="isAgente" :agente="employeeStore.dipendenti"
           @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta" @accettaProposta="accettaProposta"
-          @controproposta="controproposta" />
+          @controproposta="controproposta" @onPage="getAnnunciByPagina" />
       </div>
 
     </div>
@@ -96,6 +98,7 @@ const router = useRouter();
 
 const activeIndex = ref(0);
 const annunci = ref([]);
+const totaleAnnunci = ref(0);
 const loading = ref(true);
 const loadingListaAgenti = ref(true);
 const employeeStore = useEmployeeStore();
@@ -168,31 +171,66 @@ const filterAgenti = (dipendenti) => {
     : [];
 };
 
-const onAccordionToggle = (newIndex) => {
+const onAccordionToggle = async (newIndex) => {
 
   if (newIndex !== null) {
 
+    loading.value = true;
+
     filtroAnnunci.agenteCreatoreAnnuncio =
       agenti.value[newIndex].infoUtente.email;
-    getAnnunci();
+
+    await getNumeroAnnunci();
+
+    await getAnnunci();
+
+    loading.value = false;
 
   }
 
 };
 
+const getNumeroAnnunci = async () => {
+
+  totaleAnnunci.value = await AnnunciService.getNumeroAnnunciByStaff(filtroAnnunci);
+}
+
+const getAnnunciByPagina = async (pagina) => {
+
+  loading.value = true;
+
+  filtroAnnunci.numeroPagina = pagina;
+
+  try{
+
+     await getAnnunci();
+
+  }catch(error){
+
+    console.log("errore durante la chiamata axsios per la get annunci by pagina: ", error);
+    annunci.value = [];
+
+  }
+
+  loading.value = false;
+
+}
+
 const getAnnunci = async () => {
+
   try {
+
     annunci.value = [{}];
-    loading.value = true;
     annunci.value = await AnnunciService.getAnnunciByStaff(filtroAnnunci);
+    console.log("annunci.value: ", annunci.value);
+
   } catch (error) {
+
     console.log(
       "errore durante la chiamata axsios per la get annunci: ",
       error,
     );
-  } finally {
-    loading.value = false;
-    console.log("annunci:", annunci.value);
+
   }
 };
 

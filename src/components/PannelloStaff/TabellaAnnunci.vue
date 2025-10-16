@@ -1,7 +1,11 @@
 <template>
+
   <div class="flex flex-col w-full h-full">
+
     <ScheletroTabella v-if="props.propLoading" class="flex-grow max-w-full" />
+
     <div v-else>
+
       <div v-if="isAnnunciEmpty" class="flex-grow flex items-center justify-center">
         <Tag value="Non ci sono annunci immobiliari per questo agente" severity="secondary"
           class="w-full text-center h-10" />
@@ -173,9 +177,15 @@
             </div>
           </template>
         </DataTable>
+
       </div>
+
     </div>
+
+    <Paginator :rows="5" :totalRecords="totaleAnnunci"  @page="onClickPage"></Paginator>
+
   </div>
+
 </template>
 
 <script setup>
@@ -187,6 +197,7 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 import Tag from "primevue/tag";
 import Dialog from "primevue/dialog";
+import Paginator from 'primevue/paginator';
 
 import ScheletroTabella from "../PannelloStaff/ScheletroTabella.vue";
 import FormControproposta from "./FormControproposta.vue";
@@ -194,6 +205,7 @@ import AggiungiPropostaManuale from "./AggiungiPropostaManuale.vue";
 
 const props = defineProps([
   "propAnnunci",
+  "propNumeroAnnunci",
   "propLoading",
   "propostaRequest",
   "agente",
@@ -204,11 +216,13 @@ const emit = defineEmits([
   "eliminaProposta",
   "accettaProposta",
   "controproposta",
+  "onPage",
 ]);
 
 const router = useRouter();
 
-const annunci = ref([]);
+const totaleAnnunci = computed( () => props.propNumeroAnnunci || 0 );
+const annunci = computed( () => props.propAnnunci || [] );
 
 const expandedRows = ref([]);
 
@@ -274,20 +288,18 @@ const controPropostaAbilitato = (proposta) => {
   return proposta.controproposta === null;
 };
 
-watch(
-  () => props.propAnnunci,
-  (newAnnunci) => {
-    annunci.value = newAnnunci; // Copia "sicura"
-  },
-  { immediate: true },
-);
-
-
 const onClickModificaAnnuncio = (idAnnuncio) => {
 
   router.push({ 
     path: `/PortaleAgenzia/ModificaAnnuncio/${idAnnuncio}`
    });
+}
+
+const onClickPage = (event) => {
+
+  emit("onPage", event.page + 1)
+
+  console.log(event);
 }
 
 </script>
