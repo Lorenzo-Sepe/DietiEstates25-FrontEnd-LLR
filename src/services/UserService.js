@@ -69,6 +69,18 @@ export function getDatiImpiegato(email) {
     });
 }
 
+export async function aggiungiContattoDipendente(contattoRequest){
+
+  return ApiAgent()
+  .post("agenzia/dipendente/contatto", contattoRequest)
+  .then( (response) => {
+    return response.data
+  })
+  .catch( (error) => {
+    console.error("Errore durante l'aggiunta del contatto:", error);
+  });
+}
+
 export async function isTokenValid(email) {
   try {
     await ApiAgent().get("user", { params: { email } });
@@ -98,11 +110,11 @@ export function getDatiUser(email) {
     .then((response) => {
       const ret = new UserInfoResponse(response.data); // Restituisci l'oggetto creato
       if (
-        ret.UrlFotoProfilo === null ||
-        ret.UrlFotoProfilo === undefined ||
-        ret.UrlFotoProfilo === ""
+        ret.urlFotoProfilo === null ||
+        ret.urlFotoProfilo === undefined ||
+        ret.urlFotoProfilo === ""
       ) {
-        ret.UrlFotoProfilo = getDefaultAvatar(email);
+        ret.urlFotoProfilo = getDefaultAvatar(email);
       }
       return ret;
     })

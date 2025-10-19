@@ -23,6 +23,7 @@ const emit = defineEmits(["indietro", "invia"]);
 const props = defineProps({
   annuncio: AnnuncioImmobiliareRequest,
   tentativoInvio: Boolean,
+  isModifica: Boolean,
 });
 
 function mappaAnnuncio(input) {
@@ -85,7 +86,15 @@ const response = computed(() => mappaAnnuncio(props.annuncio));
           @click="$emit('indietro')"
         />
         <Button
+          v-if="!isModifica"
           label="Invia Annuncio"
+          icon="pi pi-check"
+          @click="$emit('invia')"
+          class="p-mt-2"
+        />
+        <Button
+          v-else
+          label="Modifica annuncio"
           icon="pi pi-check"
           @click="$emit('invia')"
           class="p-mt-2"

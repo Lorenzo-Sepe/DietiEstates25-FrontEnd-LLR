@@ -66,6 +66,7 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Password from "primevue/password";
 import { Form } from "@primevue/forms";
+import { useUIStore } from "../../stores/UiStore";
 
 import AuthService from "../../services/AuthService";
 
@@ -110,6 +111,7 @@ const resolver = ({ values }) => {
   };
 };
 
+
 const onFormSubmit = async ({ valid }) => {
   loading.value = true;
   if (!valid) {
@@ -124,10 +126,34 @@ const onFormSubmit = async ({ valid }) => {
       password: signInRequest.value.password,
     });
     loading.value = false;
+
+    const uiStore = useUIStore();
+    console.log("controllo su dove reindirizzare");
+            console.log("uiStore.fromPath: ", uiStore.fromPath);
+
     if (response.ruolo !== "MEMBER") {
+      console.log("HA FATTO ACCESSO UN DIPENDENTE");
+      console.log("uiStore loginRole: ", uiStore.loginRole);
+      
+      if(uiStore.loginRole === "employee"){
+        router.push(uiStore.fromPath);
+      }else{
       router.push({ path: "/PortaleAgenzia/pannelloStaff" });
+      }
       emit("close");
-    }
+    }else{
+      console.log("HA FATTO ACCESSO UN UTENTE");
+      console.log("uiStore loginRole: ", uiStore.loginRole);
+
+      if(uiStore.loginRole !== "employee"){
+        console.log("sono dentro if user")
+        router.push(uiStore.fromPath);
+      }else{
+        console.log("sono dentro else user")
+        router.push({ path: "/" });
+      }
+      emit("close");
+    } 
     emit("close");
   } catch (error) {
     console.error(error);

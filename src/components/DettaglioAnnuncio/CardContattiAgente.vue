@@ -19,9 +19,9 @@
       </div>
 
       <div class="contatti-agente flex flex-col gap-4 w-[90%]">
-        <span class="text-base font-semibold inline-flex">
+        <span class="text-base font-semibold inline-flex" v-if="telefonoAgente">
           <img src="../../assets/Icon/cornettaTelefono.png" class="w-6 h-6 mr-2" alt="Telefono" />
-          3206984615
+          {{ telefonoAgente }}
         </span>
         <span class="text-base font-semibold flex items-center">
           <img src="../../assets/Icon/email.png" class="w-6 h-6 mr-2" alt="Email" />
@@ -39,8 +39,23 @@
 import { ref, onMounted, defineProps } from "vue";
 
 onMounted(() => {
+
+  telefonoEsistente();
 });
 
 const props = defineProps(["agente"]);
+
+const telefonoAgente = ref(null);
+
+const telefonoEsistente = () => {
+
+  console.log("contattiii: ", props.agente)
+
+  props.agente.contatti.forEach(element => {
+    if (element.tipo === "Cellulare") {
+      telefonoAgente.value = element.valore;
+    }
+  });
+}
 
 </script>

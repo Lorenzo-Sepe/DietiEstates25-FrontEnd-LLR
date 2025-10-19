@@ -1,127 +1,73 @@
 <template>
   <!-------------  SEZIONE DIALOG PER GLI ALLERT ------------------------------------------------>
-  <Dialog
-    v-model:visible="loadingOperazione"
-    @close="loadingOperazione = false"
-    header="OPERAZIONE IN CORSO"
-    :style="{ width: 'auto' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-  >
+  <Dialog v-model:visible="loadingOperazione" @close="loadingOperazione = false" header="OPERAZIONE IN CORSO"
+    :style="{ width: 'auto' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <div class="card flex justify-center">
       <ProgressSpinner />
     </div>
   </Dialog>
 
-  <Dialog
-    v-model:visible="okAllert"
-    @close="okAllert = false"
-    header="CONFERMA OPERAZIONE"
-    :style="{ width: 'auto' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-  >
+  <Dialog v-model:visible="okAllert" @close="okAllert = false" header="CONFERMA OPERAZIONE" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <p class="m-0">Operazione conclusa con successo</p>
     <Button severity="contrast" label="OK" @click="okAllert = false" />
   </Dialog>
 
-  <Dialog
-    v-model:visible="erroreAllert"
-    header="ERRORE"
-    @close="erroreAllert = false"
-    :style="{ width: 'auto' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-  >
+  <Dialog v-model:visible="erroreAllert" header="ERRORE" @close="erroreAllert = false" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <p class="m-0">Errore di rete, riprovare più tardi.</p>
     <Button label="OK" @click="erroreAllert = false" severity="contrast" />
   </Dialog>
 
-  <Dialog
-    v-model:visible="registrationVisible"
-    @close="registrationVisible = false"
-    header="REGISTRA NUOVO DIPENDENTE"
-    :style="{ width: 'auto' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-  >
+  <Dialog v-model:visible="registrationVisible" @close="registrationVisible = false" header="REGISTRA NUOVO DIPENDENTE"
+    :style="{ width: 'auto' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <RegisterAgentDialog @close="registrationVisible = false" />
   </Dialog>
 
   <!-------------------------------------------- ------------------------------------------------>
 
   <div class="w-full flex flex-col gap-2 px-4">
-    <AreaSuperiore class="w-full items-center justify-center" />
+    <AreaSuperiore class="w-full items-center justify-center" @aggiungiDipendente="registrationVisible = true" />
 
     <ScheletroListaAgenti v-if="loadingListaAgenti" class="w-full" />
 
     <div v-else class="w-full">
-      <h2 v-if="!isAgente">Lista agenti dell'agenzia:</h2>
-      <Accordion
-        v-model:activeIndex="activeIndex"
-        :multiple="false"
-        @update:activeIndex="onAccordionToggle"
-        expandIcon="pi pi-plus"
-        collapseIcon="pi pi-minus"
-      >
-        <AccordionPanel
-          class="my-2"
-          v-for="(agente, index) in agenti"
-          :value="index"
-        >
-          <AccordionHeader class="!bg-surface-100 hover:bg-surface-300!">
-            <span class="flex items-center gap-2 w-full">
-              <div class="w-10 h-10 rounded-full overflow-hidden">
-                <img
-                  :src="agente.infoUtente.urlFotoProfilo"
-                  :alt="agente.infoUtente.nomeVisualizzato"
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              <span class="font-bold whitespace-nowrap">{{
-                agente.infoUtente.nomeVisualizzato
-              }}</span>
-            </span>
-          </AccordionHeader>
-          <AccordionContent>
-            <TabellaAnnunci
-              class="w-full mb-2"
-              :propAnnunci="annunci"
-              :propLoading="loading"
-              :propostaRequest="propostaRequest"
-              :isAgente="isAgente"
-              :agente="employeeStore.dipendenti"
-              @nuovaProposta="aggiungiPropostaManuale"
-              @eliminaProposta="rifiutaProposta"
-              @accettaProposta="accettaProposta"
-              @controproposta="controproposta"
-            />
-            <Button
-              severity="contrast"
-              icon="pi pi-plus"
-              @click="toCreaAnnuncio"
-              label="Crea un Annuncio"
-              raised
-            ></Button>
-          </AccordionContent>
-        </AccordionPanel>
-      </Accordion>
 
-      <div
-        v-if="!isAgente"
-        class="buttonArea flex flex-row gap-2 justify-center items-center"
-      >
-        <Button
-          severity="contrast"
-          class="mb-2"
-          label="Aggiungi Agente"
-          @click="registrationVisible = true"
-          raised
-        />
-        <Button
-          severity="contrast"
-          class="mb-2"
-          label="Crea Notifica Promozionale"
-          @click="newNotification"
-          raised
-        />
+      <div class="w-full" v-if="!isAgente">
+        <h2>Lista agenti dell'agenzia:</h2>
+        <Accordion v-model:activeIndex="activeIndex" @update:activeIndex="onAccordionToggle" expandIcon="pi pi-plus"
+          collapseIcon="pi pi-minus">
+          <AccordionPanel class="my-2" v-for="(agente, index) in agenti" :value="index">
+            <AccordionHeader class="!bg-surface-100 hover:bg-surface-300!">
+              <span class="flex items-center gap-2 w-full">
+                <div class="w-10 h-10 rounded-full overflow-hidden">
+                  <img :src="agente.infoUtente.urlFotoProfilo" :alt="agente.infoUtente.nomeVisualizzato"
+                    class="w-full h-full object-cover" />
+                </div>
+                <span class="font-bold whitespace-nowrap">{{
+                  agente.infoUtente.nomeVisualizzato
+                }}</span>
+              </span>
+            </AccordionHeader>
+            <AccordionContent>
+              <TabellaAnnunci class="w-full mb-2" 
+                :propAnnunci="annunci" :propLoading="loading" :propNumeroAnnunci="totaleAnnunci"
+                :propostaRequest="propostaRequest" :isAgente="isAgente" :agente="employeeStore.dipendenti"
+                @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta"
+                @accettaProposta="accettaProposta" @controproposta="controproposta" @onPage="getAnnunciByPagina" />
+            </AccordionContent>
+          </AccordionPanel>
+        </Accordion>
       </div>
+
+      <div v-else>
+        <TabellaAnnunci class="w-full mb-2" 
+          :propAnnunci="annunci" :propLoading="loading" :propNumeroAnnunci="totaleAnnunci"
+          :propostaRequest="propostaRequest" :isAgente="isAgente" :agente="employeeStore.dipendenti"
+          @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta" @accettaProposta="accettaProposta"
+          @controproposta="controproposta" @onPage="getAnnunciByPagina" />
+      </div>
+
     </div>
   </div>
 </template>
@@ -150,9 +96,9 @@ import { useEmployeeStore } from "../stores/EmployeeStore";
 
 const router = useRouter();
 
-const activeIndex = ref(null);
-const numeroAnnunci = ref(0);
+const activeIndex = ref(0);
 const annunci = ref([]);
+const totaleAnnunci = ref(0);
 const loading = ref(true);
 const loadingListaAgenti = ref(true);
 const employeeStore = useEmployeeStore();
@@ -170,21 +116,31 @@ const propostaRequest = reactive(new PropostaRequest());
 
 onMounted(async () => {
   try {
+
     await employeeStore.aggiorna();
+
   } catch (error) {
+
     console.log("errore durante l'aggiormamento dati pinia: ", error);
     return;
+
   } finally {
+
     if (employeeStore.ruolo === "MANAGER") {
+
       agenti.value = filterAgenti(
         Array.from(
           employeeStore.employee.DatiAgenziaImmobiliare.dipendentiDettagli.values(),
         ),
       );
+
       loadingListaAgenti.value = false;
+
       if (agenti.value.length === 0) {
+
         isAnnunciEmpty.value = true;
       }
+
     } else {
       const dettagliAgente = ref({
         infoUtente: {
@@ -195,8 +151,13 @@ onMounted(async () => {
           urlFotoProfilo: employeeStore.infoUtente.urlFotoProfilo,
         },
       });
+
       agenti.value.push(dettagliAgente.value);
+
       isAgente.value = true;
+
+      onAccordionToggle(0);
+
       loadingListaAgenti.value = false;
     }
   }
@@ -205,49 +166,71 @@ onMounted(async () => {
 const filterAgenti = (dipendenti) => {
   return dipendenti
     ? dipendenti.filter(
-        (dipendente) => dipendente.infoUtente.tipoAccount === "AGENT",
-      )
+      (dipendente) => dipendente.infoUtente.tipoAccount === "AGENT",
+    )
     : [];
 };
 
-const onAccordionToggle = (newIndex) => {
+const onAccordionToggle = async (newIndex) => {
+
   if (newIndex !== null) {
-    console.log("Dati utente:", agenti.value[newIndex].infoUtente.email);
+
+    loading.value = true;
+
     filtroAnnunci.agenteCreatoreAnnuncio =
       agenti.value[newIndex].infoUtente.email;
-    getAnnunci();
-  }
-};
 
-const toCreaAnnuncio = () => {
-  router.push({ name: "CreaAnnuncio" });
+    await getNumeroAnnunci();
+
+    await getAnnunci();
+
+    loading.value = false;
+
+  }
+
 };
 
 const getNumeroAnnunci = async () => {
-  try {
-    numeroAnnunci.value = await AnnunciService.getNumeroAnnunciByStaff();
-    console.log("numero annunci:", numeroAnnunci.value);
-  } catch (error) {
-    console.log(
-      "errore durante la chiamata axsios per la get numero annunci: ",
-      error,
-    );
+
+  totaleAnnunci.value = await AnnunciService.getNumeroAnnunciByStaff(filtroAnnunci);
+}
+
+const getAnnunciByPagina = async (pagina) => {
+
+  loading.value = true;
+
+  filtroAnnunci.numeroPagina = pagina;
+
+  try{
+
+     await getAnnunci();
+
+  }catch(error){
+
+    console.log("errore durante la chiamata axsios per la get annunci by pagina: ", error);
+    annunci.value = [];
+
   }
-};
+
+  loading.value = false;
+
+}
 
 const getAnnunci = async () => {
+
   try {
+
     annunci.value = [{}];
-    loading.value = true;
     annunci.value = await AnnunciService.getAnnunciByStaff(filtroAnnunci);
+    console.log("annunci.value: ", annunci.value);
+
   } catch (error) {
+
     console.log(
       "errore durante la chiamata axsios per la get annunci: ",
       error,
     );
-  } finally {
-    loading.value = false;
-    console.log("annunci:", annunci.value);
+
   }
 };
 
@@ -377,7 +360,4 @@ const changeControposta = (idProposta, prezzoControproposta) => {
   });
 };
 
-function newNotification() {
-  router.push({ name: "NuovaPromozione" });
-}
 </script>

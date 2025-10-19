@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-4 flex flex-col items-center justify-center">
+  <div class="mx-4 flex flex-col items-center justify-center cursor-pointer" @click="router.push('/PortaleAgenzia')">
     <img
       src="/src/assets/Icon/icona.svg"
       alt="Logo del Sito"
@@ -17,4 +17,7 @@
 }
 </style>
 
-<script setup></script>
+<script setup>
+import { useRouter } from "vue-router";
+const router = useRouter();
+</script>

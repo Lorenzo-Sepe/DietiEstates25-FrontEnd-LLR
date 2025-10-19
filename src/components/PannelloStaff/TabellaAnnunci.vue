@@ -1,43 +1,29 @@
 <template>
+
   <div class="flex flex-col w-full h-full">
+
     <ScheletroTabella v-if="props.propLoading" class="flex-grow max-w-full" />
+
     <div v-else>
-      <div
-        v-if="isAnnunciEmpty"
-        class="flex-grow flex items-center justify-center"
-      >
-        <Tag
-          value="Non ci sono annunci immobiliari per questo agente"
-          severity="secondary"
-          class="w-full text-center h-10"
-        />
+
+      <div v-if="isAnnunciEmpty" class="flex-grow flex items-center justify-center">
+        <Tag value="Non ci sono annunci immobiliari per questo agente" severity="secondary"
+          class="w-full text-center h-10" />
       </div>
 
       <div v-else class="flex-grow">
-        <DataTable
-          v-model:expandedRows="expandedRows"
-          :value="annunci"
-          dataKey="id"
-          tableStyle="min-width: 100%; height: 100%;"
-        >
+        <DataTable v-model:expandedRows="expandedRows" :value="annunci" dataKey="id"
+          tableStyle="min-width: 100%; height: 100%;">
           <template #header>
-            <div class="flex flex-wrap justify-end gap-2">
-              <Button
-                v-if="props.isAgente"
-                label="Aggiungi annuncio immobilare"
-              />
+            <div class="flex flex-wrap justify-start gap-2">
+              <span class="font-bold text-xl">Annunci immobiliari</span>
             </div>
           </template>
           <Column expander style="width: 5rem" />
           <Column field="titolo" header="Titolo"></Column>
           <Column header="Copertina">
             <template #body="slotProps">
-              <img
-                :src="`${slotProps.data.immobile.immagini[0].url}`"
-                :alt="'..'"
-                class="shadow-lg"
-                width="64"
-              />
+              <img :src="`${slotProps.data.immobile.immagini[0].url}`" :alt="'..'" class="shadow-lg" width="64" />
             </template>
           </Column>
           <Column header="Prezzo">
@@ -60,32 +46,22 @@
           </Column>
           <Column field="contratto.tipoContratto" header="Contratto"></Column>
           <Column headerStyle="width:4rem">
-            <template #body>
+            <template #body="slotProps">
               <div class="flex flex-row gap-2">
-                <Button
-                  variant="text"
-                  rounded
-                  aria-label="Filter"
-                  v-tooltip="{
-                    value: 'Modifica annuncio',
-                    showDelay: 300,
-                    hideDelay: 300,
-                  }"
-                >
+                <Button variant="text" rounded aria-label="Filter" @click="onClickModificaAnnuncio(slotProps.data.id)" v-tooltip="{
+                  value: 'Modifica annuncio',
+                  showDelay: 300,
+                  hideDelay: 300,
+                }">
                   <template #icon>
                     <i class="pi pi-file-edit w-5 h-5"></i>
                   </template>
                 </Button>
-                <Button
-                  variant="text"
-                  rounded
-                  aria-label="Filter"
-                  v-tooltip="{
-                    value: 'Elimina annuncio',
-                    showDelay: 300,
-                    hideDelay: 300,
-                  }"
-                >
+                <Button variant="text" rounded aria-label="Filter" v-tooltip="{
+                  value: 'Elimina annuncio',
+                  showDelay: 300,
+                  hideDelay: 300,
+                }">
                   <template #icon>
                     <i class="pi pi-trash w-5 h-5"></i>
                   </template>
@@ -96,142 +72,77 @@
 
           <template #expansion="slotProps" class="proposte-in-trattativa">
             <div class="bg-gray-200">
-              <div
-                class="intestazione-proposte flex items-center justify-center p-4 gap-16"
-              >
+              <div class="intestazione-proposte flex items-center justify-center p-4 gap-16">
                 <h2>Gestione proposte</h2>
-                <Button
-                  v-if="props.isAgente"
-                  label="Aggiungi proposta manuale"
-                  @click="clickAggiungiPropostaManuale(slotProps.data.id)"
-                ></Button>
+                <Button v-if="props.isAgente" label="Aggiungi proposta manuale"
+                  @click="clickAggiungiPropostaManuale(slotProps.data.id)"></Button>
               </div>
 
               <div class="card flex justify-center">
-                <Dialog
-                  v-model:visible="visible"
-                  :style="{ width: 'auto' }"
-                  header="Form proposta"
-                  :modal="true"
-                >
-                  <AggiungiPropostaManuale
-                    :propostaRequest="props.propostaRequest"
-                    :idAnnuncio="selectedAnnuncioId"
-                    @nuovaProposta="nuovaProposta"
-                  />
+                <Dialog v-model:visible="visible" :style="{ width: 'auto' }" header="Form proposta" :modal="true">
+                  <AggiungiPropostaManuale :propostaRequest="props.propostaRequest" :idAnnuncio="selectedAnnuncioId"
+                    @nuovaProposta="nuovaProposta" />
                 </Dialog>
               </div>
 
               <div class="card flex justify-center">
-                <Dialog
-                  v-model:visible="dialogControproposta"
-                  :style="{ width: 'auto' }"
-                  header="Form controproposta"
-                  :modal="true"
-                >
-                  <FormControproposta
-                    :proposta="propostaSelected"
-                    @controproposta="controproposta"
-                  />
+                <Dialog v-model:visible="dialogControproposta" :style="{ width: 'auto' }" header="Form controproposta"
+                  :modal="true">
+                  <FormControproposta :proposta="propostaSelected" @controproposta="controproposta" />
                 </Dialog>
               </div>
 
               <div class="p-4">
-                <Tag
-                  :value="'Proposte in trattative'"
-                  :severity="'warn'"
-                  class="mb-2"
-                />
+                <Tag :value="'Proposte in trattative'" :severity="'warn'" class="mb-2" />
 
-                <DataTable
-                  :value="filterProposteInTrattativa(slotProps.data.proposte)"
-                >
-                  <Column
-                    field="datiProponente.nome"
-                    header="Nome"
-                    sortable
-                  ></Column>
-                  <Column
-                    field="datiProponente.cognome"
-                    header="Cognome"
-                    sortable
-                  ></Column>
-                  <Column
-                    field="datiProponente.email"
-                    header="Email"
-                    sortable
-                  ></Column>
+                <DataTable :value="filterProposteInTrattativa(slotProps.data.proposte)">
+                  <Column field="datiProponente.nome" header="Nome" sortable></Column>
+                  <Column field="datiProponente.cognome" header="Cognome" sortable></Column>
+                  <Column field="datiProponente.email" header="Email" sortable></Column>
                   <Column field="prezzoProposta" header="Proposta" sortable>
                     <template #body="slotProps">
-                      <span
-                        :class="{
-                          'line-through':
-                            slotProps.data.controproposta !== null,
-                        }"
-                      >
+                      <span :class="{
+                        'line-through':
+                          slotProps.data.controproposta !== null,
+                      }">
                         {{ slotProps.data.prezzoProposta }}
                       </span>
                     </template>
                   </Column>
-                  <Column
-                    field="controproposta"
-                    header="Controproposta"
-                    sortable
-                  ></Column>
+                  <Column field="controproposta" header="Controproposta" sortable></Column>
                   <Column headerStyle="width:4rem">
                     <template #body="slotProps">
                       <div class="flex flex-row gap-2">
-                        <Button
-                          v-if="props.isAgente"
-                          variant="text"
-                          rounded
-                          aria-label="Filter"
-                          class="hover:bg-[#008000]/60!"
-                          @click="
+                        <Button v-if="props.isAgente" variant="text" rounded aria-label="Filter"
+                          class="hover:bg-[#008000]/60!" @click="
                             clickAccettaProposta(slotProps.data.idProposta)
-                          "
-                          v-tooltip="{
+                            " v-tooltip="{
                             value: 'Accetta la proposta',
                             showDelay: 300,
                             hideDelay: 300,
-                          }"
-                        >
+                          }">
                           <template #icon>
                             <i class="pi pi-check w-5 h-5"></i>
                           </template>
                         </Button>
-                        <Button
-                          v-if="props.isAgente"
-                          variant="text"
-                          rounded
-                          aria-label="Filter"
-                          class="hover:bg-[#FFA500]/60!"
-                          v-tooltip="{
+                        <Button v-if="props.isAgente" variant="text" rounded aria-label="Filter"
+                          class="hover:bg-[#FFA500]/60!" v-tooltip="{
                             value: 'Fai una controproposta',
                             showDelay: 300,
                             hideDelay: 300,
-                          }"
-                          @click="clickControproposta(slotProps.data)"
-                        >
+                          }" @click="clickControproposta(slotProps.data)">
                           <template #icon>
                             <i class="pi pi-pencil w-5 h-5"></i>
                           </template>
                         </Button>
-                        <Button
-                          v-if="props.isAgente"
-                          variant="text"
-                          rounded
-                          aria-label="Filter"
-                          class="hover:bg-[#FF0000]/60!"
-                          v-tooltip="{
+                        <Button v-if="props.isAgente" variant="text" rounded aria-label="Filter"
+                          class="hover:bg-[#FF0000]/60!" v-tooltip="{
                             value: 'Rifiuta proposta',
                             showDelay: 300,
                             hideDelay: 300,
-                          }"
-                          @click="
+                          }" @click="
                             clickRifiutaProposta(slotProps.data.idProposta)
-                          "
-                        >
+                            ">
                           <template #icon>
                             <i class="pi pi-times w-5 h-5"></i>
                           </template>
@@ -243,94 +154,50 @@
               </div>
 
               <div class="p-4">
-                <Tag
-                  class="mb-2"
-                  :value="'Proposte accettate'"
-                  :severity="'success'"
-                />
-                <DataTable
-                  :value="filterProposteAccettate(slotProps.data.proposte)"
-                >
-                  <Column
-                    field="datiProponente.nome"
-                    header="Nome"
-                    sortable
-                  ></Column>
-                  <Column
-                    field="datiProponente.cognome"
-                    header="Cognome"
-                    sortable
-                  ></Column>
-                  <Column
-                    field="datiProponente.email"
-                    header="Email"
-                    sortable
-                  ></Column>
-                  <Column
-                    field="prezzoProposta"
-                    header="Proposta"
-                    sortable
-                  ></Column>
-                  <Column
-                    field="controproposta"
-                    header="Controproposta"
-                    sortable
-                  ></Column>
+                <Tag class="mb-2" :value="'Proposte accettate'" :severity="'success'" />
+                <DataTable :value="filterProposteAccettate(slotProps.data.proposte)">
+                  <Column field="datiProponente.nome" header="Nome" sortable></Column>
+                  <Column field="datiProponente.cognome" header="Cognome" sortable></Column>
+                  <Column field="datiProponente.email" header="Email" sortable></Column>
+                  <Column field="prezzoProposta" header="Proposta" sortable></Column>
+                  <Column field="controproposta" header="Controproposta" sortable></Column>
                 </DataTable>
               </div>
 
               <div class="p-4">
-                <Tag
-                  class="mb-2"
-                  :value="'Proposte rifutate'"
-                  :severity="'danger'"
-                />
-                <DataTable
-                  :value="filterProposteRifiutate(slotProps.data.proposte)"
-                >
-                  <Column
-                    field="datiProponente.nome"
-                    header="Nome"
-                    sortable
-                  ></Column>
-                  <Column
-                    field="datiProponente.cognome"
-                    header="Cognome"
-                    sortable
-                  ></Column>
-                  <Column
-                    field="datiProponente.email"
-                    header="Email"
-                    sortable
-                  ></Column>
-                  <Column
-                    field="prezzoProposta"
-                    header="Proposta"
-                    sortable
-                  ></Column>
-                  <Column
-                    field="controproposta"
-                    header="Controproposta"
-                    sortable
-                  ></Column>
+                <Tag class="mb-2" :value="'Proposte rifutate'" :severity="'danger'" />
+                <DataTable :value="filterProposteRifiutate(slotProps.data.proposte)">
+                  <Column field="datiProponente.nome" header="Nome" sortable></Column>
+                  <Column field="datiProponente.cognome" header="Cognome" sortable></Column>
+                  <Column field="datiProponente.email" header="Email" sortable></Column>
+                  <Column field="prezzoProposta" header="Proposta" sortable></Column>
+                  <Column field="controproposta" header="Controproposta" sortable></Column>
                 </DataTable>
               </div>
             </div>
           </template>
         </DataTable>
+
       </div>
+
     </div>
+
+    <Paginator :rows="5" :totalRecords="totaleAnnunci"  @page="onClickPage"></Paginator>
+
   </div>
+
 </template>
 
 <script setup>
 import { ref, onMounted, defineProps, defineEmits, watch, computed } from "vue";
+import { useRouter } from "vue-router";
 
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
 import Tag from "primevue/tag";
 import Dialog from "primevue/dialog";
+import Paginator from 'primevue/paginator';
 
 import ScheletroTabella from "../PannelloStaff/ScheletroTabella.vue";
 import FormControproposta from "./FormControproposta.vue";
@@ -338,6 +205,7 @@ import AggiungiPropostaManuale from "./AggiungiPropostaManuale.vue";
 
 const props = defineProps([
   "propAnnunci",
+  "propNumeroAnnunci",
   "propLoading",
   "propostaRequest",
   "agente",
@@ -348,9 +216,13 @@ const emit = defineEmits([
   "eliminaProposta",
   "accettaProposta",
   "controproposta",
+  "onPage",
 ]);
 
-const annunci = ref([]);
+const router = useRouter();
+
+const totaleAnnunci = computed( () => props.propNumeroAnnunci || 0 );
+const annunci = computed( () => props.propAnnunci || [] );
 
 const expandedRows = ref([]);
 
@@ -359,7 +231,7 @@ const dialogControproposta = ref(false);
 const propostaSelected = ref();
 const selectedAnnuncioId = ref(null);
 
-onMounted(() => {});
+onMounted(() => { });
 
 const isAnnunciEmpty = computed(() => {
   return annunci.value.length === 0;
@@ -416,13 +288,20 @@ const controPropostaAbilitato = (proposta) => {
   return proposta.controproposta === null;
 };
 
-watch(
-  () => props.propAnnunci,
-  (newAnnunci) => {
-    annunci.value = newAnnunci; // Copia "sicura"
-  },
-  { immediate: true },
-);
+const onClickModificaAnnuncio = (idAnnuncio) => {
+
+  router.push({ 
+    path: `/PortaleAgenzia/ModificaAnnuncio/${idAnnuncio}`
+   });
+}
+
+const onClickPage = (event) => {
+
+  emit("onPage", event.page + 1)
+
+  console.log(event);
+}
+
 </script>
 
 <style>

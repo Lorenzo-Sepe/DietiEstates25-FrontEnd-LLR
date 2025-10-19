@@ -1,24 +1,24 @@
 <template>
-  <div class="card w-full">
+  <div class="w-full">
     <DataTable :value="products">
       <Column field="code" header="Titolo">
         <template #body>
-          <Skeleton></Skeleton>
+          <Skeleton class="w-full"></Skeleton>
         </template>
       </Column>
       <Column field="name" header="Copertina">
         <template #body>
-          <Skeleton></Skeleton>
+          <Skeleton class="w-full"></Skeleton>
         </template>
       </Column>
       <Column field="category" header="Prezzo">
         <template #body>
-          <Skeleton></Skeleton>
+          <Skeleton class="w-full"></Skeleton>
         </template>
       </Column>
       <Column field="quantity" header="Contratto">
         <template #body>
-          <Skeleton></Skeleton>
+          <Skeleton class="w-full"></Skeleton>
         </template>
       </Column>
     </DataTable>

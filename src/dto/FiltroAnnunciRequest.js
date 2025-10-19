@@ -12,9 +12,9 @@ export class FiltroAnnuncioRequest {
     this.prezzoMax = data.prezzoMax || null;
     this.metriQuadriMin = data.metriQuadriMin || null;
     this.metriQuadriMax = data.metriQuadriMax || null;
-    this.provincia = data.provincia || null;
-
+    
     //Localizzazione
+    this.provincia = data.provincia || null;
     this.latCentro = data.latCentro || null;
     this.lonCentro = data.lonCentro || null;
     this.raggioKm = data.raggioKm || null;
