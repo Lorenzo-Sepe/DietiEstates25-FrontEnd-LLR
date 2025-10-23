@@ -21,7 +21,7 @@
         <!-- Contenuto con TipTap -->
         <div class="field">
           <label class="font-semibold" for="contenuto-editor">Contenuto</label>
-          <MarkdownEditor id="contenuto-editor" v-model="form.contenuto" />
+          <MarkdownEditor id="contenuto-editor" v-model="form.contenuto" :contrastMode="true"/>
         </div>
       </div>
 
