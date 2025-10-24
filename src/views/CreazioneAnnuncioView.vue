@@ -12,7 +12,6 @@ import StepDatiPrincipali from "../components/CreaAnnuncio/StepDatiPrincipali.vu
 import StepIndirizzo from "../components/CreaAnnuncio/StepIndirizzo.vue";
 import StepImmagini from "../components/CreaAnnuncio/StepCaricamentoImmagini.vue";
 import { useStoreAnnuncio } from "../stores/CreazioneAnnuncioStore";
-import Tag from "primevue/tag";
 import Anteprima from "../components/CreaAnnuncio/Anteprima.vue";
 import StepCaratteristiche from "../components/CreaAnnuncio/StepCaratteristiche.vue";
 import Dialog from 'primevue/dialog';
@@ -71,6 +70,8 @@ const inviaAnnuncio = async () => {
 
   dialogCaricamento.value = true;
   progressSpinner.value = true;
+  isSuccess.value = false;
+  isError.value = false;
 
   try {
 
@@ -104,32 +105,74 @@ watch(activeStep, (newVal) => {
 
   <!--------------------------------------------------------------------------------------------------------------------------->
 
-  <Dialog v-model:visible="dialogCaricamento" modal :closable="false"
-    class="bg-green-50 border border-green-300 rounded-xl shadow animate-fade-in p-4">
-
-    <div v-if="progressSpinner">
-      <ProgressSpinner />
-    </div>
-
-    <div v-if="isSuccess" class="flex flex-col items-center gap-3">
-      <div class="flex items-center gap-2 text-green-700 text-lg font-semibold">
-        <i class="pi pi-check-circle text-2xl"></i>
-        <span>Annuncio salvato con successo!</span>
-      </div>
-
-      <Button label="OK" icon="pi pi-check" @click="dialogCaricamento = false"
-        class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg shadow" />
-    </div>
-
-
-    <div v-if="isError" class="flex flex-col items-center gap-3">
-      <div class="flex items-center gap-2 text-red-700 text-lg font-semibold">
-        <i class="pi pi-times-circle text-2xl"></i>
-        <span>Si è verificato un errore durante il salvataggio!</span>
+<Dialog
+  v-model:visible="dialogCaricamento"
+  modal
+  :closable="false"
+  class="bg-white border border-gray-200 rounded-2xl shadow-lg animate-fade-in w-[420px] max-w-[90vw] p-6 overflow-hidden"
+>
+  <!-- Stato: Caricamento -->
+  <div v-if="progressSpinner" class="flex flex-col items-center gap-4 text-center">
+    <ProgressSpinner />
+    <div class="text-gray-700">
+      <div class="text-lg font-semibold">Invio annuncio in corso...</div>
+      <div class="text-sm text-gray-600 mt-1">
+        Stiamo salvando i dati e caricando le immagini.<br />
+        Potrebbe richiedere qualche secondo, non chiudere questa finestra.
       </div>
     </div>
+  </div>
 
-  </Dialog>
+  <!-- Stato: Successo -->
+  <div v-if="isSuccess" class="flex flex-col items-center gap-4 text-center">
+    <div class="flex items-center gap-2 text-green-700 text-lg font-semibold">
+      <i class="pi pi-check-circle text-3xl"></i>
+      <span>Annuncio salvato con successo!</span>
+    </div>
+    <div class="text-gray-600 text-sm">
+      Tutti i dati e le immagini sono stati caricati correttamente.
+    </div>
+    <div class="flex flex-wrap justify-center gap-3 mt-2 w-full">
+      <Button
+        label="Torna al portale"
+        icon="pi pi-arrow-left"
+        @click="dialogCaricamento = false; window.location.href='/PortaleAgenzia'"
+        class="flex-1 min-w-[160px] bg-gray-600 hover:bg-gray-700 text-white px-5 py-2 rounded-lg shadow text-nowrap"
+      />
+      <Button
+        label="Visualizza annuncio"
+        icon="pi pi-eye"
+        @click="dialogCaricamento = false; window.open(annuncio && annuncio.id ? `annuncio/${annuncio.id}` : '/', '_blank')"
+        class="flex-1 min-w-[160px] bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow text-nowrap"
+      />
+    </div>
+  </div>
+
+<!-- Stato: Errore -->
+  <div v-if="isError" class="flex flex-col gap-4 text-left">
+    <div class="flex items-start gap-3 text-red-700 text-lg font-semibold">
+    <i class="pi pi-times-circle text-3xl leading-none mt-1"></i>
+    <span>Errore durante il salvataggio dell’annuncio</span>
+  </div>
+    <div class="text-gray-700 text-sm leading-relaxed">
+      Si è verificato un problema durante il caricamento dei dati o delle immagini.
+      Ti consigliamo di:
+      <ul class="list-disc list-inside mt-2 text-gray-600">
+        <li>Verificare la connessione internet</li>
+        <li>Riprovare tra qualche istante</li>
+      </ul>
+      Se l’errore persiste, contatta il supporto tecnico per assistenza.
+    </div>
+    <div class="flex justify-center mt-2">
+      <Button
+        label="Riprova"
+        icon="pi pi-refresh"
+        @click="inviaAnnuncio()"
+        class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg shadow text-nowrap"
+      />
+    </div>
+  </div>
+</Dialog>
 
   <!--------------------------------------------------------------------------------------------------------------------------->
 
@@ -145,7 +188,7 @@ watch(activeStep, (newVal) => {
               : '',
             '--p-stepper-step-number-color': step1.hasErrori ? 'white' : '',
           }">
-            <i class="pi pi-home" />
+            <i class="pi pi-building" />
           </Step>
           <Divider />
           <Step :value="2" :style="{
@@ -154,18 +197,18 @@ watch(activeStep, (newVal) => {
               : '',
             '--p-stepper-step-number-color': step2.hasErrori ? 'white' : '',
           }">
-            <i class="pi pi-home" />
+            <i class="pi pi-file-edit" />
           </Step>
-          <Divider />
+          <Divider/>
           <Step :value="3" :style="{
             '--p-stepper-step-number-background': step3.hasErrori
               ? '#ad0000'
               : '',
             '--p-stepper-step-number-color': step3.hasErrori ? 'white' : '',
           }">
-            <i class="pi pi-map" />
+            <i class="pi pi-tags" />
           </Step>
-          <Divider />
+          <Divider  />
           <Step :value="4" :style="{
             '--p-stepper-step-number-background': step4.hasErrori
               ? '#ad0000'
@@ -175,36 +218,28 @@ watch(activeStep, (newVal) => {
           <Divider />
           <Step :value="5"><i class="pi pi-images" /></Step>
           <Divider />
-          <Step :value="6"><i class="pi pi-images" /></Step>
+          <Step :value="6"><i class="pi pi-file-check" /></Step>
         </StepList>
 
         <StepPanels>
           <StepPanel class="!bg-gray-100" :value="1">
-            <Tag severity="contrast" class="primeTags">
               <h3>Informazioni di Base</h3>
-            </Tag>
             <StepDatiIniziali class="" ref="step1" v-model:annuncio="annuncio" :tentativoInvio="tentativoInvio.valore"
               @avanti="vaiAvanti" />
           </StepPanel>
 
           <StepPanel class="!bg-gray-100" :value="2">
-            <Tag severity="contrast" class="primeTags">
               <h3>Dettagli Annuncio</h3>
-            </Tag>
             <StepDatiPrincipali ref="step2" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti"
               :tentativoInvio="tentativoInvio.valore" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="4">
-            <Tag severity="contrast" class="primeTags">
               <h3>Indirizzo e Posizione</h3>
-            </Tag>
             <StepIndirizzo ref="step4" :tentativoInvio="tentativoInvio.valore" :activeStep="activeStep"
               v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="3">
-            <Tag severity="contrast" class="primeTags">
               <h3>Caratteristiche</h3>
-            </Tag>
             <StepCaratteristiche ref="step3" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti"
               :tentativoInvio="tentativoInvio.valore" />
           </StepPanel>

@@ -48,7 +48,7 @@ export default {
 
   modificaSottoscrizioniCategorie(sottoscrizioniRequest) {
     return Api()
-      .patch("utente/sottoscrizioni2", sottoscrizioniRequest)
+      .patch("utente/sottoscrizioni", sottoscrizioniRequest)
       .then((response) => {
         return response.data;
       });
