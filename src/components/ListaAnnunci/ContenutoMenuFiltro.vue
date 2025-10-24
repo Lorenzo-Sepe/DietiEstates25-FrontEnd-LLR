@@ -151,13 +151,12 @@ const search = (event) => {
 };
 
 const onApliccaFiltro = () => {
-  console.log("multiselecttttt:::", caratteristicheSelezionate.value);
 
   router.push({
     path: "/annunci",
     query: {
       ...route.query,
-      comune: luogoCercato.value.comune,
+      comune: luogoCercato.value.comune ? luogoCercato.value.comune : luogoCercato.value,
       immobile: selectedTipologiaImmobileBackup.value,
       contratto: selectedContratto.value,
       page: 1,
@@ -300,4 +299,5 @@ watch(route, (newRoute) => {
   if (route.query.soffitta == true || route.query.soffitta == "true")
     caratteristicheSelezionate.value.push({ name: "Soffitta" });
 });
+
 </script>
