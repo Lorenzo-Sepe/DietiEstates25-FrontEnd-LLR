@@ -9,9 +9,9 @@ export default {
       });
   },
 
-  getNumeroAnnunciByStaff() {
+  getNumeroAnnunciByStaff(filtro) {
     return ApiAgent()
-      .get("annuncioImmobiliare/numeroByStaff")
+      .post("annuncioImmobiliare/numeroByStaff", filtro)
       .then((response) => {
         return response.data;
       });
@@ -24,4 +24,13 @@ export default {
         return response.data;
       });
   },
+
+  eliminaAnnuncio(idAnnuncio) {
+    return ApiAgent()
+      .delete(`annuncioImmobiliare/${idAnnuncio}`)
+      .then((response) => {
+        return response.data;
+      });
+  },
+
 };
