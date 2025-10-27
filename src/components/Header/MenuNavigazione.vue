@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="flex flex-col lg:flex-row items-start lg:items-center justify-start lg:justify-between gap-2 lg:gap-4 pb-2 lg:pb-0 lg:mr-5"
+    class="flex flex-col lg:flex-row items-start lg:items-start justify-start lg:justify-between gap-2 lg:gap-4 pb-2 lg:pb-0 lg:mr-5"
   >
     <router-link
       v-for="item in menuCorrente"
@@ -42,8 +42,10 @@ const menuCorrente = computed(() =>
 <style scoped>
 .menu-item {
   all: unset;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   cursor: pointer;
+  height: 48px; /* stessa altezza avatar */
   font-size: 1rem;
   font-weight: 500;
   color: #111827;

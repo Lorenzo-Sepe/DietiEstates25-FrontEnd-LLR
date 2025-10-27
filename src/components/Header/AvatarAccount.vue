@@ -1,6 +1,6 @@
 <template>
   <div
-    class="profile-avatar group flex items-center gap-3 p-2 rounded-lg cursor-pointer transition hover:bg-gray-100"
+    class="profile-avatar group flex items-center h-12 gap-3 p-2 rounded-lg cursor-pointer transition hover:bg-gray-100"
     @click="$emit('avatarClick')"
   >
     <Avatar
