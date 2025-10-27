@@ -4,7 +4,7 @@
     :nomeAzienda="nomeAzienda"
     :avatarUrl="avatarUrl"
     @avatarClick="emit('avatarClick','impostazioniAvatar')"
-    onlyAvatar
+    
   />
 
 
