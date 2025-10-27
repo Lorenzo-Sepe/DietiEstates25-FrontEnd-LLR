@@ -1,48 +1,77 @@
 <template>
   <nav
-    class="pb-2 lg:pb-0 lg:mr-5 flex gap-2 lg:gap-4 flex-col lg:flex-row items-start justify-start lg:items-center lg:justify-between">
-    <router-link v-for="voce in menuCorrente" :key="voce.nome" :to="voce.percorso"
-      class="text-black hover:text-gray-600 transition-all duration-200 text-lg">
-      {{ voce.nome }}
+    class="flex flex-col lg:flex-row items-start lg:items-center justify-start lg:justify-between gap-2 lg:gap-4 pb-2 lg:pb-0 lg:mr-5"
+  >
+    <router-link
+      v-for="item in menuCorrente"
+      :key="item.nome"
+      :to="item.percorso"
+      class="menu-item"
+    >
+      {{ item.nome }}
     </router-link>
 
-    <template v-if="isInPortale === false">
-      <Button label="Storico ricerche" variant="text" @click="emit('chiudiDrawer','storicoRicerche')" />
-    </template>
+    <Button
+      v-if="!isInPortale"
+      label="Storico ricerche"
+      variant="text"
+      class="menu-item"
+      @click="emit('chiudiDrawer', 'storicoRicerche')"
+    />
   </nav>
-
 </template>
 
 <script setup>
-import { computed, defineProps, ref, defineEmits } from "vue";
-
+import { computed, defineProps, defineEmits } from "vue";
 import Button from "primevue/button";
 
-const props = defineProps({
-  isInPortale: Boolean,
-});
+const props = defineProps({ isInPortale: Boolean });
+const emit = defineEmits(["chiudiDrawer"]);
 
-const emit = defineEmits(['chiudiDrawer']);
-
-// Definizione dei menu per le diverse aree
-const menuGenerale = [
-  { nome: "Le mie notifiche", percorso: "/notifiche" },
-];
-
+const menuGenerale = [{ nome: "Le mie notifiche", percorso: "/notifiche" }];
 const menuVenditore = [
-  {
-    nome: "Gestisci annunci immobiliari",
-    percorso: "/PortaleAgenzia/miei-annunci",
-  },
-  {
-    nome: "Messaggi promozionali",
-    percorso: "/PortaleAgenzia/messaggi-promozionali",
-  },
+  { nome: "Gestisci annunci immobiliari", percorso: "/PortaleAgenzia/miei-annunci" },
+  { nome: "Messaggi promozionali", percorso: "/PortaleAgenzia/messaggi-promozionali" },
 ];
 
-// Menu dinamico in base alla prop ricevuta dal padre
 const menuCorrente = computed(() =>
-  props.isInPortale ? menuVenditore : menuGenerale,
+  props.isInPortale ? menuVenditore : menuGenerale
 );
-
 </script>
+
+<style scoped>
+.menu-item {
+  all: unset;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #111827;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.menu-item:hover {
+  color: #4b5563;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Forza lo stesso stile anche dentro il bottone PrimeVue */
+:deep(.p-button.menu-item) {
+  all: unset;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #111827;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+:deep(.p-button.menu-item:hover) {
+  color: #4b5563;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+</style>

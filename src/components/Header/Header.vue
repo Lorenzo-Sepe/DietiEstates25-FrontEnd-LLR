@@ -31,8 +31,8 @@
         </AvatarAccount>
       </div>
     </div>
-
-    <div class="block lg:hidden">
+    
+    <div class="block lg:hidden" >
       <Drawer v-model:visible="drawer" position="right">
         <div v-if="!logged" class="flex gap-2 items-center flex-col lg:flex-row">
           <Button label="Accedi" @click="openDialog"></Button>
