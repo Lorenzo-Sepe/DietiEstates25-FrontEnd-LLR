@@ -62,7 +62,11 @@ const menuCorrente = computed(() =>
 /* Forza lo stesso stile anche dentro il bottone PrimeVue */
 :deep(.p-button.menu-item) {
   all: unset;
-  display: inline-block;
+  display: inline-flex;
+    align-items: center;
+
+    height: 48px; /* stessa altezza avatar */
+
   cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
