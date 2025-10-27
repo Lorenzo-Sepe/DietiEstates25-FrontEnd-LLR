@@ -1,6 +1,7 @@
 <template>
   <!-------------  SEZIONE DIALOG PER GLI ALLERT ------------------------------------------------>
-  <Dialog v-model:visible="loadingOperazione" @close="loadingOperazione = false" header="OPERAZIONE IN CORSO"
+
+  <Dialog v-model:visible="loadingOperazione" :closable="false" header="OPERAZIONE IN CORSO"
     :style="{ width: 'auto' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <div class="card flex justify-center">
       <ProgressSpinner />
@@ -50,22 +51,22 @@
               </span>
             </AccordionHeader>
             <AccordionContent>
-              <TabellaAnnunci class="w-full mb-2" 
-                :propAnnunci="annunci" :propLoading="loading" :propNumeroAnnunci="totaleAnnunci"
-                :propostaRequest="propostaRequest" :isAgente="isAgente" :agente="employeeStore.dipendenti"
-                @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta"
-                @accettaProposta="accettaProposta" @controproposta="controproposta" @onPage="getAnnunciByPagina" />
+              <TabellaAnnunci class="w-full mb-2" :propAnnunci="annunci" :propLoading="loading"
+                :propNumeroAnnunci="totaleAnnunci" :propostaRequest="propostaRequest" :isAgente="isAgente"
+                :agente="employeeStore.dipendenti" @nuovaProposta="aggiungiPropostaManuale" @eliminaAnnuncio="eliminaAnnuncio"
+                @eliminaProposta="rifiutaProposta" @accettaProposta="accettaProposta" @controproposta="controproposta"
+                @onPage="getAnnunciByPagina" />
             </AccordionContent>
           </AccordionPanel>
         </Accordion>
       </div>
 
       <div v-else>
-        <TabellaAnnunci class="w-full mb-2" 
-          :propAnnunci="annunci" :propLoading="loading" :propNumeroAnnunci="totaleAnnunci"
-          :propostaRequest="propostaRequest" :isAgente="isAgente" :agente="employeeStore.dipendenti"
-          @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta" @accettaProposta="accettaProposta"
-          @controproposta="controproposta" @onPage="getAnnunciByPagina" />
+        <TabellaAnnunci class="w-full mb-2" :propAnnunci="annunci" :propLoading="loading"
+          :propNumeroAnnunci="totaleAnnunci" :propostaRequest="propostaRequest" :isAgente="isAgente"
+          :agente="employeeStore.dipendenti" @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta"
+          @accettaProposta="accettaProposta" @controproposta="controproposta" 
+          @onPage="getAnnunciByPagina" @eliminaAnnuncio="eliminaAnnuncio" />
       </div>
 
     </div>
@@ -74,7 +75,6 @@
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
-import { useRouter } from "vue-router";
 
 import Accordion from "primevue/accordion";
 import AccordionPanel from "primevue/accordionpanel";
@@ -93,8 +93,6 @@ import PropostaService from "../services/PropostaService";
 import { FiltroAnnuncioRequest } from "../dto/FiltroAnnunciRequest";
 import { PropostaRequest } from "../dto/PropostaRequest";
 import { useEmployeeStore } from "../stores/EmployeeStore";
-
-const router = useRouter();
 
 const activeIndex = ref(0);
 const annunci = ref([]);
@@ -193,6 +191,7 @@ const onAccordionToggle = async (newIndex) => {
 const getNumeroAnnunci = async () => {
 
   totaleAnnunci.value = await AnnunciService.getNumeroAnnunciByStaff(filtroAnnunci);
+
 }
 
 const getAnnunciByPagina = async (pagina) => {
@@ -201,11 +200,11 @@ const getAnnunciByPagina = async (pagina) => {
 
   filtroAnnunci.numeroPagina = pagina;
 
-  try{
+  try {
 
-     await getAnnunci();
+    await getAnnunci();
 
-  }catch(error){
+  } catch (error) {
 
     console.log("errore durante la chiamata axsios per la get annunci by pagina: ", error);
     annunci.value = [];
@@ -358,6 +357,47 @@ const changeControposta = (idProposta, prezzoControproposta) => {
       }
     });
   });
+};
+
+const eliminaAnnuncio = async (idAnnuncio) => {
+
+  try {
+
+    loadingOperazione.value = true;
+
+    await AnnunciService.eliminaAnnuncio(idAnnuncio);
+
+    loadingOperazione.value = false;
+
+    okAllert.value = true;
+
+  } catch (error) {
+
+    loadingOperazione.value = false;
+
+    erroreAllert.value = true;
+
+    return;
+  }
+
+  try{
+
+    loading.value = true;
+
+    filtroAnnunci.numeroPagina = 1;
+
+    totaleAnnunci.value = await AnnunciService.getNumeroAnnunciByStaff(filtroAnnunci);
+
+    await getAnnunci();
+
+  }catch(error){
+
+    console.log("errore durante l'aggiornamento della lista annunci dopo l'eliminazione: ", error);
+
+  }
+
+  loading.value = false;
+
 };
 
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model:visible="loadingOperazione" modal header="OPERAZIONE IN CORSO" :style="{ width: 'auto' }"
+  <Dialog v-model:visible="loadingOperazione" :closable="false" header="OPERAZIONE IN CORSO" :style="{ width: 'auto' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <div class="card flex justify-center">
       <ProgressSpinner />
@@ -49,24 +49,27 @@
     </div>
   </Dialog>
 
-  <div
-    class="flex flex-row p-4 items-start gap-4 w-full">
-    <div v-if="caricamentoCategorieCompletate" class="contenitore-menuLaterale border-2 border-black rounded-lg my-10 hidden md:block">
+  <div class="flex flex-row p-4 items-start gap-4 w-full">
+    <div v-if="caricamentoCategorieCompletate"
+      class="contenitore-menuLaterale border-2 border-black rounded-lg my-10 hidden md:block">
       <MenuLaterale :categorie="categorieNotifiche" :categoriaSelected="categoriaSelected"
         @modificaSottoscrizioni="modificaSottoscrizioni" />
     </div>
     <ScheletroCategorie v-else></ScheletroCategorie>
-    <div v-if="caricamentoNotificheCompletate" class="contenitore-notifiche p-2 flex flex-col gap-4">
-      <div class="flex md:hidden border-1 border-gray-500 rounded-lg p-4 justify-center gap-4 w-auto">
-        <MenuCategoriaSuperiore :categorie="categorieNotifiche" @modificaSottoscrizioni="modificaSottoscrizioni" />
+    <div class="contenitore-notifiche p-2 flex flex-col gap-4">
+      <div v-if="caricamentoNotificheCompletate">
+        <div class="flex md:hidden border-1 border-gray-500 rounded-lg p-4 justify-center gap-4 w-auto">
+          <MenuCategoriaSuperiore :categorie="categorieNotifiche" @modificaSottoscrizioni="modificaSottoscrizioni" />
+        </div>
+        <span v-if="numeroNotifche < 1" class="text-2xl">Non hai ricevuto nessuna notifica</span>
+        <ListaNotifiche v-else :notifiche="notifiche" @visualizzaNotifica="visualizzaNotifica" />
       </div>
-      <span v-if="numeroNotifche < 1" class="text-2xl">Non hai ricevuto nessuna notifica</span>
-      <ListaNotifiche v-else :notifiche="notifiche" @visualizzaNotifica="visualizzaNotifica" />
+      <ScheletroCaricamentoNotifiche v-else></ScheletroCaricamentoNotifiche>
       <div class="mt-auto">
         <Paginator :rows="5" :totalRecords="numeroNotifche" @page="onPage"></Paginator>
       </div>
     </div>
-    <ScheletroCaricamentoNotifiche v-else></ScheletroCaricamentoNotifiche>
+
   </div>
 
 </template>
@@ -112,14 +115,18 @@ const caricamentoCategorieCompletate = ref(false);
 const caricamentoNotificheCompletate = ref(false);
 
 onMounted(async () => {
+
   router.push({
     path: route.path,
     query: { ...route.query, nome: "Tutte le notifiche", pagina: 0, id: 0 },
   });
 
   try {
+
     categorieNotifiche.value = await NotificheService.getSottoscrizioni();
+
   } catch (error) {
+
   }
 
   numeroNotifche.value = getNumeroNotifiche();
@@ -127,101 +134,137 @@ onMounted(async () => {
 
   caricamentoCategorieCompletate.value = true;
   caricamentoNotificheCompletate.value = true
+
 });
 
 const getNumeroNotifiche = async () => {
+
   if (route.query.id == 0) {
+
     try {
+
       numeroNotifche.value = await NotificheService.getNumeroNotifiche();
+
     } catch (error) {
+
     }
   } else {
+
     try {
-      numeroNotifche.value =
-        await NotificheService.getNumeroNotificheByCategoria(route.query.id);
+
+      numeroNotifche.value = await NotificheService.getNumeroNotificheByCategoria(route.query.id);
+
     } catch (error) {
+
     }
   }
+
 };
 
 const getNotifiche = async () => {
+
   caricamentoNotificheCompletate.value = false;
+
   if (route.query.id == 0) {
+
     try {
+
       notifiche.value = await NotificheService.getNotifiche(route.query.pagina);
+
     } catch (error) {
+
     }
+
   } else {
+
     try {
+
       notifiche.value = await NotificheService.getNotificheByCategoria(
         route.query.pagina,
         route.query.id,
       );
 
     } catch (error) {
+
     }
   }
+
   caricamentoNotificheCompletate.value = true;
+
 };
 
 const onPage = (event) => {
+
   router.push({
     path: route.path,
     query: { ...route.query, pagina: event.page },
   });
+
 };
 
-watch(
-  () => route.query,
-  () => {
-    
-    numeroNotifche.value = getNumeroNotifiche();
-    notifiche.value = getNotifiche();
-  },
-  { deep: true },
-); // deep: true serve per rilevare cambiamenti negli oggetti complessi
+watch(() => route.query, () => {
+
+  numeroNotifche.value = getNumeroNotifiche();
+  notifiche.value = getNotifiche();
+},
+
+  { deep: true }, // deep: true serve per rilevare cambiamenti negli oggetti complessi
+
+);
 
 const modificaSottoscrizioni = async () => {
+
   const listaCategorieNotificaRequest = ref([]);
 
   categorieNotifiche.value.forEach((categoria) => {
-    const categoriaNotificaRequest = reactive(
-      new CategoriaNotificaRequest(categoria),
-    );
+
+    const categoriaNotificaRequest = reactive(new CategoriaNotificaRequest(categoria));
 
     listaCategorieNotificaRequest.value.push({ ...categoriaNotificaRequest });
+
   });
 
   try {
+
     loadingOperazione.value = true;
-    await NotificheService.modificaSottoscrizioniCategorie(
-      listaCategorieNotificaRequest.value,
-    );
+    await NotificheService.modificaSottoscrizioniCategorie(listaCategorieNotificaRequest.value);
     loadingOperazione.value = false;
-    isAttivoCategoriaNotificaVisualizzata.value =
-      !isAttivoCategoriaNotificaVisualizzata.value;
+
+    isAttivoCategoriaNotificaVisualizzata.value = !isAttivoCategoriaNotificaVisualizzata.value;
+
     okAllert.value = true;
+
   } catch (error) {
+
     erroreAllert.value = true;
   }
 };
 
-const visualizzaNotifica = (notifica) => {
+const visualizzaNotifica = async (notifica) => {
+
   contenutoHtml.value = notifica.contenuto;
   isAttivoCategoriaNotificaVisualizzata.value = isAttivo(notifica.idCategoria);
-  nomeCategoriaNotificaVisualizzata.value = getNomeCategoria(
-    notifica.idCategoria,
-  );
+  nomeCategoriaNotificaVisualizzata.value = getNomeCategoria(notifica.idCategoria);
   idCategoriaNotificaVisualizzata.value = notifica.idCategoria;
   contenutoNotifica.value = true;
+
   try {
-    NotificheService.setVisualizzazioneNotifica(notifica.id)
-      .then(() => {
-      })
-      .catch((error) => {
-      });
+
+    await NotificheService.setVisualizzazioneNotifica(notifica.id);
+
+    notifiche.value.forEach((notificaFor) => {
+
+      if (notificaFor.id === notifica.id) {
+
+        notificaFor.letta = true;
+      }
+    })
+
   } catch (error) {
+
+    console.log("Errore nel settare la notifica come letta");
   }
+
 };
 
 const getNomeCategoria = (idCategoria) => {

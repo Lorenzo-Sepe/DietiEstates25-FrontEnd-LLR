@@ -1,5 +1,18 @@
 <template>
 
+  <!------------------------------------------------ DIALOGS DI CONFERMA ---------------------------------------------------------->
+
+  <Dialog v-model:visible="dialogCancellaAnnuncio" modal header="ATTENZIONE" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <p>L'annuncio verrà cancellato definitivamente senza possibilità di recupero</p>
+    <div class="flex justify-end gap-2 my-4">
+      <Button label="Annulla" severity="secondary" raised @click="dialogCancellaAnnuncio = false" />
+      <Button label="Conferma" severity="success" raised @click="eliminaAnnuncio()" />
+    </div>
+  </Dialog>
+
+  <!--------------------------------------------------- TABELLA ANNUNCI ------------------------------------------------------------->
+
   <div class="flex flex-col w-full h-full">
 
     <ScheletroTabella v-if="props.propLoading" class="flex-grow max-w-full" />
@@ -57,7 +70,7 @@
                     <i class="pi pi-file-edit w-5 h-5"></i>
                   </template>
                 </Button>
-                <Button variant="text" rounded aria-label="Filter" v-tooltip="{
+                <Button variant="text" rounded aria-label="Filter" @click="onClickCancellaAnnuncio(slotProps.data.id)" v-tooltip="{
                   value: 'Elimina annuncio',
                   showDelay: 300,
                   hideDelay: 300,
@@ -182,7 +195,7 @@
 
     </div>
 
-    <Paginator :rows="5" :totalRecords="totaleAnnunci"  @page="onClickPage"></Paginator>
+    <Paginator :rows="5" :totalRecords="totaleAnnunci" :first="first" @page="onClickPage"></Paginator>
 
   </div>
 
@@ -221,8 +234,12 @@ const emit = defineEmits([
 
 const router = useRouter();
 
+const dialogCancellaAnnuncio = ref(false);
+
 const totaleAnnunci = computed( () => props.propNumeroAnnunci || 0 );
 const annunci = computed( () => props.propAnnunci || [] );
+
+const first = ref(0);
 
 const expandedRows = ref([]);
 
@@ -284,10 +301,6 @@ const controproposta = (idProposta, controproposta) => {
   emit("controproposta", idProposta, controproposta);
 };
 
-const controPropostaAbilitato = (proposta) => {
-  return proposta.controproposta === null;
-};
-
 const onClickModificaAnnuncio = (idAnnuncio) => {
 
   router.push({ 
@@ -295,9 +308,33 @@ const onClickModificaAnnuncio = (idAnnuncio) => {
    });
 }
 
+watch( () => props.propNumeroAnnunci,
+
+  (newVal) => {
+
+    first.value = 0;
+  }
+);
+
+const onClickCancellaAnnuncio = (idAnnuncio) => {
+
+  selectedAnnuncioId.value = idAnnuncio;
+
+  dialogCancellaAnnuncio.value = true;
+
+}
+
+const eliminaAnnuncio = () => {
+
+  dialogCancellaAnnuncio.value = false;
+
+  emit("eliminaAnnuncio", selectedAnnuncioId.value);
+
+}
+
 const onClickPage = (event) => {
 
-  emit("onPage", event.page + 1)
+  emit("onPage", event.page + 1);
 
   console.log(event);
 }
