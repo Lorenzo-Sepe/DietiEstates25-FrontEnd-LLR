@@ -1,8 +1,17 @@
 <template>
-  <div
-    class="flex flex-col items-center justify-between p-2 bg-primary-100 rounded"
-  >
+  <div class="flex flex-col items-center justify-between p-2 bg-primary-100 rounded">
+    <!-- Se login completato mostra il messaggio di benvenuto -->
+    <div v-if="loginSuccess" class="text-center p-5">
+      <h2 class="text-xl font-semibold text-green-600 mb-2">
+        Benvenuto, {{ userName }}!
+      </h2>
+      <p class="text-gray-700">Accesso effettuato con successo.</p>
+      <p class="text-gray-500 text-sm mt-1">Verrai reindirizzato tra pochi secondi...</p>
+    </div>
+
+    <!-- Altrimenti mostra il form di login -->
     <Form
+      v-else
       v-slot="$form"
       :initialValues
       :resolver
@@ -51,7 +60,7 @@
       />
     </Form>
 
-    <div v-if="errorMessage" class="text-red-500 text-sm">
+    <div v-if="errorMessage" class="text-red-500 text-sm mt-2">
       {{ errorMessage }}
     </div>
   </div>
@@ -75,6 +84,8 @@ const router = useRouter();
 
 const loading = ref(false);
 const errorMessage = ref("");
+const loginSuccess = ref(false);
+const userName = ref("");
 
 const initialValues = reactive({
   email: "",
@@ -97,7 +108,6 @@ const resolver = ({ values }) => {
   if (!values.email) {
     errors.email = [{ message: "Inserire Email" }];
   } else if (!validaEmail(values.email)) {
-    // Corretto il controllo dell'email
     errors.email = [{ message: "Inserire un email valida" }];
   }
 
@@ -105,17 +115,13 @@ const resolver = ({ values }) => {
     errors.password = [{ message: "Inserire Password." }];
   }
 
-  return {
-    values, // (Optional) Used to pass current form values to submit event.
-    errors,
-  };
+  return { values, errors };
 };
-
 
 const onFormSubmit = async ({ valid }) => {
   loading.value = true;
   if (!valid) {
-    loading.value = false; // Assicurati di fermare il caricamento se non è valido
+    loading.value = false;
     return;
   }
   errorMessage.value = "";
@@ -127,42 +133,32 @@ const onFormSubmit = async ({ valid }) => {
     });
     loading.value = false;
 
+    // Mostra messaggio di benvenuto
+    loginSuccess.value = true;
+    userName.value = response.nome || "Utente";
+
     const uiStore = useUIStore();
-    console.log("controllo su dove reindirizzare");
-            console.log("uiStore.fromPath: ", uiStore.fromPath);
 
-    if (response.ruolo !== "MEMBER") {
-      console.log("HA FATTO ACCESSO UN DIPENDENTE");
-      console.log("uiStore loginRole: ", uiStore.loginRole);
-      
-      if(uiStore.loginRole === "employee"){
-        router.push(uiStore.fromPath);
-      }else{
-      router.push({ path: "/PortaleAgenzia/pannelloStaff" });
-      }
-      emit("close");
-    }else{
-      console.log("HA FATTO ACCESSO UN UTENTE");
-      console.log("uiStore loginRole: ", uiStore.loginRole);
-
-      if(uiStore.loginRole !== "employee"){
-        console.log("sono dentro if user")
-        router.push(uiStore.fromPath);
-      }else{
-        console.log("sono dentro else user")
+    // Ritarda il reindirizzamento di 2.5 secondi
+    setTimeout(() => {
+      if (response.ruolo !== "MEMBER") {
+        if (uiStore.loginRole === "employee" && uiStore.fromPath) {
+          router.push(uiStore.fromPath);
+        } else {
+          router.push({ path: "/PortaleAgenzia/pannelloStaff" });
+        }
+      } else {
         router.push({ path: "/" });
       }
       emit("close");
-    } 
-    emit("close");
+    }, 2500);
   } catch (error) {
     console.error(error);
-    loading.value = false; // Assicurati di fermare il caricamento in caso di errore
+    loading.value = false;
     if (error.response) {
       errorMessage.value = error.response.data;
     } else {
-      errorMessage.value =
-        "Errore di rete o di configurazione: " + error.message;
+      errorMessage.value = "Errore di rete o di configurazione: " + error.message;
     }
   }
 };

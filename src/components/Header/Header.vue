@@ -133,6 +133,7 @@ const props = defineProps({
 
 function openDialog() {
   visible.value = true;
+  drawer.value = false;
 }
 
 function closeDialog() {
