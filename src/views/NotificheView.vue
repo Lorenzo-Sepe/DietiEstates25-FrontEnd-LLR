@@ -1,6 +1,6 @@
 <template>
-  <Dialog v-model:visible="loadingOperazione" modal header="OPERAZIONE IN CORSO" :style="{ width: 'auto' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+  <Dialog v-model:visible="loadingOperazione" :closable="false" header="OPERAZIONE IN CORSO" 
+    :style="{ width: 'auto' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <div class="card flex justify-center">
       <ProgressSpinner />
     </div>
