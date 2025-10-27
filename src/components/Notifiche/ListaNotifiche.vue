@@ -3,12 +3,11 @@
     <Tag severity="secondary" class="font-bold">{{ route.query.nome }}</Tag>
     <div class="border-t-2 border-black w-full mx-auto my-2"></div>
   </div>
-  <div
-    v-for="notifica in notifiche"
-    class="w-full border-2 border-black rounded-lg p-4 hover:bg-green-400! cursor-pointer"
-    @click="emit('visualizzaNotifica', notifica)"
-  >
-    <label class="font-medium">{{ notifica.oggetto }}</label>
+  <div v-for="notifica in notifiche"
+    class="w-full border-2 border-black rounded-lg p-4 hover:bg-green-400! text-left cursor-pointer"
+    @click="emit('visualizzaNotifica', notifica)">
+    <label v-if="!notifica.letta" class="font-medium">{{ notifica.oggetto }}</label>
+    <label v-else class="text-gray-400 font-medium">{{ notifica.oggetto }}</label>
   </div>
 </template>
 
