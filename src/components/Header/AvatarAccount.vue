@@ -1,101 +1,45 @@
 <template>
-  <div class="profile-avatar">
+  <div
+    class="profile-avatar group flex items-center gap-3 p-2 rounded-lg cursor-pointer transition hover:bg-gray-100"
+    @click="$emit('avatarClick')"
+  >
     <Avatar
-      @click="$emit('avatarClick')"
       :image="avatarUrl"
       :label="initials"
       shape="circle"
       size="48"
-      class="avatar cursor-pointer"
+      class="avatar transition-transform group-hover:scale-105"
     />
+
     <div v-if="!props.onlyAvatar" class="info">
-      <div class="nome-visualizzato">{{ nomeVisualizzato }}</div>
-      <div v-if="nomeAzienda" class="nome-azienda">{{ nomeAzienda }}</div>
+      <div class="nome-visualizzato font-medium text-gray-900 leading-tight">
+        {{ nomeVisualizzato }}
+      </div>
+      <div v-if="nomeAzienda" class="nome-azienda text-sm text-gray-600">
+        {{ nomeAzienda }}
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, defineProps } from "vue";
-import { Avatar } from "primevue";
-
+import Avatar from "primevue/avatar";
 const props = defineProps({
-  avatarUrl: {
-    type: String,
-    default: "https://placehold.co/400x400/4B00B4/FFFFFF?text=P",
-  },
-  nomeVisualizzato: {
-    type: String,
-    required: true,
-    default: "Nome Visualizzato",
-  },
-  nomeAzienda: {
-    type: String,
-    default: "",
-  },
-  onlyAvatar: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-const initials = computed(() => {
-  if (props.avatarUrl) return "";
-  const names = props.nomeVisualizzato.split(" ");
-  if (names.length === 1) {
-    return names[0].charAt(0).toUpperCase();
-  } else {
-    return names[0].charAt(0).toUpperCase() + names[1].charAt(0).toUpperCase();
-  }
+  avatarUrl: String,
+  initials: String,
+  nomeVisualizzato: String,
+  nomeAzienda: String,
+  onlyAvatar: Boolean,
 });
 </script>
 
 <style scoped>
 .profile-avatar {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  user-select: none;
 }
 
-.avatar {
-  flex-shrink: 0;
-}
-
-.info {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.nome-visualizzato {
-  font-weight: 600;
-  font-size: 1rem;
-  color: #333;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.nome-azienda {
-  font-size: 0.85rem;
-  color: #666;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  margin-top: 2px;
-}
-
-/* Mobile responsiveness */
-@media (max-width: 600px) {
-  .profile-avatar {
-    gap: 0.5rem;
-  }
-  .nome-visualizzato {
-    font-size: 0.9rem;
-  }
-  .nome-azienda {
-    font-size: 0.75rem;
-  }
+/* Effetto click leggero */
+.profile-avatar:active {
+  transform: scale(0.98);
 }
 </style>
