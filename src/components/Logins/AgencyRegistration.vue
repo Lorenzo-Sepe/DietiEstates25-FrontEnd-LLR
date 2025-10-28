@@ -1,116 +1,71 @@
 <template>
+
+  <!------------------------------------- DIALOG ------------------------------------------------------------>
+
+  <Dialog v-model:visible="loadingOperazione" :closable="false" header="OPERAZIONE IN CORSO" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <div class="card flex justify-center">
+      <ProgressSpinner />
+    </div>
+  </Dialog>
+
+  <Dialog v-model:visible="okAllert" :closable="false" header="CONFERMA OPERAZIONE" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <p class="m-0">Operazione conclusa con successo. Ti è stata inviata un email con le credenziali di accesso</p>
+    <Button severity="contrast" label="OK" @click="goHome" />
+  </Dialog>
+
+  <Dialog v-model:visible="erroreAllert" header="ERRORE" @close="erroreAllert = false" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <p class="m-0">Errore di rete, riprovare più tardi.</p>
+    <Button label="OK" @click="erroreAllert = false" severity="contrast" />
+  </Dialog>
+
+  <!-- --------------------------------------------------------------------------------------------------- -->
+
   <Fluid class="card p-4 min-w-[70vw]">
     <h2 class="text-center">Creazione Agenzia</h2>
-    <Form
-      v-slot="$form"
-      :initialValues="initialValues"
-      :resolver="resolver"
-      @submit="handleRegister"
-      class="flex flex-col gap-4"
-    >
+    <Form v-slot="$form" :initialValues="initialValues" :resolver="resolver" @submit="handleRegister"
+      class="flex flex-col gap-4">
       <Fieldset legend="Informazioni Agenzia">
         <div class="gap-3">
-          <InputText
-            fluid
-            v-model="initialValues.nomeAgenzia"
-            name="nomeAgenzia"
-            placeholder="Nome Agenzia"
-            :class="{ 'p-invalid': $form.nomeAgenzia?.invalid }"
-          />
-          <Message
-            v-if="$form.nomeAgenzia?.invalid"
-            severity="error"
-            size="small"
-            >{{ $form.nomeAgenzia.error?.message }}</Message
-          >
+          <InputText fluid v-model="initialValues.nomeAgenzia" name="nomeAgenzia" placeholder="Nome Agenzia"
+            :class="{ 'p-invalid': $form.nomeAgenzia?.invalid }" />
+          <Message v-if="$form.nomeAgenzia?.invalid" severity="error" size="small">{{ $form.nomeAgenzia.error?.message
+          }}</Message>
 
-          <InputText
-            fluid
-            v-model="initialValues.ragioneSociale"
-            name="ragioneSociale"
-            placeholder="Ragione Sociale"
-            :class="{ 'p-invalid': $form.ragioneSociale?.invalid }"
-          />
-          <Message
-            v-if="$form.ragioneSociale?.invalid"
-            severity="error"
-            size="small"
-            >{{ $form.ragioneSociale.error?.message }}</Message
-          >
+          <InputText fluid v-model="initialValues.ragioneSociale" name="ragioneSociale" placeholder="Ragione Sociale"
+            :class="{ 'p-invalid': $form.ragioneSociale?.invalid }" />
+          <Message v-if="$form.ragioneSociale?.invalid" severity="error" size="small">{{
+            $form.ragioneSociale.error?.message }}</Message>
 
-          <inputMask
-            mask="9999999 999 9"
-            fluid
-            v-model="initialValues.partitaIva"
-            name="partitaIva"
-            placeholder="Partita Iva"
-            :class="{ 'p-invalid': $form.partitaIva?.invalid }"
-          />
-          <Message
-            v-if="$form.partitaIva?.invalid"
-            severity="error"
-            size="small"
-            >{{ $form.partitaIva.error?.message }}</Message
-          >
+          <inputMask mask="9999999 999 9" fluid v-model="initialValues.partitaIva" name="partitaIva"
+            placeholder="Partita Iva" :class="{ 'p-invalid': $form.partitaIva?.invalid }" />
+          <Message v-if="$form.partitaIva?.invalid" severity="error" size="small">{{ $form.partitaIva.error?.message }}
+          </Message>
 
-          <InputText
-            fluid
-            v-model="initialValues.dominio"
-            name="dominio"
-            placeholder="Dominio della casella di posta"
-            :class="{ 'p-invalid': $form.dominio?.invalid }"
-          />
-          <Message
-            v-if="$form.dominio?.invalid"
-            severity="error"
-            size="small"
-            >{{ $form.dominio.error?.message }}</Message
-          >
+          <InputText fluid v-model="initialValues.dominio" name="dominio" placeholder="Dominio della casella di posta"
+            :class="{ 'p-invalid': $form.dominio?.invalid }" />
+          <Message v-if="$form.dominio?.invalid" severity="error" size="small">{{ $form.dominio.error?.message }}
+          </Message>
         </div>
       </Fieldset>
 
       <Fieldset legend="Informazioni Fondatore" class="gap-3">
-        <InputText
-          fluid
-          v-model="initialValues.nomeFondatore"
-          name="nomeFondatore"
-          placeholder="Nome Fondatore"
-          :class="{ 'p-invalid': $form.nomeFondatore?.invalid }"
-        />
-        <Message
-          v-if="$form.nomeFondatore?.invalid"
-          severity="error"
-          size="small"
-          >{{ $form.nomeFondatore.error?.message }}</Message
-        >
+        <InputText fluid v-model="initialValues.nomeFondatore" name="nomeFondatore" placeholder="Nome Fondatore"
+          :class="{ 'p-invalid': $form.nomeFondatore?.invalid }" />
+        <Message v-if="$form.nomeFondatore?.invalid" severity="error" size="small">{{ $form.nomeFondatore.error?.message
+        }}</Message>
 
-        <InputText
-          fluid
-          v-model="initialValues.cognomeFondatore"
-          name="cognomeFondatore"
-          placeholder="Cognome Fondatore"
-          :class="{ 'p-invalid': $form.cognomeFondatore?.invalid }"
-        />
-        <Message
-          v-if="$form.cognomeFondatore?.invalid"
-          severity="error"
-          size="small"
-          >{{ $form.cognomeFondatore.error?.message }}</Message
-        >
+        <InputText fluid v-model="initialValues.cognomeFondatore" name="cognomeFondatore"
+          placeholder="Cognome Fondatore" :class="{ 'p-invalid': $form.cognomeFondatore?.invalid }" />
+        <Message v-if="$form.cognomeFondatore?.invalid" severity="error" size="small">{{
+          $form.cognomeFondatore.error?.message }}</Message>
 
-        <InputText
-          fluid
-          v-model="initialValues.emailFondatore"
-          name="emailFondatore"
-          placeholder="Email Fondatore"
-          :class="{ 'p-invalid': $form.emailFondatore?.invalid }"
-        />
-        <Message
-          v-if="$form.emailFondatore?.invalid"
-          severity="error"
-          size="small"
-          >{{ $form.emailFondatore.error?.message }}</Message
-        >
+        <InputText fluid v-model="initialValues.emailFondatore" name="emailFondatore" placeholder="Email Fondatore"
+          :class="{ 'p-invalid': $form.emailFondatore?.invalid }" />
+        <Message v-if="$form.emailFondatore?.invalid" severity="error" size="small">{{
+          $form.emailFondatore.error?.message }}</Message>
       </Fieldset>
 
       <Message v-if="registrationError" severity="error" size="small">{{
@@ -123,19 +78,25 @@
       <Button type="submit" label="Registrati" :disabled="$form.$invalid" />
     </Form>
   </Fluid>
+
+
 </template>
 
 <script setup>
 import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
+
+import AgenziaImmobiliareService from "../../services/AgenziaImmobiliareService";
+
 import { Form } from "@primevue/forms";
 import InputText from "primevue/inputtext";
 import inputMask from "primevue/inputmask";
 import Fluid from "primevue/fluid";
 import Button from "primevue/button";
 import Message from "primevue/message";
-import { useRouter } from "vue-router";
-import AgenziaImmobiliareService from "../../services/AgenziaImmobiliareService";
 import Fieldset from "primevue/fieldset";
+import Dialog from "primevue/dialog";
+import ProgressSpinner from "primevue/progressspinner";
 
 const router = useRouter();
 
@@ -151,6 +112,10 @@ const initialValues = reactive({
 
 const AgenziaImmobiliareRequest = ref(initialValues);
 const registrationError = ref("");
+
+const loadingOperazione = ref(false);
+const okAllert = ref(false);
+const erroreAllert = ref(false);
 
 const resolver = ({ values }) => {
   const errors = {};
@@ -234,20 +199,35 @@ const resolver = ({ values }) => {
 };
 
 const handleRegister = async () => {
+
   try {
-    AgenziaImmobiliareRequest.value.partitaIva =
-      AgenziaImmobiliareRequest.value.partitaIva.replace(/\s/g, "");
-    console.log("Richiesta di registrazione:", AgenziaImmobiliareRequest.value);
-    const response = await AgenziaImmobiliareService.registerAgency(
-      AgenziaImmobiliareRequest.value,
-    );
-    console.log("Registrazione avvenuta con successo:", response);
-    router.push({ name: "confirmRegistration" });
+
+    loadingOperazione.value = true;
+
+    AgenziaImmobiliareRequest.value.partitaIva = AgenziaImmobiliareRequest.value.partitaIva.replace(/\s/g, "");
+
+    await AgenziaImmobiliareService.registerAgency(AgenziaImmobiliareRequest.value);
+
   } catch (error) {
-    registrationError.value = error;
-    console.error("Registrazione fallita:", error);
+
+    erroreAllert.value = true;
+
+    return;
   }
+
+    loadingOperazione.value = false;
+
+    okAllert.value = true;
+
 };
+
+const goHome = () => {
+
+  okAllert.value = false;
+
+  router.push({ name: "home" });
+}
+
 </script>
 
 <style>

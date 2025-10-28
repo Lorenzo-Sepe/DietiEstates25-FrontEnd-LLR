@@ -1,8 +1,8 @@
 <template>
   <!-------------  SEZIONE DIALOG PER GLI ALLERT ------------------------------------------------>
 
-  <Dialog v-model:visible="loadingOperazione" :closable="false" header="OPERAZIONE IN CORSO"
-    :style="{ width: 'auto' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+  <Dialog v-model:visible="loadingOperazione" :closable="false" header="OPERAZIONE IN CORSO" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <div class="card flex justify-center">
       <ProgressSpinner />
     </div>
@@ -22,7 +22,7 @@
 
   <Dialog v-model:visible="registrationVisible" @close="registrationVisible = false" header="REGISTRA NUOVO DIPENDENTE"
     :style="{ width: 'auto' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-    <RegisterAgentDialog @close="registrationVisible = false" />
+    <RegisterAgentDialog @close="closeFormNuovoDipendente" />
   </Dialog>
 
   <!-------------------------------------------- ------------------------------------------------>
@@ -53,9 +53,9 @@
             <AccordionContent>
               <TabellaAnnunci class="w-full mb-2" :propAnnunci="annunci" :propLoading="loading"
                 :propNumeroAnnunci="totaleAnnunci" :propostaRequest="propostaRequest" :isAgente="isAgente"
-                :agente="employeeStore.dipendenti" @nuovaProposta="aggiungiPropostaManuale" @eliminaAnnuncio="eliminaAnnuncio"
-                @eliminaProposta="rifiutaProposta" @accettaProposta="accettaProposta" @controproposta="controproposta"
-                @onPage="getAnnunciByPagina" />
+                :agente="employeeStore.dipendenti" @nuovaProposta="aggiungiPropostaManuale"
+                @eliminaAnnuncio="eliminaAnnuncio" @eliminaProposta="rifiutaProposta" @accettaProposta="accettaProposta"
+                @controproposta="controproposta" @onPage="getAnnunciByPagina" />
             </AccordionContent>
           </AccordionPanel>
         </Accordion>
@@ -65,8 +65,8 @@
         <TabellaAnnunci class="w-full mb-2" :propAnnunci="annunci" :propLoading="loading"
           :propNumeroAnnunci="totaleAnnunci" :propostaRequest="propostaRequest" :isAgente="isAgente"
           :agente="employeeStore.dipendenti" @nuovaProposta="aggiungiPropostaManuale" @eliminaProposta="rifiutaProposta"
-          @accettaProposta="accettaProposta" @controproposta="controproposta" 
-          @onPage="getAnnunciByPagina" @eliminaAnnuncio="eliminaAnnuncio" />
+          @accettaProposta="accettaProposta" @controproposta="controproposta" @onPage="getAnnunciByPagina"
+          @eliminaAnnuncio="eliminaAnnuncio" />
       </div>
 
     </div>
@@ -113,7 +113,13 @@ const filtroAnnunci = reactive(new FiltroAnnuncioRequest());
 const propostaRequest = reactive(new PropostaRequest());
 
 onMounted(async () => {
-  try {
+ 
+  buildStaffView();
+});
+
+const buildStaffView = async () => {
+
+   try {
 
     await employeeStore.aggiorna();
 
@@ -159,7 +165,7 @@ onMounted(async () => {
       loadingListaAgenti.value = false;
     }
   }
-});
+};
 
 const filterAgenti = (dipendenti) => {
   return dipendenti
@@ -380,7 +386,7 @@ const eliminaAnnuncio = async (idAnnuncio) => {
     return;
   }
 
-  try{
+  try {
 
     loading.value = true;
 
@@ -390,7 +396,7 @@ const eliminaAnnuncio = async (idAnnuncio) => {
 
     await getAnnunci();
 
-  }catch(error){
+  } catch (error) {
 
     console.log("errore durante l'aggiornamento della lista annunci dopo l'eliminazione: ", error);
 
@@ -399,5 +405,17 @@ const eliminaAnnuncio = async (idAnnuncio) => {
   loading.value = false;
 
 };
+
+const closeFormNuovoDipendente = async() => {
+
+  loadingListaAgenti.value = true;
+
+  registrationVisible.value = false;
+
+  await buildStaffView();
+
+  loadingListaAgenti.value = false;
+
+}
 
 </script>
