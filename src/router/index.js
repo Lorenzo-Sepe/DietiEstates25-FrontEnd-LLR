@@ -3,17 +3,6 @@ import { useStoreUtente } from "../stores/UserStore";
 import { useEmployeeStore } from "../stores/EmployeeStore";
 import { useUIStore } from "../stores/UIStore";
 
-// Simulazione di un sistema di autenticazione
-const isAuthenticatedMember = () => {
-  return true; // Esempio semplice
-};
-const isAuthenticatedEmployee = () => {
-  return true; // Esempio semplice
-};
-//TODO ELIMARE ED USARE QUELLA PIU SPECIFICA
-const isAuthenticated = () => {
-  return true; // Esempio semplice
-};
 
 // Definisci le tue rotte
 const routes = [
