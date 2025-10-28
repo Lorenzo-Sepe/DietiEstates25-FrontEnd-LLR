@@ -1,106 +1,132 @@
 <template>
   <div>
-    <h4 class="font-bold">Area Agenzie</h4>
-    <div class="text-sm">
+    <h4 class="font-bold">
+      {{ props.isInPortale ? 'Area Agenzie' : 'Agenzia Immobiliare' }}
+    </h4>
+
+    <!-- Se siamo nel sito clienti -->
+    <template v-if="!props.isInPortale">
       <ul>
         <li>
           <Button
-            @click="navigatePortale"
+            icon="pi pi-sign-in"
+            label="Accedi al Portale Agenzie"
             class="mb-2"
-            label="Area Dipendenti"
-            severity="contrast"
-            raised
+            style="width: 100%"
+            @click="navigateToPortale"
           />
-          <Dialog
-            v-model:visible="visibleAllert"
-            :style="{ width: '50vw' }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-            modal
-            header="Attenzione"
-          >
-            <AllertDialog
-              :message="'Token non valido'"
-              :isRegister="false"
-              :isLogin="true"
-              @close="closeDialog"
-              @goToLogin="goToLogin"
-            />
-          </Dialog>
-        </li>
-
-        <li>
-          <Button
-            class="mb-2"
-            label="Accedi come agente immobiliare"
-            severity="contrast"
-            @click="openDialog"
-            raised
-          />
-          <Dialog
-            v-model:visible="visible"
-            :style="{ width: '50vw' }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-            modal
-            header="Login"
-          >
-            <LoginDialog @close="closeDialog" :dipendente="true"></LoginDialog>
-          </Dialog>
         </li>
         <li>
           <Button
+            icon="pi pi-building"
+            label="Registra la tua Agenzia Immobiliare"
+            style="width: 100%"
             class="mb-2"
-            label="Crea la tua agenzia Immobiliare"
-            severity="contrast"
-            @click="goToRegisterAgency"
-            raised
+            severity="secondary"
+            @click="handleRegistraAgenzia"
           />
         </li>
       </ul>
-    </div>
+    </template>
+
+    <!-- Se siamo nel portale agenzie -->
+    <template v-else>
+      <ul>
+        <li>
+          <Button
+            icon="pi pi-home"
+            label="Visita il sito clienti"
+            class="mb-2"
+            style="width: 100%"
+            @click="goToHomeClienti"
+          />
+        </li>
+        <li>
+          <Button
+            icon="pi pi-user-plus"
+            label="Registrati per cercare immobili"
+            class="mb-2"
+            style="width: 100%"
+            severity="secondary"
+            @click="goToRegisterCliente"
+          />
+        </li>
+      </ul>
+    </template>
+
+    <!-- Dialog di allerta -->
+    <Dialog
+      v-model:visible="visibleAllert"
+      :style="{ width: '40vw' }"
+      :breakpoints="{ '1199px': '70vw', '575px': '90vw' }"
+      modal
+      header="Attenzione"
+    >
+      <AllertDialog
+        :message="'Token non valido'"
+        :isRegister="false"
+        :isLogin="true"
+        @close="closeDialog"
+        @goToLogin="goToLogin"
+      />
+    </Dialog>
+
+    <!-- Dialog di login -->
+    <Dialog
+      v-model:visible="visibleLogin"
+      :style="{ width: '40vw' }"
+      :breakpoints="{ '1199px': '70vw', '575px': '90vw' }"
+      modal
+      header="Login"
+    >
+      <LoginDialog @close="closeDialog" :dipendente="true" />
+    </Dialog>
   </div>
 </template>
 
 <script setup>
-import AllertDialog from "../Dialogs/AllertMessageDialog.vue";
-import Button from "primevue/button";
 import { ref } from "vue";
+import Button from "primevue/button";
 import Dialog from "primevue/dialog";
+import AllertDialog from "../Dialogs/AllertMessageDialog.vue";
 import LoginDialog from "../Dialogs/LoginDialog.vue";
 import { useRouter } from "vue-router";
-import { isTokenValid } from "../../services/UserService";
 import { useEmployeeStore } from "../../stores/EmployeeStore";
+import { isTokenValid } from "../../services/UserService";
 
-const employeeStore = useEmployeeStore();
+const props = defineProps({
+  isInPortale: Boolean,
+});
+
 const router = useRouter();
-const visible = ref(false);
+const employeeStore = useEmployeeStore();
 const visibleAllert = ref(false);
-
-function openDialog() {
-  visible.value = true;
-}
+const visibleLogin = ref(false);
 
 function closeDialog() {
-  visible.value = false;
+  visibleAllert.value = false;
+  visibleLogin.value = false;
+}
+
+async function navigateToPortale() {
+    router.push({ name: "PortaleAgenzia" });
+  
 }
 
 function goToLogin() {
   visibleAllert.value = false;
-  visible.value = true;
+  visibleLogin.value = true;
 }
 
-function goToRegisterAgency() {
+function handleRegistraAgenzia() {
   router.push({ name: "registerAgency" });
 }
 
-async function navigatePortale() {
-  // Naviga alla pagina desiderata
-  const valid = await isTokenValid(employeeStore.employee.email);
-  console.log("validità token", valid);
-  if (valid) {
-    router.push({ name: "pannellStaff" });
-  } else {
-    // Mostra un messaggio di errore o gestisci il caso in cui il token non è valido
-    visibleAllert.value = true;
-  }
+function goToHomeClienti() {
+  router.push("/");
+}
+
+function goToRegisterCliente() {
+  router.push({ name: "register" });
 }
 </script>

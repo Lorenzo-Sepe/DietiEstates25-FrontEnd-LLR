@@ -142,8 +142,10 @@ const onFormSubmit = async ({ valid }) => {
     // Ritarda il reindirizzamento di 2.5 secondi
     setTimeout(() => {
       if (response.ruolo !== "MEMBER") {
-        if (uiStore.loginRole === "employee" && uiStore.fromPath) {
-          router.push(uiStore.fromPath);
+        //CONTROLO
+        if (uiStore.loginRole === "employee" && uiStore.toPath) {
+          console.log("redirect to:", uiStore.toPath);
+          router.push(uiStore.toPath);
         } else {
           router.push({ path: "/PortaleAgenzia/pannelloStaff" });
         }
