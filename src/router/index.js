@@ -56,11 +56,7 @@ const routes = [
     name: "PortaleAgenzia",
     component: () => import("../views/PortaleAgenziaView.vue"),
   },
-  {
-    path: "/PortaleAgenziaInfo",
-    name: "PortaleAgenziaInfo",
-    component: () => import("../views/PortaleAgenziaInfo.vue"), // Pagina informativa sul portale
-  },
+  
   {
     path: "/PortaleAgenzia/miei-annunci",
     name: "MieiAnnunci",

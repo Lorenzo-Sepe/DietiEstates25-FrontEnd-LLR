@@ -15,16 +15,16 @@
       </p>
 
       <div class="mt-8">
-        <Tabs value="0">
+        <Tabs v-model:value="activeTab">
           <TabList class="flex justify-center border-b border-gray-200">
             <Tab
-              value="0"
+              :value="0"
               class="px-6 py-2 text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200"
             >
               Login
             </Tab>
             <Tab
-              value="1"
+              :value="1"
               class="px-6 py-2 text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200"
             >
               Registra la tua agenzia
@@ -32,10 +32,10 @@
           </TabList>
 
           <TabPanels class="mt-6">
-            <TabPanel value="0">
+            <TabPanel :value="0">
               <Login />
             </TabPanel>
-            <TabPanel value="1">
+            <TabPanel :value="1">
               <AgencyRegistration />
             </TabPanel>
           </TabPanels>
@@ -53,18 +53,30 @@ import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
 import AgencyRegistration from "../components/Logins/AgencyRegistration.vue";
 import Login from "../components/Logins/Login.vue";
- import { useEmployeeStore } from "../stores/EmployeeStore";
-  import { onMounted } from "vue";
-import { useRouter } from "vue-router"
-  const router = useRouter();
-  const storeEmployee = useEmployeeStore();
+import { useEmployeeStore } from "../stores/EmployeeStore";
+import { onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 
-  onMounted(async () => {
-    console.log("Verifica autenticazione dipendente in PortaleAgenziaView");
-    console.log("isAutenticato:", storeEmployee.isAutenticato);
-    if ( storeEmployee.isAutenticato) {
-      router.push({ name: "MieiAnnunci" });
-    }
-  });
+const props = defineProps({
+  // accetta numero o stringa, default prima tab (0)
+  initialTab: { type: [Number, String], default: 0 }
+});
 
+const activeTab = ref(props.initialTab);
+
+// se la prop cambia dall'esterno, aggiorna la variabile attiva
+watch(() => props.initialTab, (val) => {
+  activeTab.value = val;
+});
+
+const router = useRouter();
+const storeEmployee = useEmployeeStore();
+
+onMounted(async () => {
+  console.log("Verifica autenticazione dipendente in PortaleAgenziaView");
+  console.log("isAutenticato:", storeEmployee.isAutenticato);
+  if (storeEmployee.isAutenticato) {
+    router.push({ name: "MieiAnnunci" });
+  }
+});
 </script>
