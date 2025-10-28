@@ -41,12 +41,12 @@
         :disabled="!annuncio.immobile.immagini.length"
       />
       <Message
-        v-if="dimensioneTotaleMB > 1"
+        v-if="dimensioneTotaleMB > 10"
         severity="error"
         class="spazio-messaggio"
       >
         Utilizzo spazio immagini: {{ dimensioneTotaleMB }} MB / 10 MB <br />
-        Hai superato il limite massimo di 1 MB. Elimina alcune immagini per
+        Hai superato il limite massimo di 10 MB. Elimina alcune immagini per
         continuare.
       </Message>
       <Message v-else severity="info" class="spazio-messaggio">
@@ -158,7 +158,7 @@ const errori = reactive({
   },
   dimensioneTotale: {
     invalid: false,
-    messaggio: "Le immagini caricate superano i 50 MB totali",
+    messaggio: "Le immagini caricate superano i 10 MB totali",
   },
   descrizioneLunga: {
     invalid: false,
