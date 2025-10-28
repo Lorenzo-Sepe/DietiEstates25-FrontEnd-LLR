@@ -13,7 +13,7 @@
       </p>
     </div>
 
-    <Accordion value="1" class="mt-5 w-full lg:max-w-[70%]">
+    <Accordion value="1" class="mt-5 w-full">
       <AccordionPanel value="1" fluid>
         <AccordionHeader>Registra la tua agenzia ora</AccordionHeader>
         <AccordionContent>

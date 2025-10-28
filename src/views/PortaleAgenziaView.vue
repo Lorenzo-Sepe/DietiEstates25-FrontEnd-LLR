@@ -1,33 +1,70 @@
 <template>
-  <div class="min-h-screen bg-gray-100">
-    <header class="bg-blue-600 text-white p-4">
-      <h1 class="text-3xl font-bold">
-        Benvenuti nel Portale della Agenzia Immobiliare
+  <div class="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4 py-10">
+    <div class="max-w-2xl w-full bg-white rounded-2xl shadow-lg p-8">
+      <h1 class="text-3xl font-bold text-center text-gray-800">
+        Benvenuto nel nostro Portale Immobiliare
       </h1>
-    </header>
-    <main class="p-4">
-      <section class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-2xl font-semibold mb-4">Trova la tua casa ideale</h2>
-        <p class="mb-4">
-          Esplora le nostre offerte immobiliari e trova la casa dei tuoi sogni.
-        </p>
-        <button
-          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Inizia la ricerca
-        </button>
-      </section>
-    </main>
-    <footer class="bg-gray-800 text-white p-4 mt-4">
-      <p class="text-center">
-        &copy; 2025 Agenzia Immobiliare. Tutti i diritti riservati.
+
+      <p class="mt-4 text-gray-600 text-center leading-relaxed">
+        Benvenuto sul nostro portale, dedicato alle agenzie immobiliari e ai
+        loro agenti. Qui puoi pubblicare i tuoi annunci e raggiungere un sacco
+        di potenziali acquirenti. Gli utenti possono sfogliare gli annunci e
+        inviare una proposta che include l’offerta economica e i contatti per
+        essere ricontattati. In questo modo, comprare o vendere diventa davvero
+        semplice e veloce.
       </p>
-    </footer>
+
+      <div class="mt-8">
+        <Tabs value="0">
+          <TabList class="flex justify-center border-b border-gray-200">
+            <Tab
+              value="0"
+              class="px-6 py-2 text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200"
+            >
+              Login
+            </Tab>
+            <Tab
+              value="1"
+              class="px-6 py-2 text-gray-700 font-medium hover:text-blue-600 transition-colors duration-200"
+            >
+              Registra la tua agenzia
+            </Tab>
+          </TabList>
+
+          <TabPanels class="mt-6">
+            <TabPanel value="0">
+              <Login />
+            </TabPanel>
+            <TabPanel value="1">
+              <AgencyRegistration />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </div>
+    </div>
   </div>
 </template>
 
-<script></script>
+<script setup>
+import Tabs from "primevue/tabs";
+import TabList from "primevue/tablist";
+import Tab from "primevue/tab";
+import TabPanels from "primevue/tabpanels";
+import TabPanel from "primevue/tabpanel";
+import AgencyRegistration from "../components/Logins/AgencyRegistration.vue";
+import Login from "../components/Logins/Login.vue";
+ import { useEmployeeStore } from "../stores/EmployeeStore";
+  import { onMounted } from "vue";
+import { useRouter } from "vue-router"
+  const router = useRouter();
+  const storeEmployee = useEmployeeStore();
 
-<style scoped>
-/* Add any additional styles here */
-</style>
+  onMounted(async () => {
+    console.log("Verifica autenticazione dipendente in PortaleAgenziaView");
+    console.log("isAutenticato:", storeEmployee.isAutenticato);
+    if ( storeEmployee.isAutenticato) {
+      router.push({ name: "MieiAnnunci" });
+    }
+  });
+
+</script>

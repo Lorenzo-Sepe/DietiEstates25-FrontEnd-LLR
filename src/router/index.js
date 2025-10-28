@@ -66,7 +66,6 @@ const routes = [
     path: "/PortaleAgenzia",
     name: "PortaleAgenzia",
     component: () => import("../views/PortaleAgenziaView.vue"),
-    meta: { requiresAuth: true, role: "employee", redirectTo: "MieiAnnunci" },
   },
   {
     path: "/PortaleAgenziaInfo",

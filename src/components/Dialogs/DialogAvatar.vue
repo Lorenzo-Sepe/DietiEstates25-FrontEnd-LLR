@@ -44,7 +44,7 @@ import PopUpAddContact from "../Dialogs/PopUpAddContact.vue";
 import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import { Message } from "primevue";
-
+import useUIStore from "../../stores/UIStore";
 import { useStoreUtente } from "../../stores/UserStore";
 import { useEmployeeStore } from "../../stores/EmployeeStore";
 
@@ -95,8 +95,12 @@ async function logout() {
   erroreLogout.value = false;
   try {
     if (props.isInPortale) {
+      const UIStore = useUIStore();    
+      UIStore.showLoginModal=false;
+      router.push("/PortaleAgenziainfo");
+      
+      UIStore.showLoginModal=false;
       await useEmployeeStore().logout();
-      router.push("/PortaleAgenzia");
     } else {
       await storeUtente.logout();
       router.push("/");

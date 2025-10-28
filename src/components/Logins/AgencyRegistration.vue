@@ -23,7 +23,7 @@
 
   <!-- --------------------------------------------------------------------------------------------------- -->
 
-  <Fluid class="card p-4 min-w-[70vw]">
+  <Fluid class=" p-4 ">
     <h2 class="text-center">Creazione Agenzia</h2>
     <Form v-slot="$form" :initialValues="initialValues" :resolver="resolver" @submit="handleRegister"
       class="flex flex-col gap-4">
