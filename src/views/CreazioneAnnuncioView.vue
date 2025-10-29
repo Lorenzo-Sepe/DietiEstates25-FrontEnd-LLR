@@ -1,12 +1,19 @@
 <script setup>
 import { reactive, ref, watch } from "vue";
+import { useRouter } from 'vue-router'
+
 import Stepper from "primevue/stepper";
 import StepList from "primevue/steplist";
 import StepPanels from "primevue/steppanels";
 import Step from "primevue/step";
 import StepPanel from "primevue/steppanel";
 import Divider from "primevue/divider";
+import Dialog from 'primevue/dialog';
+import ProgressSpinner from 'primevue/progressspinner';
+import Button from 'primevue/button';
+
 import { CreaAnnuncio } from "../services/CreazioneModificaAnnunciService";
+
 import StepDatiIniziali from "../components/CreaAnnuncio/StepDatiGenerali.vue";
 import StepDatiPrincipali from "../components/CreaAnnuncio/StepDatiPrincipali.vue";
 import StepIndirizzo from "../components/CreaAnnuncio/StepIndirizzo.vue";
@@ -14,9 +21,8 @@ import StepImmagini from "../components/CreaAnnuncio/StepCaricamentoImmagini.vue
 import { useStoreAnnuncio } from "../stores/CreazioneAnnuncioStore";
 import Anteprima from "../components/CreaAnnuncio/Anteprima.vue";
 import StepCaratteristiche from "../components/CreaAnnuncio/StepCaratteristiche.vue";
-import Dialog from 'primevue/dialog';
-import ProgressSpinner from 'primevue/progressspinner';
-import Button from 'primevue/button';
+
+const router = useRouter()
 
 const storeAnnuncio = useStoreAnnuncio();
 
@@ -29,6 +35,8 @@ const dialogCaricamento = ref(false);
 const progressSpinner = ref(true);
 const isSuccess = ref(false);
 const isError = ref(false);
+
+const idAnnuncioCreato = ref(null);
 
 const vaiAvanti = () => {
   if (activeStep.value < 6) activeStep.value++;
@@ -75,7 +83,7 @@ const inviaAnnuncio = async () => {
 
   try {
 
-    const response = await CreaAnnuncio(annuncio);
+    idAnnuncioCreato.value = await CreaAnnuncio(annuncio);
 
   } catch (error) {
     console.error("Errore durante la creazione dell'annuncio:", error);
@@ -136,13 +144,13 @@ watch(activeStep, (newVal) => {
       <Button
         label="Torna al portale"
         icon="pi pi-arrow-left"
-        @click="dialogCaricamento = false; window.location.href='/PortaleAgenzia'"
+        @click="dialogCaricamento = false; router.push('/PortaleAgenzia')"
         class="flex-1 min-w-[160px] bg-gray-600 hover:bg-gray-700 text-white px-5 py-2 rounded-lg shadow text-nowrap"
       />
       <Button
         label="Visualizza annuncio"
         icon="pi pi-eye"
-        @click="dialogCaricamento = false; window.open(annuncio && annuncio.id ? `annuncio/${annuncio.id}` : '/', '_blank')"
+        @click="dialogCaricamento = false; router.push('/annuncio/' + idAnnuncioCreato);"
         class="flex-1 min-w-[160px] bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow text-nowrap"
       />
     </div>
