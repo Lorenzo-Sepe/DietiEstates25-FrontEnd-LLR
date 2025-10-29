@@ -32,7 +32,15 @@ function mappaAnnuncio(input) {
     id: 0, // L'ID sarà probabilmente generato dal database
     titolo: request.titolo,
     descrizione: request.descrizione,
-    agente: new Agente({}), // Non è presente in AnnuncioImmobiliareRequest, potrebbe essere aggiunto separatamente
+    agente: new Agente({
+      email: "emailagente@dominoagenzia.dieti.it",
+      username: "Username agente",
+      urlFotoProfilo: 'https://dummyimage.com/600x400/ff0004/fff.png&text=N',
+      nome: "Nome",
+      cognome: "Cognome",
+      contatti: [],
+      agenzia: "Agenzia Immobiliare",
+    }), // Non è presente in AnnuncioImmobiliareRequest, potrebbe essere aggiunto separatamente
     immobile: new Immobile({
       tipologiaImmobile: request.immobile.tipologiaImmobile,
       metriQuadri: request.immobile.metriQuadri,
@@ -79,26 +87,9 @@ const response = computed(() => mappaAnnuncio(props.annuncio));
     <DettagliAnnuncio :annuncio="response" />
     <StickyButtons>
       <div class="flex pt-6 justify-between">
-        <Button
-          label="Indietro"
-          severity="secondary"
-          icon="pi pi-arrow-left"
-          @click="$emit('indietro')"
-        />
-        <Button
-          v-if="!isModifica"
-          label="Invia Annuncio"
-          icon="pi pi-check"
-          @click="$emit('invia')"
-          class="p-mt-2"
-        />
-        <Button
-          v-else
-          label="Modifica annuncio"
-          icon="pi pi-check"
-          @click="$emit('invia')"
-          class="p-mt-2"
-        />
+        <Button label="Indietro" severity="secondary" icon="pi pi-arrow-left" @click="$emit('indietro')" />
+        <Button v-if="!isModifica" label="Invia Annuncio" icon="pi pi-check" @click="$emit('invia')" class="p-mt-2" />
+        <Button v-else label="Modifica annuncio" icon="pi pi-check" @click="$emit('invia')" class="p-mt-2" />
       </div>
     </StickyButtons>
   </div>
