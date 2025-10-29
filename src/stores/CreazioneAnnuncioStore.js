@@ -6,6 +6,21 @@ export const useStoreAnnuncio = defineStore("annuncio", {
     annuncio: new AnnuncioImmobiliareRequest(),
   }),
 
+    actions: {
+    // 🔹 Funzione per resettare i dati
+    resetAnnuncio() {
+      this.annuncio = new AnnuncioImmobiliareRequest();
+    },
+  },
+
+   getters: {
+    // 🔹 Verifica se l'annuncio è “vuoto”
+    isAnnuncioVuoto: (state) => {
+      const annuncioBase = new AnnuncioImmobiliareRequest();
+      return JSON.stringify(state.annuncio) === JSON.stringify(annuncioBase);
+    },
+  },
+
   persist: {
     enabled: true, // Abilita la persistenza
     strategies: [

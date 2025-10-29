@@ -1,12 +1,22 @@
 <script setup>
-import { reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
+import { useRouter } from 'vue-router'
+
 import Stepper from "primevue/stepper";
 import StepList from "primevue/steplist";
 import StepPanels from "primevue/steppanels";
 import Step from "primevue/step";
 import StepPanel from "primevue/steppanel";
 import Divider from "primevue/divider";
+import Dialog from 'primevue/dialog';
+import ProgressSpinner from 'primevue/progressspinner';
+import ProgressBar from 'primevue/progressbar';
+import Button from 'primevue/button';
+
 import { CreaAnnuncio } from "../services/CreazioneModificaAnnunciService";
+import { AnnuncioImmobiliareRequest } from "../dto/RequestAnnuncio";
+
+
 import StepDatiIniziali from "../components/CreaAnnuncio/StepDatiGenerali.vue";
 import StepDatiPrincipali from "../components/CreaAnnuncio/StepDatiPrincipali.vue";
 import StepIndirizzo from "../components/CreaAnnuncio/StepIndirizzo.vue";
@@ -14,21 +24,77 @@ import StepImmagini from "../components/CreaAnnuncio/StepCaricamentoImmagini.vue
 import { useStoreAnnuncio } from "../stores/CreazioneAnnuncioStore";
 import Anteprima from "../components/CreaAnnuncio/Anteprima.vue";
 import StepCaratteristiche from "../components/CreaAnnuncio/StepCaratteristiche.vue";
-import Dialog from 'primevue/dialog';
-import ProgressSpinner from 'primevue/progressspinner';
-import Button from 'primevue/button';
+
+const router = useRouter()
 
 const storeAnnuncio = useStoreAnnuncio();
 
 const annuncio = storeAnnuncio.annuncio;
+const loadingModel = ref(true);
+const modelVuoto = ref(new AnnuncioImmobiliareRequest());
+
 const activeStep = ref(1);
 
 const tentativoInvio = reactive({ valore: false });
 
 const dialogCaricamento = ref(false);
+const dialogAnnuncioSospeso = ref(false);
+const dialogCaricamentoDati = ref(false);
 const progressSpinner = ref(true);
 const isSuccess = ref(false);
 const isError = ref(false);
+
+const valoreCaricamento = ref(0);
+const interval = ref();
+
+const idAnnuncioCreato = ref(null);
+
+onMounted(() => {
+
+  if (!storeAnnuncio.isAnnuncioVuoto) {
+
+    dialogAnnuncioSospeso.value = true;
+    return
+
+  } 
+
+  loadingModel.value = false;
+})
+
+const gestisciAnnuncioSospeso = (isNuovo) => {
+
+  dialogAnnuncioSospeso.value = false;
+
+  if (isNuovo) {
+
+    storeAnnuncio.resetAnnuncio();
+
+    dialogAnnuncioSospeso.value = false;
+
+  } else {
+
+    dialogCaricamentoDati.value = true;
+
+    interval.value = setInterval(() => {
+
+      let newValue = valoreCaricamento.value + Math.floor(Math.random() * 50) + 1;
+
+      if (newValue >= 100) {
+        newValue = 100;
+        clearInterval(interval.value);
+        interval.value = null;
+        loadingModel.value = false;
+        dialogCaricamentoDati.value = false;
+        console.log("Annuncio caricatooo::::", annuncio);
+      }
+
+      valoreCaricamento.value = newValue;
+
+    }, 1000);
+
+  }
+
+}
 
 const vaiAvanti = () => {
   if (activeStep.value < 6) activeStep.value++;
@@ -75,7 +141,7 @@ const inviaAnnuncio = async () => {
 
   try {
 
-    const response = await CreaAnnuncio(annuncio);
+    idAnnuncioCreato.value = await CreaAnnuncio(annuncio);
 
   } catch (error) {
     console.error("Errore durante la creazione dell'annuncio:", error);
@@ -84,6 +150,7 @@ const inviaAnnuncio = async () => {
     return;
   }
 
+  storeAnnuncio.resetAnnuncio();
   progressSpinner.value = false;
   isSuccess.value = true;
 
@@ -103,76 +170,90 @@ watch(activeStep, (newVal) => {
 <template>
 
 
-  <!--------------------------------------------------------------------------------------------------------------------------->
+  <!----------------------------------------------------DIALOGs----------------------------------------------------->
 
-<Dialog
-  v-model:visible="dialogCaricamento"
-  modal
-  :closable="false"
-  class="bg-white border border-gray-200 rounded-2xl shadow-lg animate-fade-in w-[420px] max-w-[90vw] p-6 overflow-hidden"
->
-  <!-- Stato: Caricamento -->
-  <div v-if="progressSpinner" class="flex flex-col items-center gap-4 text-center">
-    <ProgressSpinner />
-    <div class="text-gray-700">
-      <div class="text-lg font-semibold">Invio annuncio in corso...</div>
-      <div class="text-sm text-gray-600 mt-1">
-        Stiamo salvando i dati e caricando le immagini.<br />
-        Potrebbe richiedere qualche secondo, non chiudere questa finestra.
+  <Dialog v-model:visible="dialogCaricamento" modal :closable="false"
+    class="bg-white border border-gray-200 rounded-2xl shadow-lg animate-fade-in w-[420px] max-w-[90vw] p-6 overflow-hidden">
+    <!-- Stato: Caricamento -->
+    <div v-if="progressSpinner" class="flex flex-col items-center gap-4 text-center">
+      <ProgressSpinner />
+      <div class="text-gray-700">
+        <div class="text-lg font-semibold">Invio annuncio in corso...</div>
+        <div class="text-sm text-gray-600 mt-1">
+          Stiamo salvando i dati e caricando le immagini.<br />
+          Potrebbe richiedere qualche secondo, non chiudere questa finestra.
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Stato: Successo -->
-  <div v-if="isSuccess" class="flex flex-col items-center gap-4 text-center">
-    <div class="flex items-center gap-2 text-green-700 text-lg font-semibold">
-      <i class="pi pi-check-circle text-3xl"></i>
-      <span>Annuncio salvato con successo!</span>
+    <!-- Stato: Successo -->
+    <div v-if="isSuccess" class="flex flex-col items-center gap-4 text-center">
+      <div class="flex items-center gap-2 text-green-700 text-lg font-semibold">
+        <i class="pi pi-check-circle text-3xl"></i>
+        <span>Annuncio salvato con successo!</span>
+      </div>
+      <div class="text-gray-600 text-sm">
+        Tutti i dati e le immagini sono stati caricati correttamente.
+      </div>
+      <div class="flex flex-wrap justify-center gap-3 mt-2 w-full">
+        <Button label="Torna al portale" icon="pi pi-arrow-left"
+          @click="dialogCaricamento = false; router.push('/PortaleAgenzia')"
+          class="flex-1 min-w-[160px] bg-gray-600 hover:bg-gray-700 text-white px-5 py-2 rounded-lg shadow text-nowrap" />
+        <Button label="Visualizza annuncio" icon="pi pi-eye"
+          @click="dialogCaricamento = false; router.push('/annuncio/' + idAnnuncioCreato);"
+          class="flex-1 min-w-[160px] bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow text-nowrap" />
+      </div>
     </div>
-    <div class="text-gray-600 text-sm">
-      Tutti i dati e le immagini sono stati caricati correttamente.
-    </div>
-    <div class="flex flex-wrap justify-center gap-3 mt-2 w-full">
-      <Button
-        label="Torna al portale"
-        icon="pi pi-arrow-left"
-        @click="dialogCaricamento = false; window.location.href='/PortaleAgenzia'"
-        class="flex-1 min-w-[160px] bg-gray-600 hover:bg-gray-700 text-white px-5 py-2 rounded-lg shadow text-nowrap"
-      />
-      <Button
-        label="Visualizza annuncio"
-        icon="pi pi-eye"
-        @click="dialogCaricamento = false; window.open(annuncio && annuncio.id ? `annuncio/${annuncio.id}` : '/', '_blank')"
-        class="flex-1 min-w-[160px] bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow text-nowrap"
-      />
-    </div>
-  </div>
 
-<!-- Stato: Errore -->
-  <div v-if="isError" class="flex flex-col gap-4 text-left">
-    <div class="flex items-start gap-3 text-red-700 text-lg font-semibold">
-    <i class="pi pi-times-circle text-3xl leading-none mt-1"></i>
-    <span>Errore durante il salvataggio dell’annuncio</span>
-  </div>
-    <div class="text-gray-700 text-sm leading-relaxed">
-      Si è verificato un problema durante il caricamento dei dati o delle immagini.
-      Ti consigliamo di:
-      <ul class="list-disc list-inside mt-2 text-gray-600">
-        <li>Verificare la connessione internet</li>
-        <li>Riprovare tra qualche istante</li>
-      </ul>
-      Se l’errore persiste, contatta il supporto tecnico per assistenza.
+    <!-- Stato: Errore -->
+    <div v-if="isError" class="flex flex-col gap-4 text-left">
+      <div class="flex items-start gap-3 text-red-700 text-lg font-semibold">
+        <i class="pi pi-times-circle text-3xl leading-none mt-1"></i>
+        <span>Errore durante il salvataggio dell’annuncio</span>
+      </div>
+      <div class="text-gray-700 text-sm leading-relaxed">
+        Si è verificato un problema durante il caricamento dei dati o delle immagini.
+        Ti consigliamo di:
+        <ul class="list-disc list-inside mt-2 text-gray-600">
+          <li>Verificare la connessione internet</li>
+          <li>Riprovare tra qualche istante</li>
+        </ul>
+        Se l’errore persiste, contatta il supporto tecnico per assistenza.
+      </div>
+      <div class="flex justify-center mt-2">
+        <Button label="Riprova" icon="pi pi-refresh" @click="inviaAnnuncio()"
+          class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg shadow text-nowrap" />
+      </div>
     </div>
-    <div class="flex justify-center mt-2">
-      <Button
-        label="Riprova"
-        icon="pi pi-refresh"
-        @click="inviaAnnuncio()"
-        class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg shadow text-nowrap"
-      />
+  </Dialog>
+
+  <Dialog v-model:visible="dialogAnnuncioSospeso" modal :closable="false"
+    class="bg-white border border-gray-200 rounded-2xl shadow-lg animate-fade-in w-[420px] max-w-[90vw] p-6 overflow-hidden">
+
+    <!-- 🔹 Header personalizzato -->
+    <template #header>
+      <div class="flex items-center gap-2">
+        <i class="pi pi-exclamation-triangle text-yellow-500 text-xl"></i>
+        <span class="text-black font-bold text-lg">ATTENZIONE</span>
+      </div>
+    </template>
+
+    <p>È stato rilevato un annuncio in sospeso. Vuoi ripristinare i dati oppure creare un nuovo annuncio? </p>
+
+    <div class="flex justify-end gap-2 my-4">
+      <Button label="Nuovo annuncio" severity="secondary" raised @click="gestisciAnnuncioSospeso(true)" />
+      <Button label="Ripristina Annuncio" severity="success" raised @click="gestisciAnnuncioSospeso(false)" />
     </div>
-  </div>
-</Dialog>
+
+  </Dialog>
+
+  <Dialog v-model:visible="dialogCaricamentoDati" :closable="false" :style="{ width: '50rem' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <div class="card">
+      <ProgressBar :value="valoreCaricamento" />
+    </div>
+    <p>Caricamento dati in corso...</p>
+  </Dialog>
 
   <!--------------------------------------------------------------------------------------------------------------------------->
 
@@ -199,7 +280,7 @@ watch(activeStep, (newVal) => {
           }">
             <i class="pi pi-file-edit" />
           </Step>
-          <Divider/>
+          <Divider />
           <Step :value="3" :style="{
             '--p-stepper-step-number-background': step3.hasErrori
               ? '#ad0000'
@@ -208,7 +289,7 @@ watch(activeStep, (newVal) => {
           }">
             <i class="pi pi-tags" />
           </Step>
-          <Divider  />
+          <Divider />
           <Step :value="4" :style="{
             '--p-stepper-step-number-background': step4.hasErrori
               ? '#ad0000'
@@ -223,23 +304,25 @@ watch(activeStep, (newVal) => {
 
         <StepPanels>
           <StepPanel class="!bg-gray-100" :value="1">
-              <h3>Informazioni di Base</h3>
-            <StepDatiIniziali class="" ref="step1" v-model:annuncio="annuncio" :tentativoInvio="tentativoInvio.valore"
+            <h3>Informazioni di Base</h3>
+            <StepDatiIniziali v-if="loadingModel" class="" ref="step10" v-model:annuncio="modelVuoto" :tentativoInvio="tentativoInvio.valore"
+              @avanti="vaiAvanti" />
+            <StepDatiIniziali v-else class="" ref="step1" v-model:annuncio="annuncio" :tentativoInvio="tentativoInvio.valore"
               @avanti="vaiAvanti" />
           </StepPanel>
 
           <StepPanel class="!bg-gray-100" :value="2">
-              <h3>Dettagli Annuncio</h3>
+            <h3>Dettagli Annuncio</h3>
             <StepDatiPrincipali ref="step2" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti"
               :tentativoInvio="tentativoInvio.valore" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="4">
-              <h3>Indirizzo e Posizione</h3>
+            <h3>Indirizzo e Posizione</h3>
             <StepIndirizzo ref="step4" :tentativoInvio="tentativoInvio.valore" :activeStep="activeStep"
               v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti" />
           </StepPanel>
           <StepPanel class="!bg-gray-100" :value="3">
-              <h3>Caratteristiche</h3>
+            <h3>Caratteristiche</h3>
             <StepCaratteristiche ref="step3" v-model:annuncio="annuncio" @indietro="vaiIndietro" @avanti="vaiAvanti"
               :tentativoInvio="tentativoInvio.valore" />
           </StepPanel>

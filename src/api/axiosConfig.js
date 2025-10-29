@@ -4,7 +4,7 @@ import { useStoreUtente } from "../stores/UserStore.js";
 // Definisci l'URL di base come costante
 const BASE_URL = "http://localhost:8081/api/";
 const TIMEOUT = 90000; // Timeout per Api e ApiPublic
-const AGENT_TIMEOUT = 9000; // Timeout specifico per ApiAgent
+const AGENT_TIMEOUT = 90000; // Timeout specifico per ApiAgent
 
 // Crea un'istanza di Axios con la configurazione base
 const Api = () => {
