@@ -55,8 +55,7 @@
         :loading="loading"
         type="submit"
         raised
-        severity="secondary"
-        label="Submit"
+        label="Accedi"
       />
     </Form>
 
