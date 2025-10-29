@@ -29,7 +29,10 @@ const router = useRouter()
 
 const storeAnnuncio = useStoreAnnuncio();
 
-const annuncio = ref(new AnnuncioImmobiliareRequest());
+const annuncio = storeAnnuncio.annuncio;
+const loadingModel = ref(true);
+const modelVuoto = ref(new AnnuncioImmobiliareRequest());
+
 const activeStep = ref(1);
 
 const tentativoInvio = reactive({ valore: false });
@@ -51,11 +54,11 @@ onMounted(() => {
   if (!storeAnnuncio.isAnnuncioVuoto) {
 
     dialogAnnuncioSospeso.value = true;
+    return
 
-  } else {
+  } 
 
-    annuncio.value = storeAnnuncio.annuncio;
-  }
+  loadingModel.value = false;
 })
 
 const gestisciAnnuncioSospeso = (isNuovo) => {
@@ -65,8 +68,6 @@ const gestisciAnnuncioSospeso = (isNuovo) => {
   if (isNuovo) {
 
     storeAnnuncio.resetAnnuncio();
-
-    annuncio.value = storeAnnuncio.annuncio;
 
     dialogAnnuncioSospeso.value = false;
 
@@ -82,8 +83,9 @@ const gestisciAnnuncioSospeso = (isNuovo) => {
         newValue = 100;
         clearInterval(interval.value);
         interval.value = null;
-        annuncio.value = storeAnnuncio.annuncio;
+        loadingModel.value = false;
         dialogCaricamentoDati.value = false;
+        console.log("Annuncio caricatooo::::", annuncio);
       }
 
       valoreCaricamento.value = newValue;
@@ -148,6 +150,7 @@ const inviaAnnuncio = async () => {
     return;
   }
 
+  storeAnnuncio.resetAnnuncio();
   progressSpinner.value = false;
   isSuccess.value = true;
 
@@ -302,7 +305,9 @@ watch(activeStep, (newVal) => {
         <StepPanels>
           <StepPanel class="!bg-gray-100" :value="1">
             <h3>Informazioni di Base</h3>
-            <StepDatiIniziali class="" ref="step1" v-model:annuncio="annuncio" :tentativoInvio="tentativoInvio.valore"
+            <StepDatiIniziali v-if="loadingModel" class="" ref="step10" v-model:annuncio="modelVuoto" :tentativoInvio="tentativoInvio.valore"
+              @avanti="vaiAvanti" />
+            <StepDatiIniziali v-else class="" ref="step1" v-model:annuncio="annuncio" :tentativoInvio="tentativoInvio.valore"
               @avanti="vaiAvanti" />
           </StepPanel>
 
