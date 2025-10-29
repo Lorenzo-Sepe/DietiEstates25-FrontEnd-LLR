@@ -1,5 +1,5 @@
 <template>
-  <Message severity="error" variant="filled" class="mb-4 text-left">
+  <Message v-if="errori.immagineiVuote.invalid || errori.dimensioneTotale.invalid || errori.descrizioneLunga.invalid" severity="error" variant="filled" class="mb-4 text-left">
     <p>Verifica e correggi i seguenti errori:</p>
     <ul class="list-disc pl-5">
       <li v-if="errori.immagineiVuote.invalid">
@@ -8,7 +8,7 @@
       <li v-if="errori.dimensioneTotale.invalid">
         {{ errori.dimensioneTotale.messaggio }}
       </li>
-      <li v-if="true || errori.descrizioneLunga.invalid">
+      <li v-if="errori.descrizioneLunga.invalid">
         {{ errori.descrizioneLunga.messaggio }}
       </li>
     </ul>
