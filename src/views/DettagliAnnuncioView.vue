@@ -1,36 +1,28 @@
 <template>
   <!-------------------------------------------------- SEZIONE ALLERT ------------------------------------------------>
 
-  <Dialog
-    v-model:visible="dialogLoading"
-    header=""
-    :style="{ width: '25rem' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-  >
-    <ProgressSpinner
-      style="width: 50px; height: 50px"
-      strokeWidth="8"
-      fill="transparent"
-      animationDuration=".5s"
-      aria-label="Custom ProgressSpinner"
-    />
+  <Dialog v-model:visible="dialogLoading" header="OPERAZIONE IN CORSO" :closable="false" :style="{ width: '25rem' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+
+    <div class="flex flex-col justify-center">
+
+      <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" animationDuration=".5s"
+        aria-label="Custom ProgressSpinner" />
+
+      <p>Attendere prego...</p>
+
+    </div>
+
+
   </Dialog>
 
-  <Dialog
-    v-model:visible="dialogConferma"
-    header=""
-    :style="{ width: '25rem' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-  >
+  <Dialog v-model:visible="dialogConferma" header="" :style="{ width: '25rem' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <span class="text-xl font-bold">Proposta inviata con successo</span>
     <Button label="OK" class="w-full" @click="refreshPage" />
   </Dialog>
 
-  <Dialog
-    v-model:visible="visible"
-    pt:root:class="!border-0 !bg-white"
-    pt:mask:class="backdrop-blur-sm"
-  >
+  <Dialog v-model:visible="visible" pt:root:class="!border-0 !bg-white" pt:mask:class="backdrop-blur-sm">
     <template #container="{ closeCallback }">
       <span class="text-xl font-bold">Proposta inviata con successo</span>
       <Button label="OK" class="w-full" @click="refreshPage" />
@@ -39,11 +31,8 @@
 
   <!--------------------------------------------------- ------------- -------------------------------------------------->
 
-  <DettagliAnnuncio
-    :annuncio="annuncioResponse"
-    :propostaRequest="propostaRequest"
-    @inviaNuovaProposta="inviaNuovaProposta"
-  />
+  <DettagliAnnuncio :annuncio="annuncioResponse" :propostaRequest="propostaRequest"
+    @inviaNuovaProposta="inviaNuovaProposta" />
 </template>
 
 <script setup>
