@@ -44,7 +44,7 @@ import PopUpAddContact from "../Dialogs/PopUpAddContact.vue";
 import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import { Message } from "primevue";
-import useUIStore from "../../stores/UIStore";
+import useUIStore from "../../stores/UiStore";
 import { useStoreUtente } from "../../stores/UserStore";
 import { useEmployeeStore } from "../../stores/EmployeeStore";
 

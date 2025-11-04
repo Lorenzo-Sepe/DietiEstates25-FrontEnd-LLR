@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useStoreUtente } from "../stores/UserStore";
 import { useEmployeeStore } from "../stores/EmployeeStore";
-import { useUIStore } from "../stores/UIStore";
+import { useUIStore } from "../stores/UiStore";
 
 
 // Definisci le tue rotte

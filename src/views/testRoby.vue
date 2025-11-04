@@ -95,7 +95,7 @@ import ProgressSpinner from "primevue/progressspinner";
 
 import AreaSuperiore from "../components/PannelloStaff/AreaSuperiore.vue";
 import ScheletroListaAgenti from "../components/PannelloStaff/ScheletroListaAgenti.vue";
-import TabellaAnnunci from "../components/PannelloStaff/tabellaAnnunci.vue";
+import TabellaAnnunci from "../components/PannelloStaff/TabellaAnnunci.vue";
 
 import AnnunciService from "../services/TabellaAnnunciService";
 import PropostaService from "../services/PropostaService";
