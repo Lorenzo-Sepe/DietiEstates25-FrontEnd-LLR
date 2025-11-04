@@ -151,8 +151,7 @@ watch(
               currency="EUR"
               locale="it-IT"
               :invalid="errori.prezzo.invalid"
-              @input="verificaDati('prezzo')"
-              @blur="verificaDati('prezzo')"
+              @update:modelValue="verificaDati('prezzo')"
               class="w-full"
             />
             <div class="min-h-[24px]">
@@ -177,8 +176,7 @@ watch(
               currency="EUR"
               locale="it-IT"
               :invalid="errori.caparra.invalid"
-              @input="verificaDati('caparra')"
-              @blur="verificaDati('caparra')"
+              @update:modelValue="verificaDati('caparra')"
               class="w-full"
             />
             <div class="min-h-[24px]">
@@ -206,8 +204,7 @@ watch(
               suffix=" mesi"
               :min="0"
               :invalid="errori.tempoMinimo.invalid"
-              @input="verificaDati('tempoMinimo')"
-              @blur="verificaDati('tempoMinimo')"
+              @update:modelValue="verificaDati('tempoMinimo')"
               class="w-full"
             />
             <div class="min-h-[24px]">
@@ -233,8 +230,7 @@ watch(
               suffix=" mesi"
               :min="1"
               :invalid="errori.tempoMassimo.invalid"
-              @input="verificaDati('tempoMassimo')"
-              @blur="verificaDati('tempoMassimo')"
+              @update:modelValue="verificaDati('tempoMassimo')"
               class="w-full"
             />
             <div class="min-h-[24px]">
@@ -266,8 +262,7 @@ watch(
             v-model="contratto.datiVenditaRequest.prezzo"
             type="number"
             :invalid="errori.prezzo.invalid"
-            @input="verificaDati('prezzo')"
-            @blur="verificaDati('prezzo')"
+            @update:modelValue="verificaDati('prezzo')"
             class="border rounded p-2"
           />
           <div class="">
