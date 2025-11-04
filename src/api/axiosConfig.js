@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEmployeeStore } from "../stores/EmployeeStore.js";
 import { useStoreUtente } from "../stores/UserStore.js";
 // Definisci l'URL di base come costante
-const BASE_URL = "https://dietiestetes25-production.up.railway.app/api/";
+const BASE_URL = "http://localhost:8081/api/";
 const TIMEOUT = 90000; // Timeout per Api e ApiPublic
 const AGENT_TIMEOUT = 90000; // Timeout specifico per ApiAgent
 
