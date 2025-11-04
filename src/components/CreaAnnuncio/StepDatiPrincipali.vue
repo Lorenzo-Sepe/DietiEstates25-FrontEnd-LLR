@@ -178,8 +178,8 @@ const refContratto = ref({});
           v-model="annuncio.immobile.metriQuadri"
           suffix=" m²"
           :invalid="errori.metriQuadri.invalid"
-          @input="verificaDati('metriQuadri')"
-          @blur="verificaDati('metriQuadri')"
+          @update:modelValue="verificaDati('metriQuadri')"
+          value-change
           class="border rounded p-2 w-full"
         />
         <Message
@@ -202,8 +202,7 @@ const refContratto = ref({});
           v-model="annuncio.immobile.numeroDiPiani"
           suffix=" piani"
           :invalid="errori.numeroDiPiani.invalid"
-          @input="verificaDati('numeroDiPiani')"
-          @blur="verificaDati('numeroDiPiani')"
+          @update:modelValue="verificaDati('numeroDiPiani')"
           class="border rounded p-2 w-full"
         />
         <Message
@@ -225,8 +224,7 @@ const refContratto = ref({});
           id="numeroStanze"
           v-model="annuncio.immobile.numeroStanze"
           :invalid="errori.numeroStanze.invalid"
-          @input="verificaDati('numeroStanze')"
-          @blur="verificaDati('numeroStanze')"
+          @update:modelValue="verificaDati('numeroStanze')"
           class="border rounded p-2 w-full"
         />
         <Message
@@ -248,8 +246,7 @@ const refContratto = ref({});
           id="numeroServizi"
           v-model="annuncio.immobile.numeroServizi"
           :invalid="errori.numeroServizi.invalid"
-          @input="verificaDati('numeroServizi')"
-          @blur="verificaDati('numeroServizi')"
+          @update:modelValue="verificaDati('numeroServizi')"
           class="border rounded p-2 w-full"
         />
         <Message
