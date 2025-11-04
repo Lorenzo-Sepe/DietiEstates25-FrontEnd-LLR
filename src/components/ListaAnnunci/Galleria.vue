@@ -1,5 +1,5 @@
 <template>
-  <div class="contenitore-foto w-full h-full relative">
+  <div class="contenitore-foto w-full h-full relative"> 
     <!-- Immagine -->
     <img
       :src="props.immagini[currentImageIndex].url"
@@ -8,7 +8,8 @@
     />
 
     <!-- Freccia sinistra -->
-    <button
+    <button 
+    v-if="props.immagini.length > 1"
       class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-[rgba(0,0,0,0.15)] hover:bg-[rgba(0,0,0,0.3)] cursor-pointer p-2 rounded-full hover:bg-opacity-75 z-10"
       @click="prevImage"
     >
@@ -21,6 +22,7 @@
 
     <!-- Freccia destra -->
     <button
+    v-if="props.immagini.length > 1"
       class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-[rgba(0,0,0,0.15)] hover:bg-[rgba(0,0,0,0.3)] cursor-pointer p-2 rounded-full hover:bg-opacity-75 z-10"
       @click="nextImage"
     >
