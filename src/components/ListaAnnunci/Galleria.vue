@@ -1,5 +1,9 @@
 <template>
-  <div class="contenitore-foto w-full h-full relative"> 
+  <div
+    class="contenitore-foto w-full h-full relative"
+    @mouseenter="isHover = true"
+    @mouseleave="isHover = false"
+  >
     <!-- Immagine -->
     <img
       :src="props.immagini[currentImageIndex].url"
@@ -8,8 +12,8 @@
     />
 
     <!-- Freccia sinistra -->
-    <button 
-    v-if="props.immagini.length > 1"
+    <button
+      v-if="props.immagini.length > 1 && isHover"
       class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-[rgba(0,0,0,0.15)] hover:bg-[rgba(0,0,0,0.3)] cursor-pointer p-2 rounded-full hover:bg-opacity-75 z-10"
       @click="prevImage"
     >
@@ -22,7 +26,7 @@
 
     <!-- Freccia destra -->
     <button
-    v-if="props.immagini.length > 1"
+      v-if="props.immagini.length > 1 && isHover"
       class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-[rgba(0,0,0,0.15)] hover:bg-[rgba(0,0,0,0.3)] cursor-pointer p-2 rounded-full hover:bg-opacity-75 z-10"
       @click="nextImage"
     >
@@ -41,6 +45,7 @@ import { ref, defineProps } from "vue";
 const props = defineProps(["immagini"]);
 
 const currentImageIndex = ref(0);
+const isHover = ref(false);
 
 const nextImage = () => {
   if (currentImageIndex.value < props.immagini.length - 1) {
