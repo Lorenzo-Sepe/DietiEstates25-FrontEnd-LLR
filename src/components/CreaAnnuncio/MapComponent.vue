@@ -12,6 +12,15 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import datiComuni from "../../assets/comuniCap.json";
 import { Indirizzo } from "../../dto/RequestAnnuncio";
+
+
+import markerIconUrl from "../../assets/Icon/marker.png";
+const iconaAnnuncio = L.icon({
+  iconUrl: markerIconUrl,
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+  popupAnchor: [0, -30],
+});
 // Lista dei comuni dal JSON
 const listaComuni = ref(datiComuni);
 
@@ -128,7 +137,7 @@ const aggiornaMappa = async () => {
     }
 
     // Crea il marker trascinabile con popup informativo
-    marcatore.value = L.marker([latitudine, longitudine], { draggable: true })
+    marcatore.value = L.marker([latitudine, longitudine], { draggable: true ,icon: iconaAnnuncio })
       .addTo(istanzaMappa.value)
       .bindPopup("📍 Trascinami per indicare con precisione la posizione!")
       .openPopup(); // Mostra subito il messaggio
