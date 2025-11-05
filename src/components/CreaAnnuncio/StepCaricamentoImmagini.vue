@@ -206,7 +206,6 @@ const validaEAvanza = () => {
   validaCampi();
   if (!Object.values(errori).some((e) => e.invalid)) {
     emit("avanti");
-    console.log("validaEAvanza");
   } else {
     scrollToFirstError(errori);
   }
@@ -250,7 +249,6 @@ const onSelectedFiles = (event) => {
       immagine.loading = false;
       props.annuncio.immobile.immagini.push(immagine);
       errori.descrizione.push({ invalid: false, messaggio: "" });
-      console.log("Immagini:", props.annuncio.immobile.immagini);
     };
     reader.readAsDataURL(file);
   });
@@ -315,9 +313,8 @@ async function creaFileDaUrlRemoto(url, nomeFile) {
 }
 
 const convertiImmaginiEsistenti = async () => {
-  console.log("Inizio conversione immagini esistenti");
+  
   for (const img of props.annuncio.immobile.immagini) {
-    console.log("Immagine:", img);
 
     // Controlla se il file esiste già
     if (

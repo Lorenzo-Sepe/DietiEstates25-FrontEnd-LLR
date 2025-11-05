@@ -318,7 +318,7 @@ function flattenParagraphsInList(html) {
 }
 
 const handleImageUpload = (imageUrl) => {
-  console.log("URL immagine caricata:", imageUrl);
+  
   if (imageUrl) {
     editor.value
       ?.chain()

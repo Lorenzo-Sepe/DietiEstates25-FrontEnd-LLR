@@ -18,8 +18,9 @@ const props = defineProps(["propFiltro", "propNumeroAnnunci"]);
 onMounted(async () => {});
 
 const onPage = (event) => {
-  console.log("pagina cliccata: ", event.page);
+  
   props.propFiltro.numeroPagina = event.page + 1;
   emit("onPage");
+  
 };
 </script>

@@ -62,26 +62,28 @@ const dialogConferma = ref(false);
 const visible = ref(false);
 
 onMounted(async () => {
+
   const response = await AnnunciImmobiliService.getAnnuncioImmobiliare(
     route.params.id,
   );
   annuncioResponse.value = new AnnuncioImmobiliareResponse(response);
-  console.log("response:", response.value);
 });
 
 const inviaNuovaProposta = async () => {
+
   propostaRequest.annuncioId = route.params.id;
   dialogLoading.value = true;
 
   try {
+
     await PropostaService.inviaNuovaProposta(propostaRequest);
-    console.log("Proposta inviata con successo:");
     dialogLoading.value = false;
     visible.value = true;
+
   } catch (error) {
+
     console.error("Errore durante l'invio della proposta:", error);
     dialogLoading.value = false;
-    //lanciare dialog di errore
   }
 };
 

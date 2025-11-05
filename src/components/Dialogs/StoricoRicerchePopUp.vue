@@ -104,11 +104,11 @@ const selectedRicerca = ref(null);
 const dialogVisible = ref(false);
 
 function showDetails(ricerca) {
+
   selectedRicerca.value = ricerca;
-  console.log("Dettagli ricerca selezionata:", ricerca);
-  console.log(".filtroUsatoJson:", ricerca.filtroUsatoJson);
   dialogVisible.value = true;
 }
+
 function formatTimeAgo(dateArray) {
   if (!dateArray || dateArray.length < 3) return "---";
   const [year, month, day, hour = 0, minute = 0, second = 0] = dateArray;

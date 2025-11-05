@@ -50,7 +50,7 @@ const pinia = createPinia();
 pinia.devtools = true;
 pinia.use(({ store }) => {
   store.$onAction(({ name }) => {
-    console.log(`Action triggered: ${name}`);
+    
   });
 });
 

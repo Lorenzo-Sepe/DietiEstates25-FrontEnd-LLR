@@ -73,10 +73,11 @@ const router = useRouter();
 const storeEmployee = useEmployeeStore();
 
 onMounted(async () => {
-  console.log("Verifica autenticazione dipendente in PortaleAgenziaView");
-  console.log("isAutenticato:", storeEmployee.isAutenticato);
+  
   if (storeEmployee.isAutenticato) {
     router.push({ name: "MieiAnnunci" });
   }
+  
 });
+
 </script>

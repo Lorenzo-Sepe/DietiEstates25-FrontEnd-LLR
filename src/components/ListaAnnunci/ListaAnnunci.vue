@@ -175,13 +175,17 @@ function formattaPrezzo(prezzoStringa) {
   return Number(prezzoStringa).toLocaleString("it-IT");
 }
 function formattaDataUmana(dataInput) {
+
   const now = new Date();
   let data;
+
   try {
+
     data = new Date(dataInput);
+
   } catch (error) {
+
     console.error("Errore nella conversione della data:", error);
-    console.log("Data di input:", dataInput);
     console.warn("setto come data input la data attuale:", typeof dataInput);
     data = now;
   }

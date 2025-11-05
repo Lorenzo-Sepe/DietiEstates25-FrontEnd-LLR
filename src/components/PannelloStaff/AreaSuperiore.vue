@@ -77,8 +77,7 @@ const isAgente = ref(false);
 const emits = defineEmits(["aggiungiDipendente"]);
 
 onMounted(() => {
-  console.log("EmployeeStore initialized");
-  console.log(employeeStore.UrlFotoProfilo);
+
   if (employeeStore.employee.datiImpiegato.ruolo === "AGENT") {
     isAgente.value = true;
   } else {

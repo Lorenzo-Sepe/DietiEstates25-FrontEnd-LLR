@@ -117,7 +117,6 @@ const clickTutteLeCategorie = () => {
 };
 
 const modificaSottoscrizione = (idCategoria) => {
-  console.log("sono nel log");
 
   props.categorie.forEach((categoria) => {
     if (categoria.idCategoria === idCategoria) {
@@ -127,4 +126,5 @@ const modificaSottoscrizione = (idCategoria) => {
 
   emit("modificaSottoscrizioni");
 };
+
 </script>

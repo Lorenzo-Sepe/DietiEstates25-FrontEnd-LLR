@@ -85,7 +85,6 @@ const gestisciAnnuncioSospeso = (isNuovo) => {
         interval.value = null;
         loadingModel.value = false;
         dialogCaricamentoDati.value = false;
-        console.log("Annuncio caricatooo::::", annuncio);
       }
 
       valoreCaricamento.value = newValue;

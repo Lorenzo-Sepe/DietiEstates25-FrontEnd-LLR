@@ -40,11 +40,12 @@ const emit = defineEmits(['chiudiDrawer']);
 
 // Simula caricamento da backend
 onMounted(async () => {
+
     try {
+
         ricerche.value = await StoricoRicercheService.getStoricoRicercheUtente();
         scheletroCaricamento.value = false;
 
-        console.log("Storico ricerche:", ricerche.value);
     } catch (err) {
         console.error("Errore caricamento storico ricerche:", err);
         scheletroCaricamento.value = false;
@@ -58,7 +59,6 @@ const caricaRicerche = async () => {
 
     try {
         ricerche.value = await StoricoRicercheService.getStoricoRicercheUtente();
-        console.log("Storico ricerche:", ricerche.value);
     } catch (err) {
         console.error("Errore caricamento storico ricerche:", err);
     }
@@ -101,12 +101,12 @@ const filtroAnnunci = reactive({
 
 // Quando seleziono una ricerca, apro il dettaglio filtro
 function onSelectRicerca(e) {
-    console.log("Ricerca selezionata:", e.data);
+   
     try {
+
         Object.assign(filtroAnnunci, JSON.parse(e.data.filtroUsatoJson))
-        console.log("JSON.parse:", JSON.parse(e.data.filtroUsatoJson))
-        console.log("Filtro ricostruito:", filtroAnnunci)
         clickCerca()
+
     } catch (err) {
         console.error("Errore parsing JSON:", err)
     }
@@ -145,7 +145,7 @@ const clickCerca = () => {
 };
 
 function apriDialog() {
-    console.log("Apro dialog")
+    
     visible.value = true
     emit('chiudiDrawer')
     caricaRicerche()

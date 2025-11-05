@@ -24,9 +24,10 @@ export const useStoreUtente = defineStore("utente", {
     },
   }),
   getters: {
+    
     getNomeVisulizzato: (state) => {
+
       // Controlla se il nome visualizzato è disponibile
-      console.log("getNomeVisualizzato: ", state.utente.Info.nomeVisualizzato);
       if (state.utente.Info.nomeVisualizzato) {
         return state.utente.Info.nomeVisualizzato;
       } else {
@@ -76,7 +77,6 @@ export const useStoreUtente = defineStore("utente", {
       const email = this.utente.email;
       getDatiUser(email)
         .then((userInfo) => {
-          console.log("aggiorno dari per user comune: ", userInfo);
           this.utente.Info = userInfo;
         })
         .catch((error) => {

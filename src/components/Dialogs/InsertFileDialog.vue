@@ -48,13 +48,13 @@ const apriSelettore = () => {
 };
 
 const onSelectedFiles = (event) => {
+  
   const files = Array.from(event.target.files);
   files.forEach((file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       errori.descrizione.push({ invalid: false, messaggio: "" });
       const urlImage = e.target.result;
-      console.log("Immagini:", urlImage);
       emit("image-uploaded", urlImage);
     };
     reader.readAsDataURL(file);

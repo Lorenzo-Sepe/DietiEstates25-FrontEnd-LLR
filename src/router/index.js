@@ -119,23 +119,6 @@ const routes = [
     name: "NotFound",
     component: () => import("../views/NotFoundView.vue"),
   },
-
-  // Route di testing dei componenti
-  {
-    path: "/testLorenzo",
-    name: "testL",
-    component: () => import("../views/TestLorenzoView.vue"),
-  },
-  {
-    path: "/test-roberto",
-    name: "testR",
-    component: () => import("../views/testRoby.vue"),
-  },
-  {
-    path: "/testrai",
-    name: "testRai",
-    component: () => import("../views/TestRai.vue"),
-  },
 ];
 
 // Crea l'istanza del router

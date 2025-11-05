@@ -125,7 +125,7 @@ const buildStaffView = async () => {
 
   } catch (error) {
 
-    console.log("errore durante l'aggiormamento dati pinia: ", error);
+    console.error("errore durante l'aggiormamento dati pinia: ", error);
     return;
 
   } finally {
@@ -212,7 +212,7 @@ const getAnnunciByPagina = async (pagina) => {
 
   } catch (error) {
 
-    console.log("errore durante la chiamata axsios per la get annunci by pagina: ", error);
+    console.error("errore durante la chiamata axsios per la get annunci by pagina: ", error);
     annunci.value = [];
 
   }
@@ -227,11 +227,10 @@ const getAnnunci = async () => {
 
     annunci.value = [{}];
     annunci.value = await AnnunciService.getAnnunciByStaff(filtroAnnunci);
-    console.log("annunci.value: ", annunci.value);
 
   } catch (error) {
 
-    console.log(
+    console.error(
       "errore durante la chiamata axsios per la get annunci: ",
       error,
     );
@@ -240,35 +239,36 @@ const getAnnunci = async () => {
 };
 
 const aggiungiPropostaManuale = async () => {
+
   try {
+
     loadingOperazione.value = true;
-    const nuovaProposta =
-      await AnnunciService.postPropostaManuale(propostaRequest);
+    const nuovaProposta = await AnnunciService.postPropostaManuale(propostaRequest);
     loadingOperazione.value = false;
     aggiungiProposta(nuovaProposta.idProposta);
     okAllert.value = true;
+    
   } catch (error) {
-    console.log(
-      "errore durante la chiamata axsios per la aggiunta proposta manuale: ",
-      error,
-    );
+    console.error("errore durante la chiamata axsios per la aggiunta proposta manuale: ", error,);
     loadingOperazione.value = false;
     erroreAllert.value = true;
   }
+
 };
 
 const rifiutaProposta = async (idProposta) => {
+
   try {
+
     loadingOperazione.value = true;
     await PropostaService.rifiutaProposta(idProposta);
     loadingOperazione.value = false;
     changeStatoProposta(idProposta, "RIFIUTATO");
     okAllert.value = true;
+
   } catch (error) {
-    console.log(
-      "errore durante la chiamata axsios per la eliminazione proposta: ",
-      error,
-    );
+
+    console.error("errore durante la chiamata axsios per la eliminazione proposta: ", error);
     loadingOperazione.value = false;
     erroreAllert.value = true;
   }
@@ -320,34 +320,34 @@ const aggiungiProposta = (idProposta) => {
 };
 
 const accettaProposta = async (idProposta) => {
+
   try {
+
     loadingOperazione.value = true;
     await PropostaService.accettaProposta(idProposta);
     loadingOperazione.value = false;
     changeStatoProposta(idProposta, "ACCETTATO");
     okAllert.value = true;
+
   } catch (error) {
-    console.log(
-      "errore durante la chiamata axsios per la accettazione proposta: ",
-      error,
-    );
+    console.error("errore durante la chiamata axsios per la accettazione proposta: ", error);
     loadingOperazione.value = false;
     erroreAllert.value = true;
   }
 };
 
 const controproposta = async (idProposta, prezzoControproposta) => {
+
   try {
     loadingOperazione.value = true;
     await PropostaService.controproposta(idProposta, prezzoControproposta);
     loadingOperazione.value = false;
     changeControposta(idProposta, prezzoControproposta);
     okAllert.value = true;
+
   } catch (error) {
-    console.log(
-      "errore durante la chiamata axsios per la controproposta proposta: ",
-      error,
-    );
+    
+    console.error("errore durante la chiamata axsios per la controproposta proposta: ", error);
     loadingOperazione.value = false;
     erroreAllert.value = true;
   }
@@ -398,7 +398,7 @@ const eliminaAnnuncio = async (idAnnuncio) => {
 
   } catch (error) {
 
-    console.log("errore durante l'aggiornamento della lista annunci dopo l'eliminazione: ", error);
+    console.error("errore durante l'aggiornamento della lista annunci dopo l'eliminazione: ", error);
 
   }
 

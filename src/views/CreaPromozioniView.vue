@@ -385,11 +385,8 @@ function onFormSubmit() {
   NotificaPromozionaleRequest.criteriDiRicerca.intervalloGiorniStoricoRicerca =
     form.intervalloGiorniStoricoRicerca;
 
-  console.log("Notifica Promozionale Request:", NotificaPromozionaleRequest);
-
   NotificheService.creaNotifica(NotificaPromozionaleRequest)
     .then((response) => {
-      console.log("Notifica creata con successo:", response);
       router.push({ name: "PortaleAgenzia" });
     })
     .catch((error) => {

@@ -171,7 +171,6 @@ const verificaDati = (campo) => {
 };
 
 const validaCampi = () => {
-  console.log("validaCampi", props.annuncio.immobile.indirizzo);
   ["via", "numeroCivico", "comune"].forEach((campo) => verificaDati(campo));
   return !Object.values(errori).some((e) => e.invalid);
 };

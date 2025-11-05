@@ -169,7 +169,7 @@ const completaRegistrazione = async ({ password, confermaPassword }) => {
       password: password,
     });
 
-    console.log("Registrazione avvenuta con successo:", risposta);
+   
     // Reindirizza alla home o mostra un messaggio di successo
     emit("autenticazione-successo");
     emit("close", risposta);
@@ -182,11 +182,12 @@ const completaRegistrazione = async ({ password, confermaPassword }) => {
 };
 
 function reindirizza(ruolo) {
-  console.log("Reindirizzamentoooooooooooooooooooooooo");
+  
   if (ruolo === "MEMBER") {
     router.push({ path: "/" });
   } else {
     router.push({ path: "/PortaleAgenzia" });
   }
 }
+
 </script>

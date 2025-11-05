@@ -125,7 +125,6 @@ async function logout() {
 };
 
 function apriImpostazioni() {
-    console.log("Apro dialog")
     visible.value = true
     emit('chiudiDrawer')
 }

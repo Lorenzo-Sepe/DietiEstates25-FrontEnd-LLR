@@ -143,19 +143,27 @@ const onFormSubmit = async ({ valid }) => {
       if (response.ruolo !== "MEMBER") {
         //CONTROLO
         if (uiStore.loginRole === "employee" && uiStore.toPath) {
-          console.log("redirect to:", uiStore.toPath);
+          
           router.push(uiStore.toPath);
+
         } else {
+
           router.push({ path: "/PortaleAgenzia/pannelloStaff" });
         }
+
       } else {
+
         router.push({ path: "/" });
       }
+
       emit("close");
     }, 2500);
+
   } catch (error) {
+
     console.error(error);
     loading.value = false;
+    
     if (error.response) {
       errorMessage.value = error.response.data;
     } else {

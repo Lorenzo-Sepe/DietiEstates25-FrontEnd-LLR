@@ -1,9 +1,10 @@
 import { Api, ApiAgent, ApiPublic } from "../api/axiosConfig";
 
 import { setUser } from "./UserService";
+
 export default {
+
   register(credentials) {
-    console.log("service register");
     return ApiPublic()
       .post("pb/auth/signup", credentials)
       .then((response) => {
@@ -18,19 +19,21 @@ export default {
         return setUser(response.data);
       });
   },
+
   loginIdProvvider(credentials) {
     return ApiPublic()
       .post("pb/auth/signinIdProv", credentials)
       .then((response) => {
-        console.log("Id provvider success,", response);
         return setUser(response.data);
       });
   },
+
   logout() {
     return Api()
       .post("auth/logout")
       .then((response) => response.data);
   },
+  
   changePassword(
     oldPassword,
     newPassword,
@@ -42,7 +45,7 @@ export default {
       newPassword: newPassword,
       confirmPassword: newPasswordConfirm,
     };
-    console.log("New Credentials: ", newCredentials);
+
     if (isEmployee) {
       return Api()
         .put("auth/change_password_employee", newCredentials)

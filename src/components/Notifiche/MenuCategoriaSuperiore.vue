@@ -76,7 +76,6 @@ const clickCategoria = () => {
 };
 
 const updateCategorie = () => {
-  console.log("updateCategorie", props.categorie);
 
   props.categorie.forEach((categoria) => {
     nomiCategorie.value.push({
@@ -87,4 +86,5 @@ const updateCategorie = () => {
 };
 
 watch(() => props.categorie, updateCategorie, { immediate: true });
+
 </script>

@@ -262,7 +262,7 @@ const visualizzaNotifica = async (notifica) => {
 
   } catch (error) {
 
-    console.log("Errore nel settare la notifica come letta");
+    console.error("Errore nel settare la notifica come letta");
   }
 
 };

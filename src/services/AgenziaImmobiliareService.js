@@ -10,11 +10,9 @@ export default {
       });
   },
   async registerAgency(credentials) {
-    console.log("register agency promise", credentials);
     return ApiPublic()
       .post("pb/agenzia/", credentials)
       .then((response) => {
-        console.log("register agency respose", response);
         return response.data;
       });
   },
@@ -22,7 +20,6 @@ export default {
     return ApiPublic()
       .get("/pb/agenzia/email", { params: { email } })
       .then((response) => {
-        console.log("/pb/agenzia/email response: ", response);
         const res = new DatiAgenziaImmobiliareResponse(response.data);
         return res;
       })
@@ -59,7 +56,6 @@ export function getDatiAgenziaByEmailDipendente(email) {
   return ApiPublic()
     .get("/pb/agenzia/email", { params: { email } })
     .then((response) => {
-      console.log("/pb/agenzia/email response: ", response);
       const res = new DatiAgenziaImmobiliareResponse(response.data);
       return res;
     })

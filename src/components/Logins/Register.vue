@@ -175,14 +175,18 @@ const resolver = ({ values }) => {
 };
 
 const handleRegister = async () => {
+
   try {
+
     const response = await AuthService.register(SignUpRequest.value);
-    console.log("Registrazione avvenuta con successo:", response);
+    
     router.push({
       name: "confirmRegistration",
       params: { message: encodeURIComponent(response) },
     });
+
   } catch (error) {
+    
     registrationError.value = error;
     console.error("Registrazione fallita:", error);
   }

@@ -114,8 +114,6 @@ export default {
         if (event.layerType === "circle") {
           const center = layer.getLatLng();
           const radius = layer.getRadius();
-          console.log("Centro del cerchio:", center);
-          console.log("Raggio del cerchio:", radius);
         }
       });
     };

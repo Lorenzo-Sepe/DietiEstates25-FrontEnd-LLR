@@ -47,15 +47,14 @@ onMounted(() => {
 });
 
 const cambiaPassword = async ({
+  
   passwordAttuale,
   password,
   confermaPassword,
 }) => {
+
   errore.value = null;
   alert("Cambiando password...");
-  console.log("Password attuale:", passwordAttuale);
-  console.log("Nuova password:", password);
-  console.log("Conferma password:", confermaPassword);
 
   if (password !== confermaPassword) {
     errore.value = "Le password nuove non coincidono.";

@@ -10,9 +10,9 @@ export default {
   },
 
   getAnnunci(filtro) {
+    
     const isAutenticato = useStoreUtente().isAutenticato;
-    //console.log("Utente autenticato: ", isAutenticato);
-    //console.log("Filtro per la ricerca degli annunci: ", filtro);
+   
     // Logica per autenticato
     if (isAutenticato) {
       return Api()

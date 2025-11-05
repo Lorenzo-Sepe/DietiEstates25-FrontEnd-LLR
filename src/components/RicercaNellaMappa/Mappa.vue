@@ -35,6 +35,7 @@ const iconaAnnuncio = L.icon({
 });
 
 onMounted(() => {
+  
   inizializzaMappa();
 
   istanzaMappa.value.on("click", onMappaClick);
@@ -45,8 +46,6 @@ onMounted(() => {
     if (event.layerType === "circle") {
       const latLng = layer.getLatLng();
       const radius = layer.getRadius();
-
-      console.log("Cerchio disegnato:", latLng, "raggio:", radius);
 
       if (marcatore.value) {
         istanzaMappa.value.removeLayer(marcatore.value);
@@ -132,7 +131,6 @@ function ridisegnaCerchioDaFiltro() {
 }
 
 const aggiornaMarker = () => {
-  console.log("Aggiorna marker", props.annunci);
 
   try {
     // Rimuovi i vecchi marker
@@ -152,14 +150,12 @@ const aggiornaMarker = () => {
       )
         .addTo(istanzaMappa.value)
         .on("click", () => {
-          console.log("Marker cliccato:", annuncio);
           annuncioSelezionato.value = annuncio;
           mostraPopupAnnuncio.value = true;
         });
 
       markersAnnunci.value.push(marker);
     });
-    console.log("Markers aggiunti:", markersAnnunci.value);
   } catch (error) {
     console.error("Errore durante l'aggiornamento dei marker:", error);
   }

@@ -131,7 +131,6 @@ const contacts = ref([]);
 
 onMounted(() => {
 
-    console.log("Contatti esistenti:", props.contatti);
     contacts.value = props.contatti;
 })
 
@@ -239,6 +238,7 @@ const resetErrori = () => {
 }
 
 const askConfirm = async (contattoRequest) => {
+    
     confirm.require({
         message: 'Esiste già questo tipo di contatto, vuoi modificarlo?',
         header: 'Conferma',

@@ -108,19 +108,19 @@ const setFiltro = () => {
 };
 
 const mostraAnnunciSullaMappa = async () => {
+
   try {
-    console.log("Filtro annunci: ", filtroAnnunci);
+
     loadingAnnunci.value = true;
     const annunci = await AnnunciImmobiliService.getAnnunci(filtroAnnunci);
     setAnnunciResponse(annunci);
-    console.log("resposne: ", annunci);
-    console.log("annunciResponse: ", annunciResponse);
+   
   } catch (error) {
-    console.error(
-      "Errore durante la visualizzazione degli annunci sulla mappa:",
-      error,
-    );
+
+    console.error("Errore durante la visualizzazione degli annunci sulla mappa:", error);
+
   } finally {
+    
     loadingAnnunci.value = false;
   }
 };

@@ -336,7 +336,6 @@ const onClickPage = (event) => {
 
   emit("onPage", event.page + 1);
 
-  console.log(event);
 }
 
 </script>

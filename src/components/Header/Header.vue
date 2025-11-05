@@ -177,15 +177,18 @@ const chiudiDrawer = (evento) => {
 
 
 watch(() => uiStore.showLoginModal, (newVal) => {
-  console.log("Login modal visibility prop changed:", newVal);
+  
   if (newVal === true){
     visible.value = true;
   }
 });
+
 watch(visible, (newVal) => {
-  console.log("Login modal visibility changed:", newVal);
+
   if (newVal === false){
     uiStore.showLoginModal = false;
   }
+
 });
+
 </script>

@@ -49,13 +49,12 @@ const telefonoAgente = ref(null);
 
 const telefonoEsistente = () => {
 
-  console.log("contattiii: ", props.agente)
-
   props.agente.contatti.forEach(element => {
     if (element.tipo === "Cellulare") {
       telefonoAgente.value = element.valore;
     }
   });
+  
 }
 
 </script>

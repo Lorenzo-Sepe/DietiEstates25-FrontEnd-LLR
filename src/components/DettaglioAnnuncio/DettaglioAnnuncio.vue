@@ -292,7 +292,8 @@ const isAnnuncioCompleto = (annuncio) => {
 };
 
 onMounted(() => {
-  console.log("figlio annuncio:", props.annuncio);
+  
+  
 });
 
 function formattaPrezzo(prezzoStringa) {

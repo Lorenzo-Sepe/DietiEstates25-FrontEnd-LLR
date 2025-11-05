@@ -159,10 +159,6 @@ const form = ref({
   },
 });
 
-function salvaNotifica() {
-  console.log("Payload notifica:", form.value);
-  // Qui chiamata API per salvarla
-}
 </script>
 
 <style scoped>

@@ -97,12 +97,12 @@ onMounted(() => {
 });
 
 const mostraAnnunci = async () => {
+
   try {
     loadingAnnunci.value = true;
     numeroAnnunci.value = await getNumeroAnnunci();
     const annunci = await getAnnunci();
     setAnnunciResponse(annunci);
-    console.log("Annunci response: ", annunciResponse.value);
   } catch (error) {
     console.error("Errore durante il caricamento degli annunci:", error);
   } finally {

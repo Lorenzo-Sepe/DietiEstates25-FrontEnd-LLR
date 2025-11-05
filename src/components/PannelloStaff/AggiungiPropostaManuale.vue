@@ -225,8 +225,6 @@ const clickNuovaProposta = async () => {
   props.propostaRequest.contatto = contatto.value;
   props.propostaRequest.annuncioId = props.idAnnuncio;
 
-  console.log("propostaRequest: ", props.propostaRequest);
-
   emit("nuovaProposta");
 };
 </script>

@@ -83,8 +83,6 @@ const faiRichiestaGeocodifica = async (query) => {
       `https://nominatim.openstreetmap.org/search?${query}`,
     );
     const dati = await risposta.json();
-    console.log("url:", url);
-    console.log("Dati:", dati);
     if (dati.length > 0) {
       return {
         latitudine: parseFloat(dati[0].lat),
@@ -92,10 +90,6 @@ const faiRichiestaGeocodifica = async (query) => {
       };
     } else {
       console.warn("Nessun risultato trovato per l’indirizzo:", query);
-      console.log(
-        "Inserisco come cordinate quelle associta alla città:",
-        props.via,
-      );
       const comune = listaComuni.value.find(
         (comune) =>
           comune.denominazione_ita.toLowerCase() === props.citta.toLowerCase(),
@@ -107,7 +101,6 @@ const faiRichiestaGeocodifica = async (query) => {
         };
       } else {
         console.warn("Comune non trovato nella lista dei comuni:", props.citta);
-        console.log("inserisco cordinate di default");
         return {
           latitudine: 41.8719, // Latitudine di default (Italia centrale)
           longitudine: 12.5674, // Longitudine di default (Italia centrale)
@@ -145,7 +138,6 @@ const aggiornaMappa = async () => {
     // Ascolta l'evento di trascinamento e aggiorna le coordinate
     marcatore.value.on("dragend", () => {
       const nuovaPosizione = marcatore.value.getLatLng();
-      console.log("Nuova posizione:", nuovaPosizione);
       emit("posizione-aggiornata", {
         latitudine: nuovaPosizione.lat,
         longitudine: nuovaPosizione.lng,
@@ -171,7 +163,6 @@ watch(
   () => props.activeStep,
   (nuovoStep) => {
     if (nuovoStep === 4) {
-      console.log("Attivato il passo 4, ridisegno la mappa");
       forzaRidisegnoMappa();
     }
   },
