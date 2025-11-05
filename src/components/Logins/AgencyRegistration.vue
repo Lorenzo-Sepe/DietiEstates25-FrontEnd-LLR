@@ -12,7 +12,7 @@
   <Dialog v-model:visible="okAllert" :closable="false" header="CONFERMA OPERAZIONE" :style="{ width: 'auto' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <p class="m-0">Operazione conclusa con successo. Ti è stata inviata un email con le credenziali di accesso</p>
-    <Button severity="contrast" label="OK" @click="goHome" />
+    <Button label="OK" @click="goHome" />
   </Dialog>
 
   <Dialog v-model:visible="erroreAllert" header="ERRORE" @close="erroreAllert = false" :style="{ width: 'auto' }"
