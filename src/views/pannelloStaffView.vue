@@ -17,7 +17,7 @@
   <Dialog v-model:visible="erroreAllert" header="ERRORE" @close="erroreAllert = false" :style="{ width: 'auto' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
     <p class="m-0">Errore di rete, riprovare più tardi.</p>
-    <Button label="OK" @click="erroreAllert = false" severity="contrast" />
+    <Button label="OK" @click="erroreAllert = false" />
   </Dialog>
 
   <Dialog v-model:visible="registrationVisible" @close="registrationVisible = false" header="REGISTRA NUOVO DIPENDENTE"
