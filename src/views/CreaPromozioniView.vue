@@ -396,6 +396,7 @@ function onFormSubmit() {
 
   NotificheService.creaNotifica(NotificaPromozionaleRequest)
     .then((response) => {
+      
       router.push({ name: "PortaleAgenzia" });
     })
     .catch((error) => {
