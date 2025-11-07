@@ -16,8 +16,7 @@
 
     <!-- Menu di Navigazione con prop -->
     <div class="hidden lg:flex">
-      <MenuNavigazione v-if="logged" :isInPortale="isInPortale"  @chiudiDrawer="chiudiDrawer" />
-
+      <MenuNavigazione v-if="logged" :isInPortale="isInPortale"  :isManager="isManager"   @chiudiDrawer="chiudiDrawer" />
       <div v-if="!logged" class="flex gap-2 items-center flex-col lg:flex-row">
         <Button label="Accedi" @click="openDialog"></Button>
 
@@ -89,6 +88,13 @@ const dialogRef = ref(null);
 const storeUtente = useStoreUtente();
 const storeEmployee = useEmployeeStore();
 const dialogAvatarRef = ref(false);
+const isManager = computed(() => {
+  if (props.isInPortale) {
+    return storeEmployee.isManager; 
+  } else {
+    return false;
+  }
+});
 
 const logged = computed(() => {
   if (props.isInPortale) {

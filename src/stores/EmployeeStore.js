@@ -54,7 +54,10 @@ export const useEmployeeStore = defineStore("employee", {
         return domainParts[0];
       }
     },
-
+    isManager: (state) =>
+      state.employee.datiImpiegato.ruolo === "MANAGER",
+    isAgente: (state) => state.employee.datiImpiegato.ruolo === "AGENTE",
+    
     isAutenticato: (state) => {
       try {
         return !isTokenScaduto(state.employee.token);

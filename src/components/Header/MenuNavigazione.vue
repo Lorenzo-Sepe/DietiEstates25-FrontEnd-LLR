@@ -25,18 +25,23 @@
 import { computed, defineProps, defineEmits } from "vue";
 import Button from "primevue/button";
 
-const props = defineProps({ isInPortale: Boolean });
+const props = defineProps({ isInPortale: Boolean , isManager:Boolean});
 const emit = defineEmits(["chiudiDrawer"]);
 
 const menuGenerale = [{ nome: "Le mie notifiche", percorso: "/notifiche" }];
 const menuVenditore = [
   { nome: "Gestisci annunci immobiliari", percorso: "/PortaleAgenzia/miei-annunci" },
+];
+const menuManager = [
+  { nome: "Gestisci annunci immobiliari", percorso: "/PortaleAgenzia/miei-annunci" },
   { nome: "Messaggi promozionali", percorso: "/PortaleAgenzia/messaggi-promozionali" },
 ];
-
-const menuCorrente = computed(() =>
-  props.isInPortale ? menuVenditore : menuGenerale
-);
+const menuCorrente = computed(() => {
+  if (props.isInPortale) {
+    return props.isManager ? menuManager : menuVenditore;
+  }
+  return menuGenerale;
+});
 </script>
 
 <style scoped>
