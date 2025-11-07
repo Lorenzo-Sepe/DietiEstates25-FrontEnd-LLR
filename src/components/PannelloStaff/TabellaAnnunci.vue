@@ -124,7 +124,11 @@
                   :value="filterProposteInTrattativa(slotProps.data.proposte)">
                   <Column field="datiProponente.nome" header="Nome" sortable></Column>
                   <Column field="datiProponente.cognome" header="Cognome" sortable></Column>
-                  <Column field="datiProponente.email" header="Email" sortable></Column>
+                  <Column header="Contatto" sortable>
+                    <template #body="{ data }">
+                      {{ data.datiProponente.contatto.tipo }}: {{ data.datiProponente.contatto.valore }}
+                    </template>
+                  </Column>
                   <Column field="prezzoProposta" header="Proposta" sortable>
                     <template #body="slotProps">
                       <span :class="{
@@ -140,7 +144,7 @@
                     <template #body="slotProps">
                       <div class="flex flex-row gap-2">
                         <Button v-if="props.isAgente" variant="text" rounded aria-label="Filter"
-                          class="hover:bg-[#008000]/60!" :disabled="slotProps.data.controproposta !== null" @click="
+                          class="hover:bg-[#008000]/60!" @click="
                             clickAccettaProposta(slotProps.data.idProposta)
                             " v-tooltip="{
                               value: 'Accetta la proposta',
@@ -162,7 +166,7 @@
                           </template>
                         </Button>
                         <Button v-if="props.isAgente" variant="text" rounded aria-label="Filter"
-                          class="hover:bg-[#FF0000]/60!" :disabled="slotProps.data.controproposta !== null" v-tooltip="{
+                          class="hover:bg-[#FF0000]/60!" v-tooltip="{
                             value: 'Rifiuta proposta',
                             showDelay: 300,
                             hideDelay: 300,
@@ -194,7 +198,11 @@
                   :value="filterProposteAccettate(slotProps.data.proposte)">
                   <Column field="datiProponente.nome" header="Nome" sortable></Column>
                   <Column field="datiProponente.cognome" header="Cognome" sortable></Column>
-                  <Column field="datiProponente.email" header="Email" sortable></Column>
+                  <Column header="Contatto" sortable>
+                    <template #body="{ data }">
+                      {{ data.datiProponente.contatto.tipo }}: {{ data.datiProponente.contatto.valore }}
+                    </template>
+                  </Column>
                   <Column field="prezzoProposta" header="Proposta" sortable></Column>
                   <Column field="controproposta" header="Controproposta" sortable></Column>
                 </DataTable>
@@ -213,7 +221,11 @@
                   :value="filterProposteRifiutate(slotProps.data.proposte)">
                   <Column field="datiProponente.nome" header="Nome" sortable></Column>
                   <Column field="datiProponente.cognome" header="Cognome" sortable></Column>
-                  <Column field="datiProponente.email" header="Email" sortable></Column>
+                  <Column header="Contatto" sortable>
+                    <template #body="{ data }">
+                      {{ data.datiProponente.contatto.tipo }}: {{ data.datiProponente.contatto.valore }}
+                    </template>
+                  </Column>
                   <Column field="prezzoProposta" header="Proposta" sortable></Column>
                   <Column field="controproposta" header="Controproposta" sortable></Column>
                 </DataTable>
