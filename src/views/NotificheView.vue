@@ -191,6 +191,7 @@ const getNotifiche = async () => {
 
   caricamentoNotificheCompletate.value = true;
 
+
 };
 
 const onPage = (event) => {
@@ -241,7 +242,7 @@ const modificaSottoscrizioni = async () => {
 };
 
 const visualizzaNotifica = async (notifica) => {
-
+  console.log("Notifica da visualizzare: ", notifica.contenuto);
   contenutoHtml.value = notifica.contenuto;
   isAttivoCategoriaNotificaVisualizzata.value = isAttivo(notifica.idCategoria);
   nomeCategoriaNotificaVisualizzata.value = getNomeCategoria(notifica.idCategoria);

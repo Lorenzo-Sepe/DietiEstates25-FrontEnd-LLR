@@ -109,7 +109,7 @@ const routes = [
   {
     path: "/PortaleAgenzia/messaggi-promozionali",
     name: "messaggi-promozionali",
-    component: () => import("../views/CreaNotificaView.vue"),
+    component: () => import("../views/CreaPromozioniView.vue"),
     meta: { requiresAuth: true, role: "employee" },
   },
 

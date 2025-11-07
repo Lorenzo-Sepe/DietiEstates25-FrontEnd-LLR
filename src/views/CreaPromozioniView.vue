@@ -261,8 +261,8 @@ const contrastMode = ref(true);
 const form = reactive({
   oggetto: "",
   contenuto: "",
-  areaDiInteresse: "",
-  intervalloGiorniStoricoRicerca: 30,
+  areaDiInteresse: "Italia",
+  intervalloGiorniStoricoRicerca: 7,
   budgetMin: 0,
   budgetMax: 50000,
   tipoDiContrattoDiInteresse: "AFFITTO",
@@ -296,10 +296,8 @@ const NotificaPromozionaleRequest = reactive({
 
 const immobileTypes = [
   "APPARTAMENTO",
-  "UFFICIO",
-  "POSTOAUTO",
+  "VILLA",
   "TERRENO",
-  "ALTRO",
 ];
 
 const errors = reactive({});
@@ -373,7 +371,18 @@ function onFormSubmit() {
   if (!formIsValid.value) return;
 
   NotificaPromozionaleRequest.oggetto = form.oggetto;
-  NotificaPromozionaleRequest.contenuto = DOMPurify.sanitize(form.contenuto);
+  console.log("Before saificazione: ",form.contenuto)
+  NotificaPromozionaleRequest.contenuto = DOMPurify.sanitize(form.contenuto, {
+  ALLOWED_TAGS: [
+    "p", "strong", "em", "u", "s", "span", "div",
+    "ul", "ol", "li", "br", "img", "hr", "pre", "code"
+  ],
+  ALLOWED_ATTR: [
+    "style", "src", "alt", "class", "width", "height"
+  ],
+  ALLOW_DATA_ATTR: true,
+});
+  console.log("After saificazione: ",NotificaPromozionaleRequest.contenuto)
   NotificaPromozionaleRequest.criteriDiRicerca.budgetMin = form.budgetMin;
   NotificaPromozionaleRequest.criteriDiRicerca.budgetMax = form.budgetMax;
   NotificaPromozionaleRequest.criteriDiRicerca.areaDiInteresse =

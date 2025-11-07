@@ -123,7 +123,7 @@
           ><i class="bi bi-code"></i
         ></Button>
         <Button
-          @click="addImage"
+          @click="showInsertImageDialog = true"
           class="tagButton"
           size="small"
           :severity="contrastMode ? 'contrast' : undefined"
@@ -131,10 +131,8 @@
           ><i class="bi bi-image"></i
         ></Button>
         <Dialog
-          header="Insert Image"
+          header="Inserisci immagine"
           :visible="showInsertImageDialog"
-          :modal="true"
-          :closable="false"
           :dismissableMask="true"
           @hide="showInsertImageDialog = false"
           :style="{ width: '50vw' }"
@@ -314,7 +312,7 @@ function convertToFontSize(fontSize) {
 }
 
 function flattenParagraphsInList(html) {
-  return html.replace(/<li>\s*<p>(.*?)<\/p>\s*<\/li>/g, "<li>$1</li>");
+  return html.replaceAll(/<li>\s*<p>(.*?)<\/p>\s*<\/li>/g, "<li>$1</li>");
 }
 
 const handleImageUpload = (imageUrl) => {
@@ -333,9 +331,6 @@ const handleImageUpload = (imageUrl) => {
   showInsertImageDialog.value = false;
 };
 
-function addImage() {
-  showInsertImageDialog.value = true;
-}
 </script>
 
 <style>

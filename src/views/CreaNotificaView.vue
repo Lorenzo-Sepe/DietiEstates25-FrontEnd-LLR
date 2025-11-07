@@ -159,6 +159,18 @@ const form = ref({
   },
 });
 
+function salvaNotifica(){
+
+  NotificheService.creaNotifica(NotificaPromozionaleRequest)
+    .then((response) => {
+      router.push({ name: "PortaleAgenzia" });
+    })
+    .catch((error) => {
+      console.error("Errore durante l'invio:", error);
+    }
+  )
+}
+
 </script>
 
 <style scoped>
