@@ -49,6 +49,47 @@ const router = useRouter();
 const route = useRoute();
 
 onMounted(() => {
+
+  (async () => {
+    if (route.query.comune) {
+      const comuneQuery = Array.isArray(route.query.comune)
+        ? route.query.comune[0]
+        : route.query.comune;
+
+      try {
+        const { CountryService } = await import(
+          "../services/ComuniItalianiService.js"
+        );
+        const comuni = CountryService.getData();
+        const comuneObj = comuni.find(
+          (c) =>
+            c.comune &&
+            c.comune.toString().toLowerCase() ===
+            (comuneQuery || "").toString().toLowerCase(),
+        );
+
+        if (comuneObj) {
+          const lat = comuneObj.latitudine;
+          const lon = comuneObj.longitudine;
+          const raggioKm = 10;
+
+          // Aggiorna la query URL con lat, lon e raggioKm
+          const newQuery = { ...route.query, lat, lon, raggioKm };
+          router.replace({ query: newQuery });
+
+          // Imposta i valori nel filtro e avvia la ricerca
+          filtroAnnunci.latCentro = lat;
+          filtroAnnunci.lonCentro = lon;
+          filtroAnnunci.raggioKm = raggioKm;
+
+          await mostraAnnunciSullaMappa();
+        }
+      } catch (error) {
+        console.error("Errore recupero coordinate comune:", error);
+      }
+    }
+  })();
+
   setFiltro();
 
   valoriCaricati.value = true;
@@ -114,13 +155,13 @@ const mostraAnnunciSullaMappa = async () => {
     loadingAnnunci.value = true;
     const annunci = await AnnunciImmobiliService.getAnnunci(filtroAnnunci);
     setAnnunciResponse(annunci);
-   
+
   } catch (error) {
 
     console.error("Errore durante la visualizzazione degli annunci sulla mappa:", error);
 
   } finally {
-    
+
     loadingAnnunci.value = false;
   }
 };

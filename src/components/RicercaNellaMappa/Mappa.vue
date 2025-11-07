@@ -35,7 +35,7 @@ const iconaAnnuncio = L.icon({
 });
 
 onMounted(() => {
-  
+
   inizializzaMappa();
 
   istanzaMappa.value.on("click", onMappaClick);
@@ -66,9 +66,23 @@ const onMappaClick = () => {
 };
 
 const inizializzaMappa = () => {
+
+  console.log("props: filtro nel Mappa.vue", props.filtro.latCentro);
+  const initLat = props.filtro.latCentro || 40.8400998;
+  const initLon = props.filtro.lonCentro || 14.2500966;
+  const initRaggioKm = props.filtro.raggioKm || 0;
+  console.log(
+    "Inizializzo mappa con lat:",
+    initLat,
+    "lon:",
+    initLon,
+    "raggioKm:",
+    initRaggioKm,
+  );
+
   if (contenitoreMappa.value) {
     istanzaMappa.value = L.map(contenitoreMappa.value).setView(
-      [40.8400998, 14.2500966],
+      [initLat, initLon],
       17,
     );
 
@@ -185,6 +199,19 @@ watch([() => props.annunci], () => {
   aggiornaMarker();
 });
 
+watch(
+  () => [props.filtro.latCentro, props.filtro.lonCentro, props.filtro.raggioKm],
+  ([lat, lon, raggioKm]) => {
+    if (istanzaMappa.value && lat && lon) {
+
+      // Sposta la mappa sul nuovo centro
+      istanzaMappa.value.setView([lat, lon], 13);
+
+      ridisegnaCerchioDaFiltro();
+    }
+  }
+);
+
 onBeforeUnmount(() => {
   if (istanzaMappa.value) {
     istanzaMappa.value.off(); // rimuove tutti i listener
@@ -201,40 +228,24 @@ onBeforeUnmount(() => {
   <div class="relative h-full w-full">
     <div ref="contenitoreMappa" class="z-1 h-full w-full"></div>
 
-    <div
-      v-if="props.loading"
-      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 z-10 flex gap-2"
-    >
-      <ProgressSpinner
-        style="width: 128px; height: 128px"
-        strokeWidth="8"
-        fill="transparent"
-        animationDuration=".5s"
-        aria-label="Custom ProgressSpinner"
-      />
+    <div v-if="props.loading" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 z-10 flex gap-2">
+      <ProgressSpinner style="width: 128px; height: 128px" strokeWidth="8" fill="transparent" animationDuration=".5s"
+        aria-label="Custom ProgressSpinner" />
     </div>
 
-    <div
-      class="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-10 flex flex-row gap-2"
-    >
-      <button
-        @click="attivaDisegnoCerchio"
-        class="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 cursor-pointer"
-      >
+    <div class="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-10 flex flex-row gap-2">
+      <button @click="attivaDisegnoCerchio"
+        class="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 cursor-pointer">
         Disegna cerchio
       </button>
-      <button
-        @click="rimuoviCerchio"
-        class="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700 cursor-pointer"
-      >
+      <button @click="rimuoviCerchio"
+        class="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700 cursor-pointer">
         Rimuovi cerchio
       </button>
     </div>
 
-    <div
-      v-if="mostraPopupAnnuncio"
-      class="dettaglio-annuncio-pupup absolute right-4 top-4 z-10 flex flex-col w-70 h-90 md:w-90 md:h-90 rounded-md bg-white items-start justify-start"
-    >
+    <div v-if="mostraPopupAnnuncio"
+      class="dettaglio-annuncio-pupup absolute right-4 top-4 z-10 flex flex-col w-70 h-90 md:w-90 md:h-90 rounded-md bg-white items-start justify-start">
       <div class="area-superiore p-2 w-full h-50 bg-gray-200 rounded-md">
         <Galleria :immagini="annuncioSelezionato.immobile.immagini" />
       </div>
@@ -245,38 +256,28 @@ onBeforeUnmount(() => {
         </Tag>
       </div>
 
-      <div
-        class="titolo h-20 mt-1 p-2 items-start justify-start flex flex-col w-full"
-      >
-        <span
-          class="text-sm text-left text-green-600 hover:underline cursor-pointer"
-          @click="vaiAlDettaglioAnnuncio(annuncioSelezionato.id)"
-        >
+      <div class="titolo h-20 mt-1 p-2 items-start justify-start flex flex-col w-full">
+        <span class="text-sm text-left text-green-600 hover:underline cursor-pointer"
+          @click="vaiAlDettaglioAnnuncio(annuncioSelezionato.id)">
           {{ annuncioSelezionato.titolo }}
         </span>
       </div>
 
       <div class="prezzo mb-2 p-2">
-        <span
-          v-if="annuncioSelezionato.contratto.tipoContratto === 'AFFITTO'"
-          class="font-bold text-3xl"
-          >{{
-            formattaPrezzo(
-              annuncioSelezionato.contratto.contrattoAffittoResponse
-                .prezzoAffitto,
-            )
-          }}
-          €/mese</span
-        >
-        <span v-else class="font-bold text-3xl"
-          >{{
-            formattaPrezzo(
-              annuncioSelezionato.contratto.contrattoVenditaResponse
-                .prezzoVendita,
-            )
-          }}
-          €</span
-        >
+        <span v-if="annuncioSelezionato.contratto.tipoContratto === 'AFFITTO'" class="font-bold text-3xl">{{
+          formattaPrezzo(
+            annuncioSelezionato.contratto.contrattoAffittoResponse
+              .prezzoAffitto,
+          )
+        }}
+          €/mese</span>
+        <span v-else class="font-bold text-3xl">{{
+          formattaPrezzo(
+            annuncioSelezionato.contratto.contrattoVenditaResponse
+              .prezzoVendita,
+          )
+        }}
+          €</span>
       </div>
     </div>
   </div>

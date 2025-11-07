@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col gap-8 w-full h-[65%] items-start justify-start p-2 overflow-y-auto bg-gray-100">
+
     <div class="luogo w-full">
       <div class="Comune-nella-mappa flex flex-col items-start justify-start mb-2">
         <label for="autocomplete-comune" class="block text-lg font-semibold mb-1">Comune</label>
@@ -7,8 +8,10 @@
           :suggestions="filteredCountries" placeholder="Scrivi dove cerchi l'immobile" @complete="search" />
       </div>
 
-      <div class="w-[90%] h-60">
-        <Mappa :luogo="luogoCercato" />
+      <div class="mappa-button mb-4 w-full">
+        <Button class="w-full" @click="onApliccaFiltro(true)">
+          Vedi mappa annunci
+        </Button>
       </div>
     </div>
 
@@ -59,7 +62,7 @@
 
   <!-- Bottone sempre visibile -->
   <div class="mt-4 bg-gray-100 p-4 w-full flex justify-center border-t border-gray-300">
-    <Button class="w-full" @click="onApliccaFiltro">
+    <Button class="w-full" @click="onApliccaFiltro(false)">
       Applica filtro
     </Button>
   </div>
@@ -150,10 +153,12 @@ const search = (event) => {
   }, 250);
 };
 
-const onApliccaFiltro = () => {
+const onApliccaFiltro = (isSwitchMappa) => {
+
+  const path = isSwitchMappa ? "/mappa-annunci" : "/annunci";
 
   router.push({
-    path: "/annunci",
+    path: path,
     query: {
       ...route.query,
       comune: luogoCercato.value.comune ? luogoCercato.value.comune : luogoCercato.value,
