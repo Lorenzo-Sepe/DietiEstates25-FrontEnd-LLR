@@ -6,6 +6,7 @@
     filter
     filterPlaceholder="Digita per cercare"
     placeholder="Seleziona una città"
+    :virtualScrollerOptions="{ itemSize: 38 }"
     
     />
 </template>

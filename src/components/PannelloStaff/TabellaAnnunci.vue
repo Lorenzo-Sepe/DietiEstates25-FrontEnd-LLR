@@ -158,18 +158,30 @@
                 />
               </div>
 
-              <!-- Proposte in trattativa -->
-              <div>
-                <Tag value="Proposte in trattativa" severity="warn" class="mb-2" />
-                <DataTable
-                  v-if="filterProposteInTrattativa(slotProps.data.proposte).length > 0"
-                  :value="filterProposteInTrattativa(slotProps.data.proposte)"
-                >
-                  <Column field="datiProponente.nome" header="Nome" />
-                  <Column field="datiProponente.cognome" header="Cognome" />
-                  <Column field="datiProponente.email" header="Email" />
-                  <Column field="prezzoProposta" header="Proposta" />
-                  <Column field="controproposta" header="Controproposta" />
+              <div class="p-4">
+
+                <Tag :value="'Proposte in trattative'" :severity="'warn'" class="mb-2" />
+
+                <DataTable v-if="filterProposteInTrattativa(slotProps.data.proposte).length > 0"
+                  :value="filterProposteInTrattativa(slotProps.data.proposte)">
+                  <Column field="datiProponente.nome" header="Nome" sortable></Column>
+                  <Column field="datiProponente.cognome" header="Cognome" sortable></Column>
+                  <Column header="Contatto" sortable>
+                    <template #body="{ data }">
+                      {{ data.datiProponente.contatto.tipo }}: {{ data.datiProponente.contatto.valore }}
+                    </template>
+                  </Column>
+                  <Column field="prezzoProposta" header="Proposta" sortable>
+                    <template #body="slotProps">
+                      <span :class="{
+                        'line-through':
+                          slotProps.data.controproposta !== null,
+                      }">
+                        {{ slotProps.data.prezzoProposta }}
+                      </span>
+                    </template>
+                  </Column>
+                  <Column field="controproposta" header="Controproposta" sortable></Column>
                   <Column headerStyle="width:4rem">
                     <template #body="p">
                       <div class="flex flex-row gap-2">
@@ -179,7 +191,6 @@
                           rounded
                           aria-label="Accetta"
                           class="hover:bg-green-200"
-                          :disabled="p.data.controproposta !== null"
                           @click="openDialogAccetta(p.data)"
                           v-tooltip="{ value: 'Accetta la proposta' }"
                         >
@@ -203,7 +214,6 @@
                           rounded
                           aria-label="Rifiuta"
                           class="hover:bg-red-200"
-                          :disabled="p.data.controproposta !== null"
                           @click="openDialogRifiuta(p.data)"
                           v-tooltip="{ value: 'Rifiuta proposta' }"
                         >
@@ -219,34 +229,42 @@
                 </div>
               </div>
 
-              <!-- Proposte accettate -->
-              <div>
-                <Tag class="mb-2" value="Proposte accettate" severity="success" />
-                <DataTable
-                  v-if="filterProposteAccettate(slotProps.data.proposte).length > 0"
-                  :value="filterProposteAccettate(slotProps.data.proposte)"
-                >
-                  <Column field="datiProponente.nome" header="Nome" />
-                  <Column field="datiProponente.cognome" header="Cognome" />
-                  <Column field="datiProponente.email" header="Email" />
-                  <Column field="prezzoProposta" header="Proposta" />
+
+              <div class="p-4">
+
+                <Tag class="mb-2" :value="'Proposte accettate'" :severity="'success'" />
+
+                <DataTable v-if="filterProposteAccettate(slotProps.data.proposte).length > 0"
+                  :value="filterProposteAccettate(slotProps.data.proposte)">
+                  <Column field="datiProponente.nome" header="Nome" sortable></Column>
+                  <Column field="datiProponente.cognome" header="Cognome" sortable></Column>
+                  <Column header="Contatto" sortable>
+                    <template #body="{ data }">
+                      {{ data.datiProponente.contatto.tipo }}: {{ data.datiProponente.contatto.valore }}
+                    </template>
+                  </Column>
+                  <Column field="prezzoProposta" header="Proposta" sortable></Column>
+                  <Column field="controproposta" header="Controproposta" sortable></Column>
                 </DataTable>
                 <div v-else class="flex-grow flex items-center justify-center p-4">
                   <Tag value="Nessuna proposta accettata" severity="secondary" class="w-full text-center h-10" />
                 </div>
               </div>
 
-              <!-- Proposte rifiutate -->
-              <div>
-                <Tag class="mb-2" value="Proposte rifiutate" severity="danger" />
-                <DataTable
-                  v-if="filterProposteRifiutate(slotProps.data.proposte).length > 0"
-                  :value="filterProposteRifiutate(slotProps.data.proposte)"
-                >
-                  <Column field="datiProponente.nome" header="Nome" />
-                  <Column field="datiProponente.cognome" header="Cognome" />
-                  <Column field="datiProponente.email" header="Email" />
-                  <Column field="prezzoProposta" header="Proposta" />
+              <div class="p-4">
+
+                <Tag class="mb-2" :value="'Proposte rifutate'" :severity="'danger'" />
+                <DataTable v-if="filterProposteRifiutate(slotProps.data.proposte).length > 0"
+                  :value="filterProposteRifiutate(slotProps.data.proposte)">
+                  <Column field="datiProponente.nome" header="Nome" sortable></Column>
+                  <Column field="datiProponente.cognome" header="Cognome" sortable></Column>
+                  <Column header="Contatto" sortable>
+                    <template #body="{ data }">
+                      {{ data.datiProponente.contatto.tipo }}: {{ data.datiProponente.contatto.valore }}
+                    </template>
+                  </Column>
+                  <Column field="prezzoProposta" header="Proposta" sortable></Column>
+                  <Column field="controproposta" header="Controproposta" sortable></Column>
                 </DataTable>
                 <div v-else class="flex-grow flex items-center justify-center p-4">
                   <Tag value="Nessuna proposta rifiutata" severity="secondary" class="w-full text-center h-10" />
