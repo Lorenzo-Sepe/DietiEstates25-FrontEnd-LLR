@@ -1,19 +1,31 @@
 <template>
   <div class="flex flex-col gap-8 w-full h-[65%] items-start justify-start p-2 overflow-y-auto bg-gray-100">
 
-    <div class="luogo w-full">
-      <div class="Comune-nella-mappa flex flex-col items-start justify-start mb-2">
-        <label for="autocomplete-comune" class="block text-lg font-semibold mb-1">Comune</label>
-        <AutoComplete id="autocomplete-comune" :fluid="true" v-model="luogoCercato" optionLabel="comune"
-          :suggestions="filteredCountries" placeholder="Scrivi dove cerchi l'immobile" @complete="search" />
-      </div>
+    <div class="luogo w-full mb-4">
+  <label for="autocomplete-comune" class="block text-lg font-semibold mb-2">
+    Comune
+  </label>
 
-      <div class="mappa-button mb-4 w-full">
-        <Button class="w-full" @click="onApliccaFiltro(true)">
-          Vedi mappa annunci
-        </Button>
-      </div>
-    </div>
+  <div class="flex flex-row items-center gap-2">
+    <AutoComplete
+      id="autocomplete-comune"
+      v-model="luogoCercato"
+      optionLabel="comune"
+      :suggestions="filteredCountries"
+      placeholder="Scrivi dove cerchi l'immobile"
+      @complete="search"
+      class="flex-1"
+      :fluid="true"
+    />
+
+    <Button
+      icon="pi pi-map"
+      v-tooltip.bottom="'Visualizza sulla mappa'"
+      @click="onApliccaFiltro(true)"
+    />
+  </div>
+</div>
+
 
     <div class="tipologia-immobile flex flex-col items-start justify-start">
       <label for="select-tipologia-immobile" class="block text-lg font-semibold mb-1">Tipologia immobile</label>
