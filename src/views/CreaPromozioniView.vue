@@ -1,8 +1,42 @@
 <template>
-  <div
-    class="gap-4 rounded-md my-2 p-6 md:p-8 bg-white shadow-md"
-    :class="{ 'contrast-mode': contrastMode }"
-  >
+
+  <!------------------------------------------------------------------ DIALOGS ---------------------------------->
+
+  <Dialog v-model:visible="loadingOperazione" :closable="false" header="OPERAZIONE IN CORSO" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <div class="card flex justify-center">
+      <ProgressSpinner />
+    </div>
+  </Dialog>
+
+  <Dialog v-model:visible="okAllert" modal header="CONFERMA OPERAZIONE" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <p class="m-0">Operazione conclusa con successo!</p>
+    <p>{{ responseMessage }}</p>
+    <Button label="OK" @click="okAllert = false" />
+  </Dialog>
+
+  <Dialog v-model:visible="erroreAllert" modal header="ERRORE" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <p class="m-0">Errore di rete, riprovare più tardi.</p>
+    <Button label="OK" @click="erroreAllert = false" />
+  </Dialog>
+
+  <Dialog v-model:visible="dialogConferma" modal header="ATTENZIONE" :style="{ width: 'auto' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <p>Confermi di voler inviare questo messaggio agli utenti interessati?</p>
+    <div class="flex justify-end gap-2 my-4">
+      <Button label="Annulla" severity="secondary" raised @click="dialogConferma = false" />
+      <Button label="Conferma" severity="success" raised @click="clickConfermaDialog" />
+    </div>
+  </Dialog>
+
+
+  <!--------------------------------------------------------------------------------------------------------------->
+
+
+
+  <div class="gap-4 rounded-md my-2 p-6 md:p-8 bg-white shadow-md" :class="{ 'contrast-mode': contrastMode }">
     <h1 class="text-2xl font-semibold mb-4">Crea Notifica Promozionale</h1>
     <form @submit.prevent="onFormSubmit">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -10,118 +44,53 @@
         <div class="space-y-6">
           <!-- Oggetto -->
           <div>
-            <label for="oggetto" class="font-semibold text-lg mb-1 block"
-              >Oggetto</label
-            >
-            <InputText
-              id="oggetto"
-              type="text"
-              v-model="form.oggetto"
-              placeholder="Oggetto"
-              class="w-full"
-              @blur="
-                touched.oggetto = true;
-                validateForm();
-              "
-            />
-            <Message
-              v-if="errors.oggetto"
-              severity="error"
-              size="small"
-              class="mt-1"
-            >
+            <label for="oggetto" class="font-semibold text-lg mb-1 block">Oggetto</label>
+            <InputText id="oggetto" type="text" v-model="form.oggetto" placeholder="Oggetto" class="w-full" @blur="
+              touched.oggetto = true;
+            validateForm();
+            " />
+            <Message v-if="errors.oggetto" severity="error" size="small" class="mt-1">
               {{ errors.oggetto }}
             </Message>
           </div>
 
           <!-- Area di Interesse -->
           <div>
-            <label
-              for="areaDiInteresse"
-              class="text-lg font-semibold mb-2 block"
-              >Area di Interesse</label
-            >
-            <InputRicerca
-              id="areaDiInteresse"
-              v-model="form.areaDiInteresse"
-              class="w-full"
-            />
-            <Message
-              v-if="errors.areaDiInteresse"
-              severity="error"
-              size="small"
-              class="mt-1"
-            >
+            <label for="areaDiInteresse" class="text-lg font-semibold mb-2 block">Area di Interesse</label>
+            <InputRicerca id="areaDiInteresse" v-model="form.areaDiInteresse" class="w-full" />
+            <Message v-if="errors.areaDiInteresse" severity="error" size="small" class="mt-1">
               {{ errors.areaDiInteresse }}
             </Message>
           </div>
 
           <!-- Intervallo Giorni -->
           <div>
-            <label
-              for="intervalloGiorniStoricoRicerca"
-              class="text-lg font-semibold mb-2 block"
-            >
+            <label for="intervalloGiorniStoricoRicerca" class="text-lg font-semibold mb-2 block">
               Intervallo giorni Ricerca
             </label>
-            <InputNumber
-              v-model="form.intervalloGiorniStoricoRicerca"
-              @blur="
-                touched.intervalloGiorniStoricoRicerca = true;
-                validateForm();
-              "
-              inputId="minmax-buttons"
-              mode="decimal"
-              showButtons
-              :min="1"
-              :max="100"
-              fluid
-            />
-            <Message
-              v-if="errors.intervalloGiorniStoricoRicerca"
-              severity="error"
-              size="small"
-              class="mt-1"
-            >
+            <InputNumber v-model="form.intervalloGiorniStoricoRicerca" @blur="
+              touched.intervalloGiorniStoricoRicerca = true;
+            validateForm();
+            " inputId="minmax-buttons" mode="decimal" showButtons :min="1" :max="100" fluid />
+            <Message v-if="errors.intervalloGiorniStoricoRicerca" severity="error" size="small" class="mt-1">
               {{ errors.intervalloGiorniStoricoRicerca }}
             </Message>
           </div>
 
           <!-- Budget Slider -->
           <div class="items-center">
-            <label for="budgetRange" class="text-lg font-semibold mb-2 block"
-              >Budget (EUR)</label
-            >
+            <label for="budgetRange" class="text-lg font-semibold mb-2 block">Budget (EUR)</label>
             <div class="flex flex-row gap-3">
-              <InputNumber
-                fluid
-                mode="currency"
-                currency="EUR"
-                :min="0"
-                v-model="form.budgetMin"
-                @blur="
-                  touched.budgetMin = true;
-                  validateForm();
-                "
-              />
-              <InputNumber
-                fluid
-                mode="currency"
-                currency="EUR"
-                :min="0"
-                v-model="form.budgetMax"
-                @blur="
-                  touched.budgetMax = true;
-                  validateForm();
-                "
-              />
+              <InputNumber fluid mode="currency" currency="EUR" :min="0" v-model="form.budgetMin" @blur="
+                touched.budgetMin = true;
+              validateForm();
+              " />
+              <InputNumber fluid mode="currency" currency="EUR" :min="0" v-model="form.budgetMax" @blur="
+                touched.budgetMax = true;
+              validateForm();
+              " />
             </div>
-            <Message
-              v-if="errors.budgetRange"
-              severity="error"
-              size="small"
-              class="mt-1"
-            >
+            <Message v-if="errors.budgetRange" severity="error" size="small" class="mt-1">
               {{ errors.budgetRange }}
             </Message>
           </div>
@@ -130,34 +99,18 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
             <!-- Tipo Contratto -->
             <div class="text-center">
-              <label
-                for="tipoDiContrattoDiInteresse"
-                class="text-lg font-semibold mb-2 block"
-                >Tipo Contratto</label
-              >
-              <RadioButtonGroup
-                @change="
-                  touched.tipoDiContrattoDiInteresse = true;
-                  validateForm();
-                "
-                v-model="form.tipoDiContrattoDiInteresse"
-                name="tipoDiContrattoDiInteresse"
-                class="flex flex-wrap justify-center gap-4 p-4 rounded-md ring-1 ring-surface-400 bg-surface-100 w-full"
-              >
+              <label for="tipoDiContrattoDiInteresse" class="text-lg font-semibold mb-2 block">Tipo Contratto</label>
+              <RadioButtonGroup @change="
+                touched.tipoDiContrattoDiInteresse = true;
+              validateForm();
+              " v-model="form.tipoDiContrattoDiInteresse" name="tipoDiContrattoDiInteresse"
+                class="flex flex-wrap justify-center gap-4 p-4 rounded-md ring-1 ring-surface-400 bg-surface-100 w-full">
                 <div class="flex items-center gap-2">
-                  <RadioButton
-                    inputId="Affitto"
-                    value="AFFITTO"
-                    class="black-radio"
-                  />
+                  <RadioButton inputId="Affitto" value="AFFITTO" class="black-radio" />
                   <label for="Affitto">Affitto</label>
                 </div>
                 <div class="flex items-center gap-2">
-                  <RadioButton
-                    inputId="Vendita"
-                    value="VENDITA"
-                    class="black-radio"
-                  />
+                  <RadioButton inputId="Vendita" value="VENDITA" class="black-radio" />
                   <label for="Vendita">Vendita</label>
                 </div>
               </RadioButtonGroup>
@@ -165,27 +118,16 @@
 
             <!-- Tipologia Immobile -->
             <div class="text-center">
-              <label
-                for="tipologiaDiImmobileDiInteresse"
-                class="text-lg font-semibold mb-2 block"
-                >Tipologia Immobile</label
-              >
-              <RadioButtonGroup
-                @change="
-                  touched.tipologiaDiImmobileDiInteresse = true;
-                  validateForm();
-                "
-                v-model="form.tipologiaDiImmobileDiInteresse"
-                name="tipologiaDiImmobileDiInteresse"
-                class="flex flex-wrap justify-center gap-4 p-4 rounded-md ring-1 ring-surface-400 bg-surface-100 w-full"
-              >
+              <label for="tipologiaDiImmobileDiInteresse" class="text-lg font-semibold mb-2 block">Tipologia
+                Immobile</label>
+              <RadioButtonGroup @change="
+                touched.tipologiaDiImmobileDiInteresse = true;
+              validateForm();
+              " v-model="form.tipologiaDiImmobileDiInteresse" name="tipologiaDiImmobileDiInteresse"
+                class="flex flex-wrap justify-center gap-4 p-4 rounded-md ring-1 ring-surface-400 bg-surface-100 w-full">
                 <template v-for="type in immobileTypes" :key="type">
                   <div class="flex items-center gap-2">
-                    <RadioButton
-                      :inputId="type"
-                      :value="type"
-                      class="black-radio"
-                    />
+                    <RadioButton :inputId="type" :value="type" class="black-radio" />
                     <label :for="type">{{
                       type.charAt(0) + type.slice(1).toLowerCase()
                     }}</label>
@@ -198,30 +140,16 @@
 
         <!-- Right Column: Contenuto -->
         <div class="flex flex-col justify-between h-full mb-6">
-          <label for="contenuto" class="text-lg font-semibold block mb-2"
-            >Contenuto</label
-          >
-          <Markdown
-            id="contenuto"
-            @blur="
-              touched.contenuto = true;
-              validateForm();
-            "
-            :contrastMode="contrastMode"
-            v-model="form.contenuto"
-            class="w-full h-full max-w-full overflow-x-auto"
-            label="Contenuto"
-            :class="{
+          <label for="contenuto" class="text-lg font-semibold block mb-2">Contenuto</label>
+          <Markdown id="contenuto" @blur="
+            touched.contenuto = true;
+          validateForm();
+          " :contrastMode="contrastMode" v-model="form.contenuto" class="w-full h-full max-w-full overflow-x-auto"
+            label="Contenuto" :class="{
               'ring-1 ring-red-500 rounded-md': errors.contenuto,
               'ring-1 ring-surface-400 rounded-md': !errors.contenuto,
-            }"
-          />
-          <Message
-            v-if="errors.contenuto"
-            severity="error"
-            size="small"
-            class="mt-1"
-          >
+            }" />
+          <Message v-if="errors.contenuto" severity="error" size="small" class="mt-1">
             {{ errors.contenuto }}
           </Message>
         </div>
@@ -229,34 +157,43 @@
 
       <!-- Submit Button -->
       <div class="flex justify-end mt-6">
-        <Button
-          severity="contrast"
-          type="submit"
-          label="Invia"
-          icon="pi pi-send"
-          :disabled="!formIsValid"
-        />
+        <Button severity="contrast" type="submit" label="Invia" icon="pi pi-send" :disabled="!formIsValid" />
       </div>
     </form>
   </div>
 </template>
 
 <script setup>
+
 import { ref, reactive, computed } from "vue";
+
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import InputNumber from "primevue/inputnumber";
 import Message from "primevue/message";
 import RadioButton from "primevue/radiobutton";
 import RadioButtonGroup from "primevue/radiobuttongroup";
-import Markdown from "../components/MarkdownEditor.vue";
+import Dialog from "primevue/dialog";
+import ProgressSpinner from "primevue/progressspinner";
+
 import NotificheService from "../services/NotificheService";
 import DOMPurify from "dompurify";
+
 import { useRouter } from "vue-router";
+
 import InputRicerca from "../components/Homepage/InputRicerca.vue";
+import Markdown from "../components/MarkdownEditor.vue";
+
 
 const router = useRouter();
 const contrastMode = ref(true);
+
+const loadingOperazione = ref(false);
+const okAllert = ref(false);
+const erroreAllert = ref(false);
+const dialogConferma = ref(false);
+
+const responseMessage = ref("");
 
 const form = reactive({
   oggetto: "",
@@ -366,23 +303,24 @@ function validateForm() {
 }
 
 function onFormSubmit() {
+
   Object.keys(touched).forEach((key) => (touched[key] = true));
   validateForm();
   if (!formIsValid.value) return;
 
   NotificaPromozionaleRequest.oggetto = form.oggetto;
-  console.log("Before saificazione: ",form.contenuto)
+  console.log("Before saificazione: ", form.contenuto)
   NotificaPromozionaleRequest.contenuto = DOMPurify.sanitize(form.contenuto, {
-  ALLOWED_TAGS: [
-    "p", "strong", "em", "u", "s", "span", "div",
-    "ul", "ol", "li", "br", "img", "hr", "pre", "code"
-  ],
-  ALLOWED_ATTR: [
-    "style", "src", "alt", "class", "width", "height"
-  ],
-  ALLOW_DATA_ATTR: true,
-});
-  console.log("After saificazione: ",NotificaPromozionaleRequest.contenuto)
+    ALLOWED_TAGS: [
+      "p", "strong", "em", "u", "s", "span", "div",
+      "ul", "ol", "li", "br", "img", "hr", "pre", "code"
+    ],
+    ALLOWED_ATTR: [
+      "style", "src", "alt", "class", "width", "height"
+    ],
+    ALLOW_DATA_ATTR: true,
+  });
+  console.log("After saificazione: ", NotificaPromozionaleRequest.contenuto)
   NotificaPromozionaleRequest.criteriDiRicerca.budgetMin = form.budgetMin;
   NotificaPromozionaleRequest.criteriDiRicerca.budgetMax = form.budgetMax;
   NotificaPromozionaleRequest.criteriDiRicerca.areaDiInteresse =
@@ -394,13 +332,26 @@ function onFormSubmit() {
   NotificaPromozionaleRequest.criteriDiRicerca.intervalloGiorniStoricoRicerca =
     form.intervalloGiorniStoricoRicerca;
 
+  dialogConferma.value = true;
+
+}
+
+const clickConfermaDialog = () => {
+
+  dialogConferma.value = false;
+
+  loadingOperazione.value = true;
+
   NotificheService.creaNotifica(NotificaPromozionaleRequest)
     .then((response) => {
-      
-      router.push({ name: "PortaleAgenzia" });
+      loadingOperazione.value = false;
+      okAllert.value = true;
+      responseMessage.value = response
     })
     .catch((error) => {
-      console.error("Errore durante l'invio:", error);
+      loadingOperazione.value = false;
+      erroreAllert.value = true;
     });
 }
+
 </script>
