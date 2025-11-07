@@ -243,6 +243,7 @@ const aggiungiPropostaManuale = async () => {
   try {
 
     loadingOperazione.value = true;
+    console.log("propostaRequest: ", propostaRequest);
     const nuovaProposta = await AnnunciService.postPropostaManuale(propostaRequest);
     loadingOperazione.value = false;
     aggiungiProposta(nuovaProposta.idProposta);
@@ -309,8 +310,10 @@ const aggiungiProposta = (idProposta) => {
         datiProponente: {
           nome: propostaRequest.nome,
           cognome: propostaRequest.cognome,
-          tipoContatto: propostaRequest.tipoContatto,
-          contatto: propostaRequest.informazioniContatto,
+          contatto: {
+            tipo: propostaRequest.tipoContatto,
+            valore: propostaRequest.informazioniContatto,
+          }
         },
       });
 
